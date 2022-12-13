@@ -36,7 +36,7 @@ internal sealed class JsonMessage : IMessage
     }
 
     /// <inheritdoc/>
-    public T Deserialize<T>()
+    public T GetData<T>()
         where T : struct =>
         this.serializer.Deserialize<T>(this.jsonData);
 }

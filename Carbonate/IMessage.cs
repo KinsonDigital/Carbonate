@@ -14,6 +14,6 @@ public interface IMessage
     /// </summary>
     /// <typeparam name="T">The type to deserialize the message into.</typeparam>
     /// <returns>The deserialized message data.</returns>
-    public T Deserialize<T>()
+    public T GetData<T>()
         where T : struct;
 }

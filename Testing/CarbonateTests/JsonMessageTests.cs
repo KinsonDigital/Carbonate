@@ -59,7 +59,7 @@ public class JsonMessageTests
 
     #region Method Tests
     [Fact]
-    public void Deserialize_WhenInvoked_ReturnsCorrectResult()
+    public void GetData_WhenInvoked_ReturnsCorrectResult()
     {
         // Arrange
         var testData = default(TestData);
@@ -68,7 +68,7 @@ public class JsonMessageTests
         var sut = new JsonMessage(this.mockSerializer, "test-data");
 
         // Act
-        sut.Deserialize<TestData>();
+        sut.GetData<TestData>();
 
         // Assert
         this.mockSerializer.Received(1).Deserialize<TestData>("test-data");
