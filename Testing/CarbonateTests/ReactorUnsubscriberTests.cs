@@ -2,12 +2,12 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+namespace CarbonateTests;
+
 using Carbonate;
 using FluentAssertions;
 using NSubstitute;
 using Xunit;
-
-namespace CarbonateTests;
 
 /// <summary>
 /// Tests the <see cref="ReactorUnsubscriber"/> class.

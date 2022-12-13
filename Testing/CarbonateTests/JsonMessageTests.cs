@@ -2,14 +2,14 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+namespace CarbonateTests;
+
 using Carbonate;
 using Carbonate.Services;
-using CarbonateTests.Helpers;
+using Helpers;
 using FluentAssertions;
 using NSubstitute;
 using Xunit;
-
-namespace CarbonateTests;
 
 /// <summary>
 /// Tests the <see cref="JsonMessage"/> class.
