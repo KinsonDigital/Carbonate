@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
-        <RootNamespace>[TODO: add project name here]Tests</RootNamespace>
+        <RootNamespace>CarbonateTests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -37,7 +37,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\CSharpLibTemplateRepo\CSharpLibTemplateRepo.csproj" />
+      <ProjectReference Include="..\..\Carbonate\Carbonate.csproj" />
     </ItemGroup>
 
     <ItemGroup>

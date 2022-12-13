@@ -1,6 +1,6 @@
 <h1 align="center">Branching</h1>
 
-**CSharpLibTemplateRepo** uses a more complicated branching model, but it gives you more control of the SDLC (Software Development Life Cycle).  This branching model allows a clear purpose for adding features, bug fixes, preview releases, QA releases and standard releases.
+**Carbonate** uses a more complicated branching model, but it gives you more control of the SDLC (Software Development Life Cycle).  This branching model allows a clear purpose for adding features, bug fixes, preview releases, QA releases and standard releases.
 
 As a standard contributor, all you have to worry about is creating <span style="color: #66B2FF;font-weight:bold">feature</span> branches and creating pull requests to merge those branches into the <span style="color: #FFB366;font-weight:bold">develop</span> branch.  The rest is taken care of by a solid CI/CD system as well as the maintainers of the project.  Only the organization owner and designated team members will manage the release process.  So, contributing is very easy!!🥳
 
@@ -13,7 +13,7 @@ As a standard contributor, all you have to worry about is creating <span style="
 
 <h3 align="left" style="color: #82B366;font-weight:bold">Master Branch</h3>
 
-Long living branch that represents stable production versions of **CSharpLibTemplateRepo**:
+Long living branch that represents stable production versions of **Carbonate**:
 - **Branch Syntax:** master
 - **Branches That Can Merge Into Master:**
   - <span style="color: #00CCCC;font-weight:bold">Release</span> branches via pull request

@@ -1,5 +1,5 @@
 <h1 align="center" style='color:mediumseagreen;font-weight:bold'>
-    [TODO: Add project name here] Preview Release Notes - [add-prev-release-here]
+    Carbonate Preview Release Notes - [add-prev-release-here]
 </h1>
 
 <h2 align="center" style='font-weight:bold'>Quick Reminder</h2>

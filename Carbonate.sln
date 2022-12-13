@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpLibTemplateRepo", "CSharpLibTemplateRepo\CSharpLibTemplateRepo.csproj", "{7858F8F1-497A-4261-94D7-339442B09494}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carbonate", "Carbonate\Carbonate.csproj", "{7858F8F1-497A-4261-94D7-339442B09494}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpLibTemplateRepoTests", "Testing\CSharpLibTemplateRepoTests\CSharpLibTemplateRepoTests.csproj", "{A2124FFE-C6A1-46A7-8440-F0F5709DD08C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarbonateTests", "Testing\CarbonateTests\CarbonateTests.csproj", "{A2124FFE-C6A1-46A7-8440-F0F5709DD08C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{E204672C-F241-4BB7-AAE4-5147BC5B4FF5}"
 	ProjectSection(SolutionItems) = preProject

@@ -18,20 +18,20 @@
           Example: v1.2.3.preview.1 is not allowed
         -->
         <AssemblyVersion>1.0.0</AssemblyVersion>
-        <PackageId>KinsonDigital.[TODO: add project name here]</PackageId>
+        <PackageId>KinsonDigital.Carbonate</PackageId>
         <Authors>Calvin Wilkinson</Authors>
         <Company>Kinson Digital</Company>
-        <Product>[TODO: add project name here]</Product>
-        <Description>[TODO: Add description here]</Description>
+        <Product>Carbonate</Product>
+        <Description>Library for doing internal messaging using the observable pattern.</Description>
         <Copyright>Copyright ©2022 Kinson Digital</Copyright>
-        <PackageTags>[TODO: Add tags here]</PackageTags>
-        <RootNamespace>[TODO: add project name here]</RootNamespace>
-        <ApplicationIcon>velaptor-logo.ico</ApplicationIcon>
-        <PackageReleaseNotes>https://github.com/KinsonDigital/[TODO: add project name here]/blob/release/v1.0.0/Documentation/ReleaseNotes/PreviewReleases/Release-Notes-v1.0.0-preview.1.md</PackageReleaseNotes>
-        <PackageProjectUrl>https://github.com/KinsonDigital/[TODO: add project name here]</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/KinsonDigital/[TODO: add project name here]</RepositoryUrl>
+        <PackageTags>messaging observable subscribe</PackageTags>
+        <RootNamespace>Carbonate</RootNamespace>
+        <ApplicationIcon>carbonate-logo.ico</ApplicationIcon>
+        <PackageReleaseNotes>https://github.com/KinsonDigital/Carbonate/blob/release/v1.0.0/Documentation/ReleaseNotes/PreviewReleases/Release-Notes-v1.0.0-preview.1.md</PackageReleaseNotes>
+        <PackageProjectUrl>https://github.com/KinsonDigital/Carbonate</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/KinsonDigital/Carbonate</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageIcon>[TODO: Add logo image here]</PackageIcon>
+        <PackageIcon>carbonate-logo-dark-mode.png</PackageIcon>
         <Platforms>x64</Platforms>
         <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -39,6 +39,13 @@
         <!-- Ignore warning CS7035 about version syntax. -->
         <NoWarn>CS7035</NoWarn>
     </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="carbonate-logo.ico" Pack="true" PackagePath="\" />
+        <None Include="..\Documentation\Images\carbonate-logo-dark-mode.png" Pack="true" PackagePath="\" />
+        <None Include="..\LICENSE.md" Pack="true" PackagePath="\" />
+        <None Include="..\README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.0">
