@@ -1,7 +1,11 @@
-﻿using System.Text.Json;
-using Carbonate.Services;
+﻿// <copyright file="DataSerializer.cs" company="KinsonDigital">
+// Copyright (c) KinsonDigital. All rights reserved.
+// </copyright>
 
 namespace CarbonateTesting;
+
+using System.Text.Json;
+using Carbonate.Services;
 
 public class DataSerializer : ISerializer
 {

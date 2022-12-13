@@ -6,7 +6,7 @@ namespace CarbonateTests;
 
 using Carbonate;
 using Carbonate.Services;
-using CarbonateTests.Helpers;
+using Helpers;
 using FluentAssertions;
 using NSubstitute;
 using NSubstitute.ReceivedExtensions;
