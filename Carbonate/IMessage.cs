@@ -12,8 +12,9 @@ public interface IMessage
     /// <summary>
     /// Deserializes the message to the type <typeparamref name="T"/>.
     /// </summary>
+    /// <param name="onError">The action to invoke if an exception occurs.</param>
     /// <typeparam name="T">The type to deserialize the message into.</typeparam>
     /// <returns>The deserialized message data.</returns>
-    public T GetData<T>()
-        where T : struct;
+    public T? GetData<T>(Action<Exception>? onError = null)
+        where T : class;
 }

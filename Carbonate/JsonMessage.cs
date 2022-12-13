@@ -1,9 +1,10 @@
-﻿// <copyright file="JsonMessage.cs" company="KinsonDigital">
+// <copyright file="JsonMessage.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
 namespace Carbonate;
 
+using System.Text.Json;
 using Services;
 
 /// <summary>
@@ -13,8 +14,6 @@ internal sealed class JsonMessage : IMessage
 {
     private readonly ISerializer serializer;
     private readonly string jsonData;
-
-    // TODO: Use a testing console application to test out this library
 
     /// <summary>
     /// Initializes a new instance of the <see cref="JsonMessage"/> class.
@@ -36,7 +35,23 @@ internal sealed class JsonMessage : IMessage
     }
 
     /// <inheritdoc/>
-    public T GetData<T>()
-        where T : struct =>
-        this.serializer.Deserialize<T>(this.jsonData);
+    public T? GetData<T>(Action<Exception>? onError = null)
+        where T : class
+    {
+        try
+        {
+            T? result = this.serializer.Deserialize<T>(this.jsonData);
+
+            if (result is null)
+            {
+                throw new JsonException("Issues with the JSON deserialization process.");
+            }
+        }
+        catch (Exception e)
+        {
+            onError?.Invoke(e);
+        }
+
+        return null;
+    }
 }
