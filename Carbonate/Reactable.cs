@@ -47,7 +47,6 @@ public sealed class Reactable : IReactable
 
     /// <inheritdoc/>
     public void Push<T>(in T data, Guid eventId)
-        where T : struct
     {
         var jsonData = this.serializer.Serialize(data);
 

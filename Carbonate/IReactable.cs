@@ -37,8 +37,7 @@ public interface IReactable : IDisposable
     /// <param name="data">The data to send with the push notification.</param>
     /// <param name="eventId">The ID of the event to push the notification to.</param>
     /// <typeparam name="T">The type of data to push.</typeparam>
-    void Push<T>(in T data, Guid eventId)
-        where T : struct;
+    void Push<T>(in T data, Guid eventId);
 
     /// <summary>
     /// Pushes a single notification using the given <paramref name="message"/>.
