@@ -1,5 +1,5 @@
 <h1 align="center" style='color:mediumseagreen;font-weight:bold'>
-    [TODO: Add project name here] Production Release Notes - [add-prod-release-here]
+    Carbonate Production Release Notes - [add-prod-release-here]
 </h1>
 
 <h2 style="font-weight:bold" align="center">New Features✨</h2>
