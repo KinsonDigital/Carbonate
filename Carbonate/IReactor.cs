@@ -10,7 +10,7 @@ namespace Carbonate;
 public interface IReactor
 {
     /// <summary>
-    /// Gets the ID of the event that this <see cref="Reactor"/> should response to.
+    /// Gets the ID of the event where this <see cref="Reactor"/> should respond.
     /// </summary>
     public Guid EventId { get; }
 
@@ -19,7 +19,7 @@ public interface IReactor
     /// </summary>
     /// <remarks>
     ///     This means that the <see cref="Reactor"/> will not receive <see cref="OnNext"/>, <see cref="OnComplete"/>,
-    ///     or <see cref="OnError"/> invokes anymore.
+    ///     or <see cref="OnError"/> invokes.
     /// </remarks>
     public bool Unsubscribed { get; }
 
