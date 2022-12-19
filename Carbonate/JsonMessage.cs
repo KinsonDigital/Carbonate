@@ -8,7 +8,7 @@ using System.Text.Json;
 using Services;
 
 /// <summary>
-/// A message that contains some JSON data as a message that can be deserialized into an object.
+/// A message that contains JSON data as a message that can be deserialized into an object.
 /// </summary>
 internal sealed class JsonMessage : IMessage
 {
