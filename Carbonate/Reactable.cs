@@ -5,6 +5,7 @@
 namespace Carbonate;
 
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using Services;
 
 /// <summary>
@@ -16,6 +17,13 @@ public sealed class Reactable : IReactable
     private readonly ISerializer serializer;
     private bool isDisposed;
     private bool notificationsEnded;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Reactable"/> class.
+    /// </summary>
+    [ExcludeFromCodeCoverage]
+    [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API for users.")]
+    public Reactable() => this.serializer = new JsonSerializer();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Reactable"/> class.
