@@ -1,9 +1,10 @@
-// <copyright file="JsonMessageTests.cs" company="KinsonDigital">
+﻿// <copyright file="JsonMessageTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
 namespace CarbonateTests;
 
+using System.Text.Json;
 using Carbonate;
 using Carbonate.Services;
 using Helpers;
@@ -72,6 +73,26 @@ public class JsonMessageTests
 
         // Assert
         this.mockSerializer.Received(1).Deserialize<TestData>("test-data");
+    }
+
+    [Fact]
+    public void GetData_WhenSerializationResultIsNull_ThrowsException()
+    {
+        // Arrange
+        TestData? nullData = null;
+        this.mockSerializer.Deserialize<TestData>(Arg.Any<string>()).Returns(nullData);
+
+        var sut = new JsonMessage(this.mockSerializer, "test-data");
+
+        // Act
+        _ = sut.GetData<TestData>(OnError);
+
+        // Assert
+        void OnError(Exception ex)
+        {
+            ex.Should().BeOfType<JsonException>();
+            ex.Message.Should().Be("Issues with the JSON deserialization process.");
+        }
     }
     #endregion
 }
