@@ -1,4 +1,4 @@
-﻿// <copyright file="JsonMessageTests.cs" company="KinsonDigital">
+// <copyright file="JsonMessageTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -62,7 +62,7 @@ public class JsonMessageTests
     public void GetData_WhenInvoked_ReturnsCorrectResult()
     {
         // Arrange
-        var testData = default(TestData);
+        var testData = new TestData();
         this.mockSerializer.Deserialize<TestData>(Arg.Any<string>()).Returns(testData);
 
         var sut = new JsonMessage(this.mockSerializer, "test-data");
