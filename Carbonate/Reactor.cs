@@ -16,7 +16,7 @@ public sealed class Reactor : IReactor
     /// <summary>
     /// Initializes a new instance of the <see cref="Reactor"/> class.
     /// </summary>
-    /// <param name="eventId">The ID of the event that the <see cref="Reactor"/> should respond to.</param>
+    /// <param name="eventId">The ID of the event where the <see cref="Reactor"/> responds.</param>
     /// <param name="onNext">Executed when a push notification occurs.</param>
     /// <param name="onCompleted">Executed when the provider has finished sending push-based notifications.</param>
     /// <param name="onError">Executed when the provider experiences an error condition.</param>

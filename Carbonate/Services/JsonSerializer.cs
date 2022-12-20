@@ -16,9 +16,12 @@ internal sealed class JsonSerializer : ISerializer
     /// <inheritdoc/>
     public string Serialize<T>(T? value)
     {
-        // TODO: Set these options to only be indented if in debug mode
-        var options = new JsonSerializerOptions();
-        options.WriteIndented = true;
+#if DEBUG
+        const bool writeIndented = false;
+#else
+        const bool writeIndented = true;
+#endif
+        var options = new JsonSerializerOptions { WriteIndented = writeIndented };
 
         return System.Text.Json.JsonSerializer.Serialize(value, options);
     }

@@ -35,7 +35,7 @@ public interface IReactable : IDisposable
     /// Pushes a single notification with the given <paramref name="data"/>.
     /// </summary>
     /// <param name="data">The data to send with the push notification.</param>
-    /// <param name="eventId">The ID of the event to push the notification to.</param>
+    /// <param name="eventId">The ID of the event where the notification will be pushed.</param>
     /// <typeparam name="T">The type of data to push.</typeparam>
     void Push<T>(in T data, Guid eventId);
 
@@ -43,7 +43,7 @@ public interface IReactable : IDisposable
     /// Pushes a single notification using the given <paramref name="message"/>.
     /// </summary>
     /// <param name="message">The message that contains the data to push.</param>
-    /// <param name="eventId">The ID of the event to push the notifications to.</param>
+    /// <param name="eventId">The ID of the event where the notification will be pushed.</param>
     public void Push(in IMessage message, Guid eventId);
 
     /// <summary>
