@@ -4,6 +4,7 @@
 
 namespace CarbonateTests;
 
+using System.Text.Json;
 using Carbonate;
 using Carbonate.Services;
 using Helpers;
@@ -62,7 +63,7 @@ public class JsonMessageTests
     public void GetData_WhenInvoked_ReturnsCorrectResult()
     {
         // Arrange
-        var testData = default(TestData);
+        var testData = new TestData();
         this.mockSerializer.Deserialize<TestData>(Arg.Any<string>()).Returns(testData);
 
         var sut = new JsonMessage(this.mockSerializer, "test-data");
@@ -72,6 +73,26 @@ public class JsonMessageTests
 
         // Assert
         this.mockSerializer.Received(1).Deserialize<TestData>("test-data");
+    }
+
+    [Fact]
+    public void GetData_WhenSerializationResultIsNull_ThrowsException()
+    {
+        // Arrange
+        TestData? nullData = null;
+        this.mockSerializer.Deserialize<TestData>(Arg.Any<string>()).Returns(nullData);
+
+        var sut = new JsonMessage(this.mockSerializer, "test-data");
+
+        // Act
+        _ = sut.GetData<TestData>(OnError);
+
+        // Assert
+        void OnError(Exception ex)
+        {
+            ex.Should().BeOfType<JsonException>();
+            ex.Message.Should().Be("Issues with the JSON deserialization process.");
+        }
     }
     #endregion
 }

@@ -33,8 +33,8 @@ var eventId = Guid.NewGuid();
 //     StarType = "Yellow Dwarf",
 // };
 //
-// reactable.Push(data, eventId);
 
+// reactable.Push(data, eventId);
 var window = new MyObject(123, 456);
 reactable.Subscribe(new Reactor(
     eventId,
