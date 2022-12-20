@@ -31,7 +31,7 @@
         <PackageProjectUrl>https://github.com/KinsonDigital/Carbonate</PackageProjectUrl>
         <RepositoryUrl>https://github.com/KinsonDigital/Carbonate</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageIcon>carbonate-logo-dark-mode.png</PackageIcon>
+        <PackageIcon>carbonate-logo-light-mode.png</PackageIcon>
         <Platforms>x64</Platforms>
         <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -51,7 +51,7 @@
         <InternalsVisibleTo Include="$(AssemblyName)Tests" />
         <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
     </ItemGroup>
-    
+
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.0">
             <PrivateAssets>all</PrivateAssets>
