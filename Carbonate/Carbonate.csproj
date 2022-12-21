@@ -42,7 +42,7 @@
 
     <ItemGroup>
         <None Include="carbonate-logo.ico" Pack="true" PackagePath="\" />
-        <None Include="..\Documentation\Images\carbonate-logo-dark-mode.png" Pack="true" PackagePath="\" />
+        <None Include="..\Documentation\Images\carbonate-logo-light-mode.png" Pack="true" PackagePath="\" />
         <None Include="..\LICENSE.md" Pack="true" PackagePath="\" />
         <None Include="..\README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
