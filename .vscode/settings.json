@@ -5,6 +5,7 @@
         "parameterless",
         "pwsh",
         "Reactable",
-        "runsettings"
+        "runsettings",
+        "unsubscriptions"
     ]
 }
