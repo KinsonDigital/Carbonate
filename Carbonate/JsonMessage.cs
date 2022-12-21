@@ -46,6 +46,8 @@ internal sealed class JsonMessage : IMessage
             {
                 throw new JsonException("Issues with the JSON deserialization process.");
             }
+
+            return result;
         }
         catch (Exception e)
         {
