@@ -1,4 +1,4 @@
-﻿// <copyright file="Reactable.cs" company="KinsonDigital">
+// <copyright file="Reactable.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -79,7 +79,7 @@ public sealed class Reactable : IReactable
          * This is due to the Dispose() method possibly being called during
          * iteration of the reactors list which will cause an exception.
         */
-        for (var i = 0; i < this.reactors.Count; i++)
+        for (var i = this.reactors.Count - 1; i >= 0; i--)
         {
             if (this.reactors[i].EventId == eventId)
             {
