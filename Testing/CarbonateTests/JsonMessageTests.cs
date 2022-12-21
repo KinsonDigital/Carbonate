@@ -69,14 +69,15 @@ public class JsonMessageTests
         var sut = new JsonMessage(this.mockSerializer, "test-data");
 
         // Act
-        sut.GetData<TestData>();
+        var actual = sut.GetData<TestData>();
 
         // Assert
         this.mockSerializer.Received(1).Deserialize<TestData>("test-data");
+        actual.Should().NotBeNull();
     }
 
     [Fact]
-    public void GetData_WhenSerializationResultIsNull_ThrowsException()
+    public void GetData_WhenSerializationResultIsNull_InvokesOnErrorAction()
     {
         // Arrange
         TestData? nullData = null;
