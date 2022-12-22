@@ -54,7 +54,7 @@ public sealed class Reactable : IReactable
     }
 
     /// <inheritdoc/>
-    public void Push<T>(in T data, Guid eventId)
+    public void PushData<T>(in T data, Guid eventId)
     {
         var jsonData = this.serializer.Serialize(data);
 
@@ -64,7 +64,7 @@ public sealed class Reactable : IReactable
     }
 
     /// <inheritdoc/>
-    public void Push(in IMessage message, Guid eventId) => SendNotifications(message, eventId);
+    public void PushMessage(in IMessage message, Guid eventId) => SendNotifications(message, eventId);
 
     /// <inheritdoc/>
     public void Unsubscribe(Guid eventId)

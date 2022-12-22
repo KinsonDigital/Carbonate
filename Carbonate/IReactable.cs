@@ -37,14 +37,14 @@ public interface IReactable : IDisposable
     /// <param name="data">The data to send with the push notification.</param>
     /// <param name="eventId">The ID of the event where the notification will be pushed.</param>
     /// <typeparam name="T">The type of data to push.</typeparam>
-    void Push<T>(in T data, Guid eventId);
+    void PushData<T>(in T data, Guid eventId);
 
     /// <summary>
-    /// Pushes a single notification using the given <paramref name="message"/>.
+    /// Pushes a single notification with the given <paramref name="message"/>.
     /// </summary>
     /// <param name="message">The message that contains the data to push.</param>
     /// <param name="eventId">The ID of the event where the notification will be pushed.</param>
-    public void Push(in IMessage message, Guid eventId);
+    void PushMessage(in IMessage message, Guid eventId);
 
     /// <summary>
     /// Unsubscribes notifications to all <see cref="Reactor"/>s that match the given <paramref name="eventId"/>.

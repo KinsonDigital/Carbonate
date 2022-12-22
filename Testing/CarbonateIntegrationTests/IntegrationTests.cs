@@ -35,7 +35,7 @@ public class IntegrationTests
         var sampleData = new SampleData { StringValue = "test-string", IntValue = 123 };
 
         // Act
-        reactable.Push(sampleData, eventId);
+        reactable.PushData(sampleData, eventId);
         reactable.Unsubscribe(eventId);
 
         // Assert
@@ -74,7 +74,7 @@ public class IntegrationTests
         var sampleData = new SampleData { StringValue = "test-string", IntValue = 123 };
 
         // Act
-        reactable.Push(sampleData, eventId);
+        reactable.PushData(sampleData, eventId);
 
         reactable.Unsubscribe(eventId);
 
@@ -123,8 +123,8 @@ public class IntegrationTests
         var sampleDataB = new SampleData { StringValue = "test-string-B", IntValue = 456 };
 
         // Act
-        reactable.Push(sampleDataA, eventIdA);
-        reactable.Push(sampleDataB, eventIdB);
+        reactable.PushData(sampleDataA, eventIdA);
+        reactable.PushData(sampleDataB, eventIdB);
 
         reactable.Unsubscribe(eventIdA);
 
