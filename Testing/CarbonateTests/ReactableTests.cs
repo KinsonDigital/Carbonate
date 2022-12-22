@@ -98,7 +98,7 @@ public class ReactableTests
     }
 
     [Fact]
-    public void Push_WhenPushingData_NotifiesCorrectSubscriptionsThatMatchEventId()
+    public void PushData_WhenInvoking_NotifiesCorrectSubscriptionsThatMatchEventId()
     {
         // Arrange
         this.mockSerializer.Serialize(Arg.Any<TestData>()).Returns("test-json-data");
@@ -122,7 +122,7 @@ public class ReactableTests
         sut.Subscribe(mockReactorC);
 
         // Act
-        sut.Push(testData, invokedEventId);
+        sut.PushData(testData, invokedEventId);
 
         // Assert
         this.mockSerializer.Received(1).Serialize(testData);
@@ -132,7 +132,7 @@ public class ReactableTests
     }
 
     [Fact]
-    public void Push_WhenPushingMessage_NotifiesCorrectSubscriptionsThatMatchEventId()
+    public void PushMessage_WhenInvoking_NotifiesCorrectSubscriptionsThatMatchEventId()
     {
         // Arrange
         var invokedEventId = Guid.NewGuid();
@@ -155,7 +155,7 @@ public class ReactableTests
         sut.Subscribe(mockReactorC);
 
         // Act
-        sut.Push(mockMessage, invokedEventId);
+        sut.PushMessage(mockMessage, invokedEventId);
 
         // Assert
         mockReactorA.Received(1).OnNext(Arg.Any<IMessage>());
