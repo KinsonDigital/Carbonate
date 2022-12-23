@@ -15,29 +15,12 @@ As with all software, there is always a chance for issues and bugs, especially f
 
 1. [#29](https://github.com/KinsonDigital/Carbonate/issues/29) - Added a new method with the name `Push()` to the `IReactable` interface and `Reactable` class.
    >💡This new method is for pushing a notification without any data.
-2. [#20](https://github.com/KinsonDigital/Carbonate/issues/20) - Added a new parameter to the `Reactor` class constructor.
+2. [#29](https://github.com/KinsonDigital/Carbonate/issues/29) - Added a new parameter to the `Reactor` class constructor.
    >💡This is the implementation to invoke when the new `IReactable.Push()` method is invoked.
-
----
-
-<h2 style="font-weight:bold" align="center">Bug Fixes 🐛</h2>
-
----
-
-<h2 style="font-weight:bold" align="center">Breaking Changes 🧨</h2>
 
 ---
 
 <h2 style="font-weight:bold" align="center">Internal Changes ⚙️</h2>
 <h5 align="center">(Changes that do not affect users.  Not breaking changes, new features, or bug fixes.)</h5>
 
-1. [#20](https://github.com/KinsonDigital/Carbonate/issues/20) - Added integration and unit tests
-
----
-
-<h2 style="font-weight:bold" align="center">Nuget/Library Updates 📦</h2>
-
----
-
-<h2 style="font-weight:bold" align="center">Other 🪧</h2>
-<h5 align="center">(Includes anything that does not fit into the categories above)</h5>
+1. [#29](https://github.com/KinsonDigital/Carbonate/issues/29) - Added integration and unit tests
