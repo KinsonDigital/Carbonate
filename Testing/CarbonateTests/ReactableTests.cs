@@ -1,4 +1,4 @@
-﻿// <copyright file="ReactableTests.cs" company="KinsonDigital">
+// <copyright file="ReactableTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -9,6 +9,7 @@ using Carbonate.Services;
 using Helpers;
 using FluentAssertions;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using NSubstitute.ReceivedExtensions;
 using Xunit;
 
@@ -98,6 +99,36 @@ public class ReactableTests
     }
 
     [Fact]
+    public void Push_WhenInvoking_NotifiesCorrectSubscriptionsThatMatchEventId()
+    {
+        // Arrange
+        var invokedEventId = Guid.NewGuid();
+        var notInvokedEventId = Guid.NewGuid();
+
+        var mockReactorA = Substitute.For<IReactor>();
+        mockReactorA.EventId.Returns(invokedEventId);
+
+        var mockReactorB = Substitute.For<IReactor>();
+        mockReactorB.EventId.Returns(notInvokedEventId);
+
+        var mockReactorC = Substitute.For<IReactor>();
+        mockReactorC.EventId.Returns(invokedEventId);
+
+        var sut = CreateSystemUnderTest();
+        sut.Subscribe(mockReactorA);
+        sut.Subscribe(mockReactorB);
+        sut.Subscribe(mockReactorC);
+
+        // Act
+        sut.Push(invokedEventId);
+
+        // Assert
+        mockReactorA.Received(1).OnNext();
+        mockReactorB.Received(Quantity.None()).OnNext();
+        mockReactorC.Received(1).OnNext();
+    }
+
+    [Fact]
     public void PushData_WhenInvoking_NotifiesCorrectSubscriptionsThatMatchEventId()
     {
         // Arrange
@@ -129,6 +160,38 @@ public class ReactableTests
         mockReactorA.Received(1).OnNext(Arg.Any<JsonMessage>());
         mockReactorB.Received(Quantity.None()).OnNext(Arg.Any<JsonMessage>());
         mockReactorC.Received(1).OnNext(Arg.Any<JsonMessage>());
+    }
+
+    [Fact]
+    public void PushData_WithSerializationError_NotifiesSubscribersOfError()
+    {
+        // Arrange
+        var expected = new Exception("serial-error");
+        this.mockSerializer.Serialize(Arg.Any<TestData>()).Throws(expected);
+
+        var invokedEventId = Guid.NewGuid();
+
+        var mockReactorA = Substitute.For<IReactor>();
+        mockReactorA.EventId.Returns(invokedEventId);
+
+        var mockReactorB = Substitute.For<IReactor>();
+        mockReactorB.EventId.Returns(invokedEventId);
+
+        var testData = default(TestData);
+
+        var sut = CreateSystemUnderTest();
+        sut.Subscribe(mockReactorA);
+        sut.Subscribe(mockReactorB);
+
+        // Act
+        sut.PushData(testData, invokedEventId);
+
+        // Assert
+        mockReactorA.Received(Quantity.None()).OnNext(Arg.Any<JsonMessage>());
+        mockReactorB.Received(Quantity.None()).OnNext(Arg.Any<JsonMessage>());
+
+        mockReactorA.Received(1).OnError(expected);
+        mockReactorB.Received(1).OnError(expected);
     }
 
     [Fact]

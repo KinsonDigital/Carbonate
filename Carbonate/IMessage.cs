@@ -10,7 +10,7 @@ namespace Carbonate;
 public interface IMessage
 {
     /// <summary>
-    /// Deserializes the message to the type <typeparamref name="T"/>.
+    /// Gets the data as the type <typeparamref name="T"/>.
     /// </summary>
     /// <param name="onError">The action to invoke if an exception occurs.</param>
     /// <typeparam name="T">The type to deserialize the message into.</typeparam>

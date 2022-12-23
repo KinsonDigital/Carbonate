@@ -15,7 +15,31 @@ using Xunit;
 public class IntegrationTests
 {
     [Fact]
-    public void WithSingleEventID_And_WithSingleSubscription_And_WithSingleUnsubscribe_ReturnsCorrectResults()
+    public void WhenPushingNoDataWithSingleEventID_And_WithSingleSubscription_And_WithSingleUnsubscribe_ReturnsCorrectResults()
+    {
+        // Arrange
+        var eventId = new Guid("98a879d4-e819-41da-80e4-a1b459b3e43f");
+
+        IDisposable? unsubscriber = null;
+
+        var reactable = new Reactable();
+
+        unsubscriber = reactable.Subscribe(new Reactor(
+            eventId,
+            onNext: () =>
+            {
+            }, onCompleted: () => unsubscriber?.Dispose()));
+
+        // Act
+        reactable.Push(eventId);
+        reactable.Unsubscribe(eventId);
+
+        // Assert
+        reactable.Reactors.Should().HaveCount(0);
+    }
+
+    [Fact]
+    public void WhenPushingDataWithSingleEventID_And_WithSingleSubscription_And_WithSingleUnsubscribe_ReturnsCorrectResults()
     {
         // Arrange
         SampleData? expectedData = null;
@@ -27,7 +51,7 @@ public class IntegrationTests
 
         unsubscriber = reactable.Subscribe(new Reactor(
             eventId,
-            onNext: data =>
+            onNextMsg: data =>
             {
                 expectedData = data.GetData<SampleData>();
             }, onCompleted: () => unsubscriber?.Dispose()));
@@ -46,7 +70,7 @@ public class IntegrationTests
     }
 
     [Fact]
-    public void WithSingleEventID_And_WithMultipleSubscriptions_And_WithSingleEventUnsubscribe_UnsubscribesFromAll()
+    public void WhenPushingDataWithSingleEventID_And_WithMultipleSubscriptions_And_WithSingleEventUnsubscribe_UnsubscribesFromAll()
     {
         // Arrange
         var expectedData = new List<SampleData?>();
@@ -61,7 +85,7 @@ public class IntegrationTests
             IDisposable? unsubscriber = null;
             unsubscriber = reactable.Subscribe(new Reactor(
                     eventId,
-                    onNext: data =>
+                    onNextMsg: data =>
                     {
                         expectedData.Add(data.GetData<SampleData>());
                     },
@@ -89,7 +113,7 @@ public class IntegrationTests
     }
 
     [Fact]
-    public void WithMultipleEventIDs_And_WithMultipleSubscriptions_And_WithSingleEventUnsubscribe_ReturnsCorrectResults()
+    public void WhenPushingDataWithMultipleEventIDs_And_WithMultipleSubscriptions_And_WithSingleEventUnsubscribe_ReturnsCorrectResults()
     {
         // Arrange
         SampleData? expectedDataA = null;
@@ -106,7 +130,7 @@ public class IntegrationTests
         // Subscription A
         unsubscriberA = reactable.Subscribe(new Reactor(
             eventIdA,
-            onNext: data =>
+            onNextMsg: data =>
             {
                 expectedDataA = data.GetData<SampleData>();
             }, onCompleted: () => unsubscriberA?.Dispose()));
@@ -114,7 +138,7 @@ public class IntegrationTests
         // Subscription B
         unsubscriberB = reactable.Subscribe(new Reactor(
             eventIdB,
-            onNext: data =>
+            onNextMsg: data =>
             {
                 expectedDataB = data.GetData<SampleData>();
             }, onCompleted: () => unsubscriberB?.Dispose()));

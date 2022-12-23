@@ -32,7 +32,13 @@ public interface IReactable : IDisposable
     IDisposable Subscribe(IReactor reactor);
 
     /// <summary>
-    /// Pushes a single notification with the given <paramref name="data"/>.
+    /// Pushes a single notification for an event that matches the given <paramref name="eventId"/>.
+    /// </summary>
+    /// <param name="eventId">The ID of the event where the notification will be pushed.</param>
+    void Push(Guid eventId);
+
+    /// <summary>
+    /// Pushes a single notification with the given <paramref name="data"/> for an event that matches the given <paramref name="eventId"/>.
     /// </summary>
     /// <param name="data">The data to send with the push notification.</param>
     /// <param name="eventId">The ID of the event where the notification will be pushed.</param>
@@ -40,7 +46,7 @@ public interface IReactable : IDisposable
     void PushData<T>(in T data, Guid eventId);
 
     /// <summary>
-    /// Pushes a single notification with the given <paramref name="message"/>.
+    /// Pushes a single notification with the given <paramref name="message"/> for an event that matches the given <paramref name="eventId"/>.
     /// </summary>
     /// <param name="message">The message that contains the data to push.</param>
     /// <param name="eventId">The ID of the event where the notification will be pushed.</param>
