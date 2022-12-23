@@ -9,7 +9,8 @@ namespace Carbonate;
 /// </summary>
 public sealed class Reactor : IReactor
 {
-    private readonly Action<IMessage>? onNext;
+    private readonly Action? onNext;
+    private readonly Action<IMessage>? onNextMsg;
     private readonly Action? onCompleted;
     private readonly Action<Exception>? onError;
 
@@ -17,13 +18,20 @@ public sealed class Reactor : IReactor
     /// Initializes a new instance of the <see cref="Reactor"/> class.
     /// </summary>
     /// <param name="eventId">The ID of the event where the <see cref="Reactor"/> responds.</param>
-    /// <param name="onNext">Executed when a push notification occurs.</param>
+    /// <param name="onNext">Executed when a push notification occurs with no data.</param>
+    /// <param name="onNextMsg">Executed when a push notification occurs with a message.</param>
     /// <param name="onCompleted">Executed when the provider has finished sending push-based notifications.</param>
     /// <param name="onError">Executed when the provider experiences an error condition.</param>
-    public Reactor(Guid eventId, Action<IMessage>? onNext = null, Action? onCompleted = null, Action<Exception>? onError = null)
+    public Reactor(
+        Guid eventId,
+        Action? onNext = null,
+        Action<IMessage>? onNextMsg = null,
+        Action? onCompleted = null,
+        Action<Exception>? onError = null)
     {
         EventId = eventId;
         this.onNext = onNext;
+        this.onNextMsg = onNextMsg;
         this.onCompleted = onCompleted;
         this.onError = onError;
     }
@@ -35,6 +43,17 @@ public sealed class Reactor : IReactor
     public bool Unsubscribed { get; private set; }
 
     /// <inheritdoc />
+    public void OnNext()
+    {
+        if (Unsubscribed)
+        {
+            return;
+        }
+
+        this.onNext?.Invoke();
+    }
+
+    /// <inheritdoc />
     public void OnNext(IMessage message)
     {
         if (Unsubscribed)
@@ -42,7 +61,7 @@ public sealed class Reactor : IReactor
             return;
         }
 
-        this.onNext?.Invoke(message);
+        this.onNextMsg?.Invoke(message);
     }
 
     /// <inheritdoc />

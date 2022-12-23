@@ -8,7 +8,7 @@
 
 <!--PRE-PROCESSING-UNCOMMENT-START-->
 <!--
-![logo](./Documentation/Images/carbonate-logo-light-mode.png#gh-light-mode-only)
+![carbonate-logo](https://raw.githubusercontent.com/KinsonDigital/Carbonate/release/v1.0.0/Documentation/Images/carbonate-logo-light-mode.png)
 -->
 <!--PRE-PROCESSING-UNCOMMENT-STOP-->
 
