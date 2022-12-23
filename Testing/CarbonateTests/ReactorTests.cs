@@ -32,7 +32,41 @@ public class ReactorTests
 
     #region Method Tests
     [Fact]
-    public void OnNext_WhenNotUnsubscribed_InvokesAction()
+    public void OnNext_WhenSendingNothingAndSubscribed_InvokesAction()
+    {
+        // Arrange
+        var onNextInvoked = false;
+        void OnNext() => onNextInvoked = true;
+
+        var sut = new Reactor(Guid.NewGuid(), onNext: OnNext);
+
+        // Act
+        sut.OnNext();
+
+        // Assert
+        onNextInvoked.Should().BeTrue();
+    }
+
+    [Fact]
+    public void OnNext_WhenSendingNothingAndNotSubscribed_DoesNotInvokeAction()
+    {
+        // Arrange
+        var onNextInvoked = false;
+        void OnNext() => onNextInvoked = true;
+
+        var sut = new Reactor(Guid.NewGuid(), onNext: OnNext);
+
+        sut.OnComplete();
+
+        // Act
+        sut.OnNext();
+
+        // Assert
+        onNextInvoked.Should().BeFalse();
+    }
+
+    [Fact]
+    public void OnNext_WhenSendingMessageAndSubscribed_InvokesAction()
     {
         // Arrange
         var onNextInvoked = false;
@@ -40,7 +74,7 @@ public class ReactorTests
 
         var mockMessage = Substitute.For<IMessage>();
 
-        var sut = new Reactor(Guid.NewGuid(), onNext: OnNext);
+        var sut = new Reactor(Guid.NewGuid(), onNextMsg: OnNext);
 
         // Act
         sut.OnNext(mockMessage);
@@ -50,7 +84,7 @@ public class ReactorTests
     }
 
     [Fact]
-    public void OnNext_WhenNotSubscribed_DoesNotInvokeAction()
+    public void OnNext_WhenSendingMessageAndNotSubscribed_DoesNotInvokeAction()
     {
         // Arrange
         var onNextInvoked = false;
@@ -58,7 +92,7 @@ public class ReactorTests
 
         var mockMessage = Substitute.For<IMessage>();
 
-        var sut = new Reactor(Guid.NewGuid(), onNext: OnNext);
+        var sut = new Reactor(Guid.NewGuid(), onNextMsg: OnNext);
 
         sut.OnComplete();
 

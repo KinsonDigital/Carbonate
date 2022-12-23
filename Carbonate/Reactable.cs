@@ -54,6 +54,9 @@ public sealed class Reactable : IReactable
     }
 
     /// <inheritdoc/>
+    public void Push(Guid eventId) => SendNotifications(null, eventId);
+
+    /// <inheritdoc/>
     public void PushData<T>(in T data, Guid eventId)
     {
         var jsonData = this.serializer.Serialize(data);
@@ -97,7 +100,12 @@ public sealed class Reactable : IReactable
     /// <inheritdoc cref="IDisposable.Dispose"/>
     public void Dispose() => Dispose(true);
 
-    private void SendNotifications(IMessage message, Guid eventId)
+    /// <summary>
+    /// Sends a notification to all of the <see cref="IReactor"/>s that match the given <paramref name="eventId"/>.
+    /// </summary>
+    /// <param name="message">The message to send.</param>
+    /// <param name="eventId">The ID of the event.</param>
+    private void SendNotifications(IMessage? message, Guid eventId)
     {
         /* Work from the end to the beginning of the list
            just in case the reactable is disposed(removed)
@@ -105,7 +113,16 @@ public sealed class Reactable : IReactable
          */
         for (var i = this.reactors.Count - 1; i >= 0; i--)
         {
-            if (this.reactors[i].EventId == eventId)
+            if (this.reactors[i].EventId != eventId)
+            {
+                continue;
+            }
+
+            if (message is null)
+            {
+                this.reactors[i].OnNext();
+            }
+            else
             {
                 this.reactors[i].OnNext(message);
             }

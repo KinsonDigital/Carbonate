@@ -1,4 +1,4 @@
-﻿// <copyright file="ReactableTests.cs" company="KinsonDigital">
+// <copyright file="ReactableTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -95,6 +95,36 @@ public class ReactableTests
         actual[1].Should().BeSameAs(mockReactorB);
         reactorUnsubscriberA.Should().NotBeNull();
         reactorUnsubscriberB.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void Push_WhenInvoking_NotifiesCorrectSubscriptionsThatMatchEventId()
+    {
+        // Arrange
+        var invokedEventId = Guid.NewGuid();
+        var notInvokedEventId = Guid.NewGuid();
+
+        var mockReactorA = Substitute.For<IReactor>();
+        mockReactorA.EventId.Returns(invokedEventId);
+
+        var mockReactorB = Substitute.For<IReactor>();
+        mockReactorB.EventId.Returns(notInvokedEventId);
+
+        var mockReactorC = Substitute.For<IReactor>();
+        mockReactorC.EventId.Returns(invokedEventId);
+
+        var sut = CreateSystemUnderTest();
+        sut.Subscribe(mockReactorA);
+        sut.Subscribe(mockReactorB);
+        sut.Subscribe(mockReactorC);
+
+        // Act
+        sut.Push(invokedEventId);
+
+        // Assert
+        mockReactorA.Received(1).OnNext();
+        mockReactorB.Received(Quantity.None()).OnNext();
+        mockReactorC.Received(1).OnNext();
     }
 
     [Fact]
