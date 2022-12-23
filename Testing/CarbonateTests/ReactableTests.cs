@@ -9,6 +9,7 @@ using Carbonate.Services;
 using Helpers;
 using FluentAssertions;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using NSubstitute.ReceivedExtensions;
 using Xunit;
 
@@ -159,6 +160,38 @@ public class ReactableTests
         mockReactorA.Received(1).OnNext(Arg.Any<JsonMessage>());
         mockReactorB.Received(Quantity.None()).OnNext(Arg.Any<JsonMessage>());
         mockReactorC.Received(1).OnNext(Arg.Any<JsonMessage>());
+    }
+
+    [Fact]
+    public void PushData_WithSerializationError_NotifiesSubscribersOfError()
+    {
+        // Arrange
+        var expected = new Exception("serial-error");
+        this.mockSerializer.Serialize(Arg.Any<TestData>()).Throws(expected);
+
+        var invokedEventId = Guid.NewGuid();
+
+        var mockReactorA = Substitute.For<IReactor>();
+        mockReactorA.EventId.Returns(invokedEventId);
+
+        var mockReactorB = Substitute.For<IReactor>();
+        mockReactorB.EventId.Returns(invokedEventId);
+
+        var testData = default(TestData);
+
+        var sut = CreateSystemUnderTest();
+        sut.Subscribe(mockReactorA);
+        sut.Subscribe(mockReactorB);
+
+        // Act
+        sut.PushData(testData, invokedEventId);
+
+        // Assert
+        mockReactorA.Received(Quantity.None()).OnNext(Arg.Any<JsonMessage>());
+        mockReactorB.Received(Quantity.None()).OnNext(Arg.Any<JsonMessage>());
+
+        mockReactorA.Received(1).OnError(expected);
+        mockReactorB.Received(1).OnError(expected);
     }
 
     [Fact]

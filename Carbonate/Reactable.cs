@@ -59,11 +59,18 @@ public sealed class Reactable : IReactable
     /// <inheritdoc/>
     public void PushData<T>(in T data, Guid eventId)
     {
-        var jsonData = this.serializer.Serialize(data);
+        try
+        {
+            var jsonData = this.serializer.Serialize(data);
 
-        var message = new JsonMessage(this.serializer, jsonData);
+            var message = new JsonMessage(this.serializer, jsonData);
 
-        SendNotifications(message, eventId);
+            SendNotifications(message, eventId);
+        }
+        catch (Exception e)
+        {
+            SendError(e, eventId);
+        }
     }
 
     /// <inheritdoc/>
@@ -108,8 +115,8 @@ public sealed class Reactable : IReactable
     private void SendNotifications(IMessage? message, Guid eventId)
     {
         /* Work from the end to the beginning of the list
-           just in case the reactable is disposed(removed)
-           in the OnNext() method.
+         * just in case the reactable is disposed(removed)
+         * in the OnNext() method.
          */
         for (var i = this.reactors.Count - 1; i >= 0; i--)
         {
@@ -126,6 +133,28 @@ public sealed class Reactable : IReactable
             {
                 this.reactors[i].OnNext(message);
             }
+        }
+    }
+
+    /// <summary>
+    /// Sends an error to all of the subscribers that matches the given <paramref name="eventId"/>.
+    /// </summary>
+    /// <param name="exception">The exception that occured.</param>
+    /// <param name="eventId">The ID of the event where the notification will be pushed.</param>
+    private void SendError(Exception exception, Guid eventId)
+    {
+        /* Work from the end to the beginning of the list
+         * just in case the reactable is disposed(removed)
+         * in the OnNext() method.
+         */
+        for (var i = this.reactors.Count - 1; i >= 0; i--)
+        {
+            if (this.reactors[i].EventId != eventId)
+            {
+                continue;
+            }
+
+            this.reactors[i].OnError(exception);
         }
     }
 
