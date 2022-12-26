@@ -84,7 +84,6 @@ public sealed class Reactable : IReactable
             return;
         }
 
-        // ReSharper disable ForCanBeConvertedToForeach
         /* Keep this loop as a for-loop.  Do not convert to for-each.
          * This is due to the Dispose() method possibly being called during
          * iteration of the reactors list which will cause an exception.
@@ -97,12 +96,23 @@ public sealed class Reactable : IReactable
             }
         }
 
-        // ReSharper restore ForCanBeConvertedToForeach
         this.notificationsEnded = this.reactors.All(r => r.Unsubscribed);
     }
 
     /// <inheritdoc/>
-    public void UnsubscribeAll() => this.reactors.Clear();
+    public void UnsubscribeAll()
+    {
+        /* Keep this loop as a for-loop.  Do not convert to for-each.
+         * This is due to the Dispose() method possibly being called during
+         * iteration of the reactors list which will cause an exception.
+        */
+        for (var i = this.reactors.Count - 1; i >= 0; i--)
+        {
+            this.reactors[i].OnComplete();
+        }
+
+        this.reactors.Clear();
+    }
 
     /// <inheritdoc cref="IDisposable.Dispose"/>
     public void Dispose() => Dispose(true);

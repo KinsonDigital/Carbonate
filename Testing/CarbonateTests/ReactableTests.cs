@@ -287,14 +287,30 @@ public class ReactableTests
     public void UnsubscribeAll_WhenInvoked_UnsubscribesFromAll()
     {
         // Arrange
-        var sut = CreateSystemUnderTest();
-        sut.Subscribe(Substitute.For<IReactor>());
+        var eventToUnsubscribeFrom = Guid.NewGuid();
+        var eventNotToUnsubscribeFrom = Guid.NewGuid();
+
+        var mockReactorA = Substitute.For<IReactor>();
+        mockReactorA.EventId.Returns(eventToUnsubscribeFrom);
+
+        var mockReactorB = Substitute.For<IReactor>();
+        mockReactorB.EventId.Returns(eventNotToUnsubscribeFrom);
+
+        var mockReactorC = Substitute.For<IReactor>();
+        mockReactorC.EventId.Returns(eventToUnsubscribeFrom);
 
         // Act
+        var sut = CreateSystemUnderTest();
+        sut.Subscribe(mockReactorC);
+        sut.Subscribe(mockReactorB);
+        sut.Subscribe(mockReactorA);
+
         sut.UnsubscribeAll();
 
         // Assert
-        sut.Reactors.Should().BeEmpty();
+        mockReactorA.Received(1).OnComplete();
+        mockReactorB.Received(1).OnComplete();
+        mockReactorC.Received(1).OnComplete();
     }
 
     [Fact]
