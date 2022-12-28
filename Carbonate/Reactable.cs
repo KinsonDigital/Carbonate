@@ -6,6 +6,7 @@ namespace Carbonate;
 
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using Services;
 
 /// <summary>
@@ -67,7 +68,7 @@ public sealed class Reactable : IReactable
 
             SendNotifications(message, eventId);
         }
-        catch (Exception e)
+        catch (JsonException e)
         {
             SendError(e, eventId);
         }

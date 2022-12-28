@@ -4,6 +4,7 @@
 
 namespace CarbonateTests;
 
+using System.Text.Json;
 using Carbonate;
 using Carbonate.Services;
 using Helpers;
@@ -204,7 +205,7 @@ public class ReactableTests
     public void PushData_WithSerializationError_NotifiesSubscribersOfError()
     {
         // Arrange
-        var expected = new Exception("serial-error");
+        var expected = new JsonException("serial-error");
         this.mockSerializerService.Serialize(Arg.Any<TestData>()).Throws(expected);
 
         var invokedEventId = Guid.NewGuid();
