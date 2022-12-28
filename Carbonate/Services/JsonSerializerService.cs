@@ -1,4 +1,4 @@
-﻿// <copyright file="JsonSerializer.cs" company="KinsonDigital">
+﻿// <copyright file="JsonSerializerService.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -11,7 +11,7 @@ using System.Diagnostics.CodeAnalysis;
 /// Performs JSON services.
 /// </summary>
 [ExcludeFromCodeCoverage]
-internal sealed class JsonSerializer : ISerializer
+internal sealed class JsonSerializerService : ISerializerService
 {
     /// <inheritdoc/>
     public string Serialize<T>(T? value)
@@ -23,9 +23,9 @@ internal sealed class JsonSerializer : ISerializer
 #endif
         var options = new JsonSerializerOptions { WriteIndented = writeIndented };
 
-        return System.Text.Json.JsonSerializer.Serialize(value, options);
+        return JsonSerializer.Serialize(value, options);
     }
 
     /// <inheritdoc/>
-    public T? Deserialize<T>(string value) => System.Text.Json.JsonSerializer.Deserialize<T>(value);
+    public T? Deserialize<T>(string value) => JsonSerializer.Deserialize<T>(value);
 }

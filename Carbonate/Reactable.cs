@@ -6,6 +6,7 @@ namespace Carbonate;
 
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using Services;
 
 /// <summary>
@@ -14,7 +15,7 @@ using Services;
 public sealed class Reactable : IReactable
 {
     private readonly List<IReactor> reactors = new ();
-    private readonly ISerializer serializer;
+    private readonly ISerializerService serializerService;
     private bool isDisposed;
     private bool notificationsEnded;
 
@@ -23,13 +24,13 @@ public sealed class Reactable : IReactable
     /// </summary>
     [ExcludeFromCodeCoverage]
     [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API for users.")]
-    public Reactable() => this.serializer = new JsonSerializer();
+    public Reactable() => this.serializerService = new JsonSerializerService();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Reactable"/> class.
     /// </summary>
-    /// <param name="serializer">The serializer used to serialize the messages.</param>
-    public Reactable(ISerializer serializer) => this.serializer = serializer;
+    /// <param name="serializerService">The serializer used to serialize the messages.</param>
+    public Reactable(ISerializerService serializerService) => this.serializerService = serializerService;
 
     /// <inheritdoc/>
     public ReadOnlyCollection<IReactor> Reactors => new (this.reactors);
@@ -61,13 +62,13 @@ public sealed class Reactable : IReactable
     {
         try
         {
-            var jsonData = this.serializer.Serialize(data);
+            var jsonData = this.serializerService.Serialize(data);
 
-            var message = new JsonMessage(this.serializer, jsonData);
+            var message = new JsonMessage(this.serializerService, jsonData);
 
             SendNotifications(message, eventId);
         }
-        catch (Exception e)
+        catch (JsonException e)
         {
             SendError(e, eventId);
         }
@@ -90,9 +91,34 @@ public sealed class Reactable : IReactable
         */
         for (var i = this.reactors.Count - 1; i >= 0; i--)
         {
-            if (this.reactors[i].EventId == eventId)
+            /*NOTE:
+             * The purpose of this logic is to prevent array index errors
+             * if an OnNext() implementation ends up unsubscribing a single
+             * subscription or unsubscribing from a single event id
+             *
+             * If the current index is not less than or equal to
+             * the total number of items, reset the index to the last item
+             */
+            i = i > this.reactors.Count - 1
+                ? this.reactors.Count - 1
+                : i;
+
+            if (this.reactors[i].EventId != eventId)
             {
-                this.reactors[i].OnComplete();
+                continue;
+            }
+
+            var beforeTotal = this.reactors.Count;
+
+            this.reactors[i].OnComplete();
+
+            var nothingRemoved = Math.Abs(beforeTotal - this.reactors.Count) <= 0;
+
+            // Make sure that the OnComplete implementation did not remove
+            // the reactor before attempting to remove it
+            if (nothingRemoved)
+            {
+                this.reactors.Remove(this.reactors[i]);
             }
         }
 
@@ -108,6 +134,18 @@ public sealed class Reactable : IReactable
         */
         for (var i = this.reactors.Count - 1; i >= 0; i--)
         {
+            /*NOTE:
+             * The purpose of this logic is to prevent array index errors
+             * if an OnNext() implementation ends up unsubscribing a single
+             * subscription or unsubscribing from a single event id
+             *
+             * If the current index is not less than or equal to
+             * the total number of items, reset the index to the last item
+             */
+            i = i > this.reactors.Count - 1
+                ? this.reactors.Count - 1
+                : i;
+
             this.reactors[i].OnComplete();
         }
 
@@ -130,6 +168,18 @@ public sealed class Reactable : IReactable
          */
         for (var i = this.reactors.Count - 1; i >= 0; i--)
         {
+            /*NOTE:
+             * The purpose of this logic is to prevent array index errors
+             * if an OnNext() implementation ends up unsubscribing a single
+             * subscription or unsubscribing from a single event id
+             *
+             * If the current index is not less than or equal to
+             * the total number of items, reset the index to the last item
+             */
+            i = i > this.reactors.Count - 1
+                ? this.reactors.Count - 1
+                : i;
+
             if (this.reactors[i].EventId != eventId)
             {
                 continue;
@@ -159,6 +209,18 @@ public sealed class Reactable : IReactable
          */
         for (var i = this.reactors.Count - 1; i >= 0; i--)
         {
+            /*NOTE:
+             * The purpose of this logic is to prevent array index errors
+             * if an OnNext() implementation ends up unsubscribing a single
+             * subscription or unsubscribing from a single event id
+             *
+             * If the current index is not less than or equal to
+             * the total number of items, reset the index to the last item
+             */
+            i = i > this.reactors.Count - 1
+                ? this.reactors.Count - 1
+                : i;
+
             if (this.reactors[i].EventId != eventId)
             {
                 continue;
