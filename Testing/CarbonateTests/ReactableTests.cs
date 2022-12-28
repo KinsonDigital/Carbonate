@@ -2,8 +2,10 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+// ReSharper disable AccessToModifiedClosure
 namespace CarbonateTests;
 
+using System.Text.Json;
 using Carbonate;
 using Carbonate.Services;
 using Helpers;
@@ -18,12 +20,12 @@ using Xunit;
 /// </summary>
 public class ReactableTests
 {
-    private readonly ISerializer mockSerializer;
+    private readonly ISerializerService mockSerializerService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ReactableTests"/> class.
     /// </summary>
-    public ReactableTests() => this.mockSerializer = Substitute.For<ISerializer>();
+    public ReactableTests() => this.mockSerializerService = Substitute.For<ISerializerService>();
 
     #region Prop Tests
     [Fact]
@@ -59,6 +61,36 @@ public class ReactableTests
     #endregion
 
     #region Method Tests
+    [Fact]
+    public void Push_WhenInvokedAfterDisposal_ThrowsException()
+    {
+        // Arrange
+        var sut = CreateSystemUnderTest();
+        sut.Dispose();
+
+        // Act
+        var act = () => sut.Push(Guid.Empty);
+
+        // Assert
+        act.Should().Throw<ObjectDisposedException>()
+            .WithMessage($"{nameof(Reactable)} disposed.{Environment.NewLine}Object name: 'Reactable'.");
+    }
+
+    [Fact]
+    public void Subscribe_WhenInvokedAfterDisposal_ThrowsException()
+    {
+        // Arrange
+        var sut = CreateSystemUnderTest();
+        sut.Dispose();
+
+        // Act
+        var act = () => sut.Subscribe(null);
+
+        // Assert
+        act.Should().Throw<ObjectDisposedException>()
+            .WithMessage($"{nameof(Reactable)} disposed.{Environment.NewLine}Object name: 'Reactable'.");
+    }
+
     [Fact]
     public void Subscribe_WithNullReactor_ThrowsException()
     {
@@ -129,10 +161,63 @@ public class ReactableTests
     }
 
     [Fact]
+    public void Push_WhenUnsubscribingInsideOnNexReactorAction_DoesNotThrowException()
+    {
+        // Arrange
+        var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
+        var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
+
+        IDisposable? otherUnsubscriberA = null;
+        IDisposable? otherUnsubscriberB = null;
+
+        var initReactorA = new Reactor(
+            eventId: mainId);
+
+        var otherReactorA = new Reactor(eventId: otherId);
+        var otherReactorB = new Reactor(eventId: otherId);
+
+        var sut = CreateSystemUnderTest();
+
+        var initReactorC = new Reactor(
+            eventId: mainId,
+            onNext: () =>
+            {
+                otherUnsubscriberA?.Dispose();
+                otherUnsubscriberB?.Dispose();
+            });
+
+        sut.Subscribe(initReactorA);
+        otherUnsubscriberA = sut.Subscribe(otherReactorA);
+        otherUnsubscriberB = sut.Subscribe(otherReactorB);
+        sut.Subscribe(initReactorC);
+
+        // Act
+        var act = () => sut.Push(mainId);
+
+        // Assert
+        act.Should().NotThrow<ArgumentOutOfRangeException>();
+    }
+
+    [Fact]
+    public void PushData_WhenInvokedAfterDisposal_ThrowsException()
+    {
+        // Arrange
+        var sut = CreateSystemUnderTest();
+        sut.Dispose();
+
+        // Act
+        var act = () => sut.PushData(new TestData(), Guid.Empty);
+
+        // Assert
+        act.Should().Throw<ObjectDisposedException>()
+            .WithMessage($"{nameof(Reactable)} disposed.{Environment.NewLine}Object name: 'Reactable'.");
+    }
+
+    [Fact]
     public void PushData_WhenInvoking_NotifiesCorrectSubscriptionsThatMatchEventId()
     {
         // Arrange
-        this.mockSerializer.Serialize(Arg.Any<TestData>()).Returns("test-json-data");
+        this.mockSerializerService.Serialize(Arg.Any<TestData>()).Returns("test-json-data");
         var invokedEventId = Guid.NewGuid();
         var notInvokedEventId = Guid.NewGuid();
 
@@ -156,7 +241,7 @@ public class ReactableTests
         sut.PushData(testData, invokedEventId);
 
         // Assert
-        this.mockSerializer.Received(1).Serialize(testData);
+        this.mockSerializerService.Received(1).Serialize(testData);
         mockReactorA.Received(1).OnNext(Arg.Any<JsonMessage>());
         mockReactorB.Received(Quantity.None()).OnNext(Arg.Any<JsonMessage>());
         mockReactorC.Received(1).OnNext(Arg.Any<JsonMessage>());
@@ -166,16 +251,17 @@ public class ReactableTests
     public void PushData_WithSerializationError_NotifiesSubscribersOfError()
     {
         // Arrange
-        var expected = new Exception("serial-error");
-        this.mockSerializer.Serialize(Arg.Any<TestData>()).Throws(expected);
+        var expected = new JsonException("serial-error");
+        this.mockSerializerService.Serialize(Arg.Any<TestData>()).Throws(expected);
 
         var invokedEventId = Guid.NewGuid();
+        var otherEventId = Guid.NewGuid();
 
         var mockReactorA = Substitute.For<IReactor>();
         mockReactorA.EventId.Returns(invokedEventId);
 
         var mockReactorB = Substitute.For<IReactor>();
-        mockReactorB.EventId.Returns(invokedEventId);
+        mockReactorB.EventId.Returns(otherEventId);
 
         var testData = default(TestData);
 
@@ -191,7 +277,106 @@ public class ReactableTests
         mockReactorB.Received(Quantity.None()).OnNext(Arg.Any<JsonMessage>());
 
         mockReactorA.Received(1).OnError(expected);
-        mockReactorB.Received(1).OnError(expected);
+        mockReactorB.Received(Quantity.None()).OnError(expected);
+    }
+
+    [Fact]
+    public void PushData_WhenUnsubscribingInsideOnNextReactorAction_DoesNotThrowException()
+    {
+        // Arrange
+        this.mockSerializerService.Serialize(Arg.Any<TestData>()).Returns("test-data");
+        var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
+        var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
+
+        IDisposable? otherUnsubscriberA = null;
+        IDisposable? otherUnsubscriberB = null;
+
+        var initReactorA = new Reactor(
+            eventId: mainId);
+
+        var otherReactorA = new Reactor(eventId: otherId);
+        var otherReactorB = new Reactor(eventId: otherId);
+
+        var sut = CreateSystemUnderTest();
+
+        var testData = new TestData();
+
+        var initReactorC = new Reactor(
+            eventId: mainId,
+            onNextMsg: _ =>
+            {
+                otherUnsubscriberA?.Dispose();
+                otherUnsubscriberB?.Dispose();
+            });
+
+        sut.Subscribe(initReactorA);
+        otherUnsubscriberA = sut.Subscribe(otherReactorA);
+        otherUnsubscriberB = sut.Subscribe(otherReactorB);
+        sut.Subscribe(initReactorC);
+
+        // Act
+        var act = () => sut.PushData(testData, mainId);
+
+        // Assert
+        act.Should().NotThrow<Exception>();
+    }
+
+    [Fact]
+    public void PushData_WhenUnsubscribingInsideOnErrorReactorAction_DoesNotThrowException()
+    {
+        // Arrange
+        var expected = new JsonException("serial-error");
+        this.mockSerializerService.Serialize(Arg.Any<TestData>()).Throws(expected);
+
+        var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
+        var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
+
+        IDisposable? otherUnsubscriberA = null;
+        IDisposable? otherUnsubscriberB = null;
+
+        var initReactorA = new Reactor(
+            eventId: mainId);
+
+        var otherReactorA = new Reactor(eventId: otherId);
+        var otherReactorB = new Reactor(eventId: otherId);
+
+        var testData = new TestData();
+
+        var sut = CreateSystemUnderTest();
+
+        var initReactorC = new Reactor(
+            eventId: mainId,
+            onError: _ =>
+            {
+                otherUnsubscriberA?.Dispose();
+                otherUnsubscriberB?.Dispose();
+            });
+
+        sut.Subscribe(initReactorA);
+        otherUnsubscriberA = sut.Subscribe(otherReactorA);
+        otherUnsubscriberB = sut.Subscribe(otherReactorB);
+        sut.Subscribe(initReactorC);
+
+        // Act
+        var act = () => sut.PushData(testData, mainId);
+
+        // Assert
+        act.Should().NotThrow<Exception>();
+    }
+
+    [Fact]
+    public void PushMessage_WhenInvokedAfterDisposal_ThrowsException()
+    {
+        // Arrange
+        var sut = CreateSystemUnderTest();
+        sut.Dispose();
+
+        // Act
+        var act = () => sut.PushMessage(Substitute.For<IMessage>(), Guid.Empty);
+
+        // Assert
+        act.Should().Throw<ObjectDisposedException>()
+            .WithMessage($"{nameof(Reactable)} disposed.{Environment.NewLine}Object name: 'Reactable'.");
     }
 
     [Fact]
@@ -227,6 +412,62 @@ public class ReactableTests
     }
 
     [Fact]
+    public void PushMessage_WhenUnsubscribingInsideOnNextReactorAction_DoesNotThrowException()
+    {
+        // Arrange
+        this.mockSerializerService.Serialize(Arg.Any<TestData>()).Returns("test-data");
+        var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
+        var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
+
+        IDisposable? otherUnsubscriberA = null;
+        IDisposable? otherUnsubscriberB = null;
+
+        var initReactorA = new Reactor(
+            eventId: mainId);
+
+        var otherReactorA = new Reactor(eventId: otherId);
+        var otherReactorB = new Reactor(eventId: otherId);
+
+        var mockMessage = Substitute.For<IMessage>();
+
+        var sut = CreateSystemUnderTest();
+
+        var initReactorC = new Reactor(
+            eventId: mainId,
+            onNextMsg: _ =>
+            {
+                otherUnsubscriberA?.Dispose();
+                otherUnsubscriberB?.Dispose();
+            });
+
+        sut.Subscribe(initReactorA);
+        otherUnsubscriberA = sut.Subscribe(otherReactorA);
+        otherUnsubscriberB = sut.Subscribe(otherReactorB);
+        sut.Subscribe(initReactorC);
+
+        // Act
+        var act = () => sut.PushMessage(mockMessage, mainId);
+
+        // Assert
+        act.Should().NotThrow<Exception>();
+    }
+
+    [Fact]
+    public void Unsubscribe_WhenInvokedAfterDisposal_ThrowsException()
+    {
+        // Arrange
+        var sut = CreateSystemUnderTest();
+        sut.Dispose();
+
+        // Act
+        var act = () => sut.Unsubscribe(Guid.Empty);
+
+        // Assert
+        act.Should().Throw<ObjectDisposedException>()
+            .WithMessage($"{nameof(Reactable)} disposed.{Environment.NewLine}Object name: 'Reactable'.");
+    }
+
+    [Fact]
     public void Unsubscribe_WhenUnsubscribingSomeEvents_UnsubscribesCorrectReactors()
     {
         // Arrange
@@ -254,10 +495,11 @@ public class ReactableTests
         mockReactorA.Received(1).OnComplete();
         mockReactorB.Received(Quantity.None()).OnComplete();
         mockReactorC.Received(1).OnComplete();
+        sut.Reactors.Should().HaveCount(1);
     }
 
     [Fact]
-    public void Unsubscribe_WhenUnsubscribingAllEvents_UnsubscribesCorrectReactors()
+    public void Unsubscribe_WhenUnsubscribingAllEventsOneAtATime_UnsubscribesCorrectReactors()
     {
         // Arrange
         var eventToUnsubscribeFrom = Guid.NewGuid();
@@ -281,6 +523,56 @@ public class ReactableTests
         // Assert
         mockReactorA.Received(1).OnComplete();
         mockReactorB.Received(1).OnComplete();
+        sut.Reactors.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void Unsubscribe_WhenUnsubscribingInsideOnCompleteReactorAction_DoesNotThrowException()
+    {
+        // Arrange
+        var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
+        var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
+
+        var initReactorA = new Reactor(
+            eventId: mainId);
+
+        var otherReactorA = new Reactor(eventId: otherId);
+        var otherReactorB = new Reactor(eventId: otherId);
+
+        var sut = CreateSystemUnderTest();
+
+        var initReactorC = new Reactor(
+            eventId: mainId,
+            onCompleted: () =>
+            {
+                sut.Unsubscribe(otherId);
+            });
+
+        sut.Subscribe(initReactorA);
+        sut.Subscribe(otherReactorA);
+        sut.Subscribe(otherReactorB);
+        sut.Subscribe(initReactorC);
+
+        // Act
+        var act = () => sut.Unsubscribe(mainId);
+
+        // Assert
+        act.Should().NotThrow<ArgumentOutOfRangeException>();
+    }
+
+    [Fact]
+    public void UnsubscribeAll_WhenInvokedAfterDisposal_ThrowsException()
+    {
+        // Arrange
+        var sut = CreateSystemUnderTest();
+        sut.Dispose();
+
+        // Act
+        var act = () => sut.UnsubscribeAll();
+
+        // Assert
+        act.Should().Throw<ObjectDisposedException>()
+            .WithMessage($"{nameof(Reactable)} disposed.{Environment.NewLine}Object name: 'Reactable'.");
     }
 
     [Fact]
@@ -311,6 +603,41 @@ public class ReactableTests
         mockReactorA.Received(1).OnComplete();
         mockReactorB.Received(1).OnComplete();
         mockReactorC.Received(1).OnComplete();
+        sut.Reactors.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void UnsubscribeAll_WhenUnsubscribingInsideOnCompleteReactorAction_DoesNotThrowException()
+    {
+        // Arrange
+        var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
+        var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
+
+        var initReactorA = new Reactor(
+            eventId: mainId);
+
+        var otherReactorA = new Reactor(eventId: otherId);
+        var otherReactorB = new Reactor(eventId: otherId);
+
+        var sut = CreateSystemUnderTest();
+
+        var initReactorC = new Reactor(
+            eventId: mainId,
+            onCompleted: () =>
+            {
+                sut.Unsubscribe(otherId);
+            });
+
+        sut.Subscribe(initReactorA);
+        sut.Subscribe(otherReactorA);
+        sut.Subscribe(otherReactorB);
+        sut.Subscribe(initReactorC);
+
+        // Act
+        var act = () => sut.UnsubscribeAll();
+
+        // Assert
+        act.Should().NotThrow<ArgumentOutOfRangeException>();
     }
 
     [Fact]
@@ -346,6 +673,5 @@ public class ReactableTests
     /// Creates a new instance of <see cref="Reactable"/> for the purpose of testing.
     /// </summary>
     /// <returns>The instance to test.</returns>
-    private Reactable CreateSystemUnderTest()
-        => new (this.mockSerializer);
+    private Reactable CreateSystemUnderTest() => new (this.mockSerializerService);
 }

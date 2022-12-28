@@ -17,12 +17,12 @@ using Xunit;
 /// </summary>
 public class JsonMessageTests
 {
-    private readonly ISerializer mockSerializer;
+    private readonly ISerializerService mockSerializerService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="JsonMessageTests"/> class.
     /// </summary>
-    public JsonMessageTests() => this.mockSerializer = Substitute.For<ISerializer>();
+    public JsonMessageTests() => this.mockSerializerService = Substitute.For<ISerializerService>();
 
     #region Constructor Tests
     [Fact]
@@ -37,7 +37,7 @@ public class JsonMessageTests
         // Assert
         act.Should()
             .Throw<ArgumentNullException>()
-            .WithMessage("The parameter must not be null. (Parameter 'serializer')");
+            .WithMessage("The parameter must not be null. (Parameter 'serializerService')");
     }
 
     [Theory]
@@ -48,7 +48,7 @@ public class JsonMessageTests
         // Arrange & Act
         var act = () =>
         {
-            _ = new JsonMessage(this.mockSerializer, jsonData);
+            _ = new JsonMessage(this.mockSerializerService, jsonData);
         };
 
         // Assert
@@ -64,15 +64,15 @@ public class JsonMessageTests
     {
         // Arrange
         var testData = new TestData();
-        this.mockSerializer.Deserialize<TestData>(Arg.Any<string>()).Returns(testData);
+        this.mockSerializerService.Deserialize<TestData>(Arg.Any<string>()).Returns(testData);
 
-        var sut = new JsonMessage(this.mockSerializer, "test-data");
+        var sut = new JsonMessage(this.mockSerializerService, "test-data");
 
         // Act
         var actual = sut.GetData<TestData>();
 
         // Assert
-        this.mockSerializer.Received(1).Deserialize<TestData>("test-data");
+        this.mockSerializerService.Received(1).Deserialize<TestData>("test-data");
         actual.Should().NotBeNull();
     }
 
@@ -81,9 +81,9 @@ public class JsonMessageTests
     {
         // Arrange
         TestData? nullData = null;
-        this.mockSerializer.Deserialize<TestData>(Arg.Any<string>()).Returns(nullData);
+        this.mockSerializerService.Deserialize<TestData>(Arg.Any<string>()).Returns(nullData);
 
-        var sut = new JsonMessage(this.mockSerializer, "test-data");
+        var sut = new JsonMessage(this.mockSerializerService, "test-data");
 
         // Act
         _ = sut.GetData<TestData>(OnError);
