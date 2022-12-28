@@ -2,6 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+// ReSharper disable AccessToModifiedClosure
 namespace CarbonateTests;
 
 using System.Text.Json;
@@ -231,6 +232,47 @@ public class ReactableTests
 
         mockReactorA.Received(1).OnError(expected);
         mockReactorB.Received(1).OnError(expected);
+    }
+
+    [Fact]
+    public void PushData_WhenUnsubscribingInsideOnNextReactorAction_DoesNotThrowException()
+    {
+        // Arrange
+        this.mockSerializerService.Serialize(Arg.Any<TestData>()).Returns("test-data");
+        var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
+        var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
+
+        IDisposable? otherUnsubscriberA = null;
+        IDisposable? otherUnsubscriberB = null;
+
+        var initReactorA = new Reactor(
+            eventId: mainId);
+
+        var otherReactorA = new Reactor(eventId: otherId);
+        var otherReactorB = new Reactor(eventId: otherId);
+
+        var sut = CreateSystemUnderTest();
+
+        var testData = new TestData();
+
+        var initReactorC = new Reactor(
+            eventId: mainId,
+            onNextMsg: _ =>
+            {
+                otherUnsubscriberA?.Dispose();
+                otherUnsubscriberB?.Dispose();
+            });
+
+        sut.Subscribe(initReactorA);
+        otherUnsubscriberA = sut.Subscribe(otherReactorA);
+        otherUnsubscriberB = sut.Subscribe(otherReactorB);
+        sut.Subscribe(initReactorC);
+
+        // Act
+        var act = () => sut.PushData(testData, mainId);
+
+        // Assert
+        act.Should().NotThrow<Exception>();
     }
 
     [Fact]
