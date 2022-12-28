@@ -255,12 +255,13 @@ public class ReactableTests
         this.mockSerializerService.Serialize(Arg.Any<TestData>()).Throws(expected);
 
         var invokedEventId = Guid.NewGuid();
+        var otherEventId = Guid.NewGuid();
 
         var mockReactorA = Substitute.For<IReactor>();
         mockReactorA.EventId.Returns(invokedEventId);
 
         var mockReactorB = Substitute.For<IReactor>();
-        mockReactorB.EventId.Returns(invokedEventId);
+        mockReactorB.EventId.Returns(otherEventId);
 
         var testData = default(TestData);
 
@@ -276,7 +277,7 @@ public class ReactableTests
         mockReactorB.Received(Quantity.None()).OnNext(Arg.Any<JsonMessage>());
 
         mockReactorA.Received(1).OnError(expected);
-        mockReactorB.Received(1).OnError(expected);
+        mockReactorB.Received(Quantity.None()).OnError(expected);
     }
 
     [Fact]
