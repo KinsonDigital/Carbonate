@@ -276,6 +276,49 @@ public class ReactableTests
     }
 
     [Fact]
+    public void PushData_WhenUnsubscribingInsideOnErrorReactorAction_DoesNotThrowException()
+    {
+        // Arrange
+        var expected = new JsonException("serial-error");
+        this.mockSerializerService.Serialize(Arg.Any<TestData>()).Throws(expected);
+
+        var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
+        var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
+
+        IDisposable? otherUnsubscriberA = null;
+        IDisposable? otherUnsubscriberB = null;
+
+        var initReactorA = new Reactor(
+            eventId: mainId);
+
+        var otherReactorA = new Reactor(eventId: otherId);
+        var otherReactorB = new Reactor(eventId: otherId);
+
+        var testData = new TestData();
+
+        var sut = CreateSystemUnderTest();
+
+        var initReactorC = new Reactor(
+            eventId: mainId,
+            onError: _ =>
+            {
+                otherUnsubscriberA?.Dispose();
+                otherUnsubscriberB?.Dispose();
+            });
+
+        sut.Subscribe(initReactorA);
+        otherUnsubscriberA = sut.Subscribe(otherReactorA);
+        otherUnsubscriberB = sut.Subscribe(otherReactorB);
+        sut.Subscribe(initReactorC);
+
+        // Act
+        var act = () => sut.PushData(testData, mainId);
+
+        // Assert
+        act.Should().NotThrow<Exception>();
+    }
+
+    [Fact]
     public void PushMessage_WhenInvoking_NotifiesCorrectSubscriptionsThatMatchEventId()
     {
         // Arrange
