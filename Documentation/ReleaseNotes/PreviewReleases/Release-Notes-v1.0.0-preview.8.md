@@ -39,7 +39,7 @@ As with all software, there is always a chance for issues and bugs, especially f
    - Fixed a bug where a premature unsubscription in `OnNext()` implementation was throwing an exception when invoking the `Reactable.PushMessage()` method.
    - Fixed a bug where a premature unsubscription in `OnComplete()` implementation was throwing an exception when invoking the `Reactable.Unsubscribe()` method.
    - Fixed a bug where a premature unsubscription in `OnComplete()` implementation was throwing an exception when invoking the `Reactable.UnsubscribeAll()` method.
-2. [#43](https://github.com/KinsonDigital/Carbonate/issues/43) - Fixed a bug where invoking the `Reactable.Dispose()` method was throwing an exception.
+2. [#40](https://github.com/KinsonDigital/Carbonate/issues/43) - Fixed a bug where invoking the `Reactable.Dispose()` method was throwing an exception.
 
 ---
 
