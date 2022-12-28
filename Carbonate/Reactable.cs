@@ -243,16 +243,7 @@ public sealed class Reactable : IReactable
 
         if (disposing)
         {
-            var uniqueIdValues = this.reactors
-                .Select(r => r.EventId)
-                .Distinct();
-
-            foreach (var id in uniqueIdValues)
-            {
-                Unsubscribe(id);
-            }
-
-            this.reactors.Clear();
+            UnsubscribeAll();
         }
 
         this.isDisposed = true;
