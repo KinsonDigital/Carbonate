@@ -90,9 +90,33 @@ public sealed class Reactable : IReactable
         */
         for (var i = this.reactors.Count - 1; i >= 0; i--)
         {
-            if (this.reactors[i].EventId == eventId)
+            /*NOTE:
+             * The purpose of this logic is to prevent array index errors
+             * if an OnNext() implementation ends up unsubscribing a single
+             * subscription or unsubscribing from a single event id
+             *
+             * If the current index is not less than or equal to
+             * the total number of items, reset the index to the last item
+             */
+            i = i > this.reactors.Count - 1
+                ? this.reactors.Count - 1
+                : i;
+
+            if (this.reactors[i].EventId != eventId)
             {
-                this.reactors[i].OnComplete();
+                continue;
+            }
+
+            var beforeTotal = this.reactors.Count;
+
+            this.reactors[i].OnComplete();
+
+            var nothingRemoved = Math.Abs(beforeTotal - this.reactors.Count) <= 0;
+
+            // Make sure that the OnComplete implementation did not remove
+            // the reactor before attempting to remove it
+            if (nothingRemoved)
+            {
                 this.reactors.Remove(this.reactors[i]);
             }
         }
