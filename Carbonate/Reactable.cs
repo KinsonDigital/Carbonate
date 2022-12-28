@@ -93,6 +93,7 @@ public sealed class Reactable : IReactable
             if (this.reactors[i].EventId == eventId)
             {
                 this.reactors[i].OnComplete();
+                this.reactors.Remove(this.reactors[i]);
             }
         }
 

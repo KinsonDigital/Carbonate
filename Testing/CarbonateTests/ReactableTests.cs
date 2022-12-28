@@ -254,10 +254,11 @@ public class ReactableTests
         mockReactorA.Received(1).OnComplete();
         mockReactorB.Received(Quantity.None()).OnComplete();
         mockReactorC.Received(1).OnComplete();
+        sut.Reactors.Should().HaveCount(1);
     }
 
     [Fact]
-    public void Unsubscribe_WhenUnsubscribingAllEvents_UnsubscribesCorrectReactors()
+    public void Unsubscribe_WhenUnsubscribingAllEventsOneAtATime_UnsubscribesCorrectReactors()
     {
         // Arrange
         var eventToUnsubscribeFrom = Guid.NewGuid();
@@ -281,6 +282,7 @@ public class ReactableTests
         // Assert
         mockReactorA.Received(1).OnComplete();
         mockReactorB.Received(1).OnComplete();
+        sut.Reactors.Should().BeEmpty();
     }
 
     [Fact]
@@ -311,6 +313,7 @@ public class ReactableTests
         mockReactorA.Received(1).OnComplete();
         mockReactorB.Received(1).OnComplete();
         mockReactorC.Received(1).OnComplete();
+        sut.Reactors.Should().BeEmpty();
     }
 
     [Fact]
