@@ -317,6 +317,40 @@ public class ReactableTests
     }
 
     [Fact]
+    public void UnsubscribeAll_WhenUnsubscribingInsideOnCompleteReactorAction_DoesNotThrowException()
+    {
+        // Arrange
+        var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
+        var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
+
+        var initReactorA = new Reactor(
+            eventId: mainId);
+
+        var otherReactorA = new Reactor(eventId: otherId);
+        var otherReactorB = new Reactor(eventId: otherId);
+
+        var sut = CreateSystemUnderTest();
+
+        var initReactorC = new Reactor(
+            eventId: mainId,
+            onCompleted: () =>
+            {
+                sut.Unsubscribe(otherId);
+            });
+
+        sut.Subscribe(initReactorA);
+        sut.Subscribe(otherReactorA);
+        sut.Subscribe(otherReactorB);
+        sut.Subscribe(initReactorC);
+
+        // Act
+        var act = () => sut.UnsubscribeAll();
+
+        // Assert
+        act.Should().NotThrow<ArgumentOutOfRangeException>();
+    }
+
+    [Fact]
     public void Dispose_WhenInvoked_DisposesOfReactable()
     {
         // Arrange
