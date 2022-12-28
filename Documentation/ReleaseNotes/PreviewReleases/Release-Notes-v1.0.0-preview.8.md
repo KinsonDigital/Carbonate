@@ -39,7 +39,7 @@ As with all software, there is always a chance for issues and bugs, especially f
    - Fixed a bug where a premature unsubscription in `OnNext()` implementation was throwing an exception when invoking the `Reactable.PushMessage()` method.
    - Fixed a bug where a premature unsubscription in `OnComplete()` implementation was throwing an exception when invoking the `Reactable.Unsubscribe()` method.
    - Fixed a bug where a premature unsubscription in `OnComplete()` implementation was throwing an exception when invoking the `Reactable.UnsubscribeAll()` method.
-2. [#40](https://github.com/KinsonDigital/Carbonate/issues/43) - Fixed a bug where invoking the `Reactable.Dispose()` method was throwing an exception.
+2. [#40](https://github.com/KinsonDigital/Carbonate/issues/40) - Fixed a bug where invoking the `Reactable.Dispose()` method was throwing an exception.
 
 ---
 
@@ -52,4 +52,4 @@ As with all software, there is always a chance for issues and bugs, especially f
 <h2 style="font-weight:bold" align="center">Internal Changes ⚙️</h2>
 <h5 align="center">(Changes that do not affect users.  Not breaking changes, new features, or bug fixes.)</h5>
 
-1. [#38](https://github.com/KinsonDigital/Carbonate/issues/38) - Updated the [checkout](https://github.com/marketplace/actions/checkout) GitHub actions in all of the workflows from _**v2**_ to _**v3**_.
+1. [#37](https://github.com/KinsonDigital/Carbonate/issues/37) - Updated the [checkout](https://github.com/marketplace/actions/checkout) GitHub actions in all of the workflows from _**v2**_ to _**v3**_.
