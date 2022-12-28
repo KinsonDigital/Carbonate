@@ -129,6 +129,44 @@ public class ReactableTests
     }
 
     [Fact]
+    public void Push_WhenUnsubscribingInsideOnNexReactorAction_DoesNotThrowException()
+    {
+        // Arrange
+        var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
+        var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
+
+        IDisposable? otherUnsubscriberA = null;
+        IDisposable? otherUnsubscriberB = null;
+
+        var initReactorA = new Reactor(
+            eventId: mainId);
+
+        var otherReactorA = new Reactor(eventId: otherId);
+        var otherReactorB = new Reactor(eventId: otherId);
+
+        var sut = CreateSystemUnderTest();
+
+        var initReactorC = new Reactor(
+            eventId: mainId,
+            onNext: () =>
+            {
+                otherUnsubscriberA?.Dispose();
+                otherUnsubscriberB?.Dispose();
+            });
+
+        sut.Subscribe(initReactorA);
+        otherUnsubscriberA = sut.Subscribe(otherReactorA);
+        otherUnsubscriberB = sut.Subscribe(otherReactorB);
+        sut.Subscribe(initReactorC);
+
+        // Act
+        var act = () => sut.Push(mainId);
+
+        // Assert
+        act.Should().NotThrow<ArgumentOutOfRangeException>();
+    }
+
+    [Fact]
     public void PushData_WhenInvoking_NotifiesCorrectSubscriptionsThatMatchEventId()
     {
         // Arrange
