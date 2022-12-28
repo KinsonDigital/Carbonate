@@ -15,6 +15,16 @@ public interface IReactor
     Guid EventId { get; }
 
     /// <summary>
+    /// Gets the name of the <see cref="IReactor"/>.
+    /// </summary>
+    /// <remarks>
+    ///     Note:  The <sett cref="Name"/> is not used for unique identification purposes.
+    ///     <br/>
+    ///     It is only metadata for debugging or miscellaneous purposes.
+    /// </remarks>
+    string Name { get; }
+
+    /// <summary>
     /// Gets a value indicating whether or not the <see cref="IReactor"/> has been unsubscribed.
     /// </summary>
     /// <remarks>
