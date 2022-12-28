@@ -14,7 +14,7 @@ using Services;
 public sealed class Reactable : IReactable
 {
     private readonly List<IReactor> reactors = new ();
-    private readonly ISerializer serializer;
+    private readonly ISerializerService serializerService;
     private bool isDisposed;
     private bool notificationsEnded;
 
@@ -23,13 +23,13 @@ public sealed class Reactable : IReactable
     /// </summary>
     [ExcludeFromCodeCoverage]
     [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API for users.")]
-    public Reactable() => this.serializer = new JsonSerializer();
+    public Reactable() => this.serializerService = new JsonSerializerService();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Reactable"/> class.
     /// </summary>
-    /// <param name="serializer">The serializer used to serialize the messages.</param>
-    public Reactable(ISerializer serializer) => this.serializer = serializer;
+    /// <param name="serializerService">The serializer used to serialize the messages.</param>
+    public Reactable(ISerializerService serializerService) => this.serializerService = serializerService;
 
     /// <inheritdoc/>
     public ReadOnlyCollection<IReactor> Reactors => new (this.reactors);
@@ -61,9 +61,9 @@ public sealed class Reactable : IReactable
     {
         try
         {
-            var jsonData = this.serializer.Serialize(data);
+            var jsonData = this.serializerService.Serialize(data);
 
-            var message = new JsonMessage(this.serializer, jsonData);
+            var message = new JsonMessage(this.serializerService, jsonData);
 
             SendNotifications(message, eventId);
         }

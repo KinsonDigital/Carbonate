@@ -18,12 +18,12 @@ using Xunit;
 /// </summary>
 public class ReactableTests
 {
-    private readonly ISerializer mockSerializer;
+    private readonly ISerializerService mockSerializerService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ReactableTests"/> class.
     /// </summary>
-    public ReactableTests() => this.mockSerializer = Substitute.For<ISerializer>();
+    public ReactableTests() => this.mockSerializerService = Substitute.For<ISerializerService>();
 
     #region Prop Tests
     [Fact]
@@ -170,7 +170,7 @@ public class ReactableTests
     public void PushData_WhenInvoking_NotifiesCorrectSubscriptionsThatMatchEventId()
     {
         // Arrange
-        this.mockSerializer.Serialize(Arg.Any<TestData>()).Returns("test-json-data");
+        this.mockSerializerService.Serialize(Arg.Any<TestData>()).Returns("test-json-data");
         var invokedEventId = Guid.NewGuid();
         var notInvokedEventId = Guid.NewGuid();
 
@@ -194,7 +194,7 @@ public class ReactableTests
         sut.PushData(testData, invokedEventId);
 
         // Assert
-        this.mockSerializer.Received(1).Serialize(testData);
+        this.mockSerializerService.Received(1).Serialize(testData);
         mockReactorA.Received(1).OnNext(Arg.Any<JsonMessage>());
         mockReactorB.Received(Quantity.None()).OnNext(Arg.Any<JsonMessage>());
         mockReactorC.Received(1).OnNext(Arg.Any<JsonMessage>());
@@ -205,7 +205,7 @@ public class ReactableTests
     {
         // Arrange
         var expected = new Exception("serial-error");
-        this.mockSerializer.Serialize(Arg.Any<TestData>()).Throws(expected);
+        this.mockSerializerService.Serialize(Arg.Any<TestData>()).Throws(expected);
 
         var invokedEventId = Guid.NewGuid();
 
@@ -456,5 +456,5 @@ public class ReactableTests
     /// </summary>
     /// <returns>The instance to test.</returns>
     private Reactable CreateSystemUnderTest()
-        => new (this.mockSerializer);
+        => new (this.mockSerializerService);
 }

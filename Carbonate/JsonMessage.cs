@@ -12,18 +12,18 @@ using Services;
 /// </summary>
 internal sealed class JsonMessage : IMessage
 {
-    private readonly ISerializer serializer;
+    private readonly ISerializerService serializerService;
     private readonly string jsonData;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="JsonMessage"/> class.
     /// </summary>
-    /// <param name="serializer">The serializer used to deserialize the message.</param>
+    /// <param name="serializerService">The serializer used to deserialize the message.</param>
     /// <param name="jsonData">The JSON form of the message data.</param>
-    public JsonMessage(ISerializer serializer, string jsonData)
+    public JsonMessage(ISerializerService serializerService, string jsonData)
     {
-        this.serializer = serializer ?? throw new ArgumentNullException(
-            nameof(serializer),
+        this.serializerService = serializerService ?? throw new ArgumentNullException(
+            nameof(serializerService),
             "The parameter must not be null.");
 
         if (string.IsNullOrEmpty(jsonData))
@@ -40,7 +40,7 @@ internal sealed class JsonMessage : IMessage
     {
         try
         {
-            T? result = this.serializer.Deserialize<T>(this.jsonData);
+            T? result = this.serializerService.Deserialize<T>(this.jsonData);
 
             if (result is null)
             {

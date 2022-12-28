@@ -11,7 +11,7 @@ using System.Diagnostics.CodeAnalysis;
 /// Performs JSON services.
 /// </summary>
 [ExcludeFromCodeCoverage]
-internal sealed class JsonSerializer : ISerializer
+internal sealed class JsonSerializerService : ISerializerService
 {
     /// <inheritdoc/>
     public string Serialize<T>(T? value)

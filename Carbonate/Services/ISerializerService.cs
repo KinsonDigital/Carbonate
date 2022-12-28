@@ -7,7 +7,7 @@ namespace Carbonate.Services;
 /// <summary>
 /// Performs JSON services.
 /// </summary>
-public interface ISerializer
+public interface ISerializerService
 {
     /// <summary>
     /// Serializes the specified object to a JSON string.
