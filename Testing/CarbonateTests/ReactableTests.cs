@@ -62,6 +62,36 @@ public class ReactableTests
 
     #region Method Tests
     [Fact]
+    public void Push_WhenInvokedAfterDisposal_ThrowsException()
+    {
+        // Arrange
+        var sut = CreateSystemUnderTest();
+        sut.Dispose();
+
+        // Act
+        var act = () => sut.Push(Guid.Empty);
+
+        // Assert
+        act.Should().Throw<ObjectDisposedException>()
+            .WithMessage($"{nameof(Reactable)} disposed.{Environment.NewLine}Object name: 'Reactable'.");
+    }
+
+    [Fact]
+    public void Subscribe_WhenInvokedAfterDisposal_ThrowsException()
+    {
+        // Arrange
+        var sut = CreateSystemUnderTest();
+        sut.Dispose();
+
+        // Act
+        var act = () => sut.Subscribe(null);
+
+        // Assert
+        act.Should().Throw<ObjectDisposedException>()
+            .WithMessage($"{nameof(Reactable)} disposed.{Environment.NewLine}Object name: 'Reactable'.");
+    }
+
+    [Fact]
     public void Subscribe_WithNullReactor_ThrowsException()
     {
         // Arrange
@@ -166,6 +196,21 @@ public class ReactableTests
 
         // Assert
         act.Should().NotThrow<ArgumentOutOfRangeException>();
+    }
+
+    [Fact]
+    public void PushData_WhenInvokedAfterDisposal_ThrowsException()
+    {
+        // Arrange
+        var sut = CreateSystemUnderTest();
+        sut.Dispose();
+
+        // Act
+        var act = () => sut.PushData(new TestData(), Guid.Empty);
+
+        // Assert
+        act.Should().Throw<ObjectDisposedException>()
+            .WithMessage($"{nameof(Reactable)} disposed.{Environment.NewLine}Object name: 'Reactable'.");
     }
 
     [Fact]
@@ -319,6 +364,21 @@ public class ReactableTests
     }
 
     [Fact]
+    public void PushMessage_WhenInvokedAfterDisposal_ThrowsException()
+    {
+        // Arrange
+        var sut = CreateSystemUnderTest();
+        sut.Dispose();
+
+        // Act
+        var act = () => sut.PushMessage(Substitute.For<IMessage>(), Guid.Empty);
+
+        // Assert
+        act.Should().Throw<ObjectDisposedException>()
+            .WithMessage($"{nameof(Reactable)} disposed.{Environment.NewLine}Object name: 'Reactable'.");
+    }
+
+    [Fact]
     public void PushMessage_WhenInvoking_NotifiesCorrectSubscriptionsThatMatchEventId()
     {
         // Arrange
@@ -389,6 +449,21 @@ public class ReactableTests
 
         // Assert
         act.Should().NotThrow<Exception>();
+    }
+
+    [Fact]
+    public void Unsubscribe_WhenInvokedAfterDisposal_ThrowsException()
+    {
+        // Arrange
+        var sut = CreateSystemUnderTest();
+        sut.Dispose();
+
+        // Act
+        var act = () => sut.Unsubscribe(Guid.Empty);
+
+        // Assert
+        act.Should().Throw<ObjectDisposedException>()
+            .WithMessage($"{nameof(Reactable)} disposed.{Environment.NewLine}Object name: 'Reactable'.");
     }
 
     [Fact]
@@ -482,6 +557,21 @@ public class ReactableTests
 
         // Assert
         act.Should().NotThrow<ArgumentOutOfRangeException>();
+    }
+
+    [Fact]
+    public void UnsubscribeAll_WhenInvokedAfterDisposal_ThrowsException()
+    {
+        // Arrange
+        var sut = CreateSystemUnderTest();
+        sut.Dispose();
+
+        // Act
+        var act = () => sut.UnsubscribeAll();
+
+        // Assert
+        act.Should().Throw<ObjectDisposedException>()
+            .WithMessage($"{nameof(Reactable)} disposed.{Environment.NewLine}Object name: 'Reactable'.");
     }
 
     [Fact]
@@ -582,6 +672,5 @@ public class ReactableTests
     /// Creates a new instance of <see cref="Reactable"/> for the purpose of testing.
     /// </summary>
     /// <returns>The instance to test.</returns>
-    private Reactable CreateSystemUnderTest()
-        => new (this.mockSerializerService);
+    private Reactable CreateSystemUnderTest() => new (this.mockSerializerService);
 }

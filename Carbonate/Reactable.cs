@@ -42,8 +42,14 @@ public sealed class Reactable : IReactable
         .ToReadOnlyCollection();
 
     /// <inheritdoc/>
+    /// <exception cref="ObjectDisposedException">Thrown if this method is invoked after disposal.</exception>
     public IDisposable Subscribe(IReactor reactor)
     {
+        if (this.isDisposed)
+        {
+            throw new ObjectDisposedException(nameof(Reactable), $"{nameof(Reactable)} disposed.");
+        }
+
         if (reactor is null)
         {
             throw new ArgumentNullException(nameof(reactor), "The parameter must not be null.");
@@ -58,8 +64,14 @@ public sealed class Reactable : IReactable
     public void Push(Guid eventId) => SendNotifications(null, eventId);
 
     /// <inheritdoc/>
+    /// <exception cref="ObjectDisposedException">Thrown if this method is invoked after disposal.</exception>
     public void PushData<T>(in T data, Guid eventId)
     {
+        if (this.isDisposed)
+        {
+            throw new ObjectDisposedException(nameof(Reactable), $"{nameof(Reactable)} disposed.");
+        }
+
         try
         {
             var jsonData = this.serializerService.Serialize(data);
@@ -75,11 +87,18 @@ public sealed class Reactable : IReactable
     }
 
     /// <inheritdoc/>
+    /// <exception cref="ObjectDisposedException">Thrown if this method is invoked after disposal.</exception>
     public void PushMessage(in IMessage message, Guid eventId) => SendNotifications(message, eventId);
 
     /// <inheritdoc/>
+    /// <exception cref="ObjectDisposedException">Thrown if this method is invoked after disposal.</exception>
     public void Unsubscribe(Guid eventId)
     {
+        if (this.isDisposed)
+        {
+            throw new ObjectDisposedException(nameof(Reactable), $"{nameof(Reactable)} disposed.");
+        }
+
         if (this.notificationsEnded)
         {
             return;
@@ -126,8 +145,14 @@ public sealed class Reactable : IReactable
     }
 
     /// <inheritdoc/>
+    /// <exception cref="ObjectDisposedException">Thrown if this method is invoked after disposal.</exception>
     public void UnsubscribeAll()
     {
+        if (this.isDisposed)
+        {
+            throw new ObjectDisposedException(nameof(Reactable), $"{nameof(Reactable)} disposed.");
+        }
+
         /* Keep this loop as a for-loop.  Do not convert to for-each.
          * This is due to the Dispose() method possibly being called during
          * iteration of the reactors list which will cause an exception.
@@ -160,8 +185,14 @@ public sealed class Reactable : IReactable
     /// </summary>
     /// <param name="message">The message to send.</param>
     /// <param name="eventId">The ID of the event.</param>
+    /// <exception cref="ObjectDisposedException">Thrown if this method is invoked after disposal.</exception>
     private void SendNotifications(IMessage? message, Guid eventId)
     {
+        if (this.isDisposed)
+        {
+            throw new ObjectDisposedException(nameof(Reactable), $"{nameof(Reactable)} disposed.");
+        }
+
         /* Work from the end to the beginning of the list
          * just in case the reactable is disposed(removed)
          * in the OnNext() method.
@@ -234,6 +265,10 @@ public sealed class Reactable : IReactable
     /// <inheritdoc cref="IDisposable.Dispose"/>
     /// </summary>
     /// <param name="disposing">Disposes managed resources when <c>true</c>.</param>
+    /// <remarks>
+    ///     All <see cref="IReactor"/>s that are still subscribed will have its <see cref="IReactor.OnComplete"/>
+    ///     method invoked and the <see cref="IReactor"/>s will be unsubscribed.
+    /// </remarks>
     private void Dispose(bool disposing)
     {
         if (this.isDisposed)
@@ -243,16 +278,7 @@ public sealed class Reactable : IReactable
 
         if (disposing)
         {
-            var uniqueIdValues = this.reactors
-                .Select(r => r.EventId)
-                .Distinct();
-
-            foreach (var id in uniqueIdValues)
-            {
-                Unsubscribe(id);
-            }
-
-            this.reactors.Clear();
+            UnsubscribeAll();
         }
 
         this.isDisposed = true;
