@@ -18,7 +18,7 @@ public interface IReactor
     /// Gets the name of the <see cref="IReactor"/>.
     /// </summary>
     /// <remarks>
-    ///     Note:  The <sett cref="Name"/> is not used for unique identification purposes.
+    ///     Note: This is not used for unique identification purposes.
     ///     <br/>
     ///     It is only metadata for debugging or miscellaneous purposes.
     /// </remarks>
