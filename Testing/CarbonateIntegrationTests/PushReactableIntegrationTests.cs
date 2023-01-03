@@ -1,4 +1,4 @@
-// <copyright file="IntegrationTests.cs" company="KinsonDigital">
+// <copyright file="PushReactableIntegrationTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -10,9 +10,9 @@ using FluentAssertions;
 using Xunit;
 
 /// <summary>
-/// Tests all of the components integrated together.
+/// Tests all of the components integrated together related to the <see cref="PushReactable"/>.
 /// </summary>
-public class IntegrationTests
+public class PushReactableIntegrationTests
 {
     [Fact]
     public void WhenPushingNoDataWithSingleEventID_And_WithSingleSubscription_And_WithSingleUnsubscribe_ReturnsCorrectResults()
@@ -22,9 +22,9 @@ public class IntegrationTests
 
         IDisposable? unsubscriber = null;
 
-        var reactable = new Reactable();
+        var reactable = new PushReactable();
 
-        unsubscriber = reactable.Subscribe(new Reactor(
+        unsubscriber = reactable.Subscribe(new ReceiveReactor(
             eventId,
             onReceive: () =>
             {
@@ -47,9 +47,9 @@ public class IntegrationTests
 
         IDisposable? unsubscriber = null;
 
-        var reactable = new Reactable();
+        var reactable = new PushReactable();
 
-        unsubscriber = reactable.Subscribe(new Reactor(
+        unsubscriber = reactable.Subscribe(new ReceiveReactor(
             eventId,
             onReceiveMsg: data =>
             {
@@ -77,13 +77,13 @@ public class IntegrationTests
 
         var eventId = new Guid("fc71094c-5b93-4af8-aec9-5932430c041b");
 
-        var reactable = new Reactable();
+        var reactable = new PushReactable();
 
         // Subscription
         for (var i = 0; i < 10; i++)
         {
             IDisposable? unsubscriber = null;
-            unsubscriber = reactable.Subscribe(new Reactor(
+            unsubscriber = reactable.Subscribe(new ReceiveReactor(
                     eventId,
                     onReceiveMsg: data =>
                     {
@@ -125,10 +125,10 @@ public class IntegrationTests
         IDisposable? unsubscriberA = null;
         IDisposable? unsubscriberB = null;
 
-        var reactable = new Reactable();
+        var reactable = new PushReactable();
 
         // Subscription A
-        unsubscriberA = reactable.Subscribe(new Reactor(
+        unsubscriberA = reactable.Subscribe(new ReceiveReactor(
             eventIdA,
             onReceiveMsg: data =>
             {
@@ -136,7 +136,7 @@ public class IntegrationTests
             }, onUnsubscribe: () => unsubscriberA?.Dispose()));
 
         // Subscription B
-        unsubscriberB = reactable.Subscribe(new Reactor(
+        unsubscriberB = reactable.Subscribe(new ReceiveReactor(
             eventIdB,
             onReceiveMsg: data =>
             {

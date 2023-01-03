@@ -7,19 +7,21 @@ namespace Carbonate;
 using System.Collections.ObjectModel;
 
 /// <summary>
-/// Defines a provider for push-based notification.
+/// Defines a provider for pushing notifications or receiving responses.
 /// </summary>
-public interface IReactable : IDisposable
+/// <typeparam name="T">The reactor that can subscribed to events.</typeparam>
+public interface IReactable<T> : IDisposable
+    where T : class, IReactor
 {
     /// <summary>
-    /// Gets the list of reactors that are subscribed to this <see cref="Reactable"/>.
+    /// Gets the list of reactors that are subscribed to this <see cref="PushReactable"/>.
     /// </summary>
-    ReadOnlyCollection<IReactor> Reactors { get; }
+    ReadOnlyCollection<T> Reactors { get; }
 
     /// <summary>
-    /// Gets the list of event IDs.
+    /// Gets the list of subscription IDs.
     /// </summary>
-    ReadOnlyCollection<Guid> EventIds { get; }
+    ReadOnlyCollection<Guid> SubscriptionIds { get; }
 
     /// <summary>
     /// Notifies the provider that an reactor is to receive notifications.
@@ -29,37 +31,16 @@ public interface IReactable : IDisposable
     ///     A reference to an interface that allows reactors to stop receiving
     ///     notifications before the provider has finished sending them.
     /// </returns>
-    IDisposable Subscribe(IReactor reactor);
+    IDisposable Subscribe(T reactor);
 
     /// <summary>
-    /// Pushes a single notification for an event that matches the given <paramref name="eventId"/>.
+    /// Unsubscribes notifications to all <see cref="IReactor"/>s that match the given <paramref name="id"/>.
     /// </summary>
-    /// <param name="eventId">The ID of the event where the notification will be pushed.</param>
-    void Push(Guid eventId);
-
-    /// <summary>
-    /// Pushes a single notification with the given <paramref name="data"/> for an event that matches the given <paramref name="eventId"/>.
-    /// </summary>
-    /// <param name="data">The data to send with the push notification.</param>
-    /// <param name="eventId">The ID of the event where the notification will be pushed.</param>
-    /// <typeparam name="T">The type of data to push.</typeparam>
-    void PushData<T>(in T data, Guid eventId);
-
-    /// <summary>
-    /// Pushes a single notification with the given <paramref name="message"/> for an event that matches the given <paramref name="eventId"/>.
-    /// </summary>
-    /// <param name="message">The message that contains the data to push.</param>
-    /// <param name="eventId">The ID of the event where the notification will be pushed.</param>
-    void PushMessage(in IMessage message, Guid eventId);
-
-    /// <summary>
-    /// Unsubscribes notifications to all <see cref="Reactor"/>s that match the given <paramref name="eventId"/>.
-    /// </summary>
-    /// <param name="eventId">The ID of the event to end.</param>
+    /// <param name="id">The ID of the event to end.</param>
     /// <remarks>
     ///     Will not invoke the <see cref="IReactor"/>.<see cref="IReactor.OnUnsubscribe"/> more than once.
     /// </remarks>
-    void Unsubscribe(Guid eventId);
+    void Unsubscribe(Guid id);
 
     /// <summary>
     /// Unsubscribes all of the currently subscribed reactors.

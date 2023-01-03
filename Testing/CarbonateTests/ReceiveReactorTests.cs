@@ -1,4 +1,4 @@
-﻿// <copyright file="ReactorTests.cs" company="KinsonDigital">
+﻿// <copyright file="ReceiveReactorTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -10,9 +10,9 @@ using NSubstitute;
 using Xunit;
 
 /// <summary>
-/// Tests the <see cref="Reactor"/> class.
+/// Tests the <see cref="ReceiveReactor"/> class.
 /// </summary>
-public class ReactorTests
+public class ReceiveReactorTests
 {
     #region Constructor Tests
     [Fact]
@@ -22,8 +22,8 @@ public class ReactorTests
         var guid = Guid.NewGuid();
 
         // Act
-        var sut = new Reactor(guid);
-        var actual = sut.EventId;
+        var sut = new ReceiveReactor(guid);
+        var actual = sut.Id;
 
         // Assert
         actual.Should().Be(guid);
@@ -38,7 +38,7 @@ public class ReactorTests
         var onReceiveInvoked = false;
         void OnReceive() => onReceiveInvoked = true;
 
-        var sut = new Reactor(Guid.NewGuid(), onReceive: OnReceive);
+        var sut = new ReceiveReactor(Guid.NewGuid(), onReceive: OnReceive);
 
         // Act
         sut.OnReceive();
@@ -54,7 +54,7 @@ public class ReactorTests
         var onReceiveInvoked = false;
         void OnReceive() => onReceiveInvoked = true;
 
-        var sut = new Reactor(Guid.NewGuid(), onReceive: OnReceive);
+        var sut = new ReceiveReactor(Guid.NewGuid(), onReceive: OnReceive);
 
         sut.OnUnsubscribe();
 
@@ -74,7 +74,7 @@ public class ReactorTests
 
         var mockMessage = Substitute.For<IMessage>();
 
-        var sut = new Reactor(Guid.NewGuid(), onReceiveMsg: OnReceive);
+        var sut = new ReceiveReactor(Guid.NewGuid(), onReceiveMsg: OnReceive);
 
         // Act
         sut.OnReceive(mockMessage);
@@ -92,7 +92,7 @@ public class ReactorTests
 
         var mockMessage = Substitute.For<IMessage>();
 
-        var sut = new Reactor(Guid.NewGuid(), onReceiveMsg: OnReceive);
+        var sut = new ReceiveReactor(Guid.NewGuid(), onReceiveMsg: OnReceive);
 
         sut.OnUnsubscribe();
 
@@ -110,7 +110,7 @@ public class ReactorTests
         var onReceiveInvoked = false;
         void OnUnsubscribe() => onReceiveInvoked = true;
 
-        var sut = new Reactor(Guid.NewGuid(), onUnsubscribe: OnUnsubscribe);
+        var sut = new ReceiveReactor(Guid.NewGuid(), onUnsubscribe: OnUnsubscribe);
 
         // Act
         sut.OnUnsubscribe();
@@ -126,7 +126,7 @@ public class ReactorTests
         var totalInvokes = 0;
         void OnUnsubscribe() => totalInvokes++;
 
-        var sut = new Reactor(Guid.NewGuid(), onUnsubscribe: OnUnsubscribe);
+        var sut = new ReceiveReactor(Guid.NewGuid(), onUnsubscribe: OnUnsubscribe);
         sut.OnUnsubscribe();
 
         // Act
@@ -145,7 +145,7 @@ public class ReactorTests
 
         var exception = new Exception("test-exception");
 
-        var sut = new Reactor(Guid.NewGuid(), onError: OnError);
+        var sut = new ReceiveReactor(Guid.NewGuid(), onError: OnError);
 
         // Act
         sut.OnError(exception);
@@ -163,7 +163,7 @@ public class ReactorTests
 
         var exception = new Exception("test-exception");
 
-        var sut = new Reactor(Guid.NewGuid(), onError: OnError);
+        var sut = new ReceiveReactor(Guid.NewGuid(), onError: OnError);
 
         sut.OnUnsubscribe();
 
@@ -183,7 +183,7 @@ public class ReactorTests
         // Arrange
         var id = new Guid("5739afd9-be4c-4402-a12d-6bcde35cc8c3");
 
-        var sut = new Reactor(
+        var sut = new ReceiveReactor(
             eventId: id,
             name: name);
 
