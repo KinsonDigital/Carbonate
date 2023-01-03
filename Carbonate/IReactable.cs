@@ -57,7 +57,7 @@ public interface IReactable : IDisposable
     /// </summary>
     /// <param name="eventId">The ID of the event to end.</param>
     /// <remarks>
-    ///     Will not invoke the <see cref="IReactor"/>.<see cref="IReactor.OnComplete"/> more than once.
+    ///     Will not invoke the <see cref="IReactor"/>.<see cref="IReactor.OnUnsubscribe"/> more than once.
     /// </remarks>
     void Unsubscribe(Guid eventId);
 

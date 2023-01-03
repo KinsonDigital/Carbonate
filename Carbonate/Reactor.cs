@@ -11,7 +11,7 @@ public sealed class Reactor : IReactor
 {
     private readonly Action? onReceive;
     private readonly Action<IMessage>? onReceiveMsg;
-    private readonly Action? onCompleted;
+    private readonly Action? onUnsubscribe;
     private readonly Action<Exception>? onError;
 
     /// <summary>
@@ -21,7 +21,10 @@ public sealed class Reactor : IReactor
     /// <param name="name">The name of the <see cref="Reactor"/>.</param>
     /// <param name="onReceive">Executed when a push notification occurs with no data.</param>
     /// <param name="onReceiveMsg">Executed when a push notification occurs with a message.</param>
-    /// <param name="onCompleted">Executed when the provider has finished sending push-based notifications.</param>
+    /// <param name="onUnsubscribe">
+    ///     Executed when the provider has finished sending push-based notification that it is
+    ///     complete and that it is unsubscribed.
+    /// .</param>
     /// <param name="onError">Executed when the provider experiences an error condition.</param>
     /// <remarks>
     ///     Note:  The <paramref name="name"/> is not used for unique identification purposes.
@@ -33,14 +36,14 @@ public sealed class Reactor : IReactor
         string name = "",
         Action? onReceive = null,
         Action<IMessage>? onReceiveMsg = null,
-        Action? onCompleted = null,
+        Action? onUnsubscribe = null,
         Action<Exception>? onError = null)
     {
         EventId = eventId;
         Name = string.IsNullOrEmpty(name) ? string.Empty : name;
         this.onReceive = onReceive;
         this.onReceiveMsg = onReceiveMsg;
-        this.onCompleted = onCompleted;
+        this.onUnsubscribe = onUnsubscribe;
         this.onError = onError;
     }
 
@@ -76,14 +79,14 @@ public sealed class Reactor : IReactor
     }
 
     /// <inheritdoc />
-    public void OnComplete()
+    public void OnUnsubscribe()
     {
         if (Unsubscribed)
         {
             return;
         }
 
-        this.onCompleted?.Invoke();
+        this.onUnsubscribe?.Invoke();
         Unsubscribed = true;
     }
 

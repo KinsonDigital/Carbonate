@@ -29,17 +29,17 @@ public interface IReactor
     /// </summary>
     /// <remarks>
     ///     This means that the <see cref="Reactor"/> will not receive <see cref="OnReceive()"/>, <see cref="OnReceive(IMessage)"/>,
-    ///     <see cref="OnComplete"/>, or <see cref="OnError"/> invokes.
+    ///     <see cref="OnUnsubscribe"/>, or <see cref="OnError"/> invokes.
     /// </remarks>
     bool Unsubscribed { get; }
 
     /// <summary>
-    /// Sends the next notification without any data to the <see cref="Reactor"/>.
+    /// Sends the next notification without any data to the <see cref="Reactor"/> subscription.
     /// </summary>
     void OnReceive();
 
     /// <summary>
-    /// Sends the next notification with the given <paramref name="message"/> the <see cref="Reactor"/>.
+    /// Sends the next notification with the given <paramref name="message"/> to the <see cref="Reactor"/> subscription.
     /// </summary>
     /// <param name="message">The notification message.</param>
     void OnReceive(IMessage message);
@@ -50,7 +50,7 @@ public interface IReactor
     /// <remarks>
     ///     Will not be invoked more than once.
     /// </remarks>
-    void OnComplete();
+    void OnUnsubscribe();
 
     /// <summary>
     /// Notifies the <see cref="Reactor"/> that the provider has experiences an error condition.

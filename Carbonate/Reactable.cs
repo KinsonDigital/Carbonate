@@ -129,11 +129,11 @@ public sealed class Reactable : IReactable
 
             var beforeTotal = this.reactors.Count;
 
-            this.reactors[i].OnComplete();
+            this.reactors[i].OnUnsubscribe();
 
             var nothingRemoved = Math.Abs(beforeTotal - this.reactors.Count) <= 0;
 
-            // Make sure that the OnComplete implementation did not remove
+            // Make sure that the OnUnsubscribe implementation did not remove
             // the reactor before attempting to remove it
             if (nothingRemoved)
             {
@@ -171,7 +171,7 @@ public sealed class Reactable : IReactable
                 ? this.reactors.Count - 1
                 : i;
 
-            this.reactors[i].OnComplete();
+            this.reactors[i].OnUnsubscribe();
         }
 
         this.reactors.Clear();
@@ -266,7 +266,7 @@ public sealed class Reactable : IReactable
     /// </summary>
     /// <param name="disposing">Disposes managed resources when <c>true</c>.</param>
     /// <remarks>
-    ///     All <see cref="IReactor"/>s that are still subscribed will have its <see cref="IReactor.OnComplete"/>
+    ///     All <see cref="IReactor"/>s that are still subscribed will have its <see cref="IReactor.OnUnsubscribe"/>
     ///     method invoked and the <see cref="IReactor"/>s will be unsubscribed.
     /// </remarks>
     private void Dispose(bool disposing)

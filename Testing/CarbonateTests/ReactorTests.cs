@@ -56,7 +56,7 @@ public class ReactorTests
 
         var sut = new Reactor(Guid.NewGuid(), onReceive: OnReceive);
 
-        sut.OnComplete();
+        sut.OnUnsubscribe();
 
         // Act
         sut.OnReceive();
@@ -94,7 +94,7 @@ public class ReactorTests
 
         var sut = new Reactor(Guid.NewGuid(), onReceiveMsg: OnReceive);
 
-        sut.OnComplete();
+        sut.OnUnsubscribe();
 
         // Act
         sut.OnReceive(mockMessage);
@@ -104,33 +104,33 @@ public class ReactorTests
     }
 
     [Fact]
-    public void OnComplete_WhenNotUnsubscribed_InvokesAction()
+    public void OnUnsubscribe_WhenNotUnsubscribed_InvokesAction()
     {
         // Arrange
         var onReceiveInvoked = false;
-        void OnComplete() => onReceiveInvoked = true;
+        void OnUnsubscribe() => onReceiveInvoked = true;
 
-        var sut = new Reactor(Guid.NewGuid(), onCompleted: OnComplete);
+        var sut = new Reactor(Guid.NewGuid(), onUnsubscribe: OnUnsubscribe);
 
         // Act
-        sut.OnComplete();
+        sut.OnUnsubscribe();
 
         // Assert
         onReceiveInvoked.Should().BeTrue();
     }
 
     [Fact]
-    public void OnComplete_WhenUnsubscribed_DoesNotInvokeActionAgain()
+    public void OnUnsubscribe_WhenUnsubscribed_DoesNotInvokeActionAgain()
     {
         // Arrange
         var totalInvokes = 0;
-        void OnComplete() => totalInvokes++;
+        void OnUnsubscribe() => totalInvokes++;
 
-        var sut = new Reactor(Guid.NewGuid(), onCompleted: OnComplete);
-        sut.OnComplete();
+        var sut = new Reactor(Guid.NewGuid(), onUnsubscribe: OnUnsubscribe);
+        sut.OnUnsubscribe();
 
         // Act
-        sut.OnComplete();
+        sut.OnUnsubscribe();
 
         // Assert
         totalInvokes.Should().Be(1);
@@ -165,7 +165,7 @@ public class ReactorTests
 
         var sut = new Reactor(Guid.NewGuid(), onError: OnError);
 
-        sut.OnComplete();
+        sut.OnUnsubscribe();
 
         // Act
         sut.OnError(exception);

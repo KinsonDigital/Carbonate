@@ -28,7 +28,7 @@ public class IntegrationTests
             eventId,
             onReceive: () =>
             {
-            }, onCompleted: () => unsubscriber?.Dispose()));
+            }, onUnsubscribe: () => unsubscriber?.Dispose()));
 
         // Act
         reactable.Push(eventId);
@@ -54,7 +54,7 @@ public class IntegrationTests
             onReceiveMsg: data =>
             {
                 expectedData = data.GetData<SampleData>();
-            }, onCompleted: () => unsubscriber?.Dispose()));
+            }, onUnsubscribe: () => unsubscriber?.Dispose()));
 
         var sampleData = new SampleData { StringValue = "test-string", IntValue = 123 };
 
@@ -89,7 +89,7 @@ public class IntegrationTests
                     {
                         expectedData.Add(data.GetData<SampleData>());
                     },
-                    onCompleted: () =>
+                    onUnsubscribe: () =>
                     {
                         unsubscriber?.Dispose();
                     }));
@@ -133,7 +133,7 @@ public class IntegrationTests
             onReceiveMsg: data =>
             {
                 expectedDataA = data.GetData<SampleData>();
-            }, onCompleted: () => unsubscriberA?.Dispose()));
+            }, onUnsubscribe: () => unsubscriberA?.Dispose()));
 
         // Subscription B
         unsubscriberB = reactable.Subscribe(new Reactor(
@@ -141,7 +141,7 @@ public class IntegrationTests
             onReceiveMsg: data =>
             {
                 expectedDataB = data.GetData<SampleData>();
-            }, onCompleted: () => unsubscriberB?.Dispose()));
+            }, onUnsubscribe: () => unsubscriberB?.Dispose()));
 
         var sampleDataA = new SampleData { StringValue = "test-string-A", IntValue = 123 };
         var sampleDataB = new SampleData { StringValue = "test-string-B", IntValue = 456 };

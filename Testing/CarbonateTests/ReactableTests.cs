@@ -492,9 +492,9 @@ public class ReactableTests
         sut.Unsubscribe(eventToUnsubscribeFrom);
 
         // Assert
-        mockReactorA.Received(1).OnComplete();
-        mockReactorB.Received(Quantity.None()).OnComplete();
-        mockReactorC.Received(1).OnComplete();
+        mockReactorA.Received(1).OnUnsubscribe();
+        mockReactorB.Received(Quantity.None()).OnUnsubscribe();
+        mockReactorC.Received(1).OnUnsubscribe();
         sut.Reactors.Should().HaveCount(1);
     }
 
@@ -521,13 +521,13 @@ public class ReactableTests
         sut.Unsubscribe(eventToUnsubscribeFrom);
 
         // Assert
-        mockReactorA.Received(1).OnComplete();
-        mockReactorB.Received(1).OnComplete();
+        mockReactorA.Received(1).OnUnsubscribe();
+        mockReactorB.Received(1).OnUnsubscribe();
         sut.Reactors.Should().BeEmpty();
     }
 
     [Fact]
-    public void Unsubscribe_WhenUnsubscribingInsideOnCompleteReactorAction_DoesNotThrowException()
+    public void Unsubscribe_WhenUnsubscribingInsideOnUnsubscribeReactorAction_DoesNotThrowException()
     {
         // Arrange
         var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
@@ -543,7 +543,7 @@ public class ReactableTests
 
         var initReactorC = new Reactor(
             eventId: mainId,
-            onCompleted: () =>
+            onUnsubscribe: () =>
             {
                 sut.Unsubscribe(otherId);
             });
@@ -600,14 +600,14 @@ public class ReactableTests
         sut.UnsubscribeAll();
 
         // Assert
-        mockReactorA.Received(1).OnComplete();
-        mockReactorB.Received(1).OnComplete();
-        mockReactorC.Received(1).OnComplete();
+        mockReactorA.Received(1).OnUnsubscribe();
+        mockReactorB.Received(1).OnUnsubscribe();
+        mockReactorC.Received(1).OnUnsubscribe();
         sut.Reactors.Should().BeEmpty();
     }
 
     [Fact]
-    public void UnsubscribeAll_WhenUnsubscribingInsideOnCompleteReactorAction_DoesNotThrowException()
+    public void UnsubscribeAll_WhenUnsubscribingInsideOnUnsubscribeReactorAction_DoesNotThrowException()
     {
         // Arrange
         var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
@@ -623,7 +623,7 @@ public class ReactableTests
 
         var initReactorC = new Reactor(
             eventId: mainId,
-            onCompleted: () =>
+            onUnsubscribe: () =>
             {
                 sut.Unsubscribe(otherId);
             });
@@ -662,8 +662,8 @@ public class ReactableTests
         sut.Dispose();
 
         // Assert
-        mockReactorA.Received(1).OnComplete();
-        mockReactorB.Received(1).OnComplete();
+        mockReactorA.Received(1).OnUnsubscribe();
+        mockReactorB.Received(1).OnUnsubscribe();
 
         sut.Reactors.Should().BeEmpty();
     }
