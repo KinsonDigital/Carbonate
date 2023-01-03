@@ -9,8 +9,8 @@ namespace Carbonate;
 /// </summary>
 public sealed class Reactor : IReactor
 {
-    private readonly Action? onNext;
-    private readonly Action<IMessage>? onNextMsg;
+    private readonly Action? onReceive;
+    private readonly Action<IMessage>? onReceiveMsg;
     private readonly Action? onCompleted;
     private readonly Action<Exception>? onError;
 
@@ -19,8 +19,8 @@ public sealed class Reactor : IReactor
     /// </summary>
     /// <param name="eventId">The ID of the event where the <see cref="Reactor"/> responds.</param>
     /// <param name="name">The name of the <see cref="Reactor"/>.</param>
-    /// <param name="onNext">Executed when a push notification occurs with no data.</param>
-    /// <param name="onNextMsg">Executed when a push notification occurs with a message.</param>
+    /// <param name="onReceive">Executed when a push notification occurs with no data.</param>
+    /// <param name="onReceiveMsg">Executed when a push notification occurs with a message.</param>
     /// <param name="onCompleted">Executed when the provider has finished sending push-based notifications.</param>
     /// <param name="onError">Executed when the provider experiences an error condition.</param>
     /// <remarks>
@@ -31,15 +31,15 @@ public sealed class Reactor : IReactor
     public Reactor(
         Guid eventId,
         string name = "",
-        Action? onNext = null,
-        Action<IMessage>? onNextMsg = null,
+        Action? onReceive = null,
+        Action<IMessage>? onReceiveMsg = null,
         Action? onCompleted = null,
         Action<Exception>? onError = null)
     {
         EventId = eventId;
         Name = string.IsNullOrEmpty(name) ? string.Empty : name;
-        this.onNext = onNext;
-        this.onNextMsg = onNextMsg;
+        this.onReceive = onReceive;
+        this.onReceiveMsg = onReceiveMsg;
         this.onCompleted = onCompleted;
         this.onError = onError;
     }
@@ -54,25 +54,25 @@ public sealed class Reactor : IReactor
     public bool Unsubscribed { get; private set; }
 
     /// <inheritdoc />
-    public void OnNext()
+    public void OnReceive()
     {
         if (Unsubscribed)
         {
             return;
         }
 
-        this.onNext?.Invoke();
+        this.onReceive?.Invoke();
     }
 
     /// <inheritdoc />
-    public void OnNext(IMessage message)
+    public void OnReceive(IMessage message)
     {
         if (Unsubscribed)
         {
             return;
         }
 
-        this.onNextMsg?.Invoke(message);
+        this.onReceiveMsg?.Invoke(message);
     }
 
     /// <inheritdoc />

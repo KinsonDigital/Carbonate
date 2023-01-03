@@ -32,83 +32,83 @@ public class ReactorTests
 
     #region Method Tests
     [Fact]
-    public void OnNext_WhenSendingNothingAndSubscribed_InvokesAction()
+    public void OnReceive_WhenSendingNothingAndSubscribed_InvokesAction()
     {
         // Arrange
-        var onNextInvoked = false;
-        void OnNext() => onNextInvoked = true;
+        var onReceiveInvoked = false;
+        void OnReceive() => onReceiveInvoked = true;
 
-        var sut = new Reactor(Guid.NewGuid(), onNext: OnNext);
+        var sut = new Reactor(Guid.NewGuid(), onReceive: OnReceive);
 
         // Act
-        sut.OnNext();
+        sut.OnReceive();
 
         // Assert
-        onNextInvoked.Should().BeTrue();
+        onReceiveInvoked.Should().BeTrue();
     }
 
     [Fact]
-    public void OnNext_WhenSendingNothingAndNotSubscribed_DoesNotInvokeAction()
+    public void OnReceive_WhenSendingNothingAndNotSubscribed_DoesNotInvokeAction()
     {
         // Arrange
-        var onNextInvoked = false;
-        void OnNext() => onNextInvoked = true;
+        var onReceiveInvoked = false;
+        void OnReceive() => onReceiveInvoked = true;
 
-        var sut = new Reactor(Guid.NewGuid(), onNext: OnNext);
+        var sut = new Reactor(Guid.NewGuid(), onReceive: OnReceive);
 
         sut.OnComplete();
 
         // Act
-        sut.OnNext();
+        sut.OnReceive();
 
         // Assert
-        onNextInvoked.Should().BeFalse();
+        onReceiveInvoked.Should().BeFalse();
     }
 
     [Fact]
-    public void OnNext_WhenSendingMessageAndSubscribed_InvokesAction()
+    public void OnReceive_WhenSendingMessageAndSubscribed_InvokesAction()
     {
         // Arrange
-        var onNextInvoked = false;
-        void OnNext(IMessage msg) => onNextInvoked = true;
+        var onReceiveInvoked = false;
+        void OnReceive(IMessage msg) => onReceiveInvoked = true;
 
         var mockMessage = Substitute.For<IMessage>();
 
-        var sut = new Reactor(Guid.NewGuid(), onNextMsg: OnNext);
+        var sut = new Reactor(Guid.NewGuid(), onReceiveMsg: OnReceive);
 
         // Act
-        sut.OnNext(mockMessage);
+        sut.OnReceive(mockMessage);
 
         // Assert
-        onNextInvoked.Should().BeTrue();
+        onReceiveInvoked.Should().BeTrue();
     }
 
     [Fact]
-    public void OnNext_WhenSendingMessageAndNotSubscribed_DoesNotInvokeAction()
+    public void OnReceive_WhenSendingMessageAndNotSubscribed_DoesNotInvokeAction()
     {
         // Arrange
-        var onNextInvoked = false;
-        void OnNext(IMessage msg) => onNextInvoked = true;
+        var onReceiveInvoked = false;
+        void OnReceive(IMessage msg) => onReceiveInvoked = true;
 
         var mockMessage = Substitute.For<IMessage>();
 
-        var sut = new Reactor(Guid.NewGuid(), onNextMsg: OnNext);
+        var sut = new Reactor(Guid.NewGuid(), onReceiveMsg: OnReceive);
 
         sut.OnComplete();
 
         // Act
-        sut.OnNext(mockMessage);
+        sut.OnReceive(mockMessage);
 
         // Assert
-        onNextInvoked.Should().BeFalse();
+        onReceiveInvoked.Should().BeFalse();
     }
 
     [Fact]
     public void OnComplete_WhenNotUnsubscribed_InvokesAction()
     {
         // Arrange
-        var onNextInvoked = false;
-        void OnComplete() => onNextInvoked = true;
+        var onReceiveInvoked = false;
+        void OnComplete() => onReceiveInvoked = true;
 
         var sut = new Reactor(Guid.NewGuid(), onCompleted: OnComplete);
 
@@ -116,7 +116,7 @@ public class ReactorTests
         sut.OnComplete();
 
         // Assert
-        onNextInvoked.Should().BeTrue();
+        onReceiveInvoked.Should().BeTrue();
     }
 
     [Fact]
@@ -158,8 +158,8 @@ public class ReactorTests
     public void OnError_WhenNotSubscribed_DoesNotInvokeAction()
     {
         // Arrange
-        var onNextInvoked = false;
-        void OnError(Exception ex) => onNextInvoked = true;
+        var onReceiveInvoked = false;
+        void OnError(Exception ex) => onReceiveInvoked = true;
 
         var exception = new Exception("test-exception");
 
@@ -171,7 +171,7 @@ public class ReactorTests
         sut.OnError(exception);
 
         // Assert
-        onNextInvoked.Should().BeFalse();
+        onReceiveInvoked.Should().BeFalse();
     }
 
     [Theory]

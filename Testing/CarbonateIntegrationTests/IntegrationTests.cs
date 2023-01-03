@@ -26,7 +26,7 @@ public class IntegrationTests
 
         unsubscriber = reactable.Subscribe(new Reactor(
             eventId,
-            onNext: () =>
+            onReceive: () =>
             {
             }, onCompleted: () => unsubscriber?.Dispose()));
 
@@ -51,7 +51,7 @@ public class IntegrationTests
 
         unsubscriber = reactable.Subscribe(new Reactor(
             eventId,
-            onNextMsg: data =>
+            onReceiveMsg: data =>
             {
                 expectedData = data.GetData<SampleData>();
             }, onCompleted: () => unsubscriber?.Dispose()));
@@ -85,7 +85,7 @@ public class IntegrationTests
             IDisposable? unsubscriber = null;
             unsubscriber = reactable.Subscribe(new Reactor(
                     eventId,
-                    onNextMsg: data =>
+                    onReceiveMsg: data =>
                     {
                         expectedData.Add(data.GetData<SampleData>());
                     },
@@ -130,7 +130,7 @@ public class IntegrationTests
         // Subscription A
         unsubscriberA = reactable.Subscribe(new Reactor(
             eventIdA,
-            onNextMsg: data =>
+            onReceiveMsg: data =>
             {
                 expectedDataA = data.GetData<SampleData>();
             }, onCompleted: () => unsubscriberA?.Dispose()));
@@ -138,7 +138,7 @@ public class IntegrationTests
         // Subscription B
         unsubscriberB = reactable.Subscribe(new Reactor(
             eventIdB,
-            onNextMsg: data =>
+            onReceiveMsg: data =>
             {
                 expectedDataB = data.GetData<SampleData>();
             }, onCompleted: () => unsubscriberB?.Dispose()));

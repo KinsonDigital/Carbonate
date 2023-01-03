@@ -155,9 +155,9 @@ public class ReactableTests
         sut.Push(invokedEventId);
 
         // Assert
-        mockReactorA.Received(1).OnNext();
-        mockReactorB.Received(Quantity.None()).OnNext();
-        mockReactorC.Received(1).OnNext();
+        mockReactorA.Received(1).OnReceive();
+        mockReactorB.Received(Quantity.None()).OnReceive();
+        mockReactorC.Received(1).OnReceive();
     }
 
     [Fact]
@@ -180,7 +180,7 @@ public class ReactableTests
 
         var initReactorC = new Reactor(
             eventId: mainId,
-            onNext: () =>
+            onReceive: () =>
             {
                 otherUnsubscriberA?.Dispose();
                 otherUnsubscriberB?.Dispose();
@@ -242,9 +242,9 @@ public class ReactableTests
 
         // Assert
         this.mockSerializerService.Received(1).Serialize(testData);
-        mockReactorA.Received(1).OnNext(Arg.Any<JsonMessage>());
-        mockReactorB.Received(Quantity.None()).OnNext(Arg.Any<JsonMessage>());
-        mockReactorC.Received(1).OnNext(Arg.Any<JsonMessage>());
+        mockReactorA.Received(1).OnReceive(Arg.Any<JsonMessage>());
+        mockReactorB.Received(Quantity.None()).OnReceive(Arg.Any<JsonMessage>());
+        mockReactorC.Received(1).OnReceive(Arg.Any<JsonMessage>());
     }
 
     [Fact]
@@ -273,15 +273,15 @@ public class ReactableTests
         sut.PushData(testData, invokedEventId);
 
         // Assert
-        mockReactorA.Received(Quantity.None()).OnNext(Arg.Any<JsonMessage>());
-        mockReactorB.Received(Quantity.None()).OnNext(Arg.Any<JsonMessage>());
+        mockReactorA.Received(Quantity.None()).OnReceive(Arg.Any<JsonMessage>());
+        mockReactorB.Received(Quantity.None()).OnReceive(Arg.Any<JsonMessage>());
 
         mockReactorA.Received(1).OnError(expected);
         mockReactorB.Received(Quantity.None()).OnError(expected);
     }
 
     [Fact]
-    public void PushData_WhenUnsubscribingInsideOnNextReactorAction_DoesNotThrowException()
+    public void PushData_WhenUnsubscribingInsideOnReceiveReactorAction_DoesNotThrowException()
     {
         // Arrange
         this.mockSerializerService.Serialize(Arg.Any<TestData>()).Returns("test-data");
@@ -303,7 +303,7 @@ public class ReactableTests
 
         var initReactorC = new Reactor(
             eventId: mainId,
-            onNextMsg: _ =>
+            onReceiveMsg: _ =>
             {
                 otherUnsubscriberA?.Dispose();
                 otherUnsubscriberB?.Dispose();
@@ -406,13 +406,13 @@ public class ReactableTests
         sut.PushMessage(mockMessage, invokedEventId);
 
         // Assert
-        mockReactorA.Received(1).OnNext(Arg.Any<IMessage>());
-        mockReactorB.Received(Quantity.None()).OnNext(Arg.Any<IMessage>());
-        mockReactorC.Received(1).OnNext(Arg.Any<IMessage>());
+        mockReactorA.Received(1).OnReceive(Arg.Any<IMessage>());
+        mockReactorB.Received(Quantity.None()).OnReceive(Arg.Any<IMessage>());
+        mockReactorC.Received(1).OnReceive(Arg.Any<IMessage>());
     }
 
     [Fact]
-    public void PushMessage_WhenUnsubscribingInsideOnNextReactorAction_DoesNotThrowException()
+    public void PushMessage_WhenUnsubscribingInsideOnReceiveReactorAction_DoesNotThrowException()
     {
         // Arrange
         this.mockSerializerService.Serialize(Arg.Any<TestData>()).Returns("test-data");
@@ -434,7 +434,7 @@ public class ReactableTests
 
         var initReactorC = new Reactor(
             eventId: mainId,
-            onNextMsg: _ =>
+            onReceiveMsg: _ =>
             {
                 otherUnsubscriberA?.Dispose();
                 otherUnsubscriberB?.Dispose();

@@ -112,7 +112,7 @@ public sealed class Reactable : IReactable
         {
             /*NOTE:
              * The purpose of this logic is to prevent array index errors
-             * if an OnNext() implementation ends up unsubscribing a single
+             * if an OnReceive() implementation ends up unsubscribing a single
              * subscription or unsubscribing from a single event id
              *
              * If the current index is not less than or equal to
@@ -161,7 +161,7 @@ public sealed class Reactable : IReactable
         {
             /*NOTE:
              * The purpose of this logic is to prevent array index errors
-             * if an OnNext() implementation ends up unsubscribing a single
+             * if an OnReceive() implementation ends up unsubscribing a single
              * subscription or unsubscribing from a single event id
              *
              * If the current index is not less than or equal to
@@ -195,13 +195,13 @@ public sealed class Reactable : IReactable
 
         /* Work from the end to the beginning of the list
          * just in case the reactable is disposed(removed)
-         * in the OnNext() method.
+         * in the OnReceive() method.
          */
         for (var i = this.reactors.Count - 1; i >= 0; i--)
         {
             /*NOTE:
              * The purpose of this logic is to prevent array index errors
-             * if an OnNext() implementation ends up unsubscribing a single
+             * if an OnReceive() implementation ends up unsubscribing a single
              * subscription or unsubscribing from a single event id
              *
              * If the current index is not less than or equal to
@@ -218,11 +218,11 @@ public sealed class Reactable : IReactable
 
             if (message is null)
             {
-                this.reactors[i].OnNext();
+                this.reactors[i].OnReceive();
             }
             else
             {
-                this.reactors[i].OnNext(message);
+                this.reactors[i].OnReceive(message);
             }
         }
     }
@@ -236,13 +236,13 @@ public sealed class Reactable : IReactable
     {
         /* Work from the end to the beginning of the list
          * just in case the reactable is disposed(removed)
-         * in the OnNext() method.
+         * in the OnReceive() method.
          */
         for (var i = this.reactors.Count - 1; i >= 0; i--)
         {
             /*NOTE:
              * The purpose of this logic is to prevent array index errors
-             * if an OnNext() implementation ends up unsubscribing a single
+             * if an OnReceive() implementation ends up unsubscribing a single
              * subscription or unsubscribing from a single event id
              *
              * If the current index is not less than or equal to

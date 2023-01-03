@@ -28,21 +28,21 @@ public interface IReactor
     /// Gets a value indicating whether or not the <see cref="IReactor"/> has been unsubscribed.
     /// </summary>
     /// <remarks>
-    ///     This means that the <see cref="Reactor"/> will not receive <see cref="OnNext()"/>, <see cref="OnComplete"/>,
-    ///     or <see cref="OnError"/> invokes.
+    ///     This means that the <see cref="Reactor"/> will not receive <see cref="OnReceive()"/>, <see cref="OnReceive(IMessage)"/>,
+    ///     <see cref="OnComplete"/>, or <see cref="OnError"/> invokes.
     /// </remarks>
     bool Unsubscribed { get; }
 
     /// <summary>
     /// Sends the next notification without any data to the <see cref="Reactor"/>.
     /// </summary>
-    void OnNext();
+    void OnReceive();
 
     /// <summary>
     /// Sends the next notification with the given <paramref name="message"/> the <see cref="Reactor"/>.
     /// </summary>
     /// <param name="message">The notification message.</param>
-    void OnNext(IMessage message);
+    void OnReceive(IMessage message);
 
     /// <summary>
     /// Notifies the <see cref="Reactor"/> that the provider has finished sending push-based notifications.
