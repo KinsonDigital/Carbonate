@@ -26,7 +26,9 @@ public sealed class PushReactable : ReactableBase<IReceiveReactor>, IPushable
     /// Initializes a new instance of the <see cref="PushReactable"/> class.
     /// </summary>
     /// <param name="serializerService">The serializer used to serialize the messages.</param>
-    public PushReactable(ISerializerService serializerService) => this.serializerService = serializerService;
+    public PushReactable(ISerializerService serializerService) =>
+        this.serializerService = serializerService ??
+            throw new ArgumentNullException(nameof(serializerService), "The parameter must not be null.");
 
     /// <inheritdoc/>
     public void Push(Guid eventId) => SendNotifications(null, eventId);

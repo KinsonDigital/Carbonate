@@ -5,7 +5,7 @@
 namespace Carbonate;
 
 /// <summary>
-/// Provides a mechanism for receiving push-based notifications.
+/// Provides a mechanism for pushing notifications or receiving responses.
 /// </summary>
 public interface IReactor
 {

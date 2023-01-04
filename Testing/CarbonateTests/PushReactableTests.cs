@@ -27,6 +27,23 @@ public class PushReactableTests
     /// </summary>
     public PushReactableTests() => this.mockSerializerService = Substitute.For<ISerializerService>();
 
+    #region Constructor Tests
+    [Fact]
+    public void Ctor_WithNullSerializerServiceParam_ThrowsException()
+    {
+        // Arrange & Act
+        var act = () =>
+        {
+            _ = new PushReactable(null);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'serializerService')");
+    }
+    #endregion
+
     #region Prop Tests
     [Fact]
     public void EventIds_WhenGettingValue_ReturnsCorrectResult()
@@ -167,7 +184,7 @@ public class PushReactableTests
         sut.Dispose();
 
         // Act
-        var act = () => sut.PushData(new TestData(), Guid.Empty);
+        var act = () => sut.PushData(new PullTestData(), Guid.Empty);
 
         // Assert
         act.Should().Throw<ObjectDisposedException>()
@@ -178,7 +195,7 @@ public class PushReactableTests
     public void PushData_WhenInvoking_NotifiesCorrectSubscriptionsThatMatchEventId()
     {
         // Arrange
-        this.mockSerializerService.Serialize(Arg.Any<TestData>()).Returns("test-json-data");
+        this.mockSerializerService.Serialize(Arg.Any<PullTestData>()).Returns("test-json-data");
         var invokedEventId = Guid.NewGuid();
         var notInvokedEventId = Guid.NewGuid();
 
@@ -191,7 +208,7 @@ public class PushReactableTests
         var mockReactorC = Substitute.For<IReceiveReactor>();
         mockReactorC.Id.Returns(invokedEventId);
 
-        var testData = default(TestData);
+        var testData = default(PullTestData);
 
         var sut = CreateSystemUnderTest();
         sut.Subscribe(mockReactorA);
@@ -199,7 +216,7 @@ public class PushReactableTests
         sut.Subscribe(mockReactorC);
 
         // Act
-        sut.PushData(testData, invokedEventId);
+        sut.PushData<PullTestData>(testData, invokedEventId);
 
         // Assert
         this.mockSerializerService.Received(1).Serialize(testData);
@@ -213,7 +230,7 @@ public class PushReactableTests
     {
         // Arrange
         var expected = new JsonException("serial-error");
-        this.mockSerializerService.Serialize(Arg.Any<TestData>()).Throws(expected);
+        this.mockSerializerService.Serialize(Arg.Any<PullTestData>()).Throws(expected);
 
         var invokedEventId = Guid.NewGuid();
         var otherEventId = Guid.NewGuid();
@@ -224,7 +241,7 @@ public class PushReactableTests
         var mockReactorB = Substitute.For<IReceiveReactor>();
         mockReactorB.Id.Returns(otherEventId);
 
-        var testData = default(TestData);
+        var testData = default(PullTestData);
 
         var sut = CreateSystemUnderTest();
         sut.Subscribe(mockReactorA);
@@ -245,7 +262,7 @@ public class PushReactableTests
     public void PushData_WhenUnsubscribingInsideOnReceiveReactorAction_DoesNotThrowException()
     {
         // Arrange
-        this.mockSerializerService.Serialize(Arg.Any<TestData>()).Returns("test-data");
+        this.mockSerializerService.Serialize(Arg.Any<PullTestData>()).Returns("test-data");
         var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
         var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
 
@@ -260,7 +277,7 @@ public class PushReactableTests
 
         var sut = CreateSystemUnderTest();
 
-        var testData = new TestData();
+        var testData = new PullTestData();
 
         var initReactorC = new ReceiveReactor(
             eventId: mainId,
@@ -287,7 +304,7 @@ public class PushReactableTests
     {
         // Arrange
         var expected = new JsonException("serial-error");
-        this.mockSerializerService.Serialize(Arg.Any<TestData>()).Throws(expected);
+        this.mockSerializerService.Serialize(Arg.Any<PullTestData>()).Throws(expected);
 
         var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
         var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
@@ -301,7 +318,7 @@ public class PushReactableTests
         var otherReactorA = new ReceiveReactor(eventId: otherId);
         var otherReactorB = new ReceiveReactor(eventId: otherId);
 
-        var testData = new TestData();
+        var testData = new PullTestData();
 
         var sut = CreateSystemUnderTest();
 
@@ -376,7 +393,7 @@ public class PushReactableTests
     public void PushMessage_WhenUnsubscribingInsideOnReceiveReactorAction_DoesNotThrowException()
     {
         // Arrange
-        this.mockSerializerService.Serialize(Arg.Any<TestData>()).Returns("test-data");
+        this.mockSerializerService.Serialize(Arg.Any<PullTestData>()).Returns("test-data");
         var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
         var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
 

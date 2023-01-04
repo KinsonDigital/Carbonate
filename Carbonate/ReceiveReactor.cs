@@ -17,15 +17,14 @@ public sealed class ReceiveReactor : IReceiveReactor
     /// <summary>
     /// Initializes a new instance of the <see cref="ReceiveReactor"/> class.
     /// </summary>
-    /// <param name="eventId">The ID of the event where the <see cref="ReceiveReactor"/> responds.</param>
+    /// <param name="eventId">The ID of the event that was pushed by a <see cref="IReactable{IReceiveReactor}"/>.</param>
     /// <param name="name">The name of the <see cref="ReceiveReactor"/>.</param>
     /// <param name="onReceive">Executed when a push notification occurs with no data.</param>
     /// <param name="onReceiveMsg">Executed when a push notification occurs with a message.</param>
     /// <param name="onUnsubscribe">
-    ///     Executed when the provider has finished sending push-based notification that it is
-    ///     complete and that it is unsubscribed.
-    /// .</param>
-    /// <param name="onError">Executed when the provider experiences an error condition.</param>
+    ///     Executed when the provider has finished sending push-based notifications and is unsubscribed.
+    /// </param>
+    /// <param name="onError">Executed when the provider experiences an error.</param>
     /// <remarks>
     ///     Note:  The <paramref name="name"/> is not used for unique identification purposes.
     ///     <br/>
@@ -73,6 +72,11 @@ public sealed class ReceiveReactor : IReceiveReactor
         if (Unsubscribed)
         {
             return;
+        }
+
+        if (message is null)
+        {
+            throw new ArgumentNullException(nameof(message), "The parameter must not be null.");
         }
 
         this.onReceiveMsg?.Invoke(message);

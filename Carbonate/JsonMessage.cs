@@ -19,7 +19,8 @@ internal sealed class JsonMessage : IMessage
     /// Initializes a new instance of the <see cref="JsonMessage"/> class.
     /// </summary>
     /// <param name="serializerService">The serializer used to deserialize the message.</param>
-    /// <param name="jsonData">The JSON form of the message data.</param>
+    /// <param name="jsonData">The JSON data.</param>
+    /// <exception cref="ArgumentNullException">Thrown if the <paramref name="serializerService"/> is null.</exception>
     public JsonMessage(ISerializerService serializerService, string jsonData)
     {
         this.serializerService = serializerService ?? throw new ArgumentNullException(

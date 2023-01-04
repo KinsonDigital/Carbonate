@@ -104,6 +104,20 @@ public class ReceiveReactorTests
     }
 
     [Fact]
+    public void OnReceive_WhenSendingNullMessage_ThrowsException()
+    {
+        // Arrange
+        var sut = new ReceiveReactor(Guid.NewGuid());
+
+        // Act
+        var act = () => sut.OnReceive(null);
+
+        // Assert
+        act.Should().Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'message')");
+    }
+
+    [Fact]
     public void OnUnsubscribe_WhenNotUnsubscribed_InvokesAction()
     {
         // Arrange

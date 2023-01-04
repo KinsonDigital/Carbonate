@@ -48,7 +48,7 @@ public class ReactorUnsubscriberTests
 
     #region Prop Tests
     [Fact]
-    public void TotalReactors_WhenInvoked_EXPECTED_RESULT()
+    public void TotalReactors_WhenInvoked_ReturnsCorrectResult()
     {
         // Arrange
         var reactors = new[] { Substitute.For<IReactor>(), Substitute.For<IReactor>() };

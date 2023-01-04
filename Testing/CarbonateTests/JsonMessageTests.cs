@@ -63,16 +63,16 @@ public class JsonMessageTests
     public void GetData_WhenInvoked_ReturnsCorrectResult()
     {
         // Arrange
-        var testData = new TestData();
-        this.mockSerializerService.Deserialize<TestData>(Arg.Any<string>()).Returns(testData);
+        var testData = new PullTestData();
+        this.mockSerializerService.Deserialize<PullTestData>("test-data").Returns(testData);
 
         var sut = new JsonMessage(this.mockSerializerService, "test-data");
 
         // Act
-        var actual = sut.GetData<TestData>();
+        var actual = sut.GetData<PullTestData>();
 
         // Assert
-        this.mockSerializerService.Received(1).Deserialize<TestData>("test-data");
+        this.mockSerializerService.Received(1).Deserialize<PullTestData>("test-data");
         actual.Should().NotBeNull();
     }
 
@@ -80,20 +80,25 @@ public class JsonMessageTests
     public void GetData_WhenSerializationResultIsNull_InvokesOnErrorAction()
     {
         // Arrange
-        TestData? nullData = null;
-        this.mockSerializerService.Deserialize<TestData>(Arg.Any<string>()).Returns(nullData);
+        PullTestData? nullData = null;
+
+        var totalActionInvokes = 0;
+        this.mockSerializerService.Deserialize<PullTestData>("test-data")
+            .Returns(nullData);
 
         var sut = new JsonMessage(this.mockSerializerService, "test-data");
 
         // Act
-        _ = sut.GetData<TestData>(OnError);
+        _ = sut.GetData<PullTestData>(e =>
+        {
+            e.Should().BeOfType<JsonException>();
+            e.Message.Should().Be("Issues with the JSON deserialization process.");
+
+            totalActionInvokes++;
+        });
 
         // Assert
-        void OnError(Exception ex)
-        {
-            ex.Should().BeOfType<JsonException>();
-            ex.Message.Should().Be("Issues with the JSON deserialization process.");
-        }
+        totalActionInvokes.Should().Be(1);
     }
     #endregion
 }
