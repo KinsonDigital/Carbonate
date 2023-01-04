@@ -9,7 +9,7 @@ using Carbonate;
 using Carbonate.Services;
 using FluentAssertions;
 using Helpers;
-using NSubstitute;
+using Moq;
 using Xunit;
 
 /// <summary>
@@ -39,7 +39,7 @@ public class JsonResultTests
         // Arrange & Act
         var act = () =>
         {
-            _ = new JsonResult(Substitute.For<ISerializerService>(), null);
+            _ = new JsonResult(new Mock<ISerializerService>().Object, null);
         };
 
         // Assert
@@ -56,9 +56,9 @@ public class JsonResultTests
         // Arrange
         ResultTestData? resultData = null;
 
-        var mockSerializerService = Substitute.For<ISerializerService>();
+        var mockSerializerService = new Mock<ISerializerService>();
 
-        var sut = new JsonResult(mockSerializerService, "test-value");
+        var sut = new JsonResult(mockSerializerService.Object, "test-value");
 
         // Act
         var act = () => resultData = sut.GetValue<ResultTestData>(e => throw e);
@@ -73,9 +73,9 @@ public class JsonResultTests
     public void GetValue_WithNullSerializationResultAndWithNullOnErrorParam_ReturnsNull()
     {
         // Arrange
-        var mockSerializerService = Substitute.For<ISerializerService>();
+        var mockSerializerService = new Mock<ISerializerService>();
 
-        var sut = new JsonResult(mockSerializerService, "test-value");
+        var sut = new JsonResult(mockSerializerService.Object, "test-value");
 
         // Act
         var resultData = sut.GetValue<ResultTestData>();
@@ -88,17 +88,17 @@ public class JsonResultTests
     public void GetValue_WithNonNullSerializationResult_ReturnsCorrectResult()
     {
         // Arrange
-        var mockSerializerService = Substitute.For<ISerializerService>();
-        mockSerializerService.Deserialize<ResultTestData>(Arg.Any<string>())
+        var mockSerializerService = new Mock<ISerializerService>();
+        mockSerializerService.Setup(m => m.Deserialize<ResultTestData>(It.IsAny<string>()))
             .Returns(new ResultTestData { Number = 123 });
 
-        var sut = new JsonResult(mockSerializerService, "test-value");
+        var sut = new JsonResult(mockSerializerService.Object, "test-value");
 
         // Act
         var resultData = sut.GetValue<ResultTestData>();
 
         // Assert
-        mockSerializerService.Received(1).Deserialize<ResultTestData>("test-value");
+        mockSerializerService.Verify(m => m.Deserialize<ResultTestData>("test-value"), Times.Once);
         resultData.Should().NotBeNull();
         resultData.Number.Should().Be(123);
     }

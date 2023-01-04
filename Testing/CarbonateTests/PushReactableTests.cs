@@ -10,9 +10,7 @@ using Carbonate;
 using Carbonate.Services;
 using Helpers;
 using FluentAssertions;
-using NSubstitute;
-using NSubstitute.ExceptionExtensions;
-using NSubstitute.ReceivedExtensions;
+using Moq;
 using Xunit;
 
 /// <summary>
@@ -20,12 +18,12 @@ using Xunit;
 /// </summary>
 public class PushReactableTests
 {
-    private readonly ISerializerService mockSerializerService;
+    private readonly Mock<ISerializerService> mockSerializerService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PushReactableTests"/> class.
     /// </summary>
-    public PushReactableTests() => this.mockSerializerService = Substitute.For<ISerializerService>();
+    public PushReactableTests() => this.mockSerializerService = new Mock<ISerializerService>();
 
     #region Constructor Tests
     [Fact]
@@ -55,19 +53,19 @@ public class PushReactableTests
 
         var expected = new[] { eventIdA, eventIdB };
 
-        var mockReactorA = Substitute.For<IReceiveReactor>();
-        mockReactorA.Id.Returns(eventIdA);
+        var mockReactorA = new Mock<IReceiveReactor>();
+        mockReactorA.SetupGet(p => p.Id).Returns(eventIdA);
 
-        var mockReactorB = Substitute.For<IReceiveReactor>();
-        mockReactorB.Id.Returns(eventIdB);
+        var mockReactorB = new Mock<IReceiveReactor>();
+        mockReactorB.SetupGet(p => p.Id).Returns(eventIdB);
 
-        var mockReactorC = Substitute.For<IReceiveReactor>();
-        mockReactorC.Id.Returns(eventIdC);
+        var mockReactorC = new Mock<IReceiveReactor>();
+        mockReactorC.SetupGet(p => p.Id).Returns(eventIdC);
 
         var sut = CreateSystemUnderTest();
-        sut.Subscribe(mockReactorA);
-        sut.Subscribe(mockReactorB);
-        sut.Subscribe(mockReactorC);
+        sut.Subscribe(mockReactorA.Object);
+        sut.Subscribe(mockReactorB.Object);
+        sut.Subscribe(mockReactorC.Object);
 
         // Act
         var actual = sut.SubscriptionIds;
@@ -115,27 +113,27 @@ public class PushReactableTests
         var invokedEventId = Guid.NewGuid();
         var notInvokedEventId = Guid.NewGuid();
 
-        var mockReactorA = Substitute.For<IReceiveReactor>();
-        mockReactorA.Id.Returns(invokedEventId);
+        var mockReactorA = new Mock<IReceiveReactor>();
+        mockReactorA.SetupGet(p => p.Id).Returns(invokedEventId);
 
-        var mockReactorB = Substitute.For<IReceiveReactor>();
-        mockReactorB.Id.Returns(notInvokedEventId);
+        var mockReactorB = new Mock<IReceiveReactor>();
+        mockReactorB.SetupGet(p => p.Id).Returns(notInvokedEventId);
 
-        var mockReactorC = Substitute.For<IReceiveReactor>();
-        mockReactorC.Id.Returns(invokedEventId);
+        var mockReactorC = new Mock<IReceiveReactor>();
+        mockReactorC.SetupGet(p => p.Id).Returns(invokedEventId);
 
         var sut = CreateSystemUnderTest();
-        sut.Subscribe(mockReactorA);
-        sut.Subscribe(mockReactorB);
-        sut.Subscribe(mockReactorC);
+        sut.Subscribe(mockReactorA.Object);
+        sut.Subscribe(mockReactorB.Object);
+        sut.Subscribe(mockReactorC.Object);
 
         // Act
         sut.Push(invokedEventId);
 
         // Assert
-        mockReactorA.Received(1).OnReceive();
-        mockReactorB.Received(Quantity.None()).OnReceive();
-        mockReactorC.Received(1).OnReceive();
+        mockReactorA.Verify(m => m.OnReceive(), Times.Once);
+        mockReactorB.Verify(m => m.OnReceive(), Times.Never);
+        mockReactorC.Verify(m => m.OnReceive(), Times.Once);
     }
 
     [Fact]
@@ -195,34 +193,35 @@ public class PushReactableTests
     public void PushData_WhenInvoking_NotifiesCorrectSubscriptionsThatMatchEventId()
     {
         // Arrange
-        this.mockSerializerService.Serialize(Arg.Any<PullTestData>()).Returns("test-json-data");
+        this.mockSerializerService.Setup(m => m.Serialize(It.IsAny<PullTestData>()))
+            .Returns("test-json-data");
         var invokedEventId = Guid.NewGuid();
         var notInvokedEventId = Guid.NewGuid();
 
-        var mockReactorA = Substitute.For<IReceiveReactor>();
-        mockReactorA.Id.Returns(invokedEventId);
+        var mockReactorA = new Mock<IReceiveReactor>();
+        mockReactorA.SetupGet(p => p.Id).Returns(invokedEventId);
 
-        var mockReactorB = Substitute.For<IReceiveReactor>();
-        mockReactorB.Id.Returns(notInvokedEventId);
+        var mockReactorB = new Mock<IReceiveReactor>();
+        mockReactorB.SetupGet(p => p.Id).Returns(notInvokedEventId);
 
-        var mockReactorC = Substitute.For<IReceiveReactor>();
-        mockReactorC.Id.Returns(invokedEventId);
+        var mockReactorC = new Mock<IReceiveReactor>();
+        mockReactorC.SetupGet(p => p.Id).Returns(invokedEventId);
 
         var testData = default(PullTestData);
 
         var sut = CreateSystemUnderTest();
-        sut.Subscribe(mockReactorA);
-        sut.Subscribe(mockReactorB);
-        sut.Subscribe(mockReactorC);
+        sut.Subscribe(mockReactorA.Object);
+        sut.Subscribe(mockReactorB.Object);
+        sut.Subscribe(mockReactorC.Object);
 
         // Act
         sut.PushData<PullTestData>(testData, invokedEventId);
 
         // Assert
-        this.mockSerializerService.Received(1).Serialize(testData);
-        mockReactorA.Received(1).OnReceive(Arg.Any<JsonMessage>());
-        mockReactorB.Received(Quantity.None()).OnReceive(Arg.Any<JsonMessage>());
-        mockReactorC.Received(1).OnReceive(Arg.Any<JsonMessage>());
+        this.mockSerializerService.Verify(m => m.Serialize(testData), Times.Once);
+        mockReactorA.Verify(m => m.OnReceive(It.IsAny<JsonMessage>()), Times.Once);
+        mockReactorB.Verify(m => m.OnReceive(It.IsAny<JsonMessage>()), Times.Never);
+        mockReactorC.Verify(m => m.OnReceive(It.IsAny<JsonMessage>()), Times.Once);
     }
 
     [Fact]
@@ -230,39 +229,41 @@ public class PushReactableTests
     {
         // Arrange
         var expected = new JsonException("serial-error");
-        this.mockSerializerService.Serialize(Arg.Any<PullTestData>()).Throws(expected);
+        this.mockSerializerService.Setup(m => m.Serialize(It.IsAny<PullTestData>()))
+            .Throws(expected);
 
         var invokedEventId = Guid.NewGuid();
         var otherEventId = Guid.NewGuid();
 
-        var mockReactorA = Substitute.For<IReceiveReactor>();
-        mockReactorA.Id.Returns(invokedEventId);
+        var mockReactorA = new Mock<IReceiveReactor>();
+        mockReactorA.SetupGet(p => p.Id).Returns(invokedEventId);
 
-        var mockReactorB = Substitute.For<IReceiveReactor>();
-        mockReactorB.Id.Returns(otherEventId);
+        var mockReactorB = new Mock<IReceiveReactor>();
+        mockReactorB.SetupGet(p => p.Id).Returns(otherEventId);
 
         var testData = default(PullTestData);
 
         var sut = CreateSystemUnderTest();
-        sut.Subscribe(mockReactorA);
-        sut.Subscribe(mockReactorB);
+        sut.Subscribe(mockReactorA.Object);
+        sut.Subscribe(mockReactorB.Object);
 
         // Act
         sut.PushData(testData, invokedEventId);
 
         // Assert
-        mockReactorA.Received(Quantity.None()).OnReceive(Arg.Any<JsonMessage>());
-        mockReactorB.Received(Quantity.None()).OnReceive(Arg.Any<JsonMessage>());
+        mockReactorA.Verify(m => m.OnReceive(It.IsAny<JsonMessage>()), Times.Never);
+        mockReactorB.Verify(m => m.OnReceive(It.IsAny<JsonMessage>()), Times.Never);
 
-        mockReactorA.Received(1).OnError(expected);
-        mockReactorB.Received(Quantity.None()).OnError(expected);
+        mockReactorA.Verify(m =>  m.OnError(expected), Times.Once);
+        mockReactorB.Verify(m => m.OnError(expected), Times.Never);
     }
 
     [Fact]
     public void PushData_WhenUnsubscribingInsideOnReceiveReactorAction_DoesNotThrowException()
     {
         // Arrange
-        this.mockSerializerService.Serialize(Arg.Any<PullTestData>()).Returns("test-data");
+        this.mockSerializerService.Setup(m => m.Serialize(It.IsAny<PullTestData>()))
+            .Returns("test-data");
         var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
         var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
 
@@ -304,7 +305,8 @@ public class PushReactableTests
     {
         // Arrange
         var expected = new JsonException("serial-error");
-        this.mockSerializerService.Serialize(Arg.Any<PullTestData>()).Throws(expected);
+        this.mockSerializerService.Setup(m => m.Serialize(It.IsAny<PullTestData>()))
+            .Throws(expected);
 
         var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
         var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
@@ -350,7 +352,7 @@ public class PushReactableTests
         sut.Dispose();
 
         // Act
-        var act = () => sut.PushMessage(Substitute.For<IMessage>(), Guid.Empty);
+        var act = () => sut.PushMessage(new Mock<IMessage>().Object, Guid.Empty);
 
         // Assert
         act.Should().Throw<ObjectDisposedException>()
@@ -364,36 +366,37 @@ public class PushReactableTests
         var invokedEventId = Guid.NewGuid();
         var notInvokedEventId = Guid.NewGuid();
 
-        var mockReactorA = Substitute.For<IReceiveReactor>();
-        mockReactorA.Id.Returns(invokedEventId);
+        var mockReactorA = new Mock<IReceiveReactor>();
+        mockReactorA.SetupGet(p => p.Id).Returns(invokedEventId);
 
-        var mockReactorB = Substitute.For<IReceiveReactor>();
-        mockReactorB.Id.Returns(notInvokedEventId);
+        var mockReactorB = new Mock<IReceiveReactor>();
+        mockReactorB.SetupGet(p => p.Id).Returns(notInvokedEventId);
 
-        var mockReactorC = Substitute.For<IReceiveReactor>();
-        mockReactorC.Id.Returns(invokedEventId);
+        var mockReactorC = new Mock<IReceiveReactor>();
+        mockReactorC.SetupGet(p => p.Id).Returns(invokedEventId);
 
-        var mockMessage = Substitute.For<IMessage>();
+        var mockMessage = new Mock<IMessage>();
 
         var sut = CreateSystemUnderTest();
-        sut.Subscribe(mockReactorA);
-        sut.Subscribe(mockReactorB);
-        sut.Subscribe(mockReactorC);
+        sut.Subscribe(mockReactorA.Object);
+        sut.Subscribe(mockReactorB.Object);
+        sut.Subscribe(mockReactorC.Object);
 
         // Act
-        sut.PushMessage(mockMessage, invokedEventId);
+        sut.PushMessage(mockMessage.Object, invokedEventId);
 
         // Assert
-        mockReactorA.Received(1).OnReceive(Arg.Any<IMessage>());
-        mockReactorB.Received(Quantity.None()).OnReceive(Arg.Any<IMessage>());
-        mockReactorC.Received(1).OnReceive(Arg.Any<IMessage>());
+        mockReactorA.Verify(m => m.OnReceive(It.IsAny<IMessage>()), Times.Once);
+        mockReactorB.Verify(m => m.OnReceive(It.IsAny<IMessage>()), Times.Never);
+        mockReactorC.Verify(m => m.OnReceive(It.IsAny<IMessage>()), Times.Once);
     }
 
     [Fact]
     public void PushMessage_WhenUnsubscribingInsideOnReceiveReactorAction_DoesNotThrowException()
     {
         // Arrange
-        this.mockSerializerService.Serialize(Arg.Any<PullTestData>()).Returns("test-data");
+        this.mockSerializerService.Setup(m => m.Serialize(It.IsAny<PullTestData>()))
+            .Returns("test-data");
         var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
         var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
 
@@ -406,7 +409,7 @@ public class PushReactableTests
         var otherReactorA = new ReceiveReactor(eventId: otherId);
         var otherReactorB = new ReceiveReactor(eventId: otherId);
 
-        var mockMessage = Substitute.For<IMessage>();
+        var mockMessage = new Mock<IMessage>();
 
         var sut = CreateSystemUnderTest();
 
@@ -424,7 +427,7 @@ public class PushReactableTests
         sut.Subscribe(initReactorC);
 
         // Act
-        var act = () => sut.PushMessage(mockMessage, mainId);
+        var act = () => sut.PushMessage(mockMessage.Object, mainId);
 
         // Assert
         act.Should().NotThrow<Exception>();
@@ -435,5 +438,5 @@ public class PushReactableTests
     /// Creates a new instance of <see cref="PushReactable"/> for the purpose of testing.
     /// </summary>
     /// <returns>The instance to test.</returns>
-    private PushReactable CreateSystemUnderTest() => new (this.mockSerializerService);
+    private PushReactable CreateSystemUnderTest() => new (this.mockSerializerService.Object);
 }

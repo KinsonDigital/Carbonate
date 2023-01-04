@@ -6,7 +6,7 @@ namespace CarbonateTests;
 
 using Carbonate;
 using FluentAssertions;
-using NSubstitute;
+using Moq;
 using Xunit;
 
 /// <summary>
@@ -72,12 +72,12 @@ public class ReceiveReactorTests
         var onReceiveInvoked = false;
         void OnReceive(IMessage msg) => onReceiveInvoked = true;
 
-        var mockMessage = Substitute.For<IMessage>();
+        var mockMessage = new Mock<IMessage>();
 
         var sut = new ReceiveReactor(Guid.NewGuid(), onReceiveMsg: OnReceive);
 
         // Act
-        sut.OnReceive(mockMessage);
+        sut.OnReceive(mockMessage.Object);
 
         // Assert
         onReceiveInvoked.Should().BeTrue();
@@ -90,14 +90,14 @@ public class ReceiveReactorTests
         var onReceiveInvoked = false;
         void OnReceive(IMessage msg) => onReceiveInvoked = true;
 
-        var mockMessage = Substitute.For<IMessage>();
+        var mockMessage = new Mock<IMessage>();
 
         var sut = new ReceiveReactor(Guid.NewGuid(), onReceiveMsg: OnReceive);
 
         sut.OnUnsubscribe();
 
         // Act
-        sut.OnReceive(mockMessage);
+        sut.OnReceive(mockMessage.Object);
 
         // Assert
         onReceiveInvoked.Should().BeFalse();

@@ -9,7 +9,7 @@ using Carbonate;
 using Carbonate.Services;
 using FluentAssertions;
 using Helpers;
-using NSubstitute;
+using Moq;
 using Xunit;
 
 /// <summary>
@@ -17,12 +17,12 @@ using Xunit;
 /// </summary>
 public class PullReactableTests
 {
-    private readonly ISerializerService mockSerializerService;
+    private readonly Mock<ISerializerService> mockSerializerService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PullReactableTests"/> class.
     /// </summary>
-    public PullReactableTests() => this.mockSerializerService = Substitute.For<ISerializerService>();
+    public PullReactableTests() => this.mockSerializerService = new Mock<ISerializerService>();
 
     #region Constructor
     [Fact]
@@ -64,14 +64,15 @@ public class PullReactableTests
     public void Pull_WithNonGenericOverloadAndWhenResponseIsNotNull_ReturnsCorrectResult()
     {
         // Arrange
-        var mockResult = Substitute.For<IResult>();
-        mockResult.GetValue<ResultTestData>().Returns(new ResultTestData { Number = 123 });
+        var mockResult = new Mock<IResult>();
+        mockResult.Setup(m => m.GetValue<ResultTestData>(It.IsAny<Action<Exception>?>()))
+            .Returns(new ResultTestData { Number = 123 });
         var respondId = Guid.NewGuid();
 
         var sut = CreateSystemUnderTest();
         sut.Subscribe(new RespondReactor(
             respondId: respondId,
-            onRespond: () => mockResult));
+            onRespond: () => mockResult.Object));
 
         // Act
         var actualResult = sut.Pull(respondId);
@@ -106,27 +107,29 @@ public class PullReactableTests
     public void Pull_WithGenericOverloadAndWhenResponseIsNotNull_ReturnsCorrectResult()
     {
         // Arrange
-        var mockResult = Substitute.For<IResult>();
-        mockResult.GetValue<ResultTestData>().Returns(new ResultTestData { Number = 123 });
+        var mockResult = new Mock<IResult>();
+        mockResult.Setup(m => m.GetValue<ResultTestData>(It.IsAny<Action<Exception>?>()))
+            .Returns(new ResultTestData { Number = 123 });
 
-        var mockRespondReactor = Substitute.For<IRespondReactor>();
-        mockRespondReactor.OnRespond(Arg.Any<JsonMessage>()).Returns(mockResult);
+        var mockRespondReactor = new Mock<IRespondReactor>();
+        mockRespondReactor.Setup(m => m.OnRespond(It.IsAny<JsonMessage>()))
+            .Returns(mockResult.Object);
 
         var respondId = Guid.NewGuid();
         var testData = new PullTestData { Number = 123 };
 
-        this.mockSerializerService.Serialize(Arg.Any<PullTestData>())
-            .Returns(_ => JsonSerializer.Serialize(testData));
+        this.mockSerializerService.Setup(m => m.Serialize(It.IsAny<PullTestData>()))
+            .Returns(JsonSerializer.Serialize(testData));
 
         var sut = CreateSystemUnderTest();
-        sut.Subscribe(mockRespondReactor);
+        sut.Subscribe(mockRespondReactor.Object);
 
         // Act
         var actualResult = sut.Pull(testData, respondId);
         var actualData = actualResult?.GetValue<ResultTestData>();
 
         // Assert
-        mockRespondReactor.Received(1).OnRespond(Arg.Any<JsonMessage>());
+        mockRespondReactor.Verify(m => m.OnRespond(It.IsAny<JsonMessage>()), Times.Once);
         actualResult.Should().NotBeNull();
         actualData.Should().NotBeNull();
         actualData.Number.Should().Be(123);

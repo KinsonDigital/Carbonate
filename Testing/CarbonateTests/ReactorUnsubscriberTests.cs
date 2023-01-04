@@ -6,7 +6,7 @@ namespace CarbonateTests;
 
 using Carbonate;
 using FluentAssertions;
-using NSubstitute;
+using Moq;
 using Xunit;
 
 /// <summary>
@@ -51,9 +51,9 @@ public class ReactorUnsubscriberTests
     public void TotalReactors_WhenInvoked_ReturnsCorrectResult()
     {
         // Arrange
-        var reactors = new[] { Substitute.For<IReactor>(), Substitute.For<IReactor>() };
+        var reactors = new[] { new Mock<IReactor>().Object, new Mock<IReactor>().Object };
 
-        var sut = new ReactorUnsubscriber(reactors.ToList(), Substitute.For<IReactor>());
+        var sut = new ReactorUnsubscriber(reactors.ToList(), new Mock<IReactor>().Object);
 
         // Act
         var actual = sut.TotalReactors;
@@ -66,13 +66,13 @@ public class ReactorUnsubscriberTests
     public void Dispose_WhenInvoked_RemovesFromReactorsList()
     {
         // Arrange
-        var reactorA = Substitute.For<IReactor>();
-        var reactorB = Substitute.For<IReactor>();
-        var reactorC = Substitute.For<IReactor>();
+        var reactorA = new Mock<IReactor>();
+        var reactorB = new Mock<IReactor>();
+        var reactorC = new Mock<IReactor>();
 
-        var reactors = new[] { reactorA, reactorB, reactorC };
+        var reactors = new[] { reactorA.Object, reactorB.Object, reactorC.Object };
 
-        var sut = new ReactorUnsubscriber(reactors.ToList(), reactorB);
+        var sut = new ReactorUnsubscriber(reactors.ToList(), reactorB.Object);
 
         // Act
         sut.Dispose();

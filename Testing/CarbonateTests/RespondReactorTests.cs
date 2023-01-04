@@ -6,7 +6,7 @@ namespace CarbonateTests;
 
 using Carbonate;
 using FluentAssertions;
-using NSubstitute;
+using Moq;
 using Xunit;
 
 /// <summary>
@@ -49,12 +49,12 @@ public class RespondReactorTests
         // Arrange
         var totalActionInvokes = 0;
         var sut = new RespondReactor(
-            Arg.Any<Guid>(),
-            Arg.Any<string>(),
+            It.IsAny<Guid>(),
+            It.IsAny<string>(),
             onRespond: () =>
             {
                 totalActionInvokes++;
-                return Arg.Any<IResult>();
+                return It.IsAny<IResult>();
             });
 
         sut.OnUnsubscribe();
@@ -73,12 +73,12 @@ public class RespondReactorTests
         // Arrange
         var totalActionInvokes = 0;
         var sut = new RespondReactor(
-            Arg.Any<Guid>(),
-            Arg.Any<string>(),
+            It.IsAny<Guid>(),
+            It.IsAny<string>(),
             onRespond: () =>
             {
                 totalActionInvokes++;
-                return Substitute.For<IResult>();
+                return new Mock<IResult>().Object;
             });
 
         // Act
@@ -95,18 +95,18 @@ public class RespondReactorTests
         // Arrange
         var totalActionInvokes = 0;
         var sut = new RespondReactor(
-            Arg.Any<Guid>(),
-            Arg.Any<string>(),
+            It.IsAny<Guid>(),
+            It.IsAny<string>(),
             onRespond: () =>
             {
                 totalActionInvokes++;
-                return Arg.Any<IResult>();
+                return It.IsAny<IResult>();
             });
 
         sut.OnUnsubscribe();
 
         // Act
-        var actual = sut.OnRespond(Substitute.For<IMessage>());
+        var actual = sut.OnRespond(new Mock<IMessage>().Object);
 
         // Assert
         actual.Should().BeNull();
@@ -119,12 +119,12 @@ public class RespondReactorTests
         // Arrange
         var totalActionInvokes = 0;
         var sut = new RespondReactor(
-            Arg.Any<Guid>(),
-            Arg.Any<string>(),
+            It.IsAny<Guid>(),
+            It.IsAny<string>(),
             onRespondMsg: _ =>
             {
                 totalActionInvokes++;
-                return Substitute.For<IResult>();
+                return new Mock<IResult>().Object;
             });
 
         // Act
@@ -140,25 +140,25 @@ public class RespondReactorTests
     {
         // Arrange
         var totalActionInvokes = 0;
-        var message = Substitute.For<IMessage>();
-        var result = Substitute.For<IResult>();
+        var message = new Mock<IMessage>();
+        var result = new Mock<IResult>();
 
         var sut = new RespondReactor(
-            Arg.Any<Guid>(),
-            Arg.Any<string>(),
+            It.IsAny<Guid>(),
+            It.IsAny<string>(),
             onRespondMsg: msg =>
             {
-                msg.Should().BeSameAs(message);
+                msg.Should().BeSameAs(message.Object);
                 totalActionInvokes++;
-                return result;
+                return result.Object;
             });
 
         // Act
-        var actual = sut.OnRespond(message);
+        var actual = sut.OnRespond(message.Object);
 
         // Assert
         actual.Should().NotBeNull();
-        actual.Should().BeSameAs(result);
+        actual.Should().BeSameAs(result.Object);
         totalActionInvokes.Should().Be(1);
     }
 
@@ -169,8 +169,8 @@ public class RespondReactorTests
         var totalActionInvokes = 0;
 
         var sut = new RespondReactor(
-            Arg.Any<Guid>(),
-            Arg.Any<string>(),
+            It.IsAny<Guid>(),
+            It.IsAny<string>(),
             onUnsubscribe: () => totalActionInvokes++);
 
         // Act
@@ -189,14 +189,14 @@ public class RespondReactorTests
         var totalActionInvokes = 0;
 
         var sut = new RespondReactor(
-            Arg.Any<Guid>(),
-            Arg.Any<string>(),
+            It.IsAny<Guid>(),
+            It.IsAny<string>(),
             onError: _ => totalActionInvokes++);
 
         sut.OnUnsubscribe();
 
         // Act
-        sut.OnError(Arg.Any<Exception>());
+        sut.OnError(It.IsAny<Exception>());
 
         // Assert
         totalActionInvokes.Should().Be(0);
@@ -209,8 +209,8 @@ public class RespondReactorTests
         var totalActionInvokes = 0;
 
         var sut = new RespondReactor(
-            Arg.Any<Guid>(),
-            Arg.Any<string>(),
+            It.IsAny<Guid>(),
+            It.IsAny<string>(),
             onError: _ => totalActionInvokes++);
 
         // Act
@@ -229,8 +229,8 @@ public class RespondReactorTests
         var totalActionInvokes = 0;
 
         var sut = new RespondReactor(
-            Arg.Any<Guid>(),
-            Arg.Any<string>(),
+            It.IsAny<Guid>(),
+            It.IsAny<string>(),
             onError: e =>
             {
                 e.Should().BeOfType<InvalidOperationException>();
