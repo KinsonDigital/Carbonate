@@ -1,26 +1,26 @@
-// <copyright file="JsonMessage.cs" company="KinsonDigital">
+﻿// <copyright file="JsonResult.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace Carbonate;
+namespace Carbonate.Core;
 
 using System.Text.Json;
 using Services;
 
 /// <summary>
-/// A message that contains JSON data as a message that can be deserialized into an object.
+/// Contains data that is returned as JSON data from a <see cref="IRespondReactor"/> and <see cref="PullReactable"/>.
 /// </summary>
-internal sealed class JsonMessage : IMessage
+internal sealed class JsonResult : IResult
 {
     private readonly ISerializerService serializerService;
     private readonly string jsonData;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="JsonMessage"/> class.
+    /// Initializes a new instance of the <see cref="JsonResult"/> class.
     /// </summary>
     /// <param name="serializerService">The serializer used to deserialize the message.</param>
-    /// <param name="jsonData">The JSON form of the message data.</param>
-    public JsonMessage(ISerializerService serializerService, string jsonData)
+    /// <param name="jsonData">The JSON data.</param>
+    public JsonResult(ISerializerService serializerService, string jsonData)
     {
         this.serializerService = serializerService ?? throw new ArgumentNullException(
             nameof(serializerService),
@@ -35,7 +35,7 @@ internal sealed class JsonMessage : IMessage
     }
 
     /// <inheritdoc/>
-    public T? GetData<T>(Action<Exception>? onError = null)
+    public T? GetValue<T>(Action<Exception>? onError = null)
         where T : class
     {
         try
