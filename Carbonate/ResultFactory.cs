@@ -9,7 +9,7 @@ using Core;
 using Services;
 
 /// <summary>
-/// Used to easily create <see cref="IResult"/> objects for sending results back to a <see cref="IReactable{IRespondReactor}"/>.
+/// Used to create <see cref="IResult"/> objects for sending results back to a <see cref="IReactable{IRespondReactor}"/>.
 /// </summary>
 [ExcludeFromCodeCoverage]
 public static class ResultFactory

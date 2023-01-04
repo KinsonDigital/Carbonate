@@ -25,7 +25,7 @@ internal sealed class ReactorUnsubscriber : IDisposable
     }
 
     /// <summary>
-    /// Gets the total number of current subscriptions that an <see cref="PushReactable"/> has.
+    /// Gets the total number of current subscriptions that a <see cref="PushReactable"/> has.
     /// </summary>
     public int TotalReactors => this.reactors.Count;
 
