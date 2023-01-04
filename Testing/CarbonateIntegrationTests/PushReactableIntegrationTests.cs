@@ -1,4 +1,4 @@
-// <copyright file="IntegrationTests.cs" company="KinsonDigital">
+// <copyright file="PushReactableIntegrationTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -10,9 +10,9 @@ using FluentAssertions;
 using Xunit;
 
 /// <summary>
-/// Tests all of the components integrated together.
+/// Tests all of the components integrated together related to the <see cref="PushReactable"/>.
 /// </summary>
-public class IntegrationTests
+public class PushReactableIntegrationTests
 {
     [Fact]
     public void WhenPushingNoDataWithSingleEventID_And_WithSingleSubscription_And_WithSingleUnsubscribe_ReturnsCorrectResults()
@@ -22,13 +22,13 @@ public class IntegrationTests
 
         IDisposable? unsubscriber = null;
 
-        var reactable = new Reactable();
+        var reactable = new PushReactable();
 
-        unsubscriber = reactable.Subscribe(new Reactor(
+        unsubscriber = reactable.Subscribe(new ReceiveReactor(
             eventId,
-            onNext: () =>
+            onReceive: () =>
             {
-            }, onCompleted: () => unsubscriber?.Dispose()));
+            }, onUnsubscribe: () => unsubscriber?.Dispose()));
 
         // Act
         reactable.Push(eventId);
@@ -47,14 +47,14 @@ public class IntegrationTests
 
         IDisposable? unsubscriber = null;
 
-        var reactable = new Reactable();
+        var reactable = new PushReactable();
 
-        unsubscriber = reactable.Subscribe(new Reactor(
+        unsubscriber = reactable.Subscribe(new ReceiveReactor(
             eventId,
-            onNextMsg: data =>
+            onReceiveMsg: data =>
             {
                 expectedData = data.GetData<SampleData>();
-            }, onCompleted: () => unsubscriber?.Dispose()));
+            }, onUnsubscribe: () => unsubscriber?.Dispose()));
 
         var sampleData = new SampleData { StringValue = "test-string", IntValue = 123 };
 
@@ -77,19 +77,19 @@ public class IntegrationTests
 
         var eventId = new Guid("fc71094c-5b93-4af8-aec9-5932430c041b");
 
-        var reactable = new Reactable();
+        var reactable = new PushReactable();
 
         // Subscription
         for (var i = 0; i < 10; i++)
         {
             IDisposable? unsubscriber = null;
-            unsubscriber = reactable.Subscribe(new Reactor(
+            unsubscriber = reactable.Subscribe(new ReceiveReactor(
                     eventId,
-                    onNextMsg: data =>
+                    onReceiveMsg: data =>
                     {
                         expectedData.Add(data.GetData<SampleData>());
                     },
-                    onCompleted: () =>
+                    onUnsubscribe: () =>
                     {
                         unsubscriber?.Dispose();
                     }));
@@ -125,23 +125,23 @@ public class IntegrationTests
         IDisposable? unsubscriberA = null;
         IDisposable? unsubscriberB = null;
 
-        var reactable = new Reactable();
+        var reactable = new PushReactable();
 
         // Subscription A
-        unsubscriberA = reactable.Subscribe(new Reactor(
+        unsubscriberA = reactable.Subscribe(new ReceiveReactor(
             eventIdA,
-            onNextMsg: data =>
+            onReceiveMsg: data =>
             {
                 expectedDataA = data.GetData<SampleData>();
-            }, onCompleted: () => unsubscriberA?.Dispose()));
+            }, onUnsubscribe: () => unsubscriberA?.Dispose()));
 
         // Subscription B
-        unsubscriberB = reactable.Subscribe(new Reactor(
+        unsubscriberB = reactable.Subscribe(new ReceiveReactor(
             eventIdB,
-            onNextMsg: data =>
+            onReceiveMsg: data =>
             {
                 expectedDataB = data.GetData<SampleData>();
-            }, onCompleted: () => unsubscriberB?.Dispose()));
+            }, onUnsubscribe: () => unsubscriberB?.Dispose()));
 
         var sampleDataA = new SampleData { StringValue = "test-string-A", IntValue = 123 };
         var sampleDataB = new SampleData { StringValue = "test-string-B", IntValue = 456 };

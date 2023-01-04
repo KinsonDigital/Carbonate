@@ -2,14 +2,14 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace CarbonateTests;
+namespace CarbonateTests.Core;
 
 using System.Text.Json;
-using Carbonate;
+using Carbonate.Core;
 using Carbonate.Services;
 using Helpers;
 using FluentAssertions;
-using NSubstitute;
+using Moq;
 using Xunit;
 
 /// <summary>
@@ -17,12 +17,12 @@ using Xunit;
 /// </summary>
 public class JsonMessageTests
 {
-    private readonly ISerializerService mockSerializerService;
+    private readonly Mock<ISerializerService> mockSerializerService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="JsonMessageTests"/> class.
     /// </summary>
-    public JsonMessageTests() => this.mockSerializerService = Substitute.For<ISerializerService>();
+    public JsonMessageTests() => this.mockSerializerService = new Mock<ISerializerService>();
 
     #region Constructor Tests
     [Fact]
@@ -48,7 +48,7 @@ public class JsonMessageTests
         // Arrange & Act
         var act = () =>
         {
-            _ = new JsonMessage(this.mockSerializerService, jsonData);
+            _ = new JsonMessage(this.mockSerializerService.Object, jsonData);
         };
 
         // Assert
@@ -63,16 +63,17 @@ public class JsonMessageTests
     public void GetData_WhenInvoked_ReturnsCorrectResult()
     {
         // Arrange
-        var testData = new TestData();
-        this.mockSerializerService.Deserialize<TestData>(Arg.Any<string>()).Returns(testData);
+        var testData = new PullTestData();
+        this.mockSerializerService.Setup(m => m.Deserialize<PullTestData>("test-data"))
+            .Returns(testData);
 
-        var sut = new JsonMessage(this.mockSerializerService, "test-data");
+        var sut = new JsonMessage(this.mockSerializerService.Object, "test-data");
 
         // Act
-        var actual = sut.GetData<TestData>();
+        var actual = sut.GetData<PullTestData>();
 
         // Assert
-        this.mockSerializerService.Received(1).Deserialize<TestData>("test-data");
+        this.mockSerializerService.Verify(m => m.Deserialize<PullTestData>("test-data"), Times.Once);
         actual.Should().NotBeNull();
     }
 
@@ -80,20 +81,25 @@ public class JsonMessageTests
     public void GetData_WhenSerializationResultIsNull_InvokesOnErrorAction()
     {
         // Arrange
-        TestData? nullData = null;
-        this.mockSerializerService.Deserialize<TestData>(Arg.Any<string>()).Returns(nullData);
+        PullTestData? nullData = null;
 
-        var sut = new JsonMessage(this.mockSerializerService, "test-data");
+        var totalActionInvokes = 0;
+        this.mockSerializerService.Setup(m => m.Deserialize<PullTestData>("test-data"))
+            .Returns(nullData);
+
+        var sut = new JsonMessage(this.mockSerializerService.Object, "test-data");
 
         // Act
-        _ = sut.GetData<TestData>(OnError);
+        _ = sut.GetData<PullTestData>(e =>
+        {
+            e.Should().BeOfType<JsonException>();
+            e.Message.Should().Be("Issues with the JSON deserialization process.");
+
+            totalActionInvokes++;
+        });
 
         // Assert
-        void OnError(Exception ex)
-        {
-            ex.Should().BeOfType<JsonException>();
-            ex.Message.Should().Be("Issues with the JSON deserialization process.");
-        }
+        totalActionInvokes.Should().Be(1);
     }
     #endregion
 }

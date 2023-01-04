@@ -2,17 +2,17 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace Carbonate;
+namespace Carbonate.Core;
 
 /// <summary>
-/// Provides a mechanism for receiving push-based notifications.
+/// Provides a mechanism for pushing notifications or receiving responses.
 /// </summary>
 public interface IReactor
 {
     /// <summary>
-    /// Gets the ID of the event where this <see cref="Reactor"/> should respond.
+    /// Gets the ID of the subscription where this <see cref="IReactor"/> should respond.
     /// </summary>
-    Guid EventId { get; }
+    Guid Id { get; }
 
     /// <summary>
     /// Gets the name of the <see cref="IReactor"/>.
@@ -28,32 +28,27 @@ public interface IReactor
     /// Gets a value indicating whether or not the <see cref="IReactor"/> has been unsubscribed.
     /// </summary>
     /// <remarks>
-    ///     This means that the <see cref="Reactor"/> will not receive <see cref="OnNext()"/>, <see cref="OnComplete"/>,
-    ///     or <see cref="OnError"/> invokes.
+    ///     This means that the <see cref="ReceiveReactor"/> will not receive the following notifications:
+    ///     <br/>
+    ///     <list type="bullet">
+    ///         <item><see cref="IReceiveReactor"/>.<see cref="IReceiveReactor.OnReceive()"/></item>
+    ///         <item><see cref="IReceiveReactor"/>.<see cref="IReceiveReactor.OnReceive(IMessage)"/></item>
+    ///         <item><see cref="OnUnsubscribe"/></item>
+    ///         <item><see cref="OnError"/></item>
+    ///     </list>
     /// </remarks>
     bool Unsubscribed { get; }
 
     /// <summary>
-    /// Sends the next notification without any data to the <see cref="Reactor"/>.
-    /// </summary>
-    void OnNext();
-
-    /// <summary>
-    /// Sends the next notification with the given <paramref name="message"/> the <see cref="Reactor"/>.
-    /// </summary>
-    /// <param name="message">The notification message.</param>
-    void OnNext(IMessage message);
-
-    /// <summary>
-    /// Notifies the <see cref="Reactor"/> that the provider has finished sending push-based notifications.
+    /// Notifies the subscriber that the provider has finished sending push-based notifications and has been unsubscribed.
     /// </summary>
     /// <remarks>
     ///     Will not be invoked more than once.
     /// </remarks>
-    void OnComplete();
+    void OnUnsubscribe();
 
     /// <summary>
-    /// Notifies the <see cref="Reactor"/> that the provider has experiences an error condition.
+    /// Notifies the subscriber that the provider has experienced an error condition.
     /// </summary>
     /// <param name="error">An object that provides additional information about the error.</param>
     void OnError(Exception error);

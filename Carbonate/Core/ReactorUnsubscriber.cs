@@ -2,10 +2,10 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace Carbonate;
+namespace Carbonate.Core;
 
 /// <summary>
-/// A reactor unsubscriber for unsubscribing from a <see cref="Reactable"/>.
+/// A reactor unsubscriber for unsubscribing from a <see cref="PushReactable"/>.
 /// </summary>
 internal sealed class ReactorUnsubscriber : IDisposable
 {
@@ -25,7 +25,7 @@ internal sealed class ReactorUnsubscriber : IDisposable
     }
 
     /// <summary>
-    /// Gets the total number of current subscriptions that an <see cref="Reactable"/> has.
+    /// Gets the total number of current subscriptions that a <see cref="PushReactable"/> has.
     /// </summary>
     public int TotalReactors => this.reactors.Count;
 
