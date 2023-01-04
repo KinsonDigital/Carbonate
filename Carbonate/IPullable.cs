@@ -5,6 +5,7 @@
 namespace Carbonate;
 
 using System.Diagnostics.CodeAnalysis;
+using Core;
 
 /// <summary>
 /// Gives the ability to pull data from a source using a messaging mechanism.

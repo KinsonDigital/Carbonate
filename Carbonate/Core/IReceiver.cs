@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace Carbonate;
+namespace Carbonate.Core;
 
 /// <summary>
 /// Gives the ability to receive push notifications.

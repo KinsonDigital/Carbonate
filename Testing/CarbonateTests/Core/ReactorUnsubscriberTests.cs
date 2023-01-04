@@ -2,9 +2,9 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace CarbonateTests;
+namespace CarbonateTests.Core;
 
-using Carbonate;
+using Carbonate.Core;
 using FluentAssertions;
 using Moq;
 using Xunit;

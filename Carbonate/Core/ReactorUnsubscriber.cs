@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace Carbonate;
+namespace Carbonate.Core;
 
 /// <summary>
 /// A reactor unsubscriber for unsubscribing from a <see cref="PushReactable"/>.

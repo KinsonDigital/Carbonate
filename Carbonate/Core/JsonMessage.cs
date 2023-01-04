@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace Carbonate;
+namespace Carbonate.Core;
 
 using System.Text.Json;
 using Services;

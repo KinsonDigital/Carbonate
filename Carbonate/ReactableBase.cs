@@ -5,6 +5,7 @@
 namespace Carbonate;
 
 using System.Collections.ObjectModel;
+using Core;
 
 /// <summary>
 /// Defines a provider for pushing notifications or receiving responses with default behavior.

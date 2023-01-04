@@ -2,10 +2,10 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace CarbonateTests;
+namespace CarbonateTests.Core;
 
 using System.Text.Json;
-using Carbonate;
+using Carbonate.Core;
 using Carbonate.Services;
 using Helpers;
 using FluentAssertions;

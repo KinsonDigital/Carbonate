@@ -4,6 +4,8 @@
 
 namespace Carbonate;
 
+using Core;
+
 /// <summary>
 /// Provides a mechanism for receiving push-based notifications.
 /// </summary>

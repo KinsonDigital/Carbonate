@@ -4,6 +4,8 @@
 
 namespace Carbonate;
 
+using Core;
+
 /// <summary>
 /// Pushes out notifications.
 /// </summary>

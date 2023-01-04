@@ -6,6 +6,7 @@ namespace CarbonateTests;
 
 using System.Text.Json;
 using Carbonate;
+using Carbonate.Core;
 using Carbonate.Services;
 using FluentAssertions;
 using Helpers;

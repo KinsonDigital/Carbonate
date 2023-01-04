@@ -5,6 +5,7 @@
 namespace CarbonateTests;
 
 using Carbonate;
+using Carbonate.Core;
 using FluentAssertions;
 using Moq;
 using Xunit;

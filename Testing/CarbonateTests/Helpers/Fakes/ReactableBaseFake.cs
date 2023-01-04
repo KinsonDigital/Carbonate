@@ -5,6 +5,7 @@
 namespace CarbonateTests.Helpers.Fakes;
 
 using Carbonate;
+using Carbonate.Core;
 
 /// <summary>
 /// Used for the purpose of testing the <see cref="ReactableBase{T}"/> class.
