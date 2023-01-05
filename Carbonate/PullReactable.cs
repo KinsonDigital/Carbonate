@@ -33,6 +33,11 @@ public sealed class PullReactable : ReactableBase<IRespondReactor>, IPullReactab
     {
         foreach (var reactor in Reactors)
         {
+            if (reactor.Id != respondId)
+            {
+                continue;
+            }
+
             var result = reactor.OnRespond();
 
             if (result is not null)
@@ -50,6 +55,11 @@ public sealed class PullReactable : ReactableBase<IRespondReactor>, IPullReactab
     {
         foreach (var reactor in Reactors)
         {
+            if (reactor.Id != respondId)
+            {
+                continue;
+            }
+
             var jsonData = this.serializerService.Serialize(data);
             var outgoingMsg = new JsonMessage(this.serializerService, jsonData);
 

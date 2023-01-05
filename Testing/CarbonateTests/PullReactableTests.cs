@@ -1,4 +1,4 @@
-// <copyright file="PullReactableTests.cs" company="KinsonDigital">
+﻿// <copyright file="PullReactableTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -71,6 +71,7 @@ public class PullReactableTests
             .Returns(new ResultTestData { Number = 123 });
 
         var mockReactor = new Mock<IRespondReactor>();
+        mockReactor.SetupGet(p => p.Id).Returns(respondId);
         mockReactor.Setup(m => m.OnRespond()).Returns(mockResult.Object);
 
         var sut = CreateSystemUnderTest();
@@ -84,6 +85,39 @@ public class PullReactableTests
         actualResult.Should().NotBeNull();
         actualData.Should().NotBeNull();
         actualData.Number.Should().Be(123);
+    }
+
+    [Fact]
+    public void Pull_WithNonGenericOverload_InvokesCorrectSubscriptions()
+    {
+        // Arrange
+        var respondIdA = Guid.NewGuid();
+        var respondIdB = Guid.NewGuid();
+        var respondIdC = Guid.NewGuid();
+
+        var mockReactorA = new Mock<IRespondReactor>();
+        mockReactorA.SetupGet(p => p.Id).Returns(respondIdA);
+
+        var mockReactorB = new Mock<IRespondReactor>();
+        mockReactorB.SetupGet(p => p.Id).Returns(respondIdB);
+
+        var mockReactorC = new Mock<IRespondReactor>();
+        mockReactorC.SetupGet(p => p.Id).Returns(respondIdC);
+
+        var sut = CreateSystemUnderTest();
+        sut.Subscribe(mockReactorA.Object);
+        sut.Subscribe(mockReactorB.Object);
+        sut.Subscribe(mockReactorC.Object);
+
+        // TODO: Might need to check result returned
+
+        // Act
+        sut.Pull(respondIdB);
+
+        // Assert
+        mockReactorA.Verify(m => m.OnRespond(), Times.Never);
+        mockReactorB.Verify(m => m.OnRespond(), Times.Once);
+        mockReactorC.Verify(m => m.OnRespond(), Times.Never);
     }
 
     [Fact]
@@ -117,6 +151,7 @@ public class PullReactableTests
             .Returns(new ResultTestData { Number = 123 });
 
         var mockReactor = new Mock<IRespondReactor>();
+        mockReactor.SetupGet(p => p.Id).Returns(respondId);
         mockReactor.Setup(m => m.OnRespond(It.IsAny<JsonMessage>()))
             .Returns(mockResult.Object);
 
@@ -135,6 +170,40 @@ public class PullReactableTests
         actualResult.Should().NotBeNull();
         actualData.Should().NotBeNull();
         actualData.Number.Should().Be(123);
+    }
+
+    [Fact]
+    public void Pull_WithGenericOverload_InvokesCorrectSubscriptions()
+    {
+        // Arrange
+        var respondIdA = Guid.NewGuid();
+        var respondIdB = Guid.NewGuid();
+        var respondIdC = Guid.NewGuid();
+        var pullTestData = new PullTestData { Number = 123 };
+
+        var mockReactorA = new Mock<IRespondReactor>();
+        mockReactorA.SetupGet(p => p.Id).Returns(respondIdA);
+
+        var mockReactorB = new Mock<IRespondReactor>();
+        mockReactorB.SetupGet(p => p.Id).Returns(respondIdB);
+
+        var mockReactorC = new Mock<IRespondReactor>();
+        mockReactorC.SetupGet(p => p.Id).Returns(respondIdC);
+
+        var sut = CreateSystemUnderTest();
+        sut.Subscribe(mockReactorA.Object);
+        sut.Subscribe(mockReactorB.Object);
+        sut.Subscribe(mockReactorC.Object);
+
+        // TODO: Might need to check result returned
+
+        // Act
+        sut.Pull(pullTestData, respondIdB);
+
+        // Assert
+        mockReactorA.Verify(m => m.OnRespond(It.IsAny<IMessage>()), Times.Never);
+        mockReactorB.Verify(m => m.OnRespond(It.IsAny<IMessage>()), Times.Once);
+        mockReactorC.Verify(m => m.OnRespond(It.IsAny<IMessage>()), Times.Never);
     }
     #endregion
 
