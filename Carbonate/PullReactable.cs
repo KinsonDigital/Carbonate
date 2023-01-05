@@ -8,10 +8,8 @@ using System.Diagnostics.CodeAnalysis;
 using Core;
 using Services;
 
-/// <summary>
-/// Defines a provider for pull-based responses.
-/// </summary>
-public sealed class PullReactable : ReactableBase<IRespondReactor>, IPullable
+/// <inheritdoc cref="IPullReactable"/>
+public sealed class PullReactable : ReactableBase<IRespondReactor>, IPullReactable
 {
     private readonly ISerializerService serializerService;
 
