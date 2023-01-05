@@ -9,10 +9,8 @@ using System.Text.Json;
 using Core;
 using Services;
 
-/// <summary>
-/// Defines a provider for push-based notifications.
-/// </summary>
-public sealed class PushReactable : ReactableBase<IReceiveReactor>, IPushable
+/// <inheritdoc cref="IPushReactable"/>
+public sealed class PushReactable : ReactableBase<IReceiveReactor>, IPushReactable
 {
     private readonly ISerializerService serializerService;
 
