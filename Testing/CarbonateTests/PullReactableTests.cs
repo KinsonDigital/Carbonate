@@ -2,6 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+// ReSharper disable AccessToModifiedClosure
 namespace CarbonateTests;
 
 using System.Text.Json;
@@ -70,18 +71,25 @@ public class PullReactableTests
         mockResult.Setup(m => m.GetValue<ResultTestData>(It.IsAny<Action<Exception>?>()))
             .Returns(new ResultTestData { Number = 123 });
 
-        var mockReactor = new Mock<IRespondReactor>();
-        mockReactor.SetupGet(p => p.Id).Returns(respondId);
-        mockReactor.Setup(m => m.OnRespond()).Returns(mockResult.Object);
+        var mockReactorA = new Mock<IRespondReactor>();
+        mockReactorA.SetupGet(p => p.Id).Returns(respondId);
+        mockReactorA.Setup(m => m.OnRespond()).Returns(mockResult.Object);
+
+        var mockReactorB = new Mock<IRespondReactor>();
+        mockReactorB.SetupGet(p => p.Id).Returns(respondId);
+        mockReactorB.Setup(m => m.OnRespond()).Returns(mockResult.Object);
 
         var sut = CreateSystemUnderTest();
-        sut.Subscribe(mockReactor.Object);
+        sut.Subscribe(mockReactorA.Object);
+        sut.Subscribe(mockReactorB.Object);
 
         // Act
         var actualResult = sut.Pull(respondId);
         var actualData = actualResult.GetValue<ResultTestData>();
 
         // Assert
+        mockReactorA.Verify(m => m.OnRespond(), Times.Once);
+        mockReactorB.Verify(m => m.OnRespond(), Times.Never);
         actualResult.Should().NotBeNull();
         actualData.Should().NotBeNull();
         actualData.Number.Should().Be(123);
@@ -108,8 +116,6 @@ public class PullReactableTests
         sut.Subscribe(mockReactorA.Object);
         sut.Subscribe(mockReactorB.Object);
         sut.Subscribe(mockReactorC.Object);
-
-        // TODO: Might need to check result returned
 
         // Act
         sut.Pull(respondIdB);
@@ -150,23 +156,29 @@ public class PullReactableTests
         mockResult.Setup(m => m.GetValue<ResultTestData>(It.IsAny<Action<Exception>?>()))
             .Returns(new ResultTestData { Number = 123 });
 
-        var mockReactor = new Mock<IRespondReactor>();
-        mockReactor.SetupGet(p => p.Id).Returns(respondId);
-        mockReactor.Setup(m => m.OnRespond(It.IsAny<JsonMessage>()))
+        var mockReactorA = new Mock<IRespondReactor>();
+        mockReactorA.SetupGet(p => p.Id).Returns(respondId);
+        mockReactorA.Setup(m => m.OnRespond(It.IsAny<JsonMessage>()))
+            .Returns(mockResult.Object);
+
+        var mockReactorB = new Mock<IRespondReactor>();
+        mockReactorB.SetupGet(p => p.Id).Returns(respondId);
+        mockReactorB.Setup(m => m.OnRespond(It.IsAny<JsonMessage>()))
             .Returns(mockResult.Object);
 
         this.mockSerializerService.Setup(m => m.Serialize(It.IsAny<PullTestData>()))
             .Returns(JsonSerializer.Serialize(testData));
 
         var sut = CreateSystemUnderTest();
-        sut.Subscribe(mockReactor.Object);
+        sut.Subscribe(mockReactorA.Object);
 
         // Act
         var actualResult = sut.Pull(testData, respondId);
         var actualData = actualResult?.GetValue<ResultTestData>();
 
         // Assert
-        mockReactor.Verify(m => m.OnRespond(It.IsAny<JsonMessage>()), Times.Once);
+        mockReactorA.Verify(m => m.OnRespond(It.IsAny<JsonMessage>()), Times.Once);
+        mockReactorB.Verify(m => m.OnRespond(It.IsAny<JsonMessage>()), Times.Never);
         actualResult.Should().NotBeNull();
         actualData.Should().NotBeNull();
         actualData.Number.Should().Be(123);
