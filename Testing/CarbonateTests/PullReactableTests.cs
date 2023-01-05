@@ -1,4 +1,4 @@
-﻿// <copyright file="PullReactableTests.cs" company="KinsonDigital">
+// <copyright file="PullReactableTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -48,11 +48,10 @@ public class PullReactableTests
     {
         // Arrange
         var respondId = Guid.NewGuid();
+        var mockReactor = new Mock<IRespondReactor>();
 
         var sut = CreateSystemUnderTest();
-        sut.Subscribe(new RespondReactor(
-            respondId: respondId,
-            onRespond: () => null));
+        sut.Subscribe(mockReactor.Object);
 
         // Act
         var actual = sut.Pull(respondId);
@@ -65,15 +64,17 @@ public class PullReactableTests
     public void Pull_WithNonGenericOverloadAndWhenResponseIsNotNull_ReturnsCorrectResult()
     {
         // Arrange
+        var respondId = Guid.NewGuid();
+
         var mockResult = new Mock<IResult>();
         mockResult.Setup(m => m.GetValue<ResultTestData>(It.IsAny<Action<Exception>?>()))
             .Returns(new ResultTestData { Number = 123 });
-        var respondId = Guid.NewGuid();
+
+        var mockReactor = new Mock<IRespondReactor>();
+        mockReactor.Setup(m => m.OnRespond()).Returns(mockResult.Object);
 
         var sut = CreateSystemUnderTest();
-        sut.Subscribe(new RespondReactor(
-            respondId: respondId,
-            onRespond: () => mockResult.Object));
+        sut.Subscribe(mockReactor.Object);
 
         // Act
         var actualResult = sut.Pull(respondId);
@@ -92,10 +93,10 @@ public class PullReactableTests
         var respondId = Guid.NewGuid();
         var testData = new PullTestData { Number = 123 };
 
+        var mockReactor = new Mock<IRespondReactor>();
+
         var sut = CreateSystemUnderTest();
-        sut.Subscribe(new RespondReactor(
-            respondId: respondId,
-            onRespondMsg: _ => null));
+        sut.Subscribe(mockReactor.Object);
 
         // Act
         var actual = sut.Pull(testData, respondId);
@@ -108,29 +109,29 @@ public class PullReactableTests
     public void Pull_WithGenericOverloadAndWhenResponseIsNotNull_ReturnsCorrectResult()
     {
         // Arrange
+        var respondId = Guid.NewGuid();
+        var testData = new PullTestData { Number = 123 };
+
         var mockResult = new Mock<IResult>();
         mockResult.Setup(m => m.GetValue<ResultTestData>(It.IsAny<Action<Exception>?>()))
             .Returns(new ResultTestData { Number = 123 });
 
-        var mockRespondReactor = new Mock<IRespondReactor>();
-        mockRespondReactor.Setup(m => m.OnRespond(It.IsAny<JsonMessage>()))
+        var mockReactor = new Mock<IRespondReactor>();
+        mockReactor.Setup(m => m.OnRespond(It.IsAny<JsonMessage>()))
             .Returns(mockResult.Object);
-
-        var respondId = Guid.NewGuid();
-        var testData = new PullTestData { Number = 123 };
 
         this.mockSerializerService.Setup(m => m.Serialize(It.IsAny<PullTestData>()))
             .Returns(JsonSerializer.Serialize(testData));
 
         var sut = CreateSystemUnderTest();
-        sut.Subscribe(mockRespondReactor.Object);
+        sut.Subscribe(mockReactor.Object);
 
         // Act
         var actualResult = sut.Pull(testData, respondId);
         var actualData = actualResult?.GetValue<ResultTestData>();
 
         // Assert
-        mockRespondReactor.Verify(m => m.OnRespond(It.IsAny<JsonMessage>()), Times.Once);
+        mockReactor.Verify(m => m.OnRespond(It.IsAny<JsonMessage>()), Times.Once);
         actualResult.Should().NotBeNull();
         actualData.Should().NotBeNull();
         actualData.Number.Should().Be(123);
@@ -141,6 +142,5 @@ public class PullReactableTests
     /// Creates a new instance of <see cref="PullReactable"/> for the purpose of testing.
     /// </summary>
     /// <returns>The instance to test.</returns>
-    private PullReactable CreateSystemUnderTest()
-        => new ();
+    private static PullReactable CreateSystemUnderTest() => new ();
 }
