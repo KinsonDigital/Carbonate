@@ -2,6 +2,9 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+// NOTE: Leave the loops as 'for loops'. This is a small performance improvement.
+// ReSharper disable ForCanBeConvertedToForeach
+// ReSharper disable LoopCanBeConvertedToQuery
 namespace Carbonate;
 
 using System.Diagnostics.CodeAnalysis;
@@ -31,9 +34,14 @@ public sealed class PullReactable : ReactableBase<IRespondReactor>, IPullReactab
     /// <inheritdoc/>
     public IResult? Pull(Guid respondId)
     {
-        foreach (var reactor in Reactors)
+        for (var i = 0; i < Reactors.Count; i++)
         {
-            var result = reactor.OnRespond();
+            if (Reactors[i].Id != respondId)
+            {
+                continue;
+            }
+
+            var result = Reactors[i].OnRespond();
 
             if (result is not null)
             {
@@ -48,12 +56,17 @@ public sealed class PullReactable : ReactableBase<IRespondReactor>, IPullReactab
     public IResult? Pull<T>(in T data, Guid respondId)
         where T : class
     {
-        foreach (var reactor in Reactors)
+        for (var i = 0; i < Reactors.Count; i++)
         {
+            if (Reactors[i].Id != respondId)
+            {
+                continue;
+            }
+
             var jsonData = this.serializerService.Serialize(data);
             var outgoingMsg = new JsonMessage(this.serializerService, jsonData);
 
-            var result = reactor.OnRespond(outgoingMsg);
+            var result = Reactors[i].OnRespond(outgoingMsg);
 
             if (result is not null)
             {
