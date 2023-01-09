@@ -4,10 +4,11 @@
 
 namespace CarbonateTests.Helpers;
 
-using Carbonate;
+using Carbonate.BiDirectional;
+using Carbonate.UniDirectional;
 
 /// <summary>
-/// Used for testing the <see cref="PullReactable"/> class.
+/// Used for testing the <see cref="PullReactable{TDataIn,TDataOut}"/> and <see cref="PullReactable{TDataOut}"/> classes.
 /// </summary>
 public class ResultTestData
 {
