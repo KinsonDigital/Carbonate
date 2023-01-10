@@ -13,7 +13,7 @@ using Moq;
 using Xunit;
 
 /// <summary>
-/// Tests the <see cref="JsonMessage"/> class.
+/// Tests the <see cref="JsonMessage{T}"/> class.
 /// </summary>
 public class JsonMessageTests
 {
@@ -31,7 +31,7 @@ public class JsonMessageTests
         // Arrange & Act
         var act = () =>
         {
-            _ = new JsonMessage(null, null);
+            _ = new JsonMessage<int>(null, null);
         };
 
         // Assert
@@ -48,7 +48,7 @@ public class JsonMessageTests
         // Arrange & Act
         var act = () =>
         {
-            _ = new JsonMessage(this.mockSerializerService.Object, jsonData);
+            _ = new JsonMessage<int>(this.mockSerializerService.Object, jsonData);
         };
 
         // Assert
@@ -67,10 +67,10 @@ public class JsonMessageTests
         this.mockSerializerService.Setup(m => m.Deserialize<PullTestData>("test-data"))
             .Returns(testData);
 
-        var sut = new JsonMessage(this.mockSerializerService.Object, "test-data");
+        var sut = new JsonMessage<PullTestData>(this.mockSerializerService.Object, "test-data");
 
         // Act
-        var actual = sut.GetData<PullTestData>();
+        var actual = sut.GetData();
 
         // Assert
         this.mockSerializerService.Verify(m => m.Deserialize<PullTestData>("test-data"), Times.Once);
@@ -87,10 +87,10 @@ public class JsonMessageTests
         this.mockSerializerService.Setup(m => m.Deserialize<PullTestData>("test-data"))
             .Returns(nullData);
 
-        var sut = new JsonMessage(this.mockSerializerService.Object, "test-data");
+        var sut = new JsonMessage<PullTestData>(this.mockSerializerService.Object, "test-data");
 
         // Act
-        _ = sut.GetData<PullTestData>(e =>
+        _ = sut.GetData(e =>
         {
             e.Should().BeOfType<JsonException>();
             e.Message.Should().Be("Issues with the JSON deserialization process.");

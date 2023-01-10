@@ -7,10 +7,10 @@
         <Nullable>enable</Nullable>
 
         <!--Update this for production and preview releases-->
-        <Version>1.0.0-preview.11</Version>
+        <Version>1.0.0-preview.12</Version>
 
         <!--Update this for production and preview releases-->
-        <FileVersion>1.0.0-preview.11</FileVersion>
+        <FileVersion>1.0.0-preview.12</FileVersion>
 
         <!--
           DO NOT UPDATE THIS FOR PREVIEW RELEASES!!
@@ -38,6 +38,7 @@
 
         <!-- Ignore warning CS7035 about version syntax. -->
         <NoWarn>CS7035</NoWarn>
+        <Configurations>Debug;Release</Configurations>
     </PropertyGroup>
 
     <ItemGroup>
