@@ -28,14 +28,7 @@ public interface IReactor
     /// Gets a value indicating whether or not the <see cref="IReactor"/> has been unsubscribed.
     /// </summary>
     /// <remarks>
-    ///     This means that the <see cref="ReceiveReactor"/> will not receive the following notifications:
-    ///     <br/>
-    ///     <list type="bullet">
-    ///         <item><see cref="IReceiveReactor"/>.<see cref="IReceiveReactor.OnReceive()"/></item>
-    ///         <item><see cref="IReceiveReactor"/>.<see cref="IReceiveReactor.OnReceive(IMessage)"/></item>
-    ///         <item><see cref="OnUnsubscribe"/></item>
-    ///         <item><see cref="OnError"/></item>
-    ///     </list>
+    ///     This means that the <see cref="IReactor"/> will not receive.
     /// </remarks>
     bool Unsubscribed { get; }
 

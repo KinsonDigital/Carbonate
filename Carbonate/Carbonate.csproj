@@ -38,6 +38,7 @@
 
         <!-- Ignore warning CS7035 about version syntax. -->
         <NoWarn>CS7035</NoWarn>
+        <Configurations>Debug;Release</Configurations>
     </PropertyGroup>
 
     <ItemGroup>
