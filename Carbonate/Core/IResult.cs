@@ -4,17 +4,25 @@
 
 namespace Carbonate.Core;
 
+using System.Diagnostics.CodeAnalysis;
+
 /// <summary>
-/// Contains data that is returned from a <see cref="IRespondReactor"/> and <see cref="PullReactable"/>.
+/// Contains data that is returned from a <see cref="IReactable{TReactor}"/> subscription.
 /// </summary>
-public interface IResult
+/// <typeparam name="T">The type of data that the result holds.</typeparam>
+public interface IResult<out T>
 {
+    /// <summary>
+    /// Gets a value indicating whether or not the result is empty.
+    /// </summary>
+    [SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = "Public API")]
+    bool IsEmpty { get; }
+
     /// <summary>
     /// Gets the data as the type <typeparamref name="T"/>.
     /// </summary>
     /// <param name="onError">The action to invoke if an exception occurs.</param>
     /// <typeparam name="T">The type to deserialize the message into.</typeparam>
     /// <returns>The deserialized message data.</returns>
-    public T? GetValue<T>(Action<Exception>? onError = null)
-        where T : class;
+    T? GetValue(Action<Exception>? onError = null);
 }

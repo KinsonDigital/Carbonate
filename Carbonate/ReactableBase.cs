@@ -6,6 +6,9 @@ namespace Carbonate;
 
 using System.Collections.ObjectModel;
 using Core;
+using UniDirectional;
+
+// TODO: Make some of the methods virtual
 
 /// <summary>
 /// Defines a provider for pushing notifications or receiving responses with default behavior.
@@ -18,13 +21,13 @@ public abstract class ReactableBase<T> : IReactable<T>
     private bool notificationsEnded;
 
     /// <inheritdoc/>
-    public ReadOnlyCollection<T> Reactors => new (this.reactors);
+    public ReadOnlyCollection<T> Reactors => this.reactors.AsReadOnly();
 
     /// <inheritdoc/>
     public ReadOnlyCollection<Guid> SubscriptionIds => this.reactors
         .Select(r => r.Id)
         .Distinct()
-        .ToReadOnlyCollection();
+        .ToList().AsReadOnly();
 
     /// <summary>
     /// Gets a value indicating whether or not if the <see cref="ReactableBase{T}"/> has been disposed.
@@ -34,11 +37,11 @@ public abstract class ReactableBase<T> : IReactable<T>
     /// <inheritdoc/>
     /// <exception cref="ObjectDisposedException">Thrown if this method is invoked after disposal.</exception>
     /// <exception cref="ArgumentNullException">Thrown if the given <paramref name="reactor"/> is null.</exception>
-    public IDisposable Subscribe(T reactor)
+    public virtual IDisposable Subscribe(T reactor)
     {
         if (IsDisposed)
         {
-            throw new ObjectDisposedException(nameof(PushReactable), $"{nameof(PushReactable)} disposed.");
+            throw new ObjectDisposedException(nameof(PushReactable<T>), $"{nameof(PushReactable<T>)} disposed.");
         }
 
         if (reactor is null)
@@ -53,11 +56,11 @@ public abstract class ReactableBase<T> : IReactable<T>
 
     /// <inheritdoc/>
     /// <exception cref="ObjectDisposedException">Thrown if this method is invoked after disposal.</exception>
-    public void Unsubscribe(Guid id)
+    public virtual void Unsubscribe(Guid id)
     {
         if (IsDisposed)
         {
-            throw new ObjectDisposedException(nameof(PushReactable), $"{nameof(PushReactable)} disposed.");
+            throw new ObjectDisposedException(nameof(PushReactable<T>), $"{nameof(PushReactable<T>)} disposed.");
         }
 
         if (this.notificationsEnded)
@@ -107,11 +110,11 @@ public abstract class ReactableBase<T> : IReactable<T>
 
     /// <inheritdoc/>
     /// <exception cref="ObjectDisposedException">Thrown if this method is invoked after disposal.</exception>
-    public void UnsubscribeAll()
+    public virtual void UnsubscribeAll()
     {
         if (IsDisposed)
         {
-            throw new ObjectDisposedException(nameof(PushReactable), $"{nameof(PushReactable)} disposed.");
+            throw new ObjectDisposedException(nameof(PushReactable<T>), $"{nameof(PushReactable<T>)} disposed.");
         }
 
         /* Keep this loop as a for-loop.  Do not convert to for-each.

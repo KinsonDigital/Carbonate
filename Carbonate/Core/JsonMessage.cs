@@ -10,13 +10,14 @@ using Services;
 /// <summary>
 /// A message that contains JSON data as a message that can be deserialized into an object.
 /// </summary>
-internal sealed class JsonMessage : IMessage
+/// <typeparam name="T">The type of data in the message.</typeparam>
+internal sealed class JsonMessage<T> : IMessage<T>
 {
     private readonly ISerializerService serializerService;
     private readonly string jsonData;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="JsonMessage"/> class.
+    /// Initializes a new instance of the <see cref="JsonMessage{T}"/> class.
     /// </summary>
     /// <param name="serializerService">The serializer used to deserialize the message.</param>
     /// <param name="jsonData">The JSON data.</param>
@@ -36,8 +37,7 @@ internal sealed class JsonMessage : IMessage
     }
 
     /// <inheritdoc/>
-    public T? GetData<T>(Action<Exception>? onError = null)
-        where T : class
+    public T? GetData(Action<Exception>? onError = null)
     {
         try
         {
@@ -55,6 +55,6 @@ internal sealed class JsonMessage : IMessage
             onError?.Invoke(e);
         }
 
-        return null;
+        return default;
     }
 }
