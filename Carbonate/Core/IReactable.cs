@@ -9,14 +9,14 @@ using System.Collections.ObjectModel;
 /// <summary>
 /// Defines a provider for pushing notifications or receiving responses.
 /// </summary>
-/// <typeparam name="TReactor">The reactor that can subscribed to events.</typeparam>
-public interface IReactable<TReactor> : IDisposable
-    where TReactor : class, IReactor
+/// <typeparam name="T">The reactor that can subscribed to events.</typeparam>
+public interface IReactable<T> : IDisposable
+    where T : class, IReactor
 {
     /// <summary>
-    /// Gets the list of reactors that are subscribed to this <see cref="IReactable{T}"/>.
+    /// Gets the list of reactors that are subscribed to this <see cref="PushReactable"/>.
     /// </summary>
-    ReadOnlyCollection<TReactor> Reactors { get; }
+    ReadOnlyCollection<T> Reactors { get; }
 
     /// <summary>
     /// Gets the list of subscription IDs.
@@ -31,7 +31,7 @@ public interface IReactable<TReactor> : IDisposable
     ///     A reference to an interface that allows reactors to stop receiving
     ///     notifications before the provider has finished sending them.
     /// </returns>
-    IDisposable Subscribe(TReactor reactor);
+    IDisposable Subscribe(T reactor);
 
     /// <summary>
     /// Unsubscribes notifications to all <see cref="IReactor"/>s that match the given <paramref name="id"/>.
