@@ -7,12 +7,10 @@ namespace Carbonate.UniDirectional;
 using Core;
 using Core.UniDirectional;
 
-/// <inheritdoc/>
-public class RespondReactor<TDataOut> : IRespondReactor<TDataOut>
+/// <inheritdoc cref="IRespondReactor{TDataOut}"/>
+public sealed class RespondReactor<TDataOut> : ReactorBase, IRespondReactor<TDataOut>
 {
     private readonly Func<IResult<TDataOut>?>? onRespond;
-    private readonly Action? onUnsubscribe;
-    private readonly Action<Exception>? onError;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RespondReactor{TDataOut}"/> class.
@@ -35,22 +33,7 @@ public class RespondReactor<TDataOut> : IRespondReactor<TDataOut>
         Func<IResult<TDataOut>?>? onRespond = null,
         Action? onUnsubscribe = null,
         Action<Exception>? onError = null)
-    {
-        Id = respondId;
-        Name = string.IsNullOrEmpty(name) ? string.Empty : name;
-        this.onRespond = onRespond;
-        this.onUnsubscribe = onUnsubscribe;
-        this.onError = onError;
-    }
-
-    /// <inheritdoc />
-    public Guid Id { get; }
-
-    /// <inheritdoc />
-    public string Name { get; }
-
-    /// <inheritdoc />
-    public bool Unsubscribed { get; private set; }
+            : base(respondId, name, onUnsubscribe, onError) => this.onRespond = onRespond;
 
     /// <inheritdoc />
     public IResult<TDataOut> OnRespond()
@@ -61,34 +44,6 @@ public class RespondReactor<TDataOut> : IRespondReactor<TDataOut>
         }
 
         return this.onRespond?.Invoke() ?? ResultFactory.CreateEmptyResult<TDataOut>();
-    }
-
-    /// <inheritdoc />
-    public void OnUnsubscribe()
-    {
-        if (Unsubscribed)
-        {
-            return;
-        }
-
-        this.onUnsubscribe?.Invoke();
-        Unsubscribed = true;
-    }
-
-    /// <inheritdoc />
-    public void OnError(Exception error)
-    {
-        if (Unsubscribed)
-        {
-            return;
-        }
-
-        if (error is null)
-        {
-            throw new ArgumentNullException(nameof(error), "The parameter must not be null.");
-        }
-
-        this.onError?.Invoke(error);
     }
 
     /// <inheritdoc cref="object.ToString"/>

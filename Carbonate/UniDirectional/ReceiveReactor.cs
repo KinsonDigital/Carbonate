@@ -7,20 +7,15 @@ namespace Carbonate.UniDirectional;
 using Core;
 using Core.UniDirectional;
 
-/// <summary>
-/// Provides a mechanism for receiving push-based notifications.
-/// </summary>
-/// <typeparam name="TDataIn">The type of data to send ot the <see cref="IReceiver{T}"/>.</typeparam>
-public sealed class ReceiveReactor<TDataIn> : IReceiveReactor<TDataIn>
+/// <inheritdoc cref="IReceiveReactor{TDataIn}"/>
+public sealed class ReceiveReactor<TDataIn> : ReactorBase, IReceiveReactor<TDataIn>
 {
     private readonly Action<IMessage<TDataIn>>? onReceiveMsg;
-    private readonly Action? onUnsubscribe;
-    private readonly Action<Exception>? onError;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ReceiveReactor{T}"/> class.
     /// </summary>
-    /// <param name="eventId">The ID of the event that was pushed by a <see cref="IReactable{IReceiveReactor}"/>.</param>
+    /// <param name="eventId">The ID of the event that was pushed by an <see cref="IReactable{IReceiveReactor}"/>.</param>
     /// <param name="name">The name of the <see cref="ReceiveReactor{T}"/>.</param>
     /// <param name="onReceiveMsg">Executed when a push notification occurs with a message.</param>
     /// <param name="onUnsubscribe">
@@ -38,22 +33,7 @@ public sealed class ReceiveReactor<TDataIn> : IReceiveReactor<TDataIn>
         Action<IMessage<TDataIn>>? onReceiveMsg = null,
         Action? onUnsubscribe = null,
         Action<Exception>? onError = null)
-    {
-        Id = eventId;
-        Name = string.IsNullOrEmpty(name) ? string.Empty : name;
-        this.onReceiveMsg = onReceiveMsg;
-        this.onUnsubscribe = onUnsubscribe;
-        this.onError = onError;
-    }
-
-    /// <inheritdoc />
-    public Guid Id { get; }
-
-    /// <inheritdoc />
-    public string Name { get; }
-
-    /// <inheritdoc />
-    public bool Unsubscribed { get; private set; }
+            : base(eventId, name, onUnsubscribe, onError) => this.onReceiveMsg = onReceiveMsg;
 
     /// <inheritdoc />
     public void OnReceive(IMessage<TDataIn> message)
@@ -69,29 +49,6 @@ public sealed class ReceiveReactor<TDataIn> : IReceiveReactor<TDataIn>
         }
 
         this.onReceiveMsg?.Invoke(message);
-    }
-
-    /// <inheritdoc />
-    public void OnUnsubscribe()
-    {
-        if (Unsubscribed)
-        {
-            return;
-        }
-
-        this.onUnsubscribe?.Invoke();
-        Unsubscribed = true;
-    }
-
-    /// <inheritdoc />
-    public void OnError(Exception error)
-    {
-        if (Unsubscribed)
-        {
-            return;
-        }
-
-        this.onError?.Invoke(error);
     }
 
     /// <inheritdoc cref="object.ToString"/>

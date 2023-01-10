@@ -8,6 +8,8 @@ using System.Collections.ObjectModel;
 using Core;
 using UniDirectional;
 
+// TODO: Make some of the methods virtual
+
 /// <summary>
 /// Defines a provider for pushing notifications or receiving responses with default behavior.
 /// </summary>
@@ -35,7 +37,7 @@ public abstract class ReactableBase<T> : IReactable<T>
     /// <inheritdoc/>
     /// <exception cref="ObjectDisposedException">Thrown if this method is invoked after disposal.</exception>
     /// <exception cref="ArgumentNullException">Thrown if the given <paramref name="reactor"/> is null.</exception>
-    public IDisposable Subscribe(T reactor)
+    public virtual IDisposable Subscribe(T reactor)
     {
         if (IsDisposed)
         {
@@ -54,7 +56,7 @@ public abstract class ReactableBase<T> : IReactable<T>
 
     /// <inheritdoc/>
     /// <exception cref="ObjectDisposedException">Thrown if this method is invoked after disposal.</exception>
-    public void Unsubscribe(Guid id)
+    public virtual void Unsubscribe(Guid id)
     {
         if (IsDisposed)
         {
@@ -108,7 +110,7 @@ public abstract class ReactableBase<T> : IReactable<T>
 
     /// <inheritdoc/>
     /// <exception cref="ObjectDisposedException">Thrown if this method is invoked after disposal.</exception>
-    public void UnsubscribeAll()
+    public virtual void UnsubscribeAll()
     {
         if (IsDisposed)
         {

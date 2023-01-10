@@ -7,17 +7,15 @@ namespace Carbonate.NonDirectional;
 using Core;
 using Core.NonDirectional;
 
-/// <inheritdoc/>
-public class ReceiveReactor : IReceiveReactor
+/// <inheritdoc cref="IReceiveReactor"/>
+public sealed class ReceiveReactor : ReactorBase, IReceiveReactor
 {
     private readonly Action? onReceive;
-    private readonly Action? onUnsubscribe;
-    private readonly Action<Exception>? onError;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ReceiveReactor"/> class.
     /// </summary>
-    /// <param name="eventId">The ID of the event that was pushed by a <see cref="IReactable{IReceiveReactor}"/>.</param>
+    /// <param name="eventId">The ID of the event that was pushed by an <see cref="IReactable{IReceiveReactor}"/>.</param>
     /// <param name="name">The name of the <see cref="ReceiveReactor"/>.</param>
     /// <param name="onReceive">Executed when a push notification occurs with no data.</param>
     /// <param name="onUnsubscribe">
@@ -35,22 +33,7 @@ public class ReceiveReactor : IReceiveReactor
         Action? onReceive = null,
         Action? onUnsubscribe = null,
         Action<Exception>? onError = null)
-    {
-        Id = eventId;
-        Name = string.IsNullOrEmpty(name) ? string.Empty : name;
-        this.onReceive = onReceive;
-        this.onUnsubscribe = onUnsubscribe;
-        this.onError = onError;
-    }
-
-    /// <inheritdoc />
-    public Guid Id { get; }
-
-    /// <inheritdoc />
-    public string Name { get; }
-
-    /// <inheritdoc />
-    public bool Unsubscribed { get; private set; }
+            : base(eventId, name, onUnsubscribe, onError) => this.onReceive = onReceive;
 
     /// <inheritdoc />
     public void OnReceive()
@@ -63,29 +46,6 @@ public class ReceiveReactor : IReceiveReactor
         this.onReceive?.Invoke();
     }
 
-    /// <inheritdoc />
-    public void OnUnsubscribe()
-    {
-        if (Unsubscribed)
-        {
-            return;
-        }
-
-        this.onUnsubscribe?.Invoke();
-        Unsubscribed = true;
-    }
-
-    /// <inheritdoc />
-    public void OnError(Exception error)
-    {
-        if (Unsubscribed)
-        {
-            return;
-        }
-
-        this.onError?.Invoke(error);
-    }
-
-    /// <inheritdoc cref="object.ToString"/>
+   /// <inheritdoc cref="object.ToString"/>
     public override string ToString() => $"{Name}{(string.IsNullOrEmpty(Name) ? string.Empty : " - ")}{Id}";
 }

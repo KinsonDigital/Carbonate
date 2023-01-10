@@ -7,12 +7,10 @@ namespace Carbonate.BiDirectional;
 using Core;
 using Core.BiDirectional;
 
-/// <inheritdoc/>
-public class RespondReactor<TDataIn, TDataOut> : IRespondReactor<TDataIn, TDataOut>
+/// <inheritdoc cref="IRespondReactor{TDataIn,TDataOut}"/>
+public sealed class RespondReactor<TDataIn, TDataOut> : ReactorBase, IRespondReactor<TDataIn, TDataOut>
 {
     private readonly Func<IMessage<TDataIn>, IResult<TDataOut>?>? onRespondMsg;
-    private readonly Action? onUnsubscribe;
-    private readonly Action<Exception>? onError;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RespondReactor{TDataIn,TDataOut}"/> class.
@@ -35,24 +33,9 @@ public class RespondReactor<TDataIn, TDataOut> : IRespondReactor<TDataIn, TDataO
         Func<IMessage<TDataIn>, IResult<TDataOut>?>? onRespondMsg = null,
         Action? onUnsubscribe = null,
         Action<Exception>? onError = null)
-    {
-        Id = respondId;
-        Name = string.IsNullOrEmpty(name) ? string.Empty : name;
-        this.onRespondMsg = onRespondMsg;
-        this.onUnsubscribe = onUnsubscribe;
-        this.onError = onError;
-    }
+            : base(respondId, name, onUnsubscribe, onError) => this.onRespondMsg = onRespondMsg;
 
-    /// <inheritdoc />
-    public Guid Id { get; }
-
-    /// <inheritdoc />
-    public string Name { get; }
-
-    /// <inheritdoc />
-    public bool Unsubscribed { get; private set; }
-
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public IResult<TDataOut> OnRespond(IMessage<TDataIn> message)
     {
         if (Unsubscribed)
@@ -68,34 +51,6 @@ public class RespondReactor<TDataIn, TDataOut> : IRespondReactor<TDataIn, TDataO
         return this.onRespondMsg?.Invoke(message) ?? ResultFactory.CreateEmptyResult<TDataOut>();
     }
 
-    /// <inheritdoc />
-    public void OnUnsubscribe()
-    {
-        if (Unsubscribed)
-        {
-            return;
-        }
-
-        this.onUnsubscribe?.Invoke();
-        Unsubscribed = true;
-    }
-
-    /// <inheritdoc />
-    public void OnError(Exception error)
-    {
-        if (Unsubscribed)
-        {
-            return;
-        }
-
-        if (error is null)
-        {
-            throw new ArgumentNullException(nameof(error), "The parameter must not be null.");
-        }
-
-        this.onError?.Invoke(error);
-    }
-
-    /// <inheritdoc cref="object.ToString"/>
+   /// <inheritdoc cref="object.ToString"/>
     public override string ToString() => $"{Name}{(string.IsNullOrEmpty(Name) ? string.Empty : " - ")}{Id}";
 }
