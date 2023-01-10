@@ -5,7 +5,7 @@
 namespace Carbonate.Core;
 
 /// <summary>
-/// A reactor unsubscriber for unsubscribing from a <see cref="IReactable{TReactor}"/>.
+/// A reactor unsubscriber for unsubscribing from a <see cref="PushReactable"/>.
 /// </summary>
 internal sealed class ReactorUnsubscriber : IDisposable
 {
@@ -25,7 +25,7 @@ internal sealed class ReactorUnsubscriber : IDisposable
     }
 
     /// <summary>
-    /// Gets the total number of subscriptions.
+    /// Gets the total number of current subscriptions that a <see cref="PushReactable"/> has.
     /// </summary>
     public int TotalReactors => this.reactors.Count;
 
