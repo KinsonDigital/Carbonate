@@ -4,11 +4,9 @@
 
 namespace CarbonateTests.UniDirectional;
 
-using Carbonate.Core;
 using Carbonate.Core.UniDirectional;
 using Carbonate.UniDirectional;
 using FluentAssertions;
-using Helpers;
 using Moq;
 using Xunit;
 
@@ -24,32 +22,29 @@ public class PullReactableTests
         // Arrange
         var respondId = Guid.NewGuid();
 
-        var mockResult = new Mock<IResult<ResultTestData>>();
-        mockResult.Setup(m => m.GetValue(It.IsAny<Action<Exception>?>()))
-            .Returns(new ResultTestData { Number = 123 });
+        const string returnData = "return-value";
 
-        var mockReactorA = new Mock<IRespondReactor<ResultTestData>>();
+        var mockReactorA = new Mock<IRespondReactor<string>>();
         mockReactorA.SetupGet(p => p.Id).Returns(respondId);
-        mockReactorA.Setup(m => m.OnRespond()).Returns(mockResult.Object);
+        mockReactorA.Setup(m => m.OnRespond()).Returns(returnData);
 
-        var mockReactorB = new Mock<IRespondReactor<ResultTestData>>();
+        var mockReactorB = new Mock<IRespondReactor<string>>();
         mockReactorB.SetupGet(p => p.Id).Returns(respondId);
-        mockReactorB.Setup(m => m.OnRespond()).Returns(mockResult.Object);
+        mockReactorB.Setup(m => m.OnRespond()).Returns(returnData);
 
         var sut = CreateSystemUnderTest();
         sut.Subscribe(mockReactorA.Object);
         sut.Subscribe(mockReactorB.Object);
 
         // Act
-        var actualResult = sut.Pull(respondId);
-        var actualData = actualResult.GetValue();
+        var actual = sut.Pull(respondId);
 
         // Assert
         mockReactorA.Verify(m => m.OnRespond(), Times.Once);
         mockReactorB.Verify(m => m.OnRespond(), Times.Never);
-        actualResult.Should().NotBeNull();
-        actualData.Should().NotBeNull();
-        actualData.Number.Should().Be(123);
+        actual.Should().NotBeNull();
+        actual.Should().NotBeNull();
+        actual.Should().Be("return-value");
     }
 
     [Fact]
@@ -60,13 +55,13 @@ public class PullReactableTests
         var respondIdB = Guid.NewGuid();
         var respondIdC = Guid.NewGuid();
 
-        var mockReactorA = new Mock<IRespondReactor<ResultTestData>>();
+        var mockReactorA = new Mock<IRespondReactor<string>>();
         mockReactorA.SetupGet(p => p.Id).Returns(respondIdA);
 
-        var mockReactorB = new Mock<IRespondReactor<ResultTestData>>();
+        var mockReactorB = new Mock<IRespondReactor<string>>();
         mockReactorB.SetupGet(p => p.Id).Returns(respondIdB);
 
-        var mockReactorC = new Mock<IRespondReactor<ResultTestData>>();
+        var mockReactorC = new Mock<IRespondReactor<string>>();
         mockReactorC.SetupGet(p => p.Id).Returns(respondIdC);
 
         var sut = CreateSystemUnderTest();
@@ -82,25 +77,11 @@ public class PullReactableTests
         mockReactorB.Verify(m => m.OnRespond(), Times.Once);
         mockReactorC.Verify(m => m.OnRespond(), Times.Never);
     }
-
-    [Fact]
-    public void Pull_WithNoSubscriptions_ReturnsEmptyResult()
-    {
-        // Arrange
-        var sut = CreateSystemUnderTest();
-
-        // Act
-        var actual = sut.Pull(It.IsAny<Guid>());
-
-        // Assert
-        actual.Should().NotBeNull();
-        actual.IsEmpty.Should().BeTrue();
-    }
     #endregion
 
     /// <summary>
     /// Creates a new instance of <see cref="PullReactable{TDataOut}"/> for the purpose of testing.
     /// </summary>
     /// <returns>The instance to test.</returns>
-    private static PullReactable<ResultTestData> CreateSystemUnderTest() => new ();
+    private static PullReactable<string> CreateSystemUnderTest() => new ();
 }

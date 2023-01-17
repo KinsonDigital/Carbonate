@@ -15,10 +15,8 @@ public class StructDataPuller
 
     public StructDataPuller(IPullReactable<StructItem[]> pullReactable) => this.pullReactable = pullReactable;
 
-    public StructItem[] Pull()
+    public StructItem[]? Pull()
     {
-        var dataResult = this.pullReactable.Pull(Ids.GetDatId);
-
-        return dataResult.GetValue() ?? Array.Empty<StructItem>();
+        return this.pullReactable.Pull(Ids.GetDatId);
     }
 }

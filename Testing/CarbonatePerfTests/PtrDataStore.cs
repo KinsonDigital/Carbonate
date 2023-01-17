@@ -5,7 +5,6 @@
 namespace CarbonatePerfTests;
 
 using System.Runtime.CompilerServices;
-using Carbonate.Core;
 using Carbonate.UniDirectional;
 
 public class PtrDataStore
@@ -35,14 +34,11 @@ public class PtrDataStore
     /// Gets the pointer data result.
     /// </summary>
     /// <returns>The result.</returns>
-    private IResult<nint> GetDataPtr()
+    private nint GetDataPtr()
     {
         unsafe
         {
-            var dataPtr = new nint(Unsafe.AsPointer(ref this.dataItems));
-            var dataResult = new DataResult(dataPtr);
-
-            return dataResult;
+            return new nint(Unsafe.AsPointer(ref this.dataItems));
         }
     }
 }

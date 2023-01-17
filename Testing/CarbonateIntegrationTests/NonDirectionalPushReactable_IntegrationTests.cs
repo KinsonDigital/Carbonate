@@ -1,10 +1,11 @@
-// <copyright file="NonDirectionalPushReactableIntegrationTests.cs" company="KinsonDigital">
+// <copyright file="NonDirectionalPushReactable_IntegrationTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
 // ReSharper disable AccessToModifiedClosure
 namespace CarbonateIntegrationTests;
 
+using System.Diagnostics.CodeAnalysis;
 using Carbonate.NonDirectional;
 using FluentAssertions;
 using Xunit;
@@ -12,7 +13,8 @@ using Xunit;
 /// <summary>
 /// Tests all of the components integrated together related to the <see cref="PushReactable"/>.
 /// </summary>
-public class NonDirectionalPushReactableIntegrationTests
+[SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Integrations Tests Are Named In This Way")]
+public class NonDirectionalPushReactable_IntegrationTests
 {
     [Fact]
     public void WhenPushing_And_WithSingleEventID_And_WithSingleSubscription_And_WithSingleUnsubscribe_ReturnsCorrectResults()

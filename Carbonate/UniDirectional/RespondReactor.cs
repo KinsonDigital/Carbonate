@@ -4,13 +4,12 @@
 
 namespace Carbonate.UniDirectional;
 
-using Core;
 using Core.UniDirectional;
 
 /// <inheritdoc cref="IRespondReactor{TDataOut}"/>
 public sealed class RespondReactor<TDataOut> : ReactorBase, IRespondReactor<TDataOut>
 {
-    private readonly Func<IResult<TDataOut>?>? onRespond;
+    private readonly Func<TDataOut?>? onRespond;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RespondReactor{TDataOut}"/> class.
@@ -30,20 +29,20 @@ public sealed class RespondReactor<TDataOut> : ReactorBase, IRespondReactor<TDat
     public RespondReactor(
         Guid respondId,
         string name = "",
-        Func<IResult<TDataOut>?>? onRespond = null,
+        Func<TDataOut?>? onRespond = null,
         Action? onUnsubscribe = null,
         Action<Exception>? onError = null)
             : base(respondId, name, onUnsubscribe, onError) => this.onRespond = onRespond;
 
     /// <inheritdoc />
-    public IResult<TDataOut> OnRespond()
+    public TDataOut? OnRespond()
     {
         if (Unsubscribed)
         {
-            return ResultFactory.CreateEmptyResult<TDataOut>();
+            return default(TDataOut);
         }
 
-        return this.onRespond?.Invoke() ?? ResultFactory.CreateEmptyResult<TDataOut>();
+        return this.onRespond is null ? default(TDataOut) : this.onRespond.Invoke();
     }
 
     /// <inheritdoc cref="object.ToString"/>

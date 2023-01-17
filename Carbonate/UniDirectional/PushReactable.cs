@@ -4,7 +4,6 @@
 
 namespace Carbonate.UniDirectional;
 
-using Core;
 using Core.UniDirectional;
 
 /// <inheritdoc cref="IPushReactable{T}"/>
@@ -12,11 +11,11 @@ public class PushReactable<TDataIn> : ReactableBase<IReceiveReactor<TDataIn>>, I
 {
     /// <inheritdoc/>
     /// <exception cref="ObjectDisposedException">Thrown if this method is invoked after disposal.</exception>
-    public void PushMessage(in IMessage<TDataIn> message, Guid eventId)
+    public void Push(in TDataIn data, Guid eventId)
     {
-        if (message is null)
+        if (data is null)
         {
-            throw new ArgumentNullException(nameof(message), "The parameter must not be null.");
+            throw new ArgumentNullException(nameof(data), "The parameter must not be null.");
         }
 
         if (IsDisposed)
@@ -49,7 +48,7 @@ public class PushReactable<TDataIn> : ReactableBase<IReceiveReactor<TDataIn>>, I
                     continue;
                 }
 
-                Reactors[i].OnReceive(message);
+                Reactors[i].OnReceive(data);
             }
         }
         catch (Exception e)
