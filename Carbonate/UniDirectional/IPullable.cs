@@ -10,7 +10,7 @@ using Core;
 /// <summary>
 /// Gives the ability to pull data from a source using a messaging mechanism.
 /// </summary>
-/// <typeparam name="TDataOut">The type of data to be pulled.</typeparam>
+/// <typeparam name="TDataOut">The data going out.</typeparam>
 public interface IPullable<out TDataOut>
 {
     /// <summary>

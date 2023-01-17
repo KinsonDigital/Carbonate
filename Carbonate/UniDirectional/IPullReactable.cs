@@ -10,7 +10,7 @@ using Core.UniDirectional;
 /// <summary>
 /// Defines a provider for pull-based responses.
 /// </summary>
-/// <typeparam name="TDataOut">The type of data to pull.</typeparam>
+/// <typeparam name="TDataOut">The data going out.</typeparam>
 public interface IPullReactable<TDataOut> : IReactable<IRespondReactor<TDataOut>>, IPullable<TDataOut>
 {
 }

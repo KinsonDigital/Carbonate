@@ -15,7 +15,7 @@ public class PullReactable<TDataIn, TDataOut>
     : ReactableBase<IRespondReactor<TDataIn, TDataOut>>, IPullReactable<TDataIn, TDataOut>
 {
     /// <inheritdoc/>
-    public IResult<TDataOut> Pull(in IMessage<TDataIn> msg, Guid respondId)
+    public IResult<TDataOut> Pull(in TDataIn data, Guid respondId)
     {
         for (var i = 0; i < Reactors.Count; i++)
         {
@@ -24,7 +24,7 @@ public class PullReactable<TDataIn, TDataOut>
                 continue;
             }
 
-            var result = Reactors[i].OnRespond(msg);
+            var result = Reactors[i].OnRespond(data);
 
             return result ?? ResultFactory.CreateEmptyResult<TDataOut>();
         }

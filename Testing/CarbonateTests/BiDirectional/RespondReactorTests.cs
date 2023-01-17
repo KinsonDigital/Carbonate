@@ -56,7 +56,7 @@ public class RespondReactorTests
         sut.OnUnsubscribe();
 
         // Act
-        var actual = sut.OnRespond(It.IsAny<IMessage<It.IsAnyType>>());
+        var actual = sut.OnRespond(It.IsAny<It.IsAnyType>());
 
         // Assert
         actual.Should().NotBeNull();
@@ -64,14 +64,14 @@ public class RespondReactorTests
     }
 
     [Fact]
-    public void OnRespond_WithNullMessage_ThrowsException()
+    public void OnRespond_WithNullData_ThrowsException()
     {
         // Arrange
         var totalActionInvokes = 0;
-        var sut = new RespondReactor<int, ResultTestData>(
+        var sut = new RespondReactor<object, ResultTestData>(
             It.IsAny<Guid>(),
             It.IsAny<string>(),
-            onRespondMsg: _ =>
+            onRespondData: _ =>
             {
                 totalActionInvokes++;
                 return new Mock<IResult<ResultTestData>>().Object;
@@ -86,25 +86,24 @@ public class RespondReactorTests
     }
 
     [Fact]
-    public void OnRespond_WithNonNullMessageAndNotUnsubscribed_ReturnsCorrectResult()
+    public void OnRespond_WithNonNullDataAndNotUnsubscribed_ReturnsCorrectResult()
     {
         // Arrange
         var totalActionInvokes = 0;
-        var message = new Mock<IMessage<int>>();
         var result = new Mock<IResult<ResultTestData>>();
-
+        const int data = 123;
         var sut = new RespondReactor<int, ResultTestData>(
             It.IsAny<Guid>(),
             It.IsAny<string>(),
-            onRespondMsg: msg =>
+            onRespondData: incomingData =>
             {
-                msg.Should().BeSameAs(message.Object);
+                incomingData.Should().Be(incomingData);
                 totalActionInvokes++;
                 return result.Object;
             });
 
         // Act
-        var actual = sut.OnRespond(message.Object);
+        var actual = sut.OnRespond(data);
 
         // Assert
         actual.Should().NotBeNull();

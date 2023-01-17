@@ -7,12 +7,12 @@ namespace Carbonate.Core.UniDirectional;
 /// <summary>
 /// Gives the ability to receive push notifications.
 /// </summary>
-/// <typeparam name="TDataIn">The type of data packaged in the <see cref="IMessage{TDataIn}"/>.</typeparam>
+/// <typeparam name="TDataIn">The data coming in.</typeparam>
 public interface IReceiver<in TDataIn>
 {
     /// <summary>
-    /// Gets a notification of an event with the given <paramref name="message"/>.
+    /// Gets a notification of an event with the given <paramref name="data"/>.
     /// </summary>
-    /// <param name="message">The notification message.</param>
-    void OnReceive(IMessage<TDataIn> message);
+    /// <param name="data">The notification data.</param>
+    void OnReceive(TDataIn data);
 }

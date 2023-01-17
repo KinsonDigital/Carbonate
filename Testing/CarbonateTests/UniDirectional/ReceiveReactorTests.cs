@@ -4,10 +4,8 @@
 
 namespace CarbonateTests.UniDirectional;
 
-using Carbonate.Core;
 using Carbonate.UniDirectional;
 using FluentAssertions;
-using Moq;
 using Xunit;
 
 /// <summary>
@@ -33,55 +31,55 @@ public class ReceiveReactorTests
 
     #region Method Tests
     [Fact]
-    public void OnReceive_WhenSendingMessageAndSubscribed_InvokesAction()
+    public void OnReceive_WhenSendingDataAndSubscribed_InvokesAction()
     {
         // Arrange
         var onReceiveInvoked = false;
-        void OnReceive(IMessage<int> msg) => onReceiveInvoked = true;
+        void OnReceive(int incomingData) => onReceiveInvoked = true;
 
-        var mockMessage = new Mock<IMessage<int>>();
+        const int data = 123;
 
-        var sut = new ReceiveReactor<int>(Guid.NewGuid(), onReceiveMsg: OnReceive);
+        var sut = new ReceiveReactor<int>(Guid.NewGuid(), onReceiveData: OnReceive);
 
         // Act
-        sut.OnReceive(mockMessage.Object);
+        sut.OnReceive(data);
 
         // Assert
         onReceiveInvoked.Should().BeTrue();
     }
 
     [Fact]
-    public void OnReceive_WhenSendingMessageAndNotSubscribed_DoesNotInvokeAction()
+    public void OnReceive_WhenSendingDataAndNotSubscribed_DoesNotInvokeAction()
     {
         // Arrange
         var onReceiveInvoked = false;
-        void OnReceive(IMessage<int> msg) => onReceiveInvoked = true;
+        void OnReceive(int incomingData) => onReceiveInvoked = true;
 
-        var mockMessage = new Mock<IMessage<int>>();
+        const int data = 123;
 
-        var sut = new ReceiveReactor<int>(Guid.NewGuid(), onReceiveMsg: OnReceive);
+        var sut = new ReceiveReactor<int>(Guid.NewGuid(), onReceiveData: OnReceive);
 
         sut.OnUnsubscribe();
 
         // Act
-        sut.OnReceive(mockMessage.Object);
+        sut.OnReceive(data);
 
         // Assert
         onReceiveInvoked.Should().BeFalse();
     }
 
     [Fact]
-    public void OnReceive_WhenSendingNullMessage_ThrowsException()
+    public void OnReceive_WhenSendingNullData_ThrowsException()
     {
         // Arrange
-        var sut = new ReceiveReactor<int>(Guid.NewGuid());
+        var sut = new ReceiveReactor<object>(Guid.NewGuid());
 
         // Act
         var act = () => sut.OnReceive(null);
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
-            .WithMessage("The parameter must not be null. (Parameter 'message')");
+            .WithMessage("The parameter must not be null. (Parameter 'data')");
     }
 
     [Theory]

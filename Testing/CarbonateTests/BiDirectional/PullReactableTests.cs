@@ -34,7 +34,7 @@ public class PullReactableTests
         var respondIdA = Guid.NewGuid();
         var respondIdB = Guid.NewGuid();
 
-        const int msgData = 123;
+        const int returnData = 123;
 
         var mockResult = new Mock<IResult<ResultTestData>>();
         mockResult.Setup(m => m.GetValue(It.IsAny<Action<Exception>?>()))
@@ -43,33 +43,31 @@ public class PullReactableTests
         var mockReactorA = new Mock<IRespondReactor<int, ResultTestData>>();
         mockReactorA.Name = nameof(mockReactorA);
         mockReactorA.SetupGet(p => p.Id).Returns(respondIdA);
-        mockReactorA.Setup(m => m.OnRespond(It.IsAny<IMessage<int>>()))
+        mockReactorA.Setup(m => m.OnRespond(It.IsAny<int>()))
             .Returns(mockResult.Object);
 
         var mockReactorB = new Mock<IRespondReactor<int, ResultTestData>>();
         mockReactorB.Name = nameof(mockReactorB);
         mockReactorB.SetupGet(p => p.Id).Returns(respondIdB);
-        mockReactorB.Setup(m => m.OnRespond(It.IsAny<IMessage<int>>()))
+        mockReactorB.Setup(m => m.OnRespond(It.IsAny<int>()))
             .Returns(mockResult.Object);
 
         this.mockSerializerService.Setup(m => m.Serialize(It.IsAny<PullTestData>()))
-            .Returns(JsonSerializer.Serialize(msgData));
+            .Returns(JsonSerializer.Serialize(returnData));
 
-        var mockMessage = new Mock<IMessage<int>>();
-        mockMessage.Setup(m => m.GetData(It.IsAny<Action<Exception>?>()))
-            .Returns<Action<Exception>?>(_ => msgData);
+        const int data = 123;
 
         var sut = CreateSystemUnderTest();
         sut.Subscribe(mockReactorA.Object);
         sut.Subscribe(mockReactorB.Object);
 
         // Act
-        var actualResult = sut.Pull(mockMessage.Object, respondIdB);
+        var actualResult = sut.Pull(data, respondIdB);
         var actualData = actualResult.GetValue();
 
         // Assert
-        mockReactorA.Verify(m => m.OnRespond(It.IsAny<IMessage<int>>()), Times.Never);
-        mockReactorB.Verify(m => m.OnRespond(It.IsAny<IMessage<int>>()), Times.Once);
+        mockReactorA.Verify(m => m.OnRespond(It.IsAny<int>()), Times.Never);
+        mockReactorB.Verify(m => m.OnRespond(It.IsAny<int>()), Times.Once);
         actualResult.Should().NotBeNull();
         actualData.Should().NotBeNull();
         actualData.Number.Should().Be(123);
@@ -87,10 +85,10 @@ public class PullReactableTests
         var sut = CreateSystemUnderTest();
         sut.Subscribe(mockReactor.Object);
 
-        var mockMessage = new Mock<IMessage<int>>();
+        const int data = 123;
 
         // Act
-        var actual = sut.Pull(mockMessage.Object, respondId);
+        var actual = sut.Pull(data, respondId);
 
         // Assert
         actual.Should().NotBeNull();
@@ -104,7 +102,7 @@ public class PullReactableTests
         var sut = CreateSystemUnderTest();
 
         // Act
-        var actual = sut.Pull(new Mock<IMessage<int>>().Object, Guid.NewGuid());
+        var actual = sut.Pull(123, Guid.NewGuid());
 
         // Assert
         actual.Should().NotBeNull();

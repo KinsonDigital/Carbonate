@@ -10,14 +10,14 @@ using Core.UniDirectional;
 /// <inheritdoc cref="IReceiveReactor{TDataIn}"/>
 public sealed class ReceiveReactor<TDataIn> : ReactorBase, IReceiveReactor<TDataIn>
 {
-    private readonly Action<IMessage<TDataIn>>? onReceiveMsg;
+    private readonly Action<TDataIn>? onReceiveData;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ReceiveReactor{T}"/> class.
     /// </summary>
     /// <param name="eventId">The ID of the event that was pushed by an <see cref="IReactable{IReceiveReactor}"/>.</param>
     /// <param name="name">The name of the <see cref="ReceiveReactor{T}"/>.</param>
-    /// <param name="onReceiveMsg">Executed when a push notification occurs with a message.</param>
+    /// <param name="onReceiveData">Executed when a push notification occurs with some data.</param>
     /// <param name="onUnsubscribe">
     ///     Executed when the provider has finished sending push-based notifications and is unsubscribed.
     /// </param>
@@ -30,25 +30,25 @@ public sealed class ReceiveReactor<TDataIn> : ReactorBase, IReceiveReactor<TData
     public ReceiveReactor(
         Guid eventId,
         string name = "",
-        Action<IMessage<TDataIn>>? onReceiveMsg = null,
+        Action<TDataIn>? onReceiveData = null,
         Action? onUnsubscribe = null,
         Action<Exception>? onError = null)
-            : base(eventId, name, onUnsubscribe, onError) => this.onReceiveMsg = onReceiveMsg;
+            : base(eventId, name, onUnsubscribe, onError) => this.onReceiveData = onReceiveData;
 
     /// <inheritdoc />
-    public void OnReceive(IMessage<TDataIn> message)
+    public void OnReceive(TDataIn data)
     {
         if (Unsubscribed)
         {
             return;
         }
 
-        if (message is null)
+        if (data is null)
         {
-            throw new ArgumentNullException(nameof(message), "The parameter must not be null.");
+            throw new ArgumentNullException(nameof(data), "The parameter must not be null.");
         }
 
-        this.onReceiveMsg?.Invoke(message);
+        this.onReceiveData?.Invoke(data);
     }
 
     /// <inheritdoc cref="object.ToString"/>

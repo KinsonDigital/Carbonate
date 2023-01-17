@@ -22,7 +22,7 @@ public interface IResult<out T>
     /// Gets the data as the type <typeparamref name="T"/>.
     /// </summary>
     /// <param name="onError">The action to invoke if an exception occurs.</param>
-    /// <typeparam name="T">The type to deserialize the message into.</typeparam>
-    /// <returns>The deserialized message data.</returns>
+    /// <typeparam name="T">The type to deserialize the data into.</typeparam>
+    /// <returns>The deserialized data data.</returns>
     T? GetValue(Action<Exception>? onError = null);
 }

@@ -19,7 +19,7 @@ internal sealed class Result<T> : IResult<T>
     /// <summary>
     /// Initializes a new instance of the <see cref="Result{T}"/> class.
     /// </summary>
-    /// <param name="serializerService">The serializer used to deserialize the message.</param>
+    /// <param name="serializerService">The serializer used to deserialize the data.</param>
     /// <param name="jsonData">The JSON data.</param>
     public Result(ISerializerService serializerService, string jsonData)
     {
