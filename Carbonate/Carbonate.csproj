@@ -23,7 +23,7 @@
         <Company>Kinson Digital</Company>
         <Product>Carbonate</Product>
         <Description>Library for doing internal messaging using the observable pattern.</Description>
-        <Copyright>Copyright ©2022 Kinson Digital</Copyright>
+        <Copyright>Copyright ©2023 Kinson Digital</Copyright>
         <PackageTags>messaging observable subscribe</PackageTags>
         <RootNamespace>Carbonate</RootNamespace>
         <ApplicationIcon>carbonate-logo.ico</ApplicationIcon>
@@ -39,6 +39,10 @@
         <!-- Ignore warning CS7035 about version syntax. -->
         <NoWarn>CS7035</NoWarn>
         <Configurations>Debug;Release</Configurations>
+    </PropertyGroup>
+
+    <PropertyGroup>
+      <DocumentationFile>bin\x64\Carbonate.xml</DocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
