@@ -7,7 +7,7 @@ namespace Carbonate.UniDirectional;
 /// <summary>
 /// Pushes out notifications.
 /// </summary>
-/// <typeparam name="TDataIn">The data coming in.</typeparam>
+/// <typeparam name="TDataIn">The type of data coming in.</typeparam>
 public interface IPushable<TDataIn>
 {
     /// <summary>

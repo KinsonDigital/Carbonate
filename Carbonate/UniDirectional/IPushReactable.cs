@@ -10,7 +10,7 @@ using Core.UniDirectional;
 /// <summary>
 /// Defines a provider for push-based notifications.
 /// </summary>
-/// <typeparam name="TDataIn">The data coming in.</typeparam>
+/// <typeparam name="TDataIn">The type of data coming in.</typeparam>
 public interface IPushReactable<TDataIn> : IReactable<IReceiveReactor<TDataIn>>, IPushable<TDataIn>
 {
 }

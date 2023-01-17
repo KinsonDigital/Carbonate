@@ -4,10 +4,8 @@
 
 namespace CarbonateTests.UniDirectional;
 
-using Carbonate.Core;
 using Carbonate.UniDirectional;
 using FluentAssertions;
-using Helpers;
 using Moq;
 using Xunit;
 
@@ -24,7 +22,7 @@ public class RespondReactorTests
         var id = Guid.NewGuid();
 
         // Act
-        var sut = new RespondReactor<ResultTestData>(id);
+        var sut = new RespondReactor<string>(id);
 
         // Assert
         sut.Id.Should().Be(id);
@@ -37,7 +35,7 @@ public class RespondReactorTests
         var id = Guid.NewGuid();
 
         // Act
-        var sut = new RespondReactor<ResultTestData>(id, "test-name");
+        var sut = new RespondReactor<string>(id, "test-name");
 
         // Assert
         sut.Name.Should().Be("test-name");
@@ -50,13 +48,13 @@ public class RespondReactorTests
     {
         // Arrange
         var totalActionInvokes = 0;
-        var sut = new RespondReactor<ResultTestData>(
+        var sut = new RespondReactor<string>(
             It.IsAny<Guid>(),
             It.IsAny<string>(),
             onRespond: () =>
             {
                 totalActionInvokes++;
-                return It.IsAny<IResult<ResultTestData>>();
+                return It.IsAny<string>();
             });
 
         sut.OnUnsubscribe();
@@ -73,13 +71,13 @@ public class RespondReactorTests
     {
         // Arrange
         var totalActionInvokes = 0;
-        var sut = new RespondReactor<ResultTestData>(
+        var sut = new RespondReactor<string>(
             It.IsAny<Guid>(),
             It.IsAny<string>(),
             onRespond: () =>
             {
                 totalActionInvokes++;
-                return new Mock<IResult<ResultTestData>>().Object;
+                return "return-value";
             });
 
         // Act
@@ -95,7 +93,7 @@ public class RespondReactorTests
         // Arrange
         var totalActionInvokes = 0;
 
-        var sut = new RespondReactor<ResultTestData>(
+        var sut = new RespondReactor<string>(
             It.IsAny<Guid>(),
             It.IsAny<string>(),
             onUnsubscribe: () => totalActionInvokes++);
@@ -115,7 +113,7 @@ public class RespondReactorTests
         // Arrange
         var totalActionInvokes = 0;
 
-        var sut = new RespondReactor<ResultTestData>(
+        var sut = new RespondReactor<string>(
             It.IsAny<Guid>(),
             It.IsAny<string>(),
             onError: _ => totalActionInvokes++);
@@ -135,7 +133,7 @@ public class RespondReactorTests
         // Arrange
         var totalActionInvokes = 0;
 
-        var sut = new RespondReactor<ResultTestData>(
+        var sut = new RespondReactor<string>(
             It.IsAny<Guid>(),
             It.IsAny<string>(),
             onError: _ => totalActionInvokes++);
@@ -155,7 +153,7 @@ public class RespondReactorTests
         // Arrange
         var totalActionInvokes = 0;
 
-        var sut = new RespondReactor<ResultTestData>(
+        var sut = new RespondReactor<string>(
             It.IsAny<Guid>(),
             It.IsAny<string>(),
             onError: e =>

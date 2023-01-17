@@ -6,9 +6,7 @@
 namespace CarbonateTests.UniDirectional;
 
 using Carbonate.Core.UniDirectional;
-using Carbonate.Services;
 using Carbonate.UniDirectional;
-using Helpers;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -18,13 +16,6 @@ using Xunit;
 /// </summary>
 public class PushReactableTests
 {
-    private readonly Mock<ISerializerService> mockSerializerService;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="PushReactableTests"/> class.
-    /// </summary>
-    public PushReactableTests() => this.mockSerializerService = new Mock<ISerializerService>();
-
     #region Method Tests
     [Fact]
     public void Push_WhenInvokedAfterDisposal_ThrowsException()
@@ -75,8 +66,6 @@ public class PushReactableTests
     public void Push_WhenUnsubscribingInsideOnReceiveReactorAction_DoesNotThrowException()
     {
         // Arrange
-        this.mockSerializerService.Setup(m => m.Serialize(It.IsAny<PullTestData>()))
-            .Returns("test-data");
         var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
         var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
 

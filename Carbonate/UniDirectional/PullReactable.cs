@@ -7,7 +7,6 @@
 // ReSharper disable LoopCanBeConvertedToQuery
 namespace Carbonate.UniDirectional;
 
-using Core;
 using Core.UniDirectional;
 
 /// <inheritdoc cref="IPullReactable{TDataOut}"/>
@@ -15,7 +14,7 @@ public class PullReactable<TDataOut>
     : ReactableBase<IRespondReactor<TDataOut>>, IPullReactable<TDataOut>
 {
     /// <inheritdoc/>
-    public IResult<TDataOut> Pull(Guid respondId)
+    public TDataOut? Pull(Guid respondId)
     {
         for (var i = 0; i < Reactors.Count; i++)
         {
@@ -24,11 +23,9 @@ public class PullReactable<TDataOut>
                 continue;
             }
 
-            var result = Reactors[i].OnRespond();
-
-            return result ?? ResultFactory.CreateEmptyResult<TDataOut>();
+            return Reactors[i].OnRespond() ?? default(TDataOut);
         }
 
-        return ResultFactory.CreateEmptyResult<TDataOut>();
+        return default(TDataOut);
     }
 }

@@ -5,9 +5,7 @@
 namespace CarbonateTests.BiDirectional;
 
 using Carbonate.BiDirectional;
-using Carbonate.Core;
 using FluentAssertions;
-using Helpers;
 using Moq;
 using Xunit;
 
@@ -24,7 +22,7 @@ public class RespondReactorTests
         var id = Guid.NewGuid();
 
         // Act
-        var sut = new RespondReactor<int, ResultTestData>(id);
+        var sut = new RespondReactor<int, string>(id);
 
         // Assert
         sut.Id.Should().Be(id);
@@ -37,7 +35,7 @@ public class RespondReactorTests
         var id = Guid.NewGuid();
 
         // Act
-        var sut = new RespondReactor<int, ResultTestData>(id, "test-name");
+        var sut = new RespondReactor<int, string>(id, "test-name");
 
         // Assert
         sut.Name.Should().Be("test-name");
@@ -46,78 +44,12 @@ public class RespondReactorTests
 
     #region Method Tests
     [Fact]
-    public void OnRespond_WhenUnsubscribed_ReturnsEmptyResult()
-    {
-        // Arrange
-        var sut = new RespondReactor<It.IsAnyType, ResultTestData>(
-            It.IsAny<Guid>(),
-            It.IsAny<string>());
-
-        sut.OnUnsubscribe();
-
-        // Act
-        var actual = sut.OnRespond(It.IsAny<It.IsAnyType>());
-
-        // Assert
-        actual.Should().NotBeNull();
-        actual.IsEmpty.Should().BeTrue();
-    }
-
-    [Fact]
-    public void OnRespond_WithNullData_ThrowsException()
-    {
-        // Arrange
-        var totalActionInvokes = 0;
-        var sut = new RespondReactor<object, ResultTestData>(
-            It.IsAny<Guid>(),
-            It.IsAny<string>(),
-            onRespondData: _ =>
-            {
-                totalActionInvokes++;
-                return new Mock<IResult<ResultTestData>>().Object;
-            });
-
-        // Act
-        var act = () => sut.OnRespond(null);
-
-        // Assert
-        act.Should().Throw<ArgumentNullException>();
-        totalActionInvokes.Should().Be(0);
-    }
-
-    [Fact]
-    public void OnRespond_WithNonNullDataAndNotUnsubscribed_ReturnsCorrectResult()
-    {
-        // Arrange
-        var totalActionInvokes = 0;
-        var result = new Mock<IResult<ResultTestData>>();
-        const int data = 123;
-        var sut = new RespondReactor<int, ResultTestData>(
-            It.IsAny<Guid>(),
-            It.IsAny<string>(),
-            onRespondData: incomingData =>
-            {
-                incomingData.Should().Be(incomingData);
-                totalActionInvokes++;
-                return result.Object;
-            });
-
-        // Act
-        var actual = sut.OnRespond(data);
-
-        // Assert
-        actual.Should().NotBeNull();
-        actual.Should().BeSameAs(result.Object);
-        totalActionInvokes.Should().Be(1);
-    }
-
-    [Fact]
     public void OnUnsubscribe_WhenInvoked_UnsubscribesReactor()
     {
         // Arrange
         var totalActionInvokes = 0;
 
-        var sut = new RespondReactor<int, ResultTestData>(
+        var sut = new RespondReactor<int, string>(
             It.IsAny<Guid>(),
             It.IsAny<string>(),
             onUnsubscribe: () => totalActionInvokes++);
@@ -137,7 +69,7 @@ public class RespondReactorTests
         // Arrange
         var totalActionInvokes = 0;
 
-        var sut = new RespondReactor<int, ResultTestData>(
+        var sut = new RespondReactor<int, string>(
             It.IsAny<Guid>(),
             It.IsAny<string>(),
             onError: _ => totalActionInvokes++);
@@ -157,7 +89,7 @@ public class RespondReactorTests
         // Arrange
         var totalActionInvokes = 0;
 
-        var sut = new RespondReactor<int, ResultTestData>(
+        var sut = new RespondReactor<int, string>(
             It.IsAny<Guid>(),
             It.IsAny<string>(),
             onError: _ => totalActionInvokes++);
@@ -177,7 +109,7 @@ public class RespondReactorTests
         // Arrange
         var totalActionInvokes = 0;
 
-        var sut = new RespondReactor<int, ResultTestData>(
+        var sut = new RespondReactor<int, string>(
             It.IsAny<Guid>(),
             It.IsAny<string>(),
             onError: e =>

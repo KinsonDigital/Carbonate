@@ -4,13 +4,12 @@
 
 namespace Carbonate.BiDirectional;
 
-using Core;
 using Core.BiDirectional;
 
 /// <inheritdoc cref="IRespondReactor{TDataIn,TDataOut}"/>
 public sealed class RespondReactor<TDataIn, TDataOut> : ReactorBase, IRespondReactor<TDataIn, TDataOut>
 {
-    private readonly Func<TDataIn, IResult<TDataOut>?>? onRespondData;
+    private readonly Func<TDataIn, TDataOut?>? onRespondData;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RespondReactor{TDataIn,TDataOut}"/> class.
@@ -30,17 +29,17 @@ public sealed class RespondReactor<TDataIn, TDataOut> : ReactorBase, IRespondRea
     public RespondReactor(
         Guid respondId,
         string name = "",
-        Func<TDataIn, IResult<TDataOut>?>? onRespondData = null,
+        Func<TDataIn, TDataOut?>? onRespondData = null,
         Action? onUnsubscribe = null,
         Action<Exception>? onError = null)
             : base(respondId, name, onUnsubscribe, onError) => this.onRespondData = onRespondData;
 
     /// <inheritdoc/>
-    public IResult<TDataOut> OnRespond(TDataIn data)
+    public TDataOut? OnRespond(TDataIn data)
     {
         if (Unsubscribed)
         {
-            return ResultFactory.CreateEmptyResult<TDataOut>();
+            return default(TDataOut);
         }
 
         if (data is null)
@@ -48,7 +47,7 @@ public sealed class RespondReactor<TDataIn, TDataOut> : ReactorBase, IRespondRea
             throw new ArgumentNullException(nameof(data), "The parameter must not be null.");
         }
 
-        return this.onRespondData?.Invoke(data) ?? ResultFactory.CreateEmptyResult<TDataOut>();
+        return this.onRespondData is null ? default(TDataOut) : this.onRespondData.Invoke(data);
     }
 
    /// <inheritdoc cref="object.ToString"/>

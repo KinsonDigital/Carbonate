@@ -5,7 +5,6 @@
 namespace CarbonateIntegrationTests;
 
 using System.Diagnostics.CodeAnalysis;
-using Carbonate;
 using Carbonate.BiDirectional;
 using FluentAssertions;
 using Xunit;
@@ -25,18 +24,16 @@ public class PullReactableWithData_IntegrationTests
         sut.Subscribe(new RespondReactor<int, SampleData>(
             respondId: respondId,
             name: "test-name",
-            onRespondData: _ => ResultFactory.CreateResult(new SampleData { IntValue = 123, StringValue = "test-str" })));
+            onRespondData: _ => new SampleData { IntValue = 123, StringValue = "test-str" }));
 
         // Act
-        var result = sut.Pull(123, respondId);
-        var actualData = result.GetValue();
+        var actual = sut.Pull(123, respondId);
 
         // Assert
-        result.Should().NotBeNull();
-        actualData.Should().NotBeNull();
-        actualData.Should().BeOfType<SampleData>();
-        actualData.IntValue.Should().Be(123);
-        actualData.StringValue.Should().Be("test-str");
+        actual.Should().NotBeNull();
+        actual.Should().BeOfType<SampleData>();
+        actual.IntValue.Should().Be(123);
+        actual.StringValue.Should().Be("test-str");
     }
     #endregion
 }
