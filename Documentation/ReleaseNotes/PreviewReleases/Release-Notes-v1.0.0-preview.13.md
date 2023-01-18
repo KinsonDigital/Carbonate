@@ -19,7 +19,7 @@ As with all software, there is always a chance for issues and bugs, especially f
    - `IResult`
    - `MessageFactory`
    - `ResultFactory`
-2. [#71](https://github.com/KinsonDigital/Carbonate/issues/71) - Changed all return types for the following interfaces and classes to nullable.
+2. [#71](https://github.com/KinsonDigital/Carbonate/issues/71) - Changed all of the return types for the following interfaces and classes to nullable.
    - `PullReactable<TDataIn, TDataOut>`
    - `IPullable`
    - `RespondReactor`
@@ -31,6 +31,6 @@ As with all software, there is always a chance for issues and bugs, especially f
 <h2 style="font-weight:bold" align="center">Other 🪧</h2>
 <h5 align="center">(Includes anything that does not fit into the categories above)</h5>
 
-1. [#67](https://github.com/KinsonDigital/Carbonate/issues/67) - Added XML code docs to NuGet package.
+1. [#67](https://github.com/KinsonDigital/Carbonate/issues/67) - Added XML code documentation to the NuGet package.
    >💡This will provide documentation in the IDE during development.
 2. [#66](https://github.com/KinsonDigital/Carbonate/issues/66) - Updated badges in the project's README file.
