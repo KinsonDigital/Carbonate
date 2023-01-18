@@ -28,7 +28,7 @@ public abstract class ReactorBase : IReactor
     ///     <br/>
     ///     It is only metadata for debugging or miscellaneous purposes.
     /// </remarks>
-    public ReactorBase(
+    protected ReactorBase(
         Guid eventId,
         string name = "",
         Action? onUnsubscribe = null,

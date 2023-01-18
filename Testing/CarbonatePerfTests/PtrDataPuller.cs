@@ -18,13 +18,11 @@ public class PtrDataPuller
 
     public Span<StructItem> Pull()
     {
-        var dataResult = this.pullReactable.Pull(Ids.GetDatId);
-
-        var dataPtr = dataResult.GetValue();
+        var result = this.pullReactable.Pull(Ids.GetDatId);
 
         unsafe
         {
-            return Unsafe.AsRef<Memory<StructItem>>(dataPtr.ToPointer()).Span;
+            return Unsafe.AsRef<Memory<StructItem>>(result.ToPointer()).Span;
         }
     }
 }

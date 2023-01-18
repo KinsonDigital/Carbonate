@@ -4,9 +4,7 @@
 
 namespace CarbonatePerfTests;
 
-using Carbonate.Core;
-
-public class DataItemResult : IResult<StructItem[]>
+public class DataItemResult
 {
     private readonly StructItem[] dataItems;
 

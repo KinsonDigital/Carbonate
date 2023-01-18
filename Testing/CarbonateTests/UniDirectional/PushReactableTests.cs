@@ -5,11 +5,8 @@
 // ReSharper disable AccessToModifiedClosure
 namespace CarbonateTests.UniDirectional;
 
-using Carbonate.Core;
 using Carbonate.Core.UniDirectional;
-using Carbonate.Services;
 using Carbonate.UniDirectional;
-using Helpers;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -19,37 +16,16 @@ using Xunit;
 /// </summary>
 public class PushReactableTests
 {
-    private readonly Mock<ISerializerService> mockSerializerService;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="PushReactableTests"/> class.
-    /// </summary>
-    public PushReactableTests() => this.mockSerializerService = new Mock<ISerializerService>();
-
     #region Method Tests
     [Fact]
-    public void PushMessage_WithNullMessageParam_ThrowsException()
-    {
-        // Arrange
-        var sut = CreateSystemUnderTest();
-
-        // Act
-        var act = () => sut.PushMessage(null, It.IsAny<Guid>());
-
-        // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("The parameter must not be null. (Parameter 'message')");
-    }
-
-    [Fact]
-    public void PushMessage_WhenInvokedAfterDisposal_ThrowsException()
+    public void Push_WhenInvokedAfterDisposal_ThrowsException()
     {
         // Arrange
         var sut = CreateSystemUnderTest();
         sut.Dispose();
 
         // Act
-        var act = () => sut.PushMessage(new Mock<IMessage<int>>().Object, Guid.Empty);
+        var act = () => sut.Push(123, Guid.Empty);
 
         // Assert
         act.Should().Throw<ObjectDisposedException>()
@@ -57,7 +33,7 @@ public class PushReactableTests
     }
 
     [Fact]
-    public void PushMessage_WhenInvoking_NotifiesCorrectSubscriptionsThatMatchEventId()
+    public void Push_WhenInvoking_NotifiesCorrectSubscriptionsThatMatchEventId()
     {
         // Arrange
         var invokedEventId = Guid.NewGuid();
@@ -72,28 +48,24 @@ public class PushReactableTests
         var mockReactorC = new Mock<IReceiveReactor<int>>();
         mockReactorC.SetupGet(p => p.Id).Returns(invokedEventId);
 
-        var mockMessage = new Mock<IMessage<int>>();
-
         var sut = CreateSystemUnderTest();
         sut.Subscribe(mockReactorA.Object);
         sut.Subscribe(mockReactorB.Object);
         sut.Subscribe(mockReactorC.Object);
 
         // Act
-        sut.PushMessage(mockMessage.Object, invokedEventId);
+        sut.Push(123, invokedEventId);
 
         // Assert
-        mockReactorA.Verify(m => m.OnReceive(It.IsAny<IMessage<int>>()), Times.Once);
-        mockReactorB.Verify(m => m.OnReceive(It.IsAny<IMessage<int>>()), Times.Never);
-        mockReactorC.Verify(m => m.OnReceive(It.IsAny<IMessage<int>>()), Times.Once);
+        mockReactorA.Verify(m => m.OnReceive(It.IsAny<int>()), Times.Once);
+        mockReactorB.Verify(m => m.OnReceive(It.IsAny<int>()), Times.Never);
+        mockReactorC.Verify(m => m.OnReceive(It.IsAny<int>()), Times.Once);
     }
 
     [Fact]
-    public void PushMessage_WhenUnsubscribingInsideOnReceiveReactorAction_DoesNotThrowException()
+    public void Push_WhenUnsubscribingInsideOnReceiveReactorAction_DoesNotThrowException()
     {
         // Arrange
-        this.mockSerializerService.Setup(m => m.Serialize(It.IsAny<PullTestData>()))
-            .Returns("test-data");
         var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
         var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
 
@@ -106,13 +78,13 @@ public class PushReactableTests
         var otherReactorA = new ReceiveReactor<int>(eventId: otherId);
         var otherReactorB = new ReceiveReactor<int>(eventId: otherId);
 
-        var mockMessage = new Mock<IMessage<int>>();
+        const int data = 123;
 
         var sut = CreateSystemUnderTest();
 
         var initReactorC = new ReceiveReactor<int>(
             eventId: mainId,
-            onReceiveMsg: _ =>
+            onReceiveData: _ =>
             {
                 otherUnsubscriberA?.Dispose();
                 otherUnsubscriberB?.Dispose();
@@ -124,14 +96,14 @@ public class PushReactableTests
         sut.Subscribe(initReactorC);
 
         // Act
-        var act = () => sut.PushMessage(mockMessage.Object, mainId);
+        var act = () => sut.Push(data, mainId);
 
         // Assert
         act.Should().NotThrow<Exception>();
     }
 
     [Fact]
-    public void PushMessage_WhenSubscriptionThrowsException_InvokesSubscriptionOnError()
+    public void Push_WhenSubscriptionThrowsException_InvokesSubscriptionOnError()
     {
         // Arrange
         var idA = Guid.NewGuid();
@@ -140,7 +112,7 @@ public class PushReactableTests
         var sut = CreateSystemUnderTest();
         var reactorA = new ReceiveReactor<int>(
             eventId: idA,
-            onReceiveMsg: _ => throw new Exception("test-exception"),
+            onReceiveData: _ => throw new Exception("test-exception"),
             onError: e =>
             {
                 // Assert
@@ -153,7 +125,7 @@ public class PushReactableTests
         sut.Subscribe(reactorB);
 
         // Act
-        sut.PushMessage(new Mock<IMessage<int>>().Object, idA);
+        sut.Push(It.IsAny<int>(), idA);
     }
     #endregion
 

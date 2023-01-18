@@ -8,8 +8,6 @@ using System.Collections.ObjectModel;
 using Core;
 using UniDirectional;
 
-// TODO: Make some of the methods virtual
-
 /// <summary>
 /// Defines a provider for pushing notifications or receiving responses with default behavior.
 /// </summary>

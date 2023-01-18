@@ -4,9 +4,7 @@
 
 namespace CarbonatePerfTests;
 
-using Carbonate.Core;
-
-public class DataResult : IResult<nint>
+public class DataResult
 {
     private readonly nint dataItems;
 

@@ -4,20 +4,19 @@
 
 namespace Carbonate.BiDirectional;
 
-using Core;
 using Core.BiDirectional;
 
 /// <inheritdoc cref="IRespondReactor{TDataIn,TDataOut}"/>
 public sealed class RespondReactor<TDataIn, TDataOut> : ReactorBase, IRespondReactor<TDataIn, TDataOut>
 {
-    private readonly Func<IMessage<TDataIn>, IResult<TDataOut>?>? onRespondMsg;
+    private readonly Func<TDataIn, TDataOut?>? onRespondData;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RespondReactor{TDataIn,TDataOut}"/> class.
     /// </summary>
     /// <param name="respondId">The ID of the <see cref="PullReactable{TDataIn,TDataOut}"/> requiring a response.</param>
     /// <param name="name">The name of the <see cref="RespondReactor{TDataIn,TDataOut}"/>.</param>
-    /// <param name="onRespondMsg">Executed when requesting a response with data.</param>
+    /// <param name="onRespondData">Executed when requesting a response with data.</param>
     /// <param name="onUnsubscribe">
     ///     Executed when the provider has finished sending push-based notifications and is unsubscribed.
     /// </param>
@@ -30,25 +29,25 @@ public sealed class RespondReactor<TDataIn, TDataOut> : ReactorBase, IRespondRea
     public RespondReactor(
         Guid respondId,
         string name = "",
-        Func<IMessage<TDataIn>, IResult<TDataOut>?>? onRespondMsg = null,
+        Func<TDataIn, TDataOut?>? onRespondData = null,
         Action? onUnsubscribe = null,
         Action<Exception>? onError = null)
-            : base(respondId, name, onUnsubscribe, onError) => this.onRespondMsg = onRespondMsg;
+            : base(respondId, name, onUnsubscribe, onError) => this.onRespondData = onRespondData;
 
     /// <inheritdoc/>
-    public IResult<TDataOut> OnRespond(IMessage<TDataIn> message)
+    public TDataOut? OnRespond(TDataIn data)
     {
         if (Unsubscribed)
         {
-            return ResultFactory.CreateEmptyResult<TDataOut>();
+            return default(TDataOut);
         }
 
-        if (message is null)
+        if (data is null)
         {
-            throw new ArgumentNullException(nameof(message), "The parameter must not be null.");
+            throw new ArgumentNullException(nameof(data), "The parameter must not be null.");
         }
 
-        return this.onRespondMsg?.Invoke(message) ?? ResultFactory.CreateEmptyResult<TDataOut>();
+        return this.onRespondData is null ? default(TDataOut) : this.onRespondData.Invoke(data);
     }
 
    /// <inheritdoc cref="object.ToString"/>
