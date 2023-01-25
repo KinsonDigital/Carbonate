@@ -44,10 +44,10 @@ public class RespondReactor<TDataOut> : ReactorBase, IRespondReactor<TDataOut>
     {
         if (Unsubscribed)
         {
-            return default(TDataOut);
+            return default;
         }
 
-        return this.onRespond is null ? default(TDataOut) : this.onRespond.Invoke();
+        return this.onRespond is null ? default : this.onRespond.Invoke();
     }
 
     /// <inheritdoc cref="object.ToString"/>

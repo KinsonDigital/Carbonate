@@ -26,6 +26,6 @@ public class PullReactable<TDataIn, TDataOut>
             return Reactors[i].OnRespond(data);
         }
 
-        return default(TDataOut);
+        return default;
     }
 }

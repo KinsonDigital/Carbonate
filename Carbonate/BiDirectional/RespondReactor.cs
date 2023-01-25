@@ -44,7 +44,7 @@ public class RespondReactor<TDataIn, TDataOut> : ReactorBase, IRespondReactor<TD
     {
         if (Unsubscribed)
         {
-            return default(TDataOut);
+            return default;
         }
 
         if (data is null)
@@ -52,7 +52,7 @@ public class RespondReactor<TDataIn, TDataOut> : ReactorBase, IRespondReactor<TD
             throw new ArgumentNullException(nameof(data), "The parameter must not be null.");
         }
 
-        return this.onRespondData is null ? default(TDataOut) : this.onRespondData.Invoke(data);
+        return this.onRespondData is null ? default : this.onRespondData.Invoke(data);
     }
 
    /// <inheritdoc cref="object.ToString"/>
