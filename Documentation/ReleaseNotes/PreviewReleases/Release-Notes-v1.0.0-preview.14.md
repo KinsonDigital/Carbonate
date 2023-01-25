@@ -14,14 +14,13 @@ As with all software, there is always a chance for issues and bugs, especially f
 <h2 style="font-weight:bold" align="center">New Features ✨</h2>
 
 1. [#77](https://github.com/KinsonDigital/Carbonate/issues/77) - Changed the following classes:
+      >💡These changes were done to give users more control.
    - Removed the `sealed` keyword from the following classes:
-        >💡This was done to give users more control.
      - `NonDirectional.ReceiveReactor`
      - `UniDirectional.ReceiveReactor`
      - `UniDirectional.RespondReactor`
      - `BiDirectional.RespondReactor`
-   - Change the following methods to `virtual`:
-        >💡This was done to give users more control.
+   - Changed the following methods to `virtual`:
      - `NonDirectional.ReceiveReactor.OnReceive()`
      - `UniDirectional.ReceiveReactor.OnReceive()`
      - `UniDirectional.RespondReactor.OnRespond()`
