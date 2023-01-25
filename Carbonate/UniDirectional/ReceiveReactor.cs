@@ -4,11 +4,16 @@
 
 namespace Carbonate.UniDirectional;
 
+using System.Diagnostics.CodeAnalysis;
 using Core;
 using Core.UniDirectional;
 
 /// <inheritdoc cref="IReceiveReactor{TDataIn}"/>
-public sealed class ReceiveReactor<TDataIn> : ReactorBase, IReceiveReactor<TDataIn>
+[SuppressMessage(
+    "ReSharper",
+    "ClassWithVirtualMembersNeverInherited.Global",
+    Justification = "Left unsealed to give users more control")]
+public class ReceiveReactor<TDataIn> : ReactorBase, IReceiveReactor<TDataIn>
 {
     private readonly Action<TDataIn>? onReceiveData;
 
