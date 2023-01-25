@@ -48,7 +48,7 @@ public class PullReactableTests
     }
 
     [Fact]
-    public void Pull_WhenInvoked_InvokesCorrectSubscriptions()
+    public void Pull_WhenSubscriptionExists_InvokesCorrectSubscriptions()
     {
         // Arrange
         var respondIdA = Guid.NewGuid();
@@ -76,6 +76,19 @@ public class PullReactableTests
         mockReactorA.Verify(m => m.OnRespond(), Times.Never);
         mockReactorB.Verify(m => m.OnRespond(), Times.Once);
         mockReactorC.Verify(m => m.OnRespond(), Times.Never);
+    }
+
+    [Fact]
+    public void Pull_WhenSubscriptionDoesNotExist_ReturnsCorrectDefaultResult()
+    {
+        // Arrange
+        var sut = CreateSystemUnderTest();
+
+        // Act
+        var actual = sut.Pull(It.IsAny<Guid>());
+
+        // Assert
+        actual.Should().BeNull();
     }
     #endregion
 

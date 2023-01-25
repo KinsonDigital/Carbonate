@@ -53,6 +53,19 @@ public class PullReactableTests
         actual.Should().NotBeNull();
         actual.Should().Be("return-value");
     }
+
+    [Fact]
+    public void Pull_WithNoMatchingSubscription_ReturnsCorrectResult()
+    {
+        // Arrange
+        var sut = new PullReactable<int, int>();
+
+        // Act
+        var actual = sut.Pull(123, Guid.NewGuid());
+
+        // Assert
+        actual.Should().Be(0);
+    }
     #endregion
 
     /// <summary>

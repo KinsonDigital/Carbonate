@@ -18,6 +18,20 @@ public class PushReactableTests
 {
     #region Method Tests
     [Fact]
+    public void Push_WhenDataParamIsNull_ThrowsException()
+    {
+        // Arrange
+        var sut = new PushReactable<object>();
+
+        // Act
+        var act = () => sut.Push(null, It.IsAny<Guid>());
+
+        // Assert
+        act.Should().Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'data')");
+    }
+
+    [Fact]
     public void Push_WhenInvokedAfterDisposal_ThrowsException()
     {
         // Arrange

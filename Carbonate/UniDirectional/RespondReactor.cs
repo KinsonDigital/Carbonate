@@ -4,10 +4,15 @@
 
 namespace Carbonate.UniDirectional;
 
+using System.Diagnostics.CodeAnalysis;
 using Core.UniDirectional;
 
 /// <inheritdoc cref="IRespondReactor{TDataOut}"/>
-public sealed class RespondReactor<TDataOut> : ReactorBase, IRespondReactor<TDataOut>
+[SuppressMessage(
+    "ReSharper",
+    "ClassWithVirtualMembersNeverInherited.Global",
+    Justification = "Left unsealed to give users more control")]
+public class RespondReactor<TDataOut> : ReactorBase, IRespondReactor<TDataOut>
 {
     private readonly Func<TDataOut?>? onRespond;
 
@@ -35,14 +40,14 @@ public sealed class RespondReactor<TDataOut> : ReactorBase, IRespondReactor<TDat
             : base(respondId, name, onUnsubscribe, onError) => this.onRespond = onRespond;
 
     /// <inheritdoc />
-    public TDataOut? OnRespond()
+    public virtual TDataOut? OnRespond()
     {
         if (Unsubscribed)
         {
-            return default(TDataOut);
+            return default;
         }
 
-        return this.onRespond is null ? default(TDataOut) : this.onRespond.Invoke();
+        return this.onRespond is null ? default : this.onRespond.Invoke();
     }
 
     /// <inheritdoc cref="object.ToString"/>

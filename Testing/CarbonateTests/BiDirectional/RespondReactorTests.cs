@@ -44,6 +44,65 @@ public class RespondReactorTests
 
     #region Method Tests
     [Fact]
+    public void OnRespond_WhenUnsubscribed_ReturnsCorrectDefaultResult()
+    {
+        // Arrange
+        var sut = new RespondReactor<int, int>(Guid.NewGuid(),
+            onRespondData: _ => 456);
+        sut.OnUnsubscribe();
+
+        // Act
+        var actual = sut.OnRespond(123);
+
+        // Assert
+        actual.Should().Be(0);
+    }
+
+    [Fact]
+    public void OnRespond_WhenDataIsNull_ThrowsException()
+    {
+        // Arrange
+        var sut = new RespondReactor<object, int>(Guid.NewGuid());
+
+        // Act
+        var act = () => sut.OnRespond(null);
+
+        // Assert
+        act.Should().Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'data')");
+    }
+
+    [Fact]
+    public void OnRespond_WhenOnRespondDataIsNull_ReturnsCorrectDefaultResult()
+    {
+        // Arrange
+        var sut = new RespondReactor<int, object>(Guid.NewGuid(),
+            onRespondData: _ => null);
+
+        // Act
+        var actual = sut.OnRespond(123);
+
+        // Assert
+        actual.Should().BeNull();
+    }
+
+    [Fact]
+    public void OnRespond_WhenOnRespondDataIsNotNull_ReturnsCorrectResult()
+    {
+        // Arrange
+        var obj = new object();
+        var sut = new RespondReactor<int, object>(Guid.NewGuid(),
+            onRespondData: _ => obj);
+
+        // Act
+        var actual = sut.OnRespond(123);
+
+        // Assert
+        actual.Should().NotBeNull();
+        actual.Should().BeSameAs(obj);
+    }
+
+    [Fact]
     public void OnUnsubscribe_WhenInvoked_UnsubscribesReactor()
     {
         // Arrange
