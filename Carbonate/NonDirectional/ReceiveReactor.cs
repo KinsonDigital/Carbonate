@@ -41,7 +41,7 @@ public class ReceiveReactor : ReactorBase, IReceiveReactor
             : base(eventId, name, onUnsubscribe, onError) => this.onReceive = onReceive;
 
     /// <inheritdoc />
-    public void OnReceive()
+    public virtual void OnReceive()
     {
         if (Unsubscribed)
         {

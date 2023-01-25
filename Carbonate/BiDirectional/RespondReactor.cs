@@ -40,7 +40,7 @@ public class RespondReactor<TDataIn, TDataOut> : ReactorBase, IRespondReactor<TD
             : base(respondId, name, onUnsubscribe, onError) => this.onRespondData = onRespondData;
 
     /// <inheritdoc/>
-    public TDataOut? OnRespond(TDataIn data)
+    public virtual TDataOut? OnRespond(TDataIn data)
     {
         if (Unsubscribed)
         {
