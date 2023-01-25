@@ -4,10 +4,15 @@
 
 namespace Carbonate.BiDirectional;
 
+using System.Diagnostics.CodeAnalysis;
 using Core.BiDirectional;
 
 /// <inheritdoc cref="IRespondReactor{TDataIn,TDataOut}"/>
-public sealed class RespondReactor<TDataIn, TDataOut> : ReactorBase, IRespondReactor<TDataIn, TDataOut>
+[SuppressMessage(
+    "ReSharper",
+    "ClassWithVirtualMembersNeverInherited.Global",
+    Justification = "Left unsealed to give users more control")]
+public class RespondReactor<TDataIn, TDataOut> : ReactorBase, IRespondReactor<TDataIn, TDataOut>
 {
     private readonly Func<TDataIn, TDataOut?>? onRespondData;
 
@@ -35,11 +40,11 @@ public sealed class RespondReactor<TDataIn, TDataOut> : ReactorBase, IRespondRea
             : base(respondId, name, onUnsubscribe, onError) => this.onRespondData = onRespondData;
 
     /// <inheritdoc/>
-    public TDataOut? OnRespond(TDataIn data)
+    public virtual TDataOut? OnRespond(TDataIn data)
     {
         if (Unsubscribed)
         {
-            return default(TDataOut);
+            return default;
         }
 
         if (data is null)
@@ -47,7 +52,7 @@ public sealed class RespondReactor<TDataIn, TDataOut> : ReactorBase, IRespondRea
             throw new ArgumentNullException(nameof(data), "The parameter must not be null.");
         }
 
-        return this.onRespondData is null ? default(TDataOut) : this.onRespondData.Invoke(data);
+        return this.onRespondData is null ? default : this.onRespondData.Invoke(data);
     }
 
    /// <inheritdoc cref="object.ToString"/>

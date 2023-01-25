@@ -4,11 +4,16 @@
 
 namespace Carbonate.NonDirectional;
 
+using System.Diagnostics.CodeAnalysis;
 using Core;
 using Core.NonDirectional;
 
 /// <inheritdoc cref="IReceiveReactor"/>
-public sealed class ReceiveReactor : ReactorBase, IReceiveReactor
+[SuppressMessage(
+    "ReSharper",
+    "ClassWithVirtualMembersNeverInherited.Global",
+    Justification = "Left unsealed to give users more control")]
+public class ReceiveReactor : ReactorBase, IReceiveReactor
 {
     private readonly Action? onReceive;
 
@@ -36,7 +41,7 @@ public sealed class ReceiveReactor : ReactorBase, IReceiveReactor
             : base(eventId, name, onUnsubscribe, onError) => this.onReceive = onReceive;
 
     /// <inheritdoc />
-    public void OnReceive()
+    public virtual void OnReceive()
     {
         if (Unsubscribed)
         {
