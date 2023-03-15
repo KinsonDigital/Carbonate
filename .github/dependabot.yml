@@ -12,7 +12,7 @@ updates:
     assignees:
       - "CalvinWilkinson"
     reviewers:
-      - "KinsonDigital/Admin"
+      - "KinsonDigitalAdmin"
     target-branch: "develop"
     labels:
       - "dependency update"
