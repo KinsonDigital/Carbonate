@@ -24,7 +24,7 @@ This library is still under development and is not at v1.0.0 yet!!  However, all
 
 <h2 style="font-weight:bold;border:0" align="center">📖 About Carbonate 📖</h2>
 
-**Carbonate** is a messaging library using the observable pattern.  This library can be used for many different kinds of applications to add the ability to easily and reliably send messages to different parts and/or systems of an application.
+**Carbonate** is a messaging library for various applications, using the observable pattern.  It adds the ability to easily and reliably send messages to different parts and/or systems of an application.
 
 <h2 style="font-weight:bold;" align="center">🙏🏼 Contributing 🙏🏼</h2>
 
@@ -41,9 +41,8 @@ Interested in contributing? If so, click [here](https://github.com/KinsonDigital
 <h2 style="font-weight:bold;border:0" align="center">🚔 Licensing And Governance 🚔</h2>
 <div align="center">
 
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg?style=flat)](code_of_conduct.md)
-![GitHub](https://img.shields.io/github/license/kinsondigital/Carbonate)
-</div>
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg?style=flat)](https://github.com/KinsonDigital/.github/blob/master/docs/code_of_conduct.md)
+[![GitHub](https://img.shields.io/github/license/kinsondigital/CASL)](https://github.com/KinsonDigital/Carbonate/blob/release/v1.0.0/LICENSE.md)
 
-**Carbonate** is distributed under the very permissive **MIT license** and all dependencies are distributed under MIT-compatible licenses.
+This software is distributed under the very permissive MIT license and all dependencies are distributed under MIT-compatible licenses.
 This project has adopted the code of conduct defined by the **Contributor Covenant** to clarify expected behavior in our community.
