@@ -65,12 +65,12 @@
 This library is still under development and is not at v1.0.0 yet!!  However, all of the major features are available, so we encourage you to use it and provide feedback.  That is what open source is all about. 🥳
 
 <!--PRE-PROCESSING-COMMENT-START-->
-<h2 style="font-weight:bold;border:0" align="center">📖 About Carbonate</h2>
+<h2 style="font-weight:bold;border:0" align="center">📖 About Carbonate 📖</h2>
 <!--PRE-PROCESSING-COMMENT-STOP-->
 
 <!--PRE-PROCESSING-UNCOMMENT-START-->
 <!--
-## **📖 About Carbonate**
+## **📖 About Carbonate 📖**
 -->
 <!--PRE-PROCESSING-UNCOMMENT-STOP-->
 
@@ -79,12 +79,12 @@ This library is still under development and is not at v1.0.0 yet!!  However, all
 <!--TODO: Add a features section-->
 
 <!--PRE-PROCESSING-COMMENT-START-->
-<h2 style="font-weight:bold;border:0" align="center">🔧Maintainers</h2>
+<h2 style="font-weight:bold;border:0" align="center">🔧 Maintainers 🔧</h2>
 <!--PRE-PROCESSING-COMMENT-STOP-->
 
 <!--PRE-PROCESSING-UNCOMMENT-START-->
 <!--
-## **🔧Maintainers**
+## **🔧 Maintainers 🔧**
 -->
 <!--PRE-PROCESSING-UNCOMMENT-STOP-->
 - [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/.github/master/Images/twitter-logo-16x16.svg)Calvin Wilkinson](https://twitter.com/KDCoder) (KinsonDigital GitHub Organization - Owner)
@@ -92,14 +92,14 @@ This library is still under development and is not at v1.0.0 yet!!  However, all
 Maintainer & Tester)
 
 <!--PRE-PROCESSING-COMMENT-START-->
-<h2 style="font-weight:bold;border:0" align="center">🙏🏼Contributing</h2>
+<h2 style="font-weight:bold;border:0" align="center">🙏🏼 Contributing 🙏🏼</h2>
 
 To learn how to contribute to the project, go [here](./CONTRIBUTING.md).
 <!--PRE-PROCESSING-COMMENT-STOP-->
 
 <!--PRE-PROCESSING-UNCOMMENT-START-->
 <!--
-## **🙏🏼Contributing**
+## **🙏🏼 Contributing 🙏🏼**
 
 To learn how to contribute to the project, go [here](https://github.com/KinsonDigital/Carbonate/blob/release/v1.0.0/CONTRIBUTING.md).
 -->
@@ -147,12 +147,12 @@ This helps ensure the long term viability of all the projects in the organizatio
 - Come chat with us on [Discord](https://discord.gg/qewu6fNgv7)!
 
 <!--PRE-PROCESSING-COMMENT-START-->
-<h2 style="font-weight:bold;border:0" align="center">Licensing And Governance</h2>
+<h2 style="font-weight:bold;border:0" align="center">🚔 Licensing And Governance 🚔</h2>
 <!--PRE-PROCESSING-COMMENT-STOP-->
 
 <!--PRE-PROCESSING-UNCOMMENT-START-->
 <!--
-## **Licensing And Governance**
+## **🚔 Licensing And Governance 🚔**
 -->
 <!--PRE-PROCESSING-UNCOMMENT-STOP-->
 
