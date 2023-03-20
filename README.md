@@ -38,7 +38,7 @@ Interested in contributing? If so, click [here](https://github.com/KinsonDigital
 
 
 
-<h2 style="font-weight:bold;border:0" align="center">🚔 Licensing And Governance 🚔</h2>
+<h2 style="font-weight:bold;border:0" align="center">🚔 Licensing and Governance 🚔</h2>
 <div align="center">
 
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg?style=flat)](https://github.com/KinsonDigital/.github/blob/master/docs/code_of_conduct.md)
