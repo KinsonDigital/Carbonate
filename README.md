@@ -99,7 +99,7 @@ To learn how to contribute to the project, go [here](./CONTRIBUTING.md).
 
 <!--PRE-PROCESSING-UNCOMMENT-START-->
 <!--
-## **🙏🏼 Contributing 🙏🏼**
+## **🙏🏼Contributing**
 
 To learn how to contribute to the project, go [here](https://github.com/KinsonDigital/Carbonate/blob/release/v1.0.0/CONTRIBUTING.md).
 -->
@@ -107,52 +107,12 @@ To learn how to contribute to the project, go [here](https://github.com/KinsonDi
 
 
 <!--PRE-PROCESSING-COMMENT-START-->
-<h2 style="font-weight:bold;border:0" align="center">Practices</h2>
+<h2 style="font-weight:bold;border:0" align="center">Licensing And Governance</h2>
 <!--PRE-PROCESSING-COMMENT-STOP-->
 
 <!--PRE-PROCESSING-UNCOMMENT-START-->
 <!--
-## **Practices**
--->
-<!--PRE-PROCESSING-UNCOMMENT-STOP-->
-
-- The code base uses unit tests and has a high level of code coverage.  Manual testing is performed by using the included testing application built specifically for manually testing the library.  When contributing, make sure to add or adjust the unit tests accordingly and perform manual testing.
-- We use a combination of [StyleCop](https://github.com/DotNetAnalyzers/StyleCopAnalyzers) and [Microsoft.CodeAnalysis.NetAnalyzers](https://github.com/dotnet/roslyn-analyzers) libraries for maintaining coding standards.
-   > **Note** We understand that there are some exceptions to the rule and not all coding standards fit every situation.  In these scenarios, contact a maintainer and lets discuss it!!  Warnings can always be suppressed if need be.
-- We use [semantic versioning 2.0](https://semver.org/) for versioning.
-
-<!--PRE-PROCESSING-COMMENT-START-->
-<h2 style="font-weight:bold;border:0" align="center">Funding</h2>
-<!--PRE-PROCESSING-COMMENT-STOP-->
-
-<!--PRE-PROCESSING-UNCOMMENT-START-->
-<!--
-## **Funding**
--->
-<!--PRE-PROCESSING-UNCOMMENT-STOP-->
-
-**Carbonate** and all of the [KinsonDigital](https://github.com/KinsonDigital) organization projects require significant effort to maintain, as such we greatly appreciate any financial support you are able to provide!
-This helps ensure the long term viability of all the projects in the organization and to [help support](https://github.com/sponsors/KinsonDigital) the project maintainers in their free time.
-
-<!--PRE-PROCESSING-COMMENT-START-->
-<h2 style="font-weight:bold;border:0" align="center">Further Resources</h2>
-<!--PRE-PROCESSING-COMMENT-STOP-->
-
-<!--PRE-PROCESSING-UNCOMMENT-START-->
-<!--
-## **Further Resources**
--->
-<!--PRE-PROCESSING-UNCOMMENT-STOP-->
-
-- Come chat with us on [Discord](https://discord.gg/qewu6fNgv7)!
-
-<!--PRE-PROCESSING-COMMENT-START-->
-<h2 style="font-weight:bold;border:0" align="center">🚔 Licensing And Governance 🚔</h2>
-<!--PRE-PROCESSING-COMMENT-STOP-->
-
-<!--PRE-PROCESSING-UNCOMMENT-START-->
-<!--
-## **🚔 Licensing And Governance 🚔**
+## **Licensing And Governance**
 -->
 <!--PRE-PROCESSING-UNCOMMENT-STOP-->
 
