@@ -39,10 +39,14 @@ Interested in contributing? If so, click [here](https://github.com/KinsonDigital
 
 
 <h2 style="font-weight:bold;border:0" align="center">🚔 Licensing and Governance 🚔</h2>
+
 <div align="center">
+
 
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg?style=flat)](https://github.com/KinsonDigital/.github/blob/master/docs/code_of_conduct.md)
 [![GitHub](https://img.shields.io/github/license/kinsondigital/CASL)](https://github.com/KinsonDigital/Carbonate/blob/release/v1.0.0/LICENSE.md)
+
+<div align= "left">
 
 This software is distributed under the very permissive MIT license and all dependencies are distributed under MIT-compatible licenses.
 This project has adopted the code of conduct defined by the **Contributor Covenant** to clarify expected behavior in our community.
