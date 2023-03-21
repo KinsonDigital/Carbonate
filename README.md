@@ -8,14 +8,14 @@
 
 <div align="center">
 
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/KinsonDigital/Carbonate/prod-release-pr-status-check.yml?color=2F8840&label=Prod%20CI%20Build&logo=GitHub)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/KinsonDigital/Carbonate/prev-release-pr-status-check.yml?color=2F8840&label=Preview%20CI%20Build&logo=GitHub)
+[![Prod Release PR Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/Carbonate/prod-release-pr-status-check.yml?color=2F8840&label=Prod%20CI%20Build&logo=GitHub)](https://github.com/KinsonDigital/Carbonate/actions/workflows/prod-release-pr-status-check.yml)
+[![Prev Release PR Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/Carbonate/prev-release-pr-status-check.yml?color=2F8840&label=Preview%20CI%20Build&logo=GitHub)](https://github.com/KinsonDigital/Carbonate/actions/workflows/prev-release-pr-status-check.yml)
 [![Code Coverage](https://img.shields.io/codecov/c/github/KinsonDigital/Carbonate/master?label=Code%20Coverage&logo=CodeCov&style=flat)](https://app.codecov.io/gh/KinsonDigital/Carbonate)
 
 [![Latest NuGet Release](https://img.shields.io/nuget/vpre/kinsondigital.Carbonate?label=Latest%20Release&logo=nuget)](https://www.nuget.org/packages/KinsonDigital.Carbonate)
-![Nuget](https://img.shields.io/nuget/dt/KinsonDigital.Carbonate?color=0094FF&label=nuget%20downloads&logo=nuget)
+[![Nuget Downloads](https://img.shields.io/nuget/dt/KinsonDigital.Carbonate?color=0094FF&label=nuget%20downloads&logo=nuget)](https://www.nuget.org/stats/packages/KinsonDigital.Carbonate?groupby=Version)
 
-[![Good First GitHub Issues](https://img.shields.io/github/issues/kinsondigital/Carbonate/good%20first%20issue?color=7057ff&label=Good%20First%20Issues)](https://github.com/KinsonDigital/Carbonate/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+[![Good First Issues](https://img.shields.io/github/issues/kinsondigital/Carbonate/good%20first%20issue?color=7057ff&label=Good%20First%20Issues)](https://github.com/KinsonDigital/Carbonate/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 [![Discord](https://img.shields.io/discord/481597721199902720?color=%23575CCB&label=chat%20on%20discord&logo=discord&logoColor=white)](https://discord.gg/qewu6fNgv7)
 </div>
 <h2 style="font-weight:bold;border:0" align="center" >!! NOTICE !!</h2>
