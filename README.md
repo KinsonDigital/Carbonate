@@ -43,7 +43,7 @@ Interested in contributing? If so, click [here](https://github.com/KinsonDigital
 <div align="center">
 
 
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg?style=flat)](https://github.com/KinsonDigital/.github/blob/master/docs/code_of_conduct.md)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg?style=flat)](https://github.com/KinsonDigital/.github/blob/master/docs/code_of_conduct.md)
 [![GitHub](https://img.shields.io/github/license/kinsondigital/CASL)](https://github.com/KinsonDigital/Carbonate/blob/release/v1.0.0/LICENSE.md)
 
 <div align= "left">
