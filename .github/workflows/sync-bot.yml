@@ -48,4 +48,4 @@ jobs:
             "${{ vars.PROJECT_NAME }}" `
             "$issueNumber" `
             "issue" `
-            "${{ secrets.CICD_REST_API }}";
+            "cicd-pat: ${{ secrets.CICD_TOKEN }}";

@@ -48,4 +48,4 @@ jobs:
             "${{ vars.PROJECT_NAME }}" `
             "$prNumber" `
             "pr" `
-            "${{ secrets.CICD_REST_API }}";
+            "${{ secrets.CICD_TOKEN }}";

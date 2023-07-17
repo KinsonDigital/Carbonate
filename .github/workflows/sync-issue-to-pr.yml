@@ -48,4 +48,4 @@ jobs:
             "${{ github.event.sender.login }}" `
             "$prNumber" `
             "$command" `
-            "${{ secrets.CICD_REST_API }}";
+            "${{ secrets.CICD_TOKEN }}";
