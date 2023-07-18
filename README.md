@@ -10,7 +10,7 @@
 
 [![Prod Release PR Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/Carbonate/prod-release-pr-status-check.yml?color=2F8840&label=Prod%20CI%20Build&logo=GitHub)](https://github.com/KinsonDigital/Carbonate/actions/workflows/prod-release-pr-status-check.yml)
 [![Prev Release PR Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/Carbonate/prev-release-pr-status-check.yml?color=2F8840&label=Preview%20CI%20Build&logo=GitHub)](https://github.com/KinsonDigital/Carbonate/actions/workflows/prev-release-pr-status-check.yml)
-[![Code Coverage](https://img.shields.io/codecov/c/github/KinsonDigital/Carbonate/master?label=Code%20Coverage&logo=CodeCov&style=flat)](https://app.codecov.io/gh/KinsonDigital/Carbonate)
+[![Code Coverage](https://img.shields.io/codecov/c/github/KinsonDigital/Carbonate/preview?label=Code%20Coverage&logo=CodeCov&style=flat)](https://app.codecov.io/gh/KinsonDigital/Carbonate)
 
 [![Latest NuGet Release](https://img.shields.io/nuget/vpre/kinsondigital.Carbonate?label=Latest%20Release&logo=nuget)](https://www.nuget.org/packages/KinsonDigital.Carbonate)
 [![Nuget Downloads](https://img.shields.io/nuget/dt/KinsonDigital.Carbonate?color=0094FF&label=nuget%20downloads&logo=nuget)](https://www.nuget.org/stats/packages/KinsonDigital.Carbonate?groupby=Version)
