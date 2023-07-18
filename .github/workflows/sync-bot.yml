@@ -37,10 +37,10 @@ jobs:
           }
 
           <# Deno Args:
-            1. Project Name
-            2. Issue Number
-            3. Event Type - set to issue event type
-            4. GitHub token
+            1. Project name
+            2. Issue number
+            3. Event type - set to issue event type
+            4. PAT
           #>
           deno run `
             --allow-net `

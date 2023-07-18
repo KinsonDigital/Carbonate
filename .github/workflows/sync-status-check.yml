@@ -38,9 +38,9 @@ jobs:
 
           <# Deno Args:
             1. Project Name
-            2. PR Number
+            2. Pull request number
             3. Event Type - set to pull request event type
-            4. GitHub token
+            4. PAT
           #>
           deno run `
             --allow-net `
