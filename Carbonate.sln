@@ -18,13 +18,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		LICENSE.md = LICENSE.md
 		README.md = README.md
+		renovate.json = renovate.json
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Issue Templates", "Issue Templates", "{EC84F317-C63E-4B7E-9619-12D291701201}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{8518113E-D0C3-4E63-8F2E-542EB6D1CCE9}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pull Request Templates", "Pull Request Templates", "{74273D28-BDB5-4FF0-B4E2-20A171671A58}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\add-new-issue-to-project.yml = .github\workflows\add-new-issue-to-project.yml
+		.github\workflows\build-pr-status-check.yml = .github\workflows\build-pr-status-check.yml
+		.github\workflows\prev-release.yml = .github\workflows\prev-release.yml
+		.github\workflows\sonar-scan-pr-status-check.yml = .github\workflows\sonar-scan-pr-status-check.yml
+		.github\workflows\sync-bot.yml = .github\workflows\sync-bot.yml
+		.github\workflows\sync-issue-to-pr.yml = .github\workflows\sync-issue-to-pr.yml
+		.github\workflows\sync-status-check.yml = .github\workflows\sync-status-check.yml
+		.github\workflows\testing-pr-status-check.yml = .github\workflows\testing-pr-status-check.yml
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarbonateIntegrationTests", "Testing\CarbonateIntegrationTests\CarbonateIntegrationTests.csproj", "{388E7191-CE3A-492C-9A19-AE67A659E466}"
 EndProject
@@ -76,9 +83,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A2124FFE-C6A1-46A7-8440-F0F5709DD08C} = {E204672C-F241-4BB7-AAE4-5147BC5B4FF5}
-		{EC84F317-C63E-4B7E-9619-12D291701201} = {67F82AED-1502-4803-855A-CDB26DC685B4}
 		{8518113E-D0C3-4E63-8F2E-542EB6D1CCE9} = {67F82AED-1502-4803-855A-CDB26DC685B4}
-		{74273D28-BDB5-4FF0-B4E2-20A171671A58} = {67F82AED-1502-4803-855A-CDB26DC685B4}
 		{388E7191-CE3A-492C-9A19-AE67A659E466} = {E204672C-F241-4BB7-AAE4-5147BC5B4FF5}
 		{FA8B11A4-48C9-4824-A90F-9D39F3678028} = {E204672C-F241-4BB7-AAE4-5147BC5B4FF5}
 	EndGlobalSection

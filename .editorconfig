@@ -184,15 +184,16 @@ dotnet_diagnostic.SA1011.severity = none
 # XML comment analysis is disabled due to project configuration
 dotnet_diagnostic.SA0001.severity = none
 
-# Using directive should apprea within a namespace declaration
-dotnet_diagnostic.SA1200.severity = error
-
 # An element within a C# code file is out of order within regard to access level, in relation to other elements in the code
 dotnet_diagnostic.SA1202.severity = warning
 
 dotnet_diagnostic.CA1852.severity = warning
 
+# Do not guard 'Dictionary.Remove(key)' with 'Dictionary.ContainsKey(key)'
+dotnet_diagnostic.CA1853.severity = warning
+
 csharp_prefer_simple_using_statement = true:suggestion
 
 # Using directives must be placed inside of a namespace declaration
+# IDE0065: Misplaced using directive
 csharp_using_directive_placement = inside_namespace

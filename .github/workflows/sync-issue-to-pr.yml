@@ -1,0 +1,59 @@
+name: 🔄️Sync Issue To PR
+
+
+defaults:
+  run:
+    shell: pwsh
+
+
+on:
+  pull_request:
+    types: opened
+  issue_comment: # This event is triggered when creating issue and pr comments
+    types: created
+
+
+jobs:
+  sync_issue_to_pr:
+    name: Start Sync Process
+    if: |
+      github.event_name == 'issue_comment' ||
+      github.event_name == 'pull_request' && startsWith(github.head_ref, 'feature/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set Up Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
+      - name: Sync
+        run: |
+          $eventName = "${{ github.event_name }}";
+          $scriptUrl = "${{ vars.SCRIPT_BASE_URL }}/${{ vars.CICD_SCRIPTS_VERSION }}/${{ vars.SCRIPT_RELATIVE_DIR_PATH }}/sync-issue-to-pr.ts";
+          $prNumber = $eventName -eq "pull_request" ? "${{ github.event.number }}" : "${{ github.event.issue.number }}";
+          $command = $eventName -eq "issue_comment" ? "${{ github.event.comment.body }}" : "[initial-sync]";
+          
+          Write-Host "::notice::Event Name: $eventName";
+          Write-Host "::notice::Organization Name: ${{ vars.ORGANIZATION_NAME }}";
+          Write-Host "::notice::Project Name: ${{ vars.PROJECT_NAME }}";
+          Write-Host "::notice::Requested By: ${{ github.event.sender.login }}";
+          Write-Host "::notice::PR Number: $prNumber";
+          Write-Host "::notice::Comment: $command";
+
+          <# Deno Args:
+            1. Organization name
+            2. Project name
+            3. Login name of the user making the issue change
+            4. Pull request number
+            5. The sync command - Either '[initial-sync]' or '[run-sync]'
+            6. PAT
+          #>
+          deno run `
+            --allow-net `
+            "$scriptUrl" `
+            "${{ vars.ORGANIZATION_NAME }}" `
+            "${{ vars.PROJECT_NAME }}" `
+            "${{ github.event.sender.login }}" `
+            "$prNumber" `
+            "$command" `
+            "${{ secrets.CICD_TOKEN }}";

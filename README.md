@@ -10,7 +10,7 @@
 
 [![Prod Release PR Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/Carbonate/prod-release-pr-status-check.yml?color=2F8840&label=Prod%20CI%20Build&logo=GitHub)](https://github.com/KinsonDigital/Carbonate/actions/workflows/prod-release-pr-status-check.yml)
 [![Prev Release PR Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/Carbonate/prev-release-pr-status-check.yml?color=2F8840&label=Preview%20CI%20Build&logo=GitHub)](https://github.com/KinsonDigital/Carbonate/actions/workflows/prev-release-pr-status-check.yml)
-[![Code Coverage](https://img.shields.io/codecov/c/github/KinsonDigital/Carbonate/master?label=Code%20Coverage&logo=CodeCov&style=flat)](https://app.codecov.io/gh/KinsonDigital/Carbonate)
+[![Code Coverage](https://img.shields.io/codecov/c/github/KinsonDigital/Carbonate/preview?label=Code%20Coverage&logo=CodeCov&style=flat)](https://app.codecov.io/gh/KinsonDigital/Carbonate)
 
 [![Latest NuGet Release](https://img.shields.io/nuget/vpre/kinsondigital.Carbonate?label=Latest%20Release&logo=nuget)](https://www.nuget.org/packages/KinsonDigital.Carbonate)
 [![Nuget Downloads](https://img.shields.io/nuget/dt/KinsonDigital.Carbonate?color=0094FF&label=nuget%20downloads&logo=nuget)](https://www.nuget.org/stats/packages/KinsonDigital.Carbonate?groupby=Version)
@@ -32,10 +32,9 @@ Interested in contributing? If so, click [here](https://github.com/KinsonDigital
 
 <h2 style="font-weight:bold;border:0" align="center">🔧 Maintainers 🔧</h2>
 
-  [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/.github/master/Images/twitter-logo-16x16.svg)Calvin Wilkinson](https://twitter.com/KDCoder) (KinsonDigital GitHub Organization - Owner)
-  
-  [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/.github/master/Images/twitter-logo-16x16.svg)Kristen Wilkinson](https://twitter.com/kswilky) (KinsonDigital GitHub Organization - Documentation Maintainer & Tester)
+[![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/.github/master/Images/twitter-logo-16x16.svg)Calvin Wilkinson](https://twitter.com/KDCoder) (KinsonDigital GitHub Organization - Owner)
 
+[![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/.github/master/Images/twitter-logo-16x16.svg)Kristen Wilkinson](https://twitter.com/kswilky) (KinsonDigital GitHub Organization - Documentation Maintainer & Tester)
 
 
 <h2 style="font-weight:bold;border:0" align="center">🚔 Licensing and Governance 🚔</h2>
