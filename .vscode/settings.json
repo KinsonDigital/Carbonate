@@ -1,8 +1,31 @@
 {
     "cSpell.words": [
-        "[TODO: add project name here]",
+        "Carbonate",
         "Kinson",
+        "parameterless",
+        "Pullable",
+        "Pushable",
         "pwsh",
-        "runsettings"
-    ]
+        "Reactable",
+        "runsettings",
+        "unsubscriptions"
+    ],
+    "dotnet.defaultSolution": "Carbonate.sln",
+    "[typescript]": {
+		"editor.insertSpaces": false,
+		"editor.tabSize": 4,
+    },
+	"[yaml]": {
+		"editor.insertSpaces": true,
+		"editor.tabSize": 2,
+	},
+	"[jsonc]": {
+		"editor.insertSpaces": false,
+		"editor.tabSize": 4,
+	},
+	"editor.detectIndentation": false,
+	"[github-actions-workflow]": {
+		"editor.tabSize": 2,
+		"editor.insertSpaces": true
+	}
 }
