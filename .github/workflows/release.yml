@@ -1,4 +1,5 @@
-name: 🚀Preview Release
+name: 🚀Release
+run-name: ${{ vars.PROJECT_NAME }} ${{ inputs.release-type }} Release ${{ inputs.dry-run == true && '(Dry Run)' || '' }}
 
 
 defaults:
@@ -8,24 +9,39 @@ defaults:
 
 on:
   workflow_dispatch:
+    inputs:
+      release-type:
+        description: The type of release.  Choose 'Preview' or 'Production'.
+        required: true
+        type: choice
+        options: [Preview, Production]
+      dry-run:
+        description: Check to run the workflow without creating a release.
+        required: false
+        default: false
+        type: boolean
 
 
 jobs:
-  preview_release:
-    name: Preview Release
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Restore DotNet Tools
-      run: dotnet tool restore
-
-    - name: Run Preview Release
-      run: dotnet cicd PreviewRelease --skip-twitter-announcement
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        NugetOrgApiKey: ${{ secrets.NUGET_ORG_API_KEY }}
-        TwitterConsumerApiKey: ${{ secrets.TWITTER_CONSUMER_API_KEY }}
-        TwitterConsumerApiSecret: ${{ secrets.TWITTER_CONSUMER_API_SECRET }}
-        TwitterAccessToken: ${{ secrets.TWITTER_ACCESS_TOKEN }}
-        TwitterAccessTokenSecret: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
+  run_release:
+    name: Performing ${{ inputs.release-type }} Release of ${{ vars.PROJECT_NAME }} (${{ inputs.release-type == 'Production' && 'Release' || 'Debug' }})
+    uses: KinsonDigital/Infrastructure/.github/workflows/dotnet-lib-release.yml@v10.0.0
+    with:
+      project-name: "${{ vars.PROJECT_NAME}}"
+      release-type: "${{ inputs.release-type }}"
+      run-branch: "${{ github.ref_name }}"
+      net-sdk-version: "${{ vars.NET_SDK_VERSION }}"
+      relative-release-notes-dir-path: "${{ vars.RELATIVE_RELEASE_NOTES_DIR_PATH }}"
+      release-notes-file-name-prefix: "${{ vars.RELEASE_NOTES_FILE_NAME_PREFIX }}"
+      build-config: ${{ inputs.release-type == 'Production' && 'Release' || 'Debug' }}
+      pr-include-notes-label: "${{ vars.PR_INCLUDE_NOTES_LABEL }}"
+      send-release-tweet: ${{ vars.TWITTER_BROADCAST_ENABLED == 'true' }}
+      dry-run: ${{ inputs.dry-run }}
+      transpile-readme: true
+    secrets:
+      cicd-pat: "${{ secrets.CICD_TOKEN }}"
+      nuget-org-api-key: "${{ secrets.NUGET_ORG_API_KEY }}"
+      twitter-consumer-api-key: "${{ secrets.TWITTER_CONSUMER_API_KEY }}"
+      twitter-consumer-api-secret: "${{ secrets.TWITTER_CONSUMER_API_SECRET }}"
+      twitter-access-token: "${{ secrets.TWITTER_ACCESS_TOKEN }}"
+      twitter-access-token-secret: "${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}"

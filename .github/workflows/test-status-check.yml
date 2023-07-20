@@ -15,7 +15,7 @@ on:
 jobs:
   run_unit_tests:
     name: ${{ vars.PROJECT_NAME }} Unit Tests Status Check
-    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v9.1.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v10.0.0
     with:
       project-name: "${{ vars.PROJECT_NAME }}Tests"
       build-config: Debug
@@ -24,7 +24,7 @@ jobs:
 
   run_integration_tests:
     name: ${{ vars.PROJECT_NAME }} Integration Tests Status Check
-    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v9.1.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v10.0.0
     with:
       project-name: "${{ vars.PROJECT_NAME }}IntegrationTests"
       build-config: Debug
