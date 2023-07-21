@@ -1,15 +1,16 @@
 <div align="center">
 
-![logo](./Documentation/Images/carbonate-logo-light-mode.png#gh-light-mode-only)
-![logo](./Documentation/Images/carbonate-logo-dark-mode.png#gh-dark-mode-only)
+![logo](https://raw.githubusercontent.com/KinsonDigital/Carbonate/preview/Images/carbonate-logo-light-mode.png#gh-light-mode-only)
+![logo](https://raw.githubusercontent.com/KinsonDigital/Carbonate/preview/Images/carbonate-logo-dark-mode.png#gh-dark-mode-only)
 </div>
 
 <h1 style="border:0;font-weight:bold" align="center">Carbonate</h1>
 
 <div align="center">
 
-[![Prod Release PR Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/Carbonate/prod-release-pr-status-check.yml?color=2F8840&label=Prod%20CI%20Build&logo=GitHub)](https://github.com/KinsonDigital/Carbonate/actions/workflows/prod-release-pr-status-check.yml)
-[![Prev Release PR Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/Carbonate/prev-release-pr-status-check.yml?color=2F8840&label=Preview%20CI%20Build&logo=GitHub)](https://github.com/KinsonDigital/Carbonate/actions/workflows/prev-release-pr-status-check.yml)
+[![Build PR Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/Carbonate/build-status-check.yml?label=%E2%9A%99%EF%B8%8FBuild)](https://github.com/KinsonDigital/Carbonate/actions/workflows/build-status-check.yml)
+[![Test PR Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/Carbonate/unit-test-status-check.yml?label=%F0%9F%A7%AATests)](https://github.com/KinsonDigital/Carbonate/actions/workflows/test-status-check.yml)
+
 [![Code Coverage](https://img.shields.io/codecov/c/github/KinsonDigital/Carbonate/preview?label=Code%20Coverage&logo=CodeCov&style=flat)](https://app.codecov.io/gh/KinsonDigital/Carbonate)
 
 [![Latest NuGet Release](https://img.shields.io/nuget/vpre/kinsondigital.Carbonate?label=Latest%20Release&logo=nuget)](https://www.nuget.org/packages/KinsonDigital.Carbonate)
@@ -43,7 +44,7 @@ Interested in contributing? If so, click [here](https://github.com/KinsonDigital
 
 
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg?style=flat)](https://github.com/KinsonDigital/.github/blob/master/docs/code_of_conduct.md)
-[![GitHub](https://img.shields.io/github/license/kinsondigital/CASL)](https://github.com/KinsonDigital/Carbonate/blob/release/v1.0.0/LICENSE.md)
+[![GitHub](https://img.shields.io/github/license/kinsondigital/Carbonate)](https://github.com/KinsonDigital/Carbonate/blob/preview/v1.0.0/LICENSE.md)
 
 <div align= "left">
 

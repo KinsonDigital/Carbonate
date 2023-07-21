@@ -58,9 +58,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          ./.sonar/scanner/dotnet-sonarscanner begin /k:"KinsonDigital_Carbonate" /o:"kinsondigital" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+          $orgNameLower = "${{ vars.ORGANIZATION_NAME }}".ToLower();
 
-          dotnet clean "${{ github.workspace }}/Carbonate/Carbonate.csproj";
-          dotnet build "${{ github.workspace }}/Carbonate/Carbonate.csproj" -c Debug;
+          ./.sonar/scanner/dotnet-sonarscanner begin -k:"${{ vars.ORGANIZATION_NAME }}_${{ vars.PROJECT_NAME }}" -o:"$orgNameLower" -d:sonar.login="${{ secrets.SONAR_TOKEN }}" -d:sonar.host.url="https://sonarcloud.io"
 
-          ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          dotnet clean "${{ github.workspace }}/${{ vars.PROJECT_NAME }}/${{ vars.PROJECT_NAME }}.csproj";
+          dotnet build "${{ github.workspace }}/${{ vars.PROJECT_NAME }}/${{ vars.PROJECT_NAME }}.csproj" -c Debug;
+
+          ./.sonar/scanner/dotnet-sonarscanner end -d:sonar.login="${{ secrets.SONAR_TOKEN }}"

@@ -13,16 +13,18 @@ on:
 
 jobs:
   sync_bot:
-    name: Sync Bot
+    name: Sync Bot Status Check
     if: ${{ !github.event.issue.pull_request }}
     runs-on: ubuntu-latest
     steps:
       - name: Set Up Deno
+        if: startsWith(github.ref_name, 'feature/')
         uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
 
       - name: Run Sync Bot (Issue Change)
+        if: startsWith(github.ref_name, 'feature/')
         run: |
           $scriptUrl = "${{ vars.SCRIPT_BASE_URL }}/${{ vars.CICD_SCRIPTS_VERSION }}/${{ vars.SCRIPT_RELATIVE_DIR_PATH}}/sync-bot-status-check.ts";
 
@@ -32,15 +34,16 @@ jobs:
           Write-Host "::notice::Issue: $issueNumber";
 
           if ($manuallyExecuted -and $issueNumber -eq "0") {
-            Write-Host "::error::The issue or PR number must be a value greater than 0.";
+            Write-Host "::notice::The issue or PR number must be a value greater than 0.";
             exit 1;
           }
 
           <# Deno Args:
-            1. Project name
-            2. Issue number
-            3. Event type - set to issue event type
-            4. PAT
+            1. Organization name
+            2. Project name
+            3. Issue number
+            4. Event Type - set to issue event type
+            5. PAT
           #>
           deno run `
             --allow-net `
@@ -48,4 +51,4 @@ jobs:
             "${{ vars.PROJECT_NAME }}" `
             "$issueNumber" `
             "issue" `
-            "cicd-pat: ${{ secrets.CICD_TOKEN }}";
+            "${{ secrets.CICD_TOKEN }}";
