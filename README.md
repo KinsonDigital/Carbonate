@@ -1,7 +1,7 @@
 <div align="center">
 
-![logo](./Documentation/Images/carbonate-logo-light-mode.png#gh-light-mode-only)
-![logo](./Documentation/Images/carbonate-logo-dark-mode.png#gh-dark-mode-only)
+![logo](https://raw.githubusercontent.com/KinsonDigital/Carbonate/preview/Images/carbonate-logo-light-mode.png#gh-light-mode-only)
+![logo](https://raw.githubusercontent.com/KinsonDigital/Carbonate/preview/Images/carbonate-logo-dark-mode.png#gh-dark-mode-only)
 </div>
 
 <h1 style="border:0;font-weight:bold" align="center">Carbonate</h1>
