@@ -1,5 +1,5 @@
 name: ✅Testing Status Check
-run-name: ✅Testing Status Check ${{ github.base_ref == 'main' && '(Release Build)' || '(Debug Build)' }}
+run-name: ✅Unit Testing Status Check (${{ github.base_ref }} branch)
 
 
 defaults:
@@ -13,8 +13,8 @@ on:
 
 
 jobs:
-  run_unit_tests:
-    name: ${{ vars.PROJECT_NAME }} Unit Tests Status Check
+  main_tests:
+    name: Run ${{ vars.PROJECT_NAME }} Tests
     uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v10.0.0
     with:
       project-name: "${{ vars.PROJECT_NAME }}Tests"
@@ -22,10 +22,20 @@ jobs:
       net-sdk-version: "${{ vars.NET_SDK_VERSION }}"
 
 
-  run_integration_tests:
-    name: ${{ vars.PROJECT_NAME }} Integration Tests Status Check
+  integration_tests:
+    name: Run ${{ vars.PROJECT_NAME }} Integration Tests
     uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v10.0.0
     with:
       project-name: "${{ vars.PROJECT_NAME }}IntegrationTests"
       build-config: Debug
       net-sdk-version: "${{ vars.NET_SDK_VERSION }}"
+
+
+  test_status_check:
+    name: ${{ vars.PROJECT_NAME }} Test Status Check
+    needs: [main_tests, integration_tests]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Status Check Pass Message
+        shell: pwsh
+        run: Write-Host "::notice::✅Test Status Check Passed✅";
