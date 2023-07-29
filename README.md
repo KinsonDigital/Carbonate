@@ -9,7 +9,15 @@
 <div align="center">
 
 [![Build PR Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/Carbonate/build-status-check.yml?label=%E2%9A%99%EF%B8%8FBuild)](https://github.com/KinsonDigital/Carbonate/actions/workflows/build-status-check.yml)
-[![Test PR Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/Carbonate/unit-test-status-check.yml?label=%F0%9F%A7%AATests)](https://github.com/KinsonDigital/Carbonate/actions/workflows/test-status-check.yml)
+[![Test PR Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/Carbonate/test-status-check.yml?label=%F0%9F%A7%AATests)](https://github.com/KinsonDigital/Carbonate/actions/workflows/test-status-check.yml)
+
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=KinsonDigital_Carbonate&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=KinsonDigital_Carbonate)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=KinsonDigital_Carbonate&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=KinsonDigital_Carbonate)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=KinsonDigital_Carbonate&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=KinsonDigital_Carbonate)
+
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=KinsonDigital_Carbonate&metric=bugs)](https://sonarcloud.io/summary/new_code?id=KinsonDigital_Carbonate)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=KinsonDigital_Carbonate&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=KinsonDigital_Carbonate)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=KinsonDigital_Carbonate&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=KinsonDigital_Carbonate)
 
 [![Code Coverage](https://img.shields.io/codecov/c/github/KinsonDigital/Carbonate/preview?label=Code%20Coverage&logo=CodeCov&style=flat)](https://app.codecov.io/gh/KinsonDigital/Carbonate)
 
