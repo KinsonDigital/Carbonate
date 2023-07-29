@@ -32,19 +32,19 @@ jobs:
       - name: Validate Workflow Inputs
         run: |
           $releaseType = "${{ inputs.release-type }}".ToLower();
-          
+
           if ("${{ vars.PROJECT_NAME }}".Trim() -eq "") {
             Write-Host "::error::The project name input cannot be empty.";
             exit 1;
           }
-          
-          
+
+
           if ($releaseType -eq "") {
             Write-Host "::error::The release type input cannot be empty.";
             exit 1;
           }
-          
-          
+
+
           if ($releaseType -ne 'preview' -and $releaseType -ne 'Production') {
             Write-Host "::error::The release type input must be either 'Preview' or 'Production'.";
             exit 1;
@@ -60,7 +60,7 @@ jobs:
 
           $prodVersionRegex = "v[0-9]+\.[0-9]+\.[0-9]+";
           $prevVersionRegex = "v[0-9]+\.[0-9]+\.[0-9]+-preview\.[0-9]+";
-          
+
           # Verify that the version has valid syntax
           if (($releaseVersion -match $prodVersionRegex) -or ($releaseVersion -match $prevVersionRegex)) {
             Write-Host "::notice::The 'release-version' workflow input is valid.";
