@@ -1,4 +1,5 @@
 name: 🚁Prepare Release
+run-name: 🚁Prepare ${{ inputs.release-type }} Release (${{ inputs.release-version }})
 
 
 defaults:
@@ -22,7 +23,7 @@ on:
 
 jobs:
   print_validate_workflow:
-    name: Ptin & Validate Prepare Release Workflow
+    name: Print & Validate Prepare Release Workflow
     runs-on: ubuntu-latest
     steps:
       - name: Print Environment Variables
@@ -32,34 +33,34 @@ jobs:
         run: |
           $releaseType = "${{ inputs.release-type }}".ToLower();
 
-          if (""${{ vars.PROJECT_NAME }}".Trim().ToLower() -eq "") {
-            Write-Host "::error::The 'PROJECT_NAME' org or repo variable be empty.";
+          if ("${{ vars.PROJECT_NAME }}".Trim() -eq "") {
+            Write-Host "::error::The project name input cannot be empty.";
             exit 1;
           }
 
 
           if ($releaseType -eq "") {
-            Write-Host "::error::The 'release-type' workflow input cannot be empty.";
+            Write-Host "::error::The release type input cannot be empty.";
             exit 1;
           }
 
 
-          if ($releaseType -ne 'preview' -and $releaseType -ne 'roduction') {
+          if ($releaseType -ne 'preview' -and $releaseType -ne 'Production') {
             Write-Host "::error::The release type input must be either 'Preview' or 'Production'.";
             exit 1;
           }
-
+          
           $releaseVersion = "${{ inputs.release-version }}".Trim().ToLower();
 
           if ($releaseVersion -eq "") {
-            Write-Host "::error::The release version input cannot be empty.";
+            Write-Host "::error::The 'release-version' workflow input cannot be empty.";
             exit 1;
           }
 
 
           $prodVersionRegex = "v[0-9]+\.[0-9]+\.[0-9]+";
           $prevVersionRegex = "v[0-9]+\.[0-9]+\.[0-9]+-preview\.[0-9]+";
-          
+
           # Verify that the version has valid syntax
           if (($releaseVersion -match $prodVersionRegex) -or ($releaseVersion -match $prevVersionRegex)) {
             Write-Host "::notice::The 'release-version' workflow input is valid.";
@@ -72,10 +73,11 @@ jobs:
 
   prepare_release:
     name: Prepare ${{ inputs.release-type }} Release Of ${{ vars.PROJECT_NAME }}
-    uses: KinsonDigital/Infrastructure/.github/workflows/prepare-release.yml@v10.0.1
+    needs: print_validate_workflow
+    uses: KinsonDigital/Infrastructure/.github/workflows/prepare-release.yml@v10.1.0
     with:
-      project-name: ${{ vars.PROJECT_NAME }}
-      release-type: ${{ inputs.release-type }}
-      release-version: ${{ inputs.release-version }}
+      project-name: "${{ vars.PROJECT_NAME }}"
+      release-type: "${{ inputs.release-type }}"
+      release-version: "${{ inputs.release-version }}"
     secrets:
       cicd-pat: ${{ secrets.CICD_TOKEN }}
