@@ -33,7 +33,7 @@ jobs:
         id: get-dir-path
         run: |
           $dirPath = "${{ inputs.release-type }}" -eq "Production" ? "${{ vars.PROD_RELATIVE_RELEASE_NOTES_DIR_PATH }}" : "${{ vars.PREV_RELATIVE_RELEASE_NOTES_DIR_PATH }}";
-          Write-Host "release-notes-dir-path=$dirPath" >> $eng:GITHUB_OUTPUT;
+          "release-notes-dir-path=$dirPath" >> $env:GITHUB_OUTPUT;
 
 
   run_release:
