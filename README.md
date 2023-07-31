@@ -33,7 +33,13 @@ This library is still under development and is not at v1.0.0 yet!!  However, all
 
 <h2 style="font-weight:bold;border:0" align="center">📖 About Carbonate 📖</h2>
 
-**Carbonate** is a messaging library for various applications, using the observable pattern.  It adds the ability to easily and reliably send messages to different parts and/or systems of an application.
+**Carbonate** is a messaging library that uses the observable pattern.  It adds the ability to easily and reliably push and pull messages to different parts or systems of an application.  This helps promote decoupling between different parts of your application as well as increasing your application's testability.
+
+For a real-world example, check out the [Velaptor](https://github.com/KinsonDigital/Velaptor) code base which is an open source 2D game development framework.  This library has been vital for decoupling the different sub-systems and making Velaptor testable.
+
+Go [here](https://refactoring.guru/design-patterns/observer) for a great explanation of the observer pattern.  There are many tutorials and examples of this pattern all over the web.  It is well documented, well known, and a highly used programming pattern.
+
+> **Note** Click [here](https://github.com/KinsonDigital/Carbonate/tree/preview/Samples) to view all of the sample projects.
 
 <h2 style="font-weight:bold;" align="center">🙏🏼 Contributing 🙏🏼</h2>
 
