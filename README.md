@@ -41,6 +41,20 @@ Go [here](https://refactoring.guru/design-patterns/observer) for a great explana
 
 > **Note** Click [here](https://github.com/KinsonDigital/Carbonate/tree/preview/Samples) to view all of the sample projects.
 
+<h2 style="font-weight:bold;border:0" align="center">✨ Features & Benefits ✨</h2>
+
+**Features:**
+- Sending notifications of events with no data
+- Sending notifications of events with data
+- Sending notifications of events with data that also returns data
+- Interfaces and abstractions are provided for custom implementations and to accommodate testing
+
+**Benefits:**
+- Increases decoupling
+- Increases testability
+- Ability to send data and events without the need to change the public API
+- Promotes the [Open/Closed Principle](https://www.tutorialsteacher.com/csharp/open-closed-principle)
+
 <h2 style="font-weight:bold;" align="center">🙏🏼 Contributing 🙏🏼</h2>
 
 Interested in contributing? If so, click [here](https://github.com/KinsonDigital/.github/blob/master/docs/CONTRIBUTING.md) to learn how to contribute your time or [here](https://github.com/sponsors/KinsonDigital) if you are interested in contributing your funds via a one-time or recurring donation.
