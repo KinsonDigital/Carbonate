@@ -1,15 +1,16 @@
 {
     "cSpell.words": [
-        "Carbonate",
-        "Kinson",
-        "parameterless",
-        "Pullable",
-        "Pushable",
-        "pwsh",
-        "Reactable",
-        "runsettings",
-        "unsubscriptions"
-    ],
+		"Carbonate",
+		"Kinson",
+		"parameterless",
+		"Pullable",
+		"Pushable",
+		"pwsh",
+		"Reactable",
+		"runsettings",
+		"unsubscriptions",
+		"Velaptor"
+	],
     "dotnet.defaultSolution": "Carbonate.sln",
     "[csharp]": {
 		"editor.insertSpaces": true,

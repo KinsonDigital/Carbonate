@@ -52,9 +52,9 @@ public class PushReactable : ReactableBase<IReceiveReactor>, IPushReactable
     }
 
     /// <summary>
-    /// Sends an error to all of the subscribers that matches the given <paramref name="eventId"/>.
+    /// Sends an error to all of the subscribers that match the given <paramref name="eventId"/>.
     /// </summary>
-    /// <param name="exception">The exception that occured.</param>
+    /// <param name="exception">The exception that occurred.</param>
     /// <param name="eventId">The ID of the event where the notification will be pushed.</param>
     private void SendError(Exception exception, Guid eventId)
     {
