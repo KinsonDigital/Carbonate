@@ -33,35 +33,35 @@ This library is still under development and is not at v1.0.0 yet!!  However, all
 
 <h2 style="font-weight:bold;border:0" align="center">📖 About Carbonate 📖</h2>
 
-**Carbonate** is a messaging library that uses the observable pattern.  It adds the ability to easily and reliably push and pull messages to different parts or systems of an application.  This helps promote decoupling between different parts of your application as well as increasing your application's testability.
+**Carbonate** is a messaging library built on the observable pattern, empowering seamless and dependable push-and-pull message handling across various parts or systems within an application. This fosters decoupling among different components, enhancing your application's overall testability.
 
 For a real-world example, check out the [Velaptor](https://github.com/KinsonDigital/Velaptor) code base which is an open source 2D game development framework.  This library has been vital for decoupling the different sub-systems and making Velaptor testable.
 
-Go [here](https://refactoring.guru/design-patterns/observer) for a great explanation of the observer pattern.  There are many tutorials and examples of this pattern all over the web.  It is well documented, well known, and a highly used programming pattern.
+Go [here](https://refactoring.guru/design-patterns/observer) for information on the observer pattern. This design pattern has been extensively covered in various tutorials and examples across the web, making it well-documented, widely recognized, and a highly popular programming pattern.
 
 > **Note** Click [here](https://github.com/KinsonDigital/Carbonate/tree/preview/Samples) to view all of the sample projects.
 
 <h2 style="font-weight:bold;border:0" align="center">✨ Features & Benefits ✨</h2>
 
 **Features:**
-- Sending notifications of events with no data
-- Sending notifications of events with data
-- Sending notifications of events with data that also returns data
-- Interfaces and abstractions are provided for custom implementations and to accommodate testing
+- Sends notifications of events with no data
+- Sends notifications of events with data
+- Sends notifications of events with data and returns data
+- Interfaces and abstractions are provided for custom implementations and to provide testability
 
 **Benefits:**
 - Increases decoupling
 - Increases testability
-- Ability to send data and events without the need to change the public API
+- Sends data and events without needing to change the public API
 - Promotes the [Open/Closed Principle](https://www.tutorialsteacher.com/csharp/open-closed-principle)
 
 <h2 style="font-weight:bold;border:0" align="center">💡 Examples 💡</h2>
 
-Below are some examples to demonstrate some basic uses of ***Carbonate***.  Use cases will depend on your application and your needs.  ***Carbonate*** is very flexible but how you use it depends on your needs.
+Below are some examples to demonstrate some basic uses of ***Carbonate***.  This library is very flexible but how you use it depends on the needs of your application.
 
 <h3 style="font-weight:bold;color: #00BBC6">Non-directional push notifications</h3>
 
-To send a _**non-directional**_ push notification of something that has occurred, you can use the `PushReactable` type. The subscriber will use the `ReceiveReactor` type for subscriptions. The term _**Non-directional**_ means that no data is being pushed out with the notification or returned from the notification.  This is great for sending a notification that an event has occurred when no data is needed.
+To send a _**non-directional**_ push notification of something that has occurred, you can use the `PushReactable` type. The subscriber will use the `ReceiveReactor` type for subscriptions. The term _**Non-directional**_ means that no data is being pushed out or returned from the notification call stack.  This is great for sending a notification that an event has occurred when no data is needed.
 
 ```cs
 var messenger = new PushReactable(); // Create the messenger object to push notifications
@@ -80,10 +80,10 @@ messenger.Push(msgEventId); // Will invoke all onReceive 'Actions'
 unsubscriber.Dispose(); // Will only unsubscribe from this subscription
 ```
 
-Each notification sent out has a unique id.  Any subscribers to that notification must use the same unique ID to receive that notification.  This is to make sure that the notification is unique and that no logic is required with the other subscriptions to make sure that the notification was meant for them.
+Every notification sent out contains a unique ID, which subscribers must use to receive the intended notification, ensuring its exclusivity and eliminating the need for additional logic with other subscriptions.
 
 > **💡TIP💡**  
-> If you want to only receive a single notification, just unsubscribe from further notifications by calling the `Dispose()`
+> If you want to receive a single notification, unsubscribe from further notifications by calling the `Dispose()`
 > method on the `IDisposable` object returned by the `PushReactable` object. All reactable objects return this object for unsubscribing at a later time.
 > ```cs
 > new ReceiveReactor(
@@ -103,7 +103,7 @@ Each notification sent out has a unique id.  Any subscribers to that notificatio
 
 <h3 style="font-weight:bold;color: #00BBC6">Uni-directional push notifications</h3>
 
-To send data with a push notification in one direction, you can use the `PushReactable<T>` type.  The subscriber will use the `ReceiveReactor<T>` type for subscriptions.  This is set up and used just like the previous example. The term _**one-directional**_ means that data travels in one direction which is out with the push notification.
+To facilitate one-directional data transfer through push notifications, you can employ the `PushReactable<T>` type for sending data, while subscribers utilize the `ReceiveReactor<T>` type for their subscriptions. Setting up and using this approach follows the same steps as in the previous example. In this context, the term one-directional signifies that data exclusively flows outward with the push notification.
 
 > **Note** The _**ONLY**_ difference with this example is that your sending some data _**WITH**_ your notification.  
 > The generic parameter `T` is the type of data you are sending out.
@@ -129,7 +129,7 @@ messenger.Unsubscribe(msgEventId); // Will invoke all onUnsubscribe 'Actions'
 
 <h3 style="font-weight:bold;color: #00BBC6">Bi-directional push notifications</h3>
 
-To send a _**bi-directional**_ push notification that sends data out and gets data back, you can use the `PullReactable<T, T>` type.  The subscriber will use the `RespondReactor<T, T>` to subscribe to notifications.  This is used when you want to send a push notification with data that the receiver needs, and then the receiver returns data to the caller that pushed the notification.
+To enable ***bi-directional*** push notifications, allowing data to be sent out and received back, you can employ the `PullReactable<T, T>` type. Subscribers, on the other hand, utilize the `RespondReactor<T, T>` for their notification subscriptions. This approach proves useful when you need to send a push notification with data required by the receiver, who then responds with data back to the original caller that initiated the notification.
 
 ```cs
 var favoriteGetter = new PullReactable<string, string>();
@@ -155,9 +155,9 @@ Console.WriteLine($"Favorite Past Time: {favoriteGetter.Pull("past-time", msgEve
 Console.WriteLine($"Favorite Music: {favoriteGetter.Pull("music", msgEventId)}");
 ```
 
-> **Note** The difference between _**bi-directional**_ and _**uni-directional**_ notifications is that _**bi-directional**_ notifications send data out and expected data to be returned.
+> **Note** The difference between _**bi-directional**_ and _**uni-directional**_ notifications is that _**bi-directional**_ notifications enable data exchange in both directions whereas _**uni-directional**_ notifications enable data exchange in one direction which sends data out and does not expect data to be returned. 
 
-> **💡TIP💡** Most of the time, the `PushReactable`, `PushReactable<T>`, and `PullReactable<string, string>` types will suit your needs.  But if you have any requirements that these cannot provide, you can always create implementations of the interfaces provided.
+> **💡TIP💡** Most of the time, the `PushReactable`, `PushReactable<T>`, and `PullReactable<string, string>` types will suit your needs.  However, But if you have any requirements that these can't provide, you can always create implementations of the interfaces provided.
 
 <h2 style="font-weight:bold;" align="center">🙏🏼 Contributing 🙏🏼</h2>
 
