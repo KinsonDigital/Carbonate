@@ -49,6 +49,7 @@ Go [here](https://refactoring.guru/design-patterns/observer) for information on 
 - Sends notifications of events with data and returns data
 - Interfaces and abstractions are provided for custom implementations and to provide testability
 
+
 **Benefits:**
 - Increases decoupling
 - Increases testability
@@ -157,6 +158,7 @@ Console.WriteLine($"Favorite Music: {favoriteGetter.Pull("music", msgEventId)}")
 
 > **Note** The difference between _**bi-directional**_ and _**uni-directional**_ notifications is that _**bi-directional**_ notifications enable data exchange in both directions whereas _**uni-directional**_ notifications enable data exchange in one direction which sends data out and does not expect data to be returned. 
 
+
 > **💡TIP💡** Most of the time, the `PushReactable`, `PushReactable<T>`, and `PullReactable<string, string>` types will suit your needs.  However, But if you have any requirements that these can't provide, you can always create implementations of the interfaces provided.
 
 <h2 style="font-weight:bold;" align="center">🙏🏼 Contributing 🙏🏼</h2>
@@ -166,6 +168,7 @@ Interested in contributing? If so, click [here](https://github.com/KinsonDigital
 <h2 style="font-weight:bold;border:0" align="center">🔧 Maintainers 🔧</h2>
 
 [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/.github/master/Images/twitter-logo-16x16.svg)Calvin Wilkinson](https://twitter.com/KDCoder) (KinsonDigital GitHub Organization - Owner)
+
 
 [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/.github/master/Images/twitter-logo-16x16.svg)Kristen Wilkinson](https://twitter.com/kswilky) (KinsonDigital GitHub Organization - Documentation Maintainer & Tester)
 
