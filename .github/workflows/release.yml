@@ -16,7 +16,7 @@ on:
         type: choice
         options: [Preview, Production]
       dry-run:
-        description: Check to run the workflow without creating a release.
+        description: Dry Run - Check to run the workflow without creating a release.
         required: false
         default: false
         type: boolean
@@ -24,7 +24,7 @@ on:
 
 jobs:
   determine_release_notes_path:
-    name: Determin Release Notes Dir Path
+    name: Determine Release Notes Dir Path
     runs-on: ubuntu-latest
     outputs:
       release-notes-dir-path: ${{ steps.get-dir-path.outputs.release-notes-dir-path }}
