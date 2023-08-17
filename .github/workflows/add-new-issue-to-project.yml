@@ -2,8 +2,9 @@ name: 🤖Add New Issue To Project
 
 
 on:
-  issues:
+  pull_request:
     types: opened
+    branches: [main, preview, renovate/*]
 
 
 jobs:
