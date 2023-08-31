@@ -15,7 +15,7 @@ on:
 jobs:
   main_build_status_check:
     name: Build ${{ vars.PROJECT_NAME }}
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v12.0.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v12.1.1
     with:
       project-name: "${{ vars.PROJECT_NAME }}"
       build-config: Debug
@@ -24,7 +24,7 @@ jobs:
 
   perf_build_status_check:
     name: Build ${{ vars.PROJECT_NAME }}PerfTests
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v12.0.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v12.1.1
     with:
       project-name: "${{ vars.PROJECT_NAME }}PerfTests"
       build-config: Debug
