@@ -46,6 +46,7 @@ jobs:
           deno run `
             --allow-net `
             "$scriptUrl" `
+            "${{ vars.ORGANIZATION_NAME }}" `
             "${{ vars.PROJECT_NAME }}" `
             "$issueNumber" `
             "issue" `
