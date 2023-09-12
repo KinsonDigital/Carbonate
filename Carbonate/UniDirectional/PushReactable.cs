@@ -7,7 +7,8 @@ namespace Carbonate.UniDirectional;
 using Core.UniDirectional;
 
 /// <inheritdoc cref="IPushReactable{T}"/>
-public class PushReactable<TDataIn> : ReactableBase<IReceiveReactor<TDataIn>>, IPushReactable<TDataIn>
+public class PushReactable<TDataIn>
+    : ReactableBase<IReceiveReactor<TDataIn>>, IPushReactable<TDataIn>
 {
     /// <inheritdoc/>
     /// <exception cref="ObjectDisposedException">Thrown if this method is invoked after disposal.</exception>
