@@ -4,6 +4,8 @@
 
 namespace Carbonate.OneWay;
 
+using System.Diagnostics.CodeAnalysis;
+
 /// <summary>
 /// Pushes out notifications.
 /// </summary>
@@ -15,5 +17,6 @@ public interface IPushable<TDataIn>
     /// </summary>
     /// <param name="data">The data that contains the data to push.</param>
     /// <param name="eventId">The ID of the event where the notification will be pushed.</param>
+    [SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = "Public API.")]
     void Push(in TDataIn data, Guid eventId);
 }
