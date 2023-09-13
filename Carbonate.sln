@@ -23,15 +23,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{8518113E-D0C3-4E63-8F2E-542EB6D1CCE9}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\add-new-issue-to-project.yml = .github\workflows\add-new-issue-to-project.yml
 		.github\workflows\build-status-check.yml = .github\workflows\build-status-check.yml
 		.github\workflows\prepare-release.yml = .github\workflows\prepare-release.yml
 		.github\workflows\release.yml = .github\workflows\release.yml
 		.github\workflows\sonar-scan-pr-status-check.yml = .github\workflows\sonar-scan-pr-status-check.yml
 		.github\workflows\sync-bot.yml = .github\workflows\sync-bot.yml
-		.github\workflows\sync-issue-to-pr.yml = .github\workflows\sync-issue-to-pr.yml
 		.github\workflows\sync-status-check.yml = .github\workflows\sync-status-check.yml
 		.github\workflows\test-status-check.yml = .github\workflows\test-status-check.yml
+		.github\workflows\add-new-item-to-project.yml = .github\workflows\add-new-item-to-project.yml
+		.github\workflows\sync-pr-to-issue.yml = .github\workflows\sync-pr-to-issue.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarbonateIntegrationTests", "Testing\CarbonateIntegrationTests\CarbonateIntegrationTests.csproj", "{388E7191-CE3A-492C-9A19-AE67A659E466}"
