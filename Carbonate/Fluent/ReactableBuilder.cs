@@ -114,7 +114,7 @@ public class ReactableBuilder : IReactableBuilder
         ArgumentNullException.ThrowIfNull(onRespond);
 
         var subscription = new RespondSubscription<TIn, TOut>(
-            respondId: this.id,
+            id: this.id,
             name: this.name ?? string.Empty,
             onRespond: onRespond,
             onUnsubscribe: this.unsubscribe,

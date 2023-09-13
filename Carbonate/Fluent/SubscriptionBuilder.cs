@@ -101,7 +101,7 @@ public class SubscriptionBuilder : ISubscriptionBuilder
         ArgumentNullException.ThrowIfNull(onRespond);
 
         return new RespondSubscription<TIn, TOut>(
-            respondId: this.id,
+            id: this.id,
             name: this.name ?? string.Empty,
             onRespond: onRespond,
             onUnsubscribe: this.unsubscribe,

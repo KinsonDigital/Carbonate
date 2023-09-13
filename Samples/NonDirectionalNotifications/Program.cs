@@ -10,7 +10,7 @@ var msgEventId = Guid.NewGuid(); // This is the ID used to identify the event
 
 // Subscribe to the event to receive messages
 IDisposable unsubscriber = messenger.Subscribe(new ReceiveSubscription(
-    eventId: msgEventId,
+    id: msgEventId,
     name: "my-subscription",
     onReceive: () => Console.WriteLine("Received a message!"),
     onUnsubscribe: () => Console.WriteLine("Unsubscribed from notifications!"),
