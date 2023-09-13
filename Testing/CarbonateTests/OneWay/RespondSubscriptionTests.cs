@@ -88,7 +88,7 @@ public class RespondSubscriptionTests
     }
 
     [Fact]
-    public void OnUnsubscribe_WhenInvoked_UnsubscribesReactor()
+    public void OnUnsubscribe_WhenInvoked_UnsubscribesSubscription()
     {
         // Arrange
         var totalActionInvokes = 0;

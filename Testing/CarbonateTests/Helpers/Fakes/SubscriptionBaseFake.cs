@@ -1,4 +1,4 @@
-﻿// <copyright file="ReactorBaseFake.cs" company="KinsonDigital">
+﻿// <copyright file="SubscriptionBaseFake.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 

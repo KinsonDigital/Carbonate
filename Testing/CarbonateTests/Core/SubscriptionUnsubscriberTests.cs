@@ -4,6 +4,7 @@
 
 namespace CarbonateTests.Core;
 
+using System.Diagnostics.CodeAnalysis;
 using Carbonate.Core;
 using FluentAssertions;
 using Moq;
@@ -16,7 +17,7 @@ public class SubscriptionUnsubscriberTests
 {
     #region Constructor Tests
     [Fact]
-    public void Ctor_WithNullReactorsParam_ThrowsException()
+    public void Ctor_WithNullSubscriptionsParam_ThrowsException()
     {
         // Arrange & Act
         var act = () =>
@@ -27,11 +28,11 @@ public class SubscriptionUnsubscriberTests
         // Assert
         act.Should()
             .Throw<ArgumentNullException>()
-            .WithMessage("The parameter must not be null. (Parameter 'reactors')");
+            .WithMessage("The parameter must not be null. (Parameter 'subscriptions')");
     }
 
     [Fact]
-    public void Ctor_WithNullReactorParam_ThrowsException()
+    public void Ctor_WithNullSubscriptionParam_ThrowsException()
     {
         // Arrange & Act
         var act = () =>
@@ -42,18 +43,18 @@ public class SubscriptionUnsubscriberTests
         // Assert
         act.Should()
             .Throw<ArgumentNullException>()
-            .WithMessage("The parameter must not be null. (Parameter 'reactor')");
+            .WithMessage("The parameter must not be null. (Parameter 'subscription')");
     }
     #endregion
 
     #region Prop Tests
     [Fact]
-    public void TotalReactors_WhenInvoked_ReturnsCorrectResult()
+    public void TotalSubscriptions_WhenInvoked_ReturnsCorrectResult()
     {
         // Arrange
-        var reactors = new[] { new Mock<ISubscription>().Object, new Mock<ISubscription>().Object };
+        var subscriptions = new[] { new Mock<ISubscription>().Object, new Mock<ISubscription>().Object };
 
-        var sut = new SubscriptionUnsubscriber(reactors.ToList(), new Mock<ISubscription>().Object);
+        var sut = new SubscriptionUnsubscriber(subscriptions.ToList(), new Mock<ISubscription>().Object);
 
         // Act
         var actual = sut.TotalSubscriptions;
@@ -63,16 +64,17 @@ public class SubscriptionUnsubscriberTests
     }
 
     [Fact]
-    public void Dispose_WhenInvoked_RemovesFromReactorsList()
+    [SuppressMessage("csharpsquid", "S3966", Justification = "Required for testing.")]
+    public void Dispose_WhenInvoked_RemovesFromSubscriptionsList()
     {
         // Arrange
-        var reactorA = new Mock<ISubscription>();
-        var reactorB = new Mock<ISubscription>();
-        var reactorC = new Mock<ISubscription>();
+        var subA = new Mock<ISubscription>();
+        var subB = new Mock<ISubscription>();
+        var subC = new Mock<ISubscription>();
 
-        var reactors = new[] { reactorA.Object, reactorB.Object, reactorC.Object };
+        var subscriptions = new[] { subA.Object, subB.Object, subC.Object };
 
-        var sut = new SubscriptionUnsubscriber(reactors.ToList(), reactorB.Object);
+        var sut = new SubscriptionUnsubscriber(subscriptions.ToList(), subB.Object);
 
         // Act
         sut.Dispose();

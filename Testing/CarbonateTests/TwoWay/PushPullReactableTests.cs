@@ -25,30 +25,30 @@ public class PushPullReactableTests
 
         const string returnData = "return-value";
 
-        var mockReactorA = new Mock<IRespondSubscription<int, string>>();
-        mockReactorA.Name = nameof(mockReactorA);
-        mockReactorA.SetupGet(p => p.Id).Returns(respondIdA);
-        mockReactorA.Setup(m => m.OnRespond(It.IsAny<int>()))
+        var mockSubA = new Mock<IRespondSubscription<int, string>>();
+        mockSubA.Name = nameof(mockSubA);
+        mockSubA.SetupGet(p => p.Id).Returns(respondIdA);
+        mockSubA.Setup(m => m.OnRespond(It.IsAny<int>()))
             .Returns(returnData);
 
-        var mockReactorB = new Mock<IRespondSubscription<int, string>>();
-        mockReactorB.Name = nameof(mockReactorB);
-        mockReactorB.SetupGet(p => p.Id).Returns(respondIdB);
-        mockReactorB.Setup(m => m.OnRespond(It.IsAny<int>()))
+        var mockSubB = new Mock<IRespondSubscription<int, string>>();
+        mockSubB.Name = nameof(mockSubB);
+        mockSubB.SetupGet(p => p.Id).Returns(respondIdB);
+        mockSubB.Setup(m => m.OnRespond(It.IsAny<int>()))
             .Returns(returnData);
 
         const int data = 123;
 
         var sut = CreateSystemUnderTest();
-        sut.Subscribe(mockReactorA.Object);
-        sut.Subscribe(mockReactorB.Object);
+        sut.Subscribe(mockSubA.Object);
+        sut.Subscribe(mockSubB.Object);
 
         // Act
         var actual = sut.PushPull(data, respondIdB);
 
         // Assert
-        mockReactorA.Verify(m => m.OnRespond(It.IsAny<int>()), Times.Never);
-        mockReactorB.Verify(m => m.OnRespond(It.IsAny<int>()), Times.Once);
+        mockSubA.Verify(m => m.OnRespond(It.IsAny<int>()), Times.Never);
+        mockSubB.Verify(m => m.OnRespond(It.IsAny<int>()), Times.Once);
         actual.Should().NotBeNull();
         actual.Should().NotBeNull();
         actual.Should().Be("return-value");

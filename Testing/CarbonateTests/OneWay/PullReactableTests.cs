@@ -24,24 +24,24 @@ public class PullReactableTests
 
         const string returnData = "return-value";
 
-        var mockReactorA = new Mock<IRespondSubscription<string>>();
-        mockReactorA.SetupGet(p => p.Id).Returns(respondId);
-        mockReactorA.Setup(m => m.OnRespond()).Returns(returnData);
+        var mockSubA = new Mock<IRespondSubscription<string>>();
+        mockSubA.SetupGet(p => p.Id).Returns(respondId);
+        mockSubA.Setup(m => m.OnRespond()).Returns(returnData);
 
-        var mockReactorB = new Mock<IRespondSubscription<string>>();
-        mockReactorB.SetupGet(p => p.Id).Returns(respondId);
-        mockReactorB.Setup(m => m.OnRespond()).Returns(returnData);
+        var mockSubB = new Mock<IRespondSubscription<string>>();
+        mockSubB.SetupGet(p => p.Id).Returns(respondId);
+        mockSubB.Setup(m => m.OnRespond()).Returns(returnData);
 
         var sut = CreateSystemUnderTest();
-        sut.Subscribe(mockReactorA.Object);
-        sut.Subscribe(mockReactorB.Object);
+        sut.Subscribe(mockSubA.Object);
+        sut.Subscribe(mockSubB.Object);
 
         // Act
         var actual = sut.Pull(respondId);
 
         // Assert
-        mockReactorA.Verify(m => m.OnRespond(), Times.Once);
-        mockReactorB.Verify(m => m.OnRespond(), Times.Never);
+        mockSubA.Verify(m => m.OnRespond(), Times.Once);
+        mockSubB.Verify(m => m.OnRespond(), Times.Never);
         actual.Should().NotBeNull();
         actual.Should().NotBeNull();
         actual.Should().Be("return-value");
@@ -55,27 +55,27 @@ public class PullReactableTests
         var respondIdB = Guid.NewGuid();
         var respondIdC = Guid.NewGuid();
 
-        var mockReactorA = new Mock<IRespondSubscription<string>>();
-        mockReactorA.SetupGet(p => p.Id).Returns(respondIdA);
+        var mockSubA = new Mock<IRespondSubscription<string>>();
+        mockSubA.SetupGet(p => p.Id).Returns(respondIdA);
 
-        var mockReactorB = new Mock<IRespondSubscription<string>>();
-        mockReactorB.SetupGet(p => p.Id).Returns(respondIdB);
+        var mockSubB = new Mock<IRespondSubscription<string>>();
+        mockSubB.SetupGet(p => p.Id).Returns(respondIdB);
 
-        var mockReactorC = new Mock<IRespondSubscription<string>>();
-        mockReactorC.SetupGet(p => p.Id).Returns(respondIdC);
+        var mockSubC = new Mock<IRespondSubscription<string>>();
+        mockSubC.SetupGet(p => p.Id).Returns(respondIdC);
 
         var sut = CreateSystemUnderTest();
-        sut.Subscribe(mockReactorA.Object);
-        sut.Subscribe(mockReactorB.Object);
-        sut.Subscribe(mockReactorC.Object);
+        sut.Subscribe(mockSubA.Object);
+        sut.Subscribe(mockSubB.Object);
+        sut.Subscribe(mockSubC.Object);
 
         // Act
         sut.Pull(respondIdB);
 
         // Assert
-        mockReactorA.Verify(m => m.OnRespond(), Times.Never);
-        mockReactorB.Verify(m => m.OnRespond(), Times.Once);
-        mockReactorC.Verify(m => m.OnRespond(), Times.Never);
+        mockSubA.Verify(m => m.OnRespond(), Times.Never);
+        mockSubB.Verify(m => m.OnRespond(), Times.Once);
+        mockSubC.Verify(m => m.OnRespond(), Times.Never);
     }
 
     [Fact]

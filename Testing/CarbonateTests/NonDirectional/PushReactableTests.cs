@@ -36,31 +36,31 @@ public class PushReactableTests
         var invokedEventId = Guid.NewGuid();
         var notInvokedEventId = Guid.NewGuid();
 
-        var mockReactorA = new Mock<IReceiveSubscription>();
-        mockReactorA.SetupGet(p => p.Id).Returns(invokedEventId);
+        var mockSubA = new Mock<IReceiveSubscription>();
+        mockSubA.SetupGet(p => p.Id).Returns(invokedEventId);
 
-        var mockReactorB = new Mock<IReceiveSubscription>();
-        mockReactorB.SetupGet(p => p.Id).Returns(notInvokedEventId);
+        var mockSubB = new Mock<IReceiveSubscription>();
+        mockSubB.SetupGet(p => p.Id).Returns(notInvokedEventId);
 
-        var mockReactorC = new Mock<IReceiveSubscription>();
-        mockReactorC.SetupGet(p => p.Id).Returns(invokedEventId);
+        var mockSubC = new Mock<IReceiveSubscription>();
+        mockSubC.SetupGet(p => p.Id).Returns(invokedEventId);
 
         var sut = CreateSystemUnderTest();
-        sut.Subscribe(mockReactorA.Object);
-        sut.Subscribe(mockReactorB.Object);
-        sut.Subscribe(mockReactorC.Object);
+        sut.Subscribe(mockSubA.Object);
+        sut.Subscribe(mockSubB.Object);
+        sut.Subscribe(mockSubC.Object);
 
         // Act
         sut.Push(invokedEventId);
 
         // Assert
-        mockReactorA.Verify(m => m.OnReceive(), Times.Once);
-        mockReactorB.Verify(m => m.OnReceive(), Times.Never);
-        mockReactorC.Verify(m => m.OnReceive(), Times.Once);
+        mockSubA.Verify(m => m.OnReceive(), Times.Once);
+        mockSubB.Verify(m => m.OnReceive(), Times.Never);
+        mockSubC.Verify(m => m.OnReceive(), Times.Once);
     }
 
     [Fact]
-    public void Push_WhenUnsubscribingInsideOnReceiveReactorAction_DoesNotThrowException()
+    public void Push_WhenUnsubscribingInsideOnReceiveSubscriptionAction_DoesNotThrowException()
     {
         // Arrange
         var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
@@ -69,15 +69,15 @@ public class PushReactableTests
         IDisposable? otherUnsubscriberA = null;
         IDisposable? otherUnsubscriberB = null;
 
-        var initReactorA = new ReceiveSubscription(
+        var initSubA = new ReceiveSubscription(
             id: mainId);
 
-        var otherReactorA = new ReceiveSubscription(id: otherId);
-        var otherReactorB = new ReceiveSubscription(id: otherId);
+        var otherSubA = new ReceiveSubscription(id: otherId);
+        var otherSubB = new ReceiveSubscription(id: otherId);
 
         var sut = CreateSystemUnderTest();
 
-        var initReactorC = new ReceiveSubscription(
+        var initSubC = new ReceiveSubscription(
             id: mainId,
             onReceive: () =>
             {
@@ -85,10 +85,10 @@ public class PushReactableTests
                 otherUnsubscriberB?.Dispose();
             });
 
-        sut.Subscribe(initReactorA);
-        otherUnsubscriberA = sut.Subscribe(otherReactorA);
-        otherUnsubscriberB = sut.Subscribe(otherReactorB);
-        sut.Subscribe(initReactorC);
+        sut.Subscribe(initSubA);
+        otherUnsubscriberA = sut.Subscribe(otherSubA);
+        otherUnsubscriberB = sut.Subscribe(otherSubB);
+        sut.Subscribe(initSubC);
 
         // Act
         var act = () => sut.Push(mainId);
@@ -98,13 +98,13 @@ public class PushReactableTests
     }
 
     [Fact]
-    public void Push_WhenExceptionOccursInOnReceiveSubscription_InvokesOnErrorForReactor()
+    public void Push_WhenExceptionOccursInOnReceiveSubscription_InvokesOnErrorForSubscription()
     {
         // Arrange
         var idA = Guid.NewGuid();
         var idB = Guid.NewGuid();
 
-        var reactorA = new ReceiveSubscription(
+        var subA = new ReceiveSubscription(
             id: idA,
             onReceive: () => throw new Exception("test-exception"),
             onError: e =>
@@ -113,12 +113,12 @@ public class PushReactableTests
                 e.Message.Should().Be("test-exception");
             });
 
-        var reactorB = new ReceiveSubscription(id: idB);
+        var subB = new ReceiveSubscription(id: idB);
 
         var sut = CreateSystemUnderTest();
 
-        sut.Subscribe(reactorA);
-        sut.Subscribe(reactorB);
+        sut.Subscribe(subA);
+        sut.Subscribe(subB);
 
         // Act
         var act = () => sut.Push(idA);

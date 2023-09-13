@@ -4,6 +4,7 @@
 
 namespace CarbonateTests;
 
+using System.Diagnostics.CodeAnalysis;
 using Carbonate.Core;
 using Carbonate.Core.OneWay;
 using Carbonate.OneWay;
@@ -32,19 +33,19 @@ public class ReactableBaseTests
 
         var expected = new[] { eventIdA, eventIdB };
 
-        var mockReactorA = new Mock<IReceiveSubscription<int>>();
-        mockReactorA.SetupGet(p => p.Id).Returns(eventIdA);
+        var mockSubA = new Mock<IReceiveSubscription<int>>();
+        mockSubA.SetupGet(p => p.Id).Returns(eventIdA);
 
-        var mockReactorB = new Mock<IReceiveSubscription<int>>();
-        mockReactorB.SetupGet(p => p.Id).Returns(eventIdB);
+        var mockSubB = new Mock<IReceiveSubscription<int>>();
+        mockSubB.SetupGet(p => p.Id).Returns(eventIdB);
 
-        var mockReactorC = new Mock<IReceiveSubscription<int>>();
-        mockReactorC.SetupGet(p => p.Id).Returns(eventIdC);
+        var mockSubC = new Mock<IReceiveSubscription<int>>();
+        mockSubC.SetupGet(p => p.Id).Returns(eventIdC);
 
         var sut = CreateSystemUnderTest();
-        sut.Subscribe(mockReactorA.Object);
-        sut.Subscribe(mockReactorB.Object);
-        sut.Subscribe(mockReactorC.Object);
+        sut.Subscribe(mockSubA.Object);
+        sut.Subscribe(mockSubB.Object);
+        sut.Subscribe(mockSubC.Object);
 
         // Act
         var actual = sut.SubscriptionIds;
@@ -71,7 +72,7 @@ public class ReactableBaseTests
     }
 
     [Fact]
-    public void Subscribe_WithNullReactor_ThrowsException()
+    public void Subscribe_WithNullSub_ThrowsException()
     {
         // Arrange
         var sut = CreateSystemUnderTest();
@@ -81,32 +82,32 @@ public class ReactableBaseTests
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
-            .WithMessage("The parameter must not be null. (Parameter 'reactor')");
+            .WithMessage("The parameter must not be null. (Parameter 'subscription')");
     }
 
     [Fact]
-    public void Subscribe_WhenInvoked_ReactorsPropReturnsReactors()
+    public void Subscribe_WhenInvoked_SubscriptionsPropReturnsSubscriptions()
     {
         // Arrange
-        var mockReactorA = new Mock<IReceiveSubscription<int>>();
-        var mockReactorB = new Mock<IReceiveSubscription<int>>();
+        var mockSubA = new Mock<IReceiveSubscription<int>>();
+        var mockSubB = new Mock<IReceiveSubscription<int>>();
 
-        var expected = new[] { mockReactorA.Object, mockReactorB.Object };
+        var expected = new[] { mockSubA.Object, mockSubB.Object };
 
         var sut = CreateSystemUnderTest();
 
         // Act
-        var reactorUnsubscriberA = sut.Subscribe(mockReactorA.Object);
-        var reactorUnsubscriberB = sut.Subscribe(mockReactorB.Object);
+        var unsubscriberA = sut.Subscribe(mockSubA.Object);
+        var unsubscriberB = sut.Subscribe(mockSubB.Object);
 
         var actual = sut.Subscriptions;
 
         // Assert
         actual.Should().BeEquivalentTo(expected);
-        actual[0].Should().BeSameAs(mockReactorA.Object);
-        actual[1].Should().BeSameAs(mockReactorB.Object);
-        reactorUnsubscriberA.Should().NotBeNull();
-        reactorUnsubscriberB.Should().NotBeNull();
+        actual[0].Should().BeSameAs(mockSubA.Object);
+        actual[1].Should().BeSameAs(mockSubB.Object);
+        unsubscriberA.Should().NotBeNull();
+        unsubscriberB.Should().NotBeNull();
     }
 
     [Fact]
@@ -125,90 +126,90 @@ public class ReactableBaseTests
     }
 
     [Fact]
-    public void Unsubscribe_WhenUnsubscribingSomeEvents_UnsubscribesCorrectReactors()
+    public void Unsubscribe_WhenUnsubscribingSomeEvents_UnsubscribesCorrectSubscriptions()
     {
         // Arrange
         var eventToUnsubscribeFrom = Guid.NewGuid();
         var eventNotToUnsubscribeFrom = Guid.NewGuid();
 
-        var mockReactorA = new Mock<ISubscription>();
-        mockReactorA.SetupGet(p => p.Id).Returns(eventToUnsubscribeFrom);
+        var mockSubA = new Mock<ISubscription>();
+        mockSubA.SetupGet(p => p.Id).Returns(eventToUnsubscribeFrom);
 
-        var mockReactorB = new Mock<ISubscription>();
-        mockReactorB.SetupGet(p => p.Id).Returns(eventNotToUnsubscribeFrom);
+        var mockSubB = new Mock<ISubscription>();
+        mockSubB.SetupGet(p => p.Id).Returns(eventNotToUnsubscribeFrom);
 
-        var mockReactorC = new Mock<ISubscription>();
-        mockReactorC.SetupGet(p => p.Id).Returns(eventToUnsubscribeFrom);
+        var mockSubC = new Mock<ISubscription>();
+        mockSubC.SetupGet(p => p.Id).Returns(eventToUnsubscribeFrom);
 
         // Act
         var sut = CreateSystemUnderTest();
-        sut.Subscribe(mockReactorA.Object);
-        sut.Subscribe(mockReactorB.Object);
-        sut.Subscribe(mockReactorC.Object);
+        sut.Subscribe(mockSubA.Object);
+        sut.Subscribe(mockSubB.Object);
+        sut.Subscribe(mockSubC.Object);
 
         sut.Unsubscribe(eventToUnsubscribeFrom);
 
         // Assert
-        mockReactorA.Verify(m => m.OnUnsubscribe(), Times.Once);
-        mockReactorB.Verify(m => m.OnUnsubscribe(), Times.Never);
-        mockReactorC.Verify(m => m.OnUnsubscribe(), Times.Once);
+        mockSubA.Verify(m => m.OnUnsubscribe(), Times.Once);
+        mockSubB.Verify(m => m.OnUnsubscribe(), Times.Never);
+        mockSubC.Verify(m => m.OnUnsubscribe(), Times.Once);
         sut.Subscriptions.Should().HaveCount(1);
     }
 
     [Fact]
-    public void Unsubscribe_WhenUnsubscribingAllEventsOneAtATime_UnsubscribesCorrectReactors()
+    public void Unsubscribe_WhenUnsubscribingAllEventsOneAtATime_UnsubscribesCorrectSubscriptions()
     {
         // Arrange
         var eventToUnsubscribeFrom = Guid.NewGuid();
 
-        var mockReactorA = new Mock<IReceiveSubscription<int>>();
-        mockReactorA.SetupGet(p => p.Id).Returns(eventToUnsubscribeFrom);
-        mockReactorA.Setup(m => m.Unsubscribed).Returns(true);
+        var mockSubA = new Mock<IReceiveSubscription<int>>();
+        mockSubA.SetupGet(p => p.Id).Returns(eventToUnsubscribeFrom);
+        mockSubA.Setup(m => m.Unsubscribed).Returns(true);
 
-        var mockReactorB = new Mock<IReceiveSubscription<int>>();
-        mockReactorB.SetupGet(p => p.Id).Returns(eventToUnsubscribeFrom);
-        mockReactorB.Setup(m => m.Unsubscribed).Returns(true);
+        var mockSubB = new Mock<IReceiveSubscription<int>>();
+        mockSubB.SetupGet(p => p.Id).Returns(eventToUnsubscribeFrom);
+        mockSubB.Setup(m => m.Unsubscribed).Returns(true);
 
         // Act
         var sut = CreateSystemUnderTest();
-        sut.Subscribe(mockReactorA.Object);
-        sut.Subscribe(mockReactorB.Object);
+        sut.Subscribe(mockSubA.Object);
+        sut.Subscribe(mockSubB.Object);
 
         sut.Unsubscribe(eventToUnsubscribeFrom);
         sut.Unsubscribe(eventToUnsubscribeFrom);
 
         // Assert
-        mockReactorA.Verify(m => m.OnUnsubscribe(), Times.Once);
-        mockReactorB.Verify(m => m.OnUnsubscribe(), Times.Once);
+        mockSubA.Verify(m => m.OnUnsubscribe(), Times.Once);
+        mockSubB.Verify(m => m.OnUnsubscribe(), Times.Once);
         sut.Subscriptions.Should().BeEmpty();
     }
 
     [Fact]
-    public void Unsubscribe_WhenUnsubscribingInsideOnUnsubscribeReactorAction_DoesNotThrowException()
+    public void Unsubscribe_WhenUnsubscribingInsideOnUnsubscribeSubscriptionAction_DoesNotThrowException()
     {
         // Arrange
         var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
         var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
 
-        var initReactorA = new ReceiveSubscription<int>(
+        var initSubA = new ReceiveSubscription<int>(
             id: mainId);
 
-        var otherReactorA = new ReceiveSubscription<int>(id: otherId);
-        var otherReactorB = new ReceiveSubscription<int>(id: otherId);
+        var otherSubA = new ReceiveSubscription<int>(id: otherId);
+        var otherSubB = new ReceiveSubscription<int>(id: otherId);
 
         var sut = CreateSystemUnderTest();
 
-        var initReactorC = new ReceiveSubscription<int>(
+        var initSubC = new ReceiveSubscription<int>(
             id: mainId,
             onUnsubscribe: () =>
             {
                 sut.Unsubscribe(otherId);
             });
 
-        sut.Subscribe(initReactorA);
-        sut.Subscribe(otherReactorA);
-        sut.Subscribe(otherReactorB);
-        sut.Subscribe(initReactorC);
+        sut.Subscribe(initSubA);
+        sut.Subscribe(otherSubA);
+        sut.Subscribe(otherSubB);
+        sut.Subscribe(initSubC);
 
         // Act
         var act = () => sut.Unsubscribe(mainId);
@@ -239,56 +240,56 @@ public class ReactableBaseTests
         var eventToUnsubscribeFrom = Guid.NewGuid();
         var eventNotToUnsubscribeFrom = Guid.NewGuid();
 
-        var mockReactorA = new Mock<IReceiveSubscription<int>>();
-        mockReactorA.SetupGet(p => p.Id).Returns(eventToUnsubscribeFrom);
+        var mockSubA = new Mock<IReceiveSubscription<int>>();
+        mockSubA.SetupGet(p => p.Id).Returns(eventToUnsubscribeFrom);
 
-        var mockReactorB = new Mock<IReceiveSubscription<int>>();
-        mockReactorB.SetupGet(p => p.Id).Returns(eventNotToUnsubscribeFrom);
+        var mockSubB = new Mock<IReceiveSubscription<int>>();
+        mockSubB.SetupGet(p => p.Id).Returns(eventNotToUnsubscribeFrom);
 
-        var mockReactorC = new Mock<IReceiveSubscription<int>>();
-        mockReactorC.SetupGet(p => p.Id).Returns(eventToUnsubscribeFrom);
+        var mockSubC = new Mock<IReceiveSubscription<int>>();
+        mockSubC.SetupGet(p => p.Id).Returns(eventToUnsubscribeFrom);
 
         // Act
         var sut = CreateSystemUnderTest();
-        sut.Subscribe(mockReactorC.Object);
-        sut.Subscribe(mockReactorB.Object);
-        sut.Subscribe(mockReactorA.Object);
+        sut.Subscribe(mockSubC.Object);
+        sut.Subscribe(mockSubB.Object);
+        sut.Subscribe(mockSubA.Object);
 
         sut.UnsubscribeAll();
 
         // Assert
-        mockReactorA.Verify(m => m.OnUnsubscribe(), Times.Once);
-        mockReactorB.Verify(m => m.OnUnsubscribe(), Times.Once);
-        mockReactorC.Verify(m => m.OnUnsubscribe(), Times.Once);
+        mockSubA.Verify(m => m.OnUnsubscribe(), Times.Once);
+        mockSubB.Verify(m => m.OnUnsubscribe(), Times.Once);
+        mockSubC.Verify(m => m.OnUnsubscribe(), Times.Once);
         sut.Subscriptions.Should().BeEmpty();
     }
 
     [Fact]
-    public void UnsubscribeAll_WhenUnsubscribingInsideOnUnsubscribeReactorAction_DoesNotThrowException()
+    public void UnsubscribeAll_WhenUnsubscribingInsideOnUnsubscribeSubscriptionAction_DoesNotThrowException()
     {
         // Arrange
         var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
         var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
 
-        var initReactorA = new ReceiveSubscription<int>(
+        var initSubA = new ReceiveSubscription<int>(
             id: mainId);
 
-        var otherReactorA = new ReceiveSubscription<int>(id: otherId);
-        var otherReactorB = new ReceiveSubscription<int>(id: otherId);
+        var otherSubA = new ReceiveSubscription<int>(id: otherId);
+        var otherSubB = new ReceiveSubscription<int>(id: otherId);
 
         var sut = CreateSystemUnderTest();
 
-        var initReactorC = new ReceiveSubscription<int>(
+        var initSubC = new ReceiveSubscription<int>(
             id: mainId,
             onUnsubscribe: () =>
             {
                 sut.Unsubscribe(otherId);
             });
 
-        sut.Subscribe(initReactorA);
-        sut.Subscribe(otherReactorA);
-        sut.Subscribe(otherReactorB);
-        sut.Subscribe(initReactorC);
+        sut.Subscribe(initSubA);
+        sut.Subscribe(otherSubA);
+        sut.Subscribe(otherSubB);
+        sut.Subscribe(initSubC);
 
         // Act
         var act = () => sut.UnsubscribeAll();
@@ -298,29 +299,30 @@ public class ReactableBaseTests
     }
 
     [Fact]
+    [SuppressMessage("csharpsquid", "S3966", Justification = "Required for testing.")]
     public void Dispose_WhenInvoked_DisposesOfReactable()
     {
         // Arrange
         var eventIdA = Guid.NewGuid();
         var eventIdB = Guid.NewGuid();
 
-        var mockReactorA = new Mock<IReceiveSubscription<int>>();
-        mockReactorA.SetupGet(p => p.Id).Returns(eventIdA);
+        var mockSubA = new Mock<IReceiveSubscription<int>>();
+        mockSubA.SetupGet(p => p.Id).Returns(eventIdA);
 
-        var mockReactorB = new Mock<IReceiveSubscription<int>>();
-        mockReactorB.SetupGet(p => p.Id).Returns(eventIdB);
+        var mockSubB = new Mock<IReceiveSubscription<int>>();
+        mockSubB.SetupGet(p => p.Id).Returns(eventIdB);
 
         var sut = CreateSystemUnderTest();
-        sut.Subscribe(mockReactorA.Object);
-        sut.Subscribe(mockReactorB.Object);
+        sut.Subscribe(mockSubA.Object);
+        sut.Subscribe(mockSubB.Object);
 
         // Act
         sut.Dispose();
         sut.Dispose();
 
         // Assert
-        mockReactorA.Verify(m => m.OnUnsubscribe(), Times.Once);
-        mockReactorB.Verify(m => m.OnUnsubscribe(), Times.Once);
+        mockSubA.Verify(m => m.OnUnsubscribe(), Times.Once);
+        mockSubB.Verify(m => m.OnUnsubscribe(), Times.Once);
 
         sut.Subscriptions.Should().BeEmpty();
     }
