@@ -13,7 +13,7 @@ using Core.NonDirectional;
     "ReSharper",
     "ClassWithVirtualMembersNeverInherited.Global",
     Justification = "Left unsealed to give users more control")]
-public class ReceiveSubscription : ReactorBase, IReceiveSubscription
+public class ReceiveSubscription : SubscriptionBase, IReceiveSubscription
 {
     private readonly Action? onReceive;
 

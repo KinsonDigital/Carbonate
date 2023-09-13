@@ -7,18 +7,18 @@ namespace CarbonateTests.Helpers.Fakes;
 using Carbonate;
 
 /// <summary>
-/// Used for the purpose of testing the <see cref="ReactorBase"/>.
+/// Used for the purpose of testing the <see cref="SubscriptionBase"/>.
 /// </summary>
-public class ReactorBaseFake : ReactorBase
+public class SubscriptionBaseFake : SubscriptionBase
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="ReactorBaseFake"/> class.
+    /// Initializes a new instance of the <see cref="SubscriptionBaseFake"/> class.
     /// </summary>
     /// <param name="eventId">Test ID.</param>
     /// <param name="name">Test name.</param>
     /// <param name="onUnsubscribe">Test action for unsubscribing.</param>
     /// <param name="onError">Test action for errors.</param>
-    public ReactorBaseFake(
+    public SubscriptionBaseFake(
         Guid eventId,
         string name = "",
         Action? onUnsubscribe = null,

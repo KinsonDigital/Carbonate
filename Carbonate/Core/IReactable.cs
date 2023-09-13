@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 /// </summary>
 /// <typeparam name="TReactor">The reactor that can subscribed to events.</typeparam>
 public interface IReactable<TReactor> : IDisposable
-    where TReactor : class, IReactor
+    where TReactor : class, ISubscription
 {
     /// <summary>
     /// Gets the list of reactors that are subscribed to this <see cref="IReactable{T}"/>.
@@ -34,11 +34,11 @@ public interface IReactable<TReactor> : IDisposable
     IDisposable Subscribe(TReactor reactor);
 
     /// <summary>
-    /// Unsubscribes notifications to all <see cref="IReactor"/>s that match the given <paramref name="id"/>.
+    /// Unsubscribes notifications to all <see cref="ISubscription"/>s that match the given <paramref name="id"/>.
     /// </summary>
     /// <param name="id">The ID of the event to end.</param>
     /// <remarks>
-    ///     Will not invoke the <see cref="IReactor"/>.<see cref="IReactor.OnUnsubscribe"/> more than once.
+    ///     Will not invoke the <see cref="ISubscription"/>.<see cref="ISubscription.OnUnsubscribe"/> more than once.
     /// </remarks>
     void Unsubscribe(Guid id);
 

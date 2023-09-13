@@ -131,13 +131,13 @@ public class ReactableBaseTests
         var eventToUnsubscribeFrom = Guid.NewGuid();
         var eventNotToUnsubscribeFrom = Guid.NewGuid();
 
-        var mockReactorA = new Mock<IReactor>();
+        var mockReactorA = new Mock<ISubscription>();
         mockReactorA.SetupGet(p => p.Id).Returns(eventToUnsubscribeFrom);
 
-        var mockReactorB = new Mock<IReactor>();
+        var mockReactorB = new Mock<ISubscription>();
         mockReactorB.SetupGet(p => p.Id).Returns(eventNotToUnsubscribeFrom);
 
-        var mockReactorC = new Mock<IReactor>();
+        var mockReactorC = new Mock<ISubscription>();
         mockReactorC.SetupGet(p => p.Id).Returns(eventToUnsubscribeFrom);
 
         // Act

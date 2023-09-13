@@ -19,7 +19,7 @@ public class ReactorBaseTests
         var onReceiveInvoked = false;
         void OnUnsubscribe() => onReceiveInvoked = true;
 
-        var sut = new ReactorBaseFake(Guid.NewGuid(), onUnsubscribe: OnUnsubscribe);
+        var sut = new SubscriptionBaseFake(Guid.NewGuid(), onUnsubscribe: OnUnsubscribe);
 
         // Act
         sut.OnUnsubscribe();

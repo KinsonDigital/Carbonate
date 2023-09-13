@@ -8,6 +8,6 @@ namespace Carbonate.Core.OneWay;
 /// A reactor capable of standard functionality that can receive push notifications.
 /// </summary>
 /// <typeparam name="TIn">The type of data coming in.</typeparam>
-public interface IReceiveSubscription<in TIn> : IReactor, IReceiver<TIn>
+public interface IReceiveSubscription<in TIn> : ISubscription, IReceiver<TIn>
 {
 }

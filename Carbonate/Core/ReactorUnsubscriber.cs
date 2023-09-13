@@ -9,19 +9,19 @@ namespace Carbonate.Core;
 /// </summary>
 internal sealed class ReactorUnsubscriber : IDisposable
 {
-    private readonly List<IReactor> reactors;
-    private readonly IReactor reactor;
+    private readonly List<ISubscription> reactors;
+    private readonly ISubscription subscription;
     private bool isDisposed;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ReactorUnsubscriber"/> class.
     /// </summary>
     /// <param name="reactors">The list of reactor subscriptions.</param>
-    /// <param name="reactor">The reactor that has been subscribed.</param>
-    internal ReactorUnsubscriber(List<IReactor> reactors, IReactor reactor)
+    /// <param name="subscription">The reactor that has been subscribed.</param>
+    internal ReactorUnsubscriber(List<ISubscription> reactors, ISubscription subscription)
     {
         this.reactors = reactors ?? throw new ArgumentNullException(nameof(reactors), "The parameter must not be null.");
-        this.reactor = reactor ?? throw new ArgumentNullException(nameof(reactor), "The parameter must not be null.");
+        this.subscription = subscription ?? throw new ArgumentNullException(nameof(subscription), "The parameter must not be null.");
     }
 
     /// <summary>
@@ -45,9 +45,9 @@ internal sealed class ReactorUnsubscriber : IDisposable
 
         if (disposing)
         {
-            if (this.reactors.Contains(this.reactor))
+            if (this.reactors.Contains(this.subscription))
             {
-                this.reactors.Remove(this.reactor);
+                this.reactors.Remove(this.subscription);
             }
         }
 

@@ -13,7 +13,7 @@ using OneWay;
 /// </summary>
 /// <typeparam name="T">The type of reactor to use.</typeparam>
 public abstract class ReactableBase<T> : IReactable<T>
-    where T : class, IReactor
+    where T : class, ISubscription
 {
     private readonly List<T> reactors = new ();
     private bool notificationsEnded;
@@ -49,7 +49,7 @@ public abstract class ReactableBase<T> : IReactable<T>
 
         this.reactors.Add(reactor);
 
-        return new ReactorUnsubscriber(this.reactors.Cast<IReactor>().ToList(), reactor);
+        return new ReactorUnsubscriber(this.reactors.Cast<ISubscription>().ToList(), reactor);
     }
 
     /// <inheritdoc/>
@@ -151,8 +151,8 @@ public abstract class ReactableBase<T> : IReactable<T>
     /// </summary>
     /// <param name="disposing">Disposes managed resources when <c>true</c>.</param>
     /// <remarks>
-    ///     All <see cref="IReactor"/>s that are still subscribed will have its <see cref="IReactor.OnUnsubscribe"/>
-    ///     method invoked and the <see cref="IReactor"/>s will be unsubscribed.
+    ///     All <see cref="ISubscription"/>s that are still subscribed will have its <see cref="ISubscription.OnUnsubscribe"/>
+    ///     method invoked and the <see cref="ISubscription"/>s will be unsubscribed.
     /// </remarks>
     private void Dispose(bool disposing)
     {

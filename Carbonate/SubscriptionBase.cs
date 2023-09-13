@@ -1,4 +1,4 @@
-﻿// <copyright file="ReactorBase.cs" company="KinsonDigital">
+﻿// <copyright file="SubscriptionBase.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -9,16 +9,16 @@ using Core;
 /// <summary>
 /// Provides a mechanism for push or pull based messaging.
 /// </summary>
-public abstract class ReactorBase : IReactor
+public abstract class SubscriptionBase : ISubscription
 {
     private readonly Action? onUnsubscribe;
     private readonly Action<Exception>? onError;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ReactorBase"/> class.
+    /// Initializes a new instance of the <see cref="SubscriptionBase"/> class.
     /// </summary>
     /// <param name="eventId">The ID of the event that was pushed by an <see cref="IReactable{TReactor}"/>.</param>
-    /// <param name="name">The name of the <see cref="IReactor"/>.</param>
+    /// <param name="name">The name of the <see cref="ISubscription"/>.</param>
     /// <param name="onUnsubscribe">
     ///     Executed when the provider has finished sending push-based notifications and is unsubscribed.
     /// </param>
@@ -28,7 +28,7 @@ public abstract class ReactorBase : IReactor
     ///     <br/>
     ///     It is only metadata for debugging or miscellaneous purposes.
     /// </remarks>
-    protected ReactorBase(
+    protected SubscriptionBase(
         Guid eventId,
         string name = "",
         Action? onUnsubscribe = null,

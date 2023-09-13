@@ -1,4 +1,4 @@
-﻿// <copyright file="RespondReactor.cs" company="KinsonDigital">
+﻿// <copyright file="RespondSubscription.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -12,7 +12,7 @@ using Core.TwoWay;
     "ReSharper",
     "ClassWithVirtualMembersNeverInherited.Global",
     Justification = "Left unsealed to give users more control")]
-public class RespondSubscription<TIn, TOut> : ReactorBase, IRespondSubscription<TIn, TOut>
+public class RespondSubscription<TIn, TOut> : SubscriptionBase, IRespondSubscription<TIn, TOut>
 {
     private readonly Func<TIn, TOut?>? onRespond;
 

@@ -1,4 +1,4 @@
-﻿// <copyright file="ReceiveReactor.cs" company="KinsonDigital">
+﻿// <copyright file="ReceiveSubscription.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -13,7 +13,7 @@ using Core.OneWay;
     "ReSharper",
     "ClassWithVirtualMembersNeverInherited.Global",
     Justification = "Left unsealed to give users more control")]
-public class ReceiveSubscription<TIn> : ReactorBase, IReceiveSubscription<TIn>
+public class ReceiveSubscription<TIn> : SubscriptionBase, IReceiveSubscription<TIn>
 {
     private readonly Action<TIn>? onReceive;
 

@@ -1,4 +1,4 @@
-﻿// <copyright file="IReactor.cs" company="KinsonDigital">
+﻿// <copyright file="ISubscription.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -7,15 +7,15 @@ namespace Carbonate.Core;
 /// <summary>
 /// Provides a mechanism for pushing notifications or receiving responses.
 /// </summary>
-public interface IReactor
+public interface ISubscription
 {
     /// <summary>
-    /// Gets the ID of the subscription where this <see cref="IReactor"/> should respond.
+    /// Gets the ID of the subscription where this <see cref="ISubscription"/> should respond.
     /// </summary>
     Guid Id { get; }
 
     /// <summary>
-    /// Gets the name of the <see cref="IReactor"/>.
+    /// Gets the name of the <see cref="ISubscription"/>.
     /// </summary>
     /// <remarks>
     ///     Note: This is not used for unique identification purposes.
@@ -25,10 +25,10 @@ public interface IReactor
     string Name { get; }
 
     /// <summary>
-    /// Gets a value indicating whether or not the <see cref="IReactor"/> has been unsubscribed.
+    /// Gets a value indicating whether or not the <see cref="ISubscription"/> has been unsubscribed.
     /// </summary>
     /// <remarks>
-    ///     This means that the <see cref="IReactor"/> will not receive.
+    ///     This means that the <see cref="ISubscription"/> will not receive.
     /// </remarks>
     bool Unsubscribed { get; }
 

@@ -36,7 +36,7 @@ public class ReactorUnsubscriberTests
         // Arrange & Act
         var act = () =>
         {
-            _ = new ReactorUnsubscriber(Array.Empty<IReactor>().ToList(), null);
+            _ = new ReactorUnsubscriber(Array.Empty<ISubscription>().ToList(), null);
         };
 
         // Assert
@@ -51,9 +51,9 @@ public class ReactorUnsubscriberTests
     public void TotalReactors_WhenInvoked_ReturnsCorrectResult()
     {
         // Arrange
-        var reactors = new[] { new Mock<IReactor>().Object, new Mock<IReactor>().Object };
+        var reactors = new[] { new Mock<ISubscription>().Object, new Mock<ISubscription>().Object };
 
-        var sut = new ReactorUnsubscriber(reactors.ToList(), new Mock<IReactor>().Object);
+        var sut = new ReactorUnsubscriber(reactors.ToList(), new Mock<ISubscription>().Object);
 
         // Act
         var actual = sut.TotalReactors;
@@ -66,9 +66,9 @@ public class ReactorUnsubscriberTests
     public void Dispose_WhenInvoked_RemovesFromReactorsList()
     {
         // Arrange
-        var reactorA = new Mock<IReactor>();
-        var reactorB = new Mock<IReactor>();
-        var reactorC = new Mock<IReactor>();
+        var reactorA = new Mock<ISubscription>();
+        var reactorB = new Mock<ISubscription>();
+        var reactorC = new Mock<ISubscription>();
 
         var reactors = new[] { reactorA.Object, reactorB.Object, reactorC.Object };
 
