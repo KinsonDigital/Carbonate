@@ -141,7 +141,7 @@ public class ReactableBuilderTests
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'onRespond')");
+            .WithMessage("Value cannot be null. (Parameter 'onReceiveRespond')");
     }
 
     [Fact]
