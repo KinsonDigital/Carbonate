@@ -70,15 +70,15 @@ public class PushReactableTests
         IDisposable? otherUnsubscriberB = null;
 
         var initReactorA = new ReceiveSubscription(
-            eventId: mainId);
+            id: mainId);
 
-        var otherReactorA = new ReceiveSubscription(eventId: otherId);
-        var otherReactorB = new ReceiveSubscription(eventId: otherId);
+        var otherReactorA = new ReceiveSubscription(id: otherId);
+        var otherReactorB = new ReceiveSubscription(id: otherId);
 
         var sut = CreateSystemUnderTest();
 
         var initReactorC = new ReceiveSubscription(
-            eventId: mainId,
+            id: mainId,
             onReceive: () =>
             {
                 otherUnsubscriberA?.Dispose();
@@ -105,7 +105,7 @@ public class PushReactableTests
         var idB = Guid.NewGuid();
 
         var reactorA = new ReceiveSubscription(
-            eventId: idA,
+            id: idA,
             onReceive: () => throw new Exception("test-exception"),
             onError: e =>
             {
@@ -113,7 +113,7 @@ public class PushReactableTests
                 e.Message.Should().Be("test-exception");
             });
 
-        var reactorB = new ReceiveSubscription(eventId: idB);
+        var reactorB = new ReceiveSubscription(id: idB);
 
         var sut = CreateSystemUnderTest();
 

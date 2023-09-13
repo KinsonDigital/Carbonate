@@ -60,7 +60,7 @@ public class ReactableBuilder : IReactableBuilder
         ArgumentNullException.ThrowIfNull(onReceive);
 
         var subscription = new ReceiveSubscription(
-            eventId: this.id,
+            id: this.id,
             name: this.name ?? string.Empty,
             onReceive: onReceive,
             onUnsubscribe: this.unsubscribe,
