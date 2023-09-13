@@ -11,15 +11,15 @@ using OneWay;
 /// <summary>
 /// Defines a provider for pushing notifications or receiving responses with default behavior.
 /// </summary>
-/// <typeparam name="T">The type of reactor to use.</typeparam>
-public abstract class ReactableBase<T> : IReactable<T>
-    where T : class, ISubscription
+/// <typeparam name="TSubscription">The type of reactor to use.</typeparam>
+public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
+    where TSubscription : class, ISubscription
 {
-    private readonly List<T> reactors = new ();
+    private readonly List<TSubscription> reactors = new ();
     private bool notificationsEnded;
 
     /// <inheritdoc/>
-    public ReadOnlyCollection<T> Subscriptions => this.reactors.AsReadOnly();
+    public ReadOnlyCollection<TSubscription> Subscriptions => this.reactors.AsReadOnly();
 
     /// <inheritdoc/>
     public ReadOnlyCollection<Guid> SubscriptionIds => this.reactors
@@ -35,11 +35,11 @@ public abstract class ReactableBase<T> : IReactable<T>
     /// <inheritdoc/>
     /// <exception cref="ObjectDisposedException">Thrown if this method is invoked after disposal.</exception>
     /// <exception cref="ArgumentNullException">Thrown if the given <paramref name="subscription"/> is null.</exception>
-    public virtual IDisposable Subscribe(T subscription)
+    public virtual IDisposable Subscribe(TSubscription subscription)
     {
         if (IsDisposed)
         {
-            throw new ObjectDisposedException(nameof(PushReactable<T>), $"{nameof(PushReactable<T>)} disposed.");
+            throw new ObjectDisposedException(nameof(PushReactable<TSubscription>), $"{nameof(PushReactable<TSubscription>)} disposed.");
         }
 
         if (subscription is null)
@@ -58,7 +58,7 @@ public abstract class ReactableBase<T> : IReactable<T>
     {
         if (IsDisposed)
         {
-            throw new ObjectDisposedException(nameof(PushReactable<T>), $"{nameof(PushReactable<T>)} disposed.");
+            throw new ObjectDisposedException(nameof(PushReactable<TSubscription>), $"{nameof(PushReactable<TSubscription>)} disposed.");
         }
 
         if (this.notificationsEnded)
@@ -112,7 +112,7 @@ public abstract class ReactableBase<T> : IReactable<T>
     {
         if (IsDisposed)
         {
-            throw new ObjectDisposedException(nameof(PushReactable<T>), $"{nameof(PushReactable<T>)} disposed.");
+            throw new ObjectDisposedException(nameof(PushReactable<TSubscription>), $"{nameof(PushReactable<TSubscription>)} disposed.");
         }
 
         /* Keep this loop as a for-loop.  Do not convert to for-each.
