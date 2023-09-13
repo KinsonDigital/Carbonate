@@ -92,7 +92,7 @@ public class ReceiveSubscriptionTests
         var id = new Guid("5739afd9-be4c-4402-a12d-6bcde35cc8c3");
 
         var sut = new ReceiveSubscription<int>(
-            eventId: id,
+            id: id,
             name: name);
 
         // Act

@@ -87,17 +87,17 @@ public class PushReactableTests
         IDisposable? otherUnsubscriberB = null;
 
         var initReactorA = new ReceiveSubscription<int>(
-            eventId: mainId);
+            id: mainId);
 
-        var otherReactorA = new ReceiveSubscription<int>(eventId: otherId);
-        var otherReactorB = new ReceiveSubscription<int>(eventId: otherId);
+        var otherReactorA = new ReceiveSubscription<int>(id: otherId);
+        var otherReactorB = new ReceiveSubscription<int>(id: otherId);
 
         const int data = 123;
 
         var sut = CreateSystemUnderTest();
 
         var initReactorC = new ReceiveSubscription<int>(
-            eventId: mainId,
+            id: mainId,
             onReceive: _ =>
             {
                 otherUnsubscriberA?.Dispose();
@@ -125,7 +125,7 @@ public class PushReactableTests
 
         var sut = CreateSystemUnderTest();
         var reactorA = new ReceiveSubscription<int>(
-            eventId: idA,
+            id: idA,
             onReceive: _ => throw new Exception("test-exception"),
             onError: e =>
             {

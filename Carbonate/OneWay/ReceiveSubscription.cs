@@ -20,7 +20,7 @@ public class ReceiveSubscription<TIn> : SubscriptionBase, IReceiveSubscription<T
     /// <summary>
     /// Initializes a new instance of the <see cref="ReceiveSubscription{TIn}"/> class.
     /// </summary>
-    /// <param name="eventId">The ID of the event that was pushed by an <see cref="IReactable{TSubscription}"/>.</param>
+    /// <param name="id">The ID of the event that was pushed by an <see cref="IReactable{TSubscription}"/>.</param>
     /// <param name="name">The name of the <see cref="ReceiveSubscription{TIn}"/>.</param>
     /// <param name="onReceive">Executed when a push notification occurs with some data.</param>
     /// <param name="onUnsubscribe">
@@ -33,12 +33,12 @@ public class ReceiveSubscription<TIn> : SubscriptionBase, IReceiveSubscription<T
     ///     It is only metadata for debugging or miscellaneous purposes.
     /// </remarks>
     public ReceiveSubscription(
-        Guid eventId,
+        Guid id,
         string name = "",
         Action<TIn>? onReceive = null,
         Action? onUnsubscribe = null,
         Action<Exception>? onError = null)
-            : base(eventId, name, onUnsubscribe, onError) => this.onReceive = onReceive;
+            : base(id, name, onUnsubscribe, onError) => this.onReceive = onReceive;
 
     /// <inheritdoc />
     public virtual void OnReceive(TIn data)

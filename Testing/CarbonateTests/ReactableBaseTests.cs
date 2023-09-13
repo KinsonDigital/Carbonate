@@ -191,15 +191,15 @@ public class ReactableBaseTests
         var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
 
         var initReactorA = new ReceiveSubscription<int>(
-            eventId: mainId);
+            id: mainId);
 
-        var otherReactorA = new ReceiveSubscription<int>(eventId: otherId);
-        var otherReactorB = new ReceiveSubscription<int>(eventId: otherId);
+        var otherReactorA = new ReceiveSubscription<int>(id: otherId);
+        var otherReactorB = new ReceiveSubscription<int>(id: otherId);
 
         var sut = CreateSystemUnderTest();
 
         var initReactorC = new ReceiveSubscription<int>(
-            eventId: mainId,
+            id: mainId,
             onUnsubscribe: () =>
             {
                 sut.Unsubscribe(otherId);
@@ -271,15 +271,15 @@ public class ReactableBaseTests
         var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
 
         var initReactorA = new ReceiveSubscription<int>(
-            eventId: mainId);
+            id: mainId);
 
-        var otherReactorA = new ReceiveSubscription<int>(eventId: otherId);
-        var otherReactorB = new ReceiveSubscription<int>(eventId: otherId);
+        var otherReactorA = new ReceiveSubscription<int>(id: otherId);
+        var otherReactorB = new ReceiveSubscription<int>(id: otherId);
 
         var sut = CreateSystemUnderTest();
 
         var initReactorC = new ReceiveSubscription<int>(
-            eventId: mainId,
+            id: mainId,
             onUnsubscribe: () =>
             {
                 sut.Unsubscribe(otherId);

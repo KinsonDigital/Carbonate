@@ -77,7 +77,7 @@ public class SubscriptionBuilder : ISubscriptionBuilder
         ArgumentNullException.ThrowIfNull(onReceive);
 
         return new ReceiveSubscription<TIn>(
-            eventId: this.id,
+            id: this.id,
             name: this.name ?? string.Empty,
             onReceive: onReceive,
             onUnsubscribe: this.unsubscribe,
