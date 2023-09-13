@@ -2,9 +2,9 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace Carbonate.UniDirectional;
+namespace Carbonate.OneWay;
 
-using Core.UniDirectional;
+using Core.OneWay;
 
 /// <inheritdoc cref="IPushReactable{T}"/>
 public class PushReactable<TDataIn>

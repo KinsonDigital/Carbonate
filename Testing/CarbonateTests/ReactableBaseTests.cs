@@ -5,8 +5,8 @@
 namespace CarbonateTests;
 
 using Carbonate.Core;
-using Carbonate.Core.UniDirectional;
-using Carbonate.UniDirectional;
+using Carbonate.Core.OneWay;
+using Carbonate.OneWay;
 using FluentAssertions;
 using Helpers.Fakes;
 using Moq;

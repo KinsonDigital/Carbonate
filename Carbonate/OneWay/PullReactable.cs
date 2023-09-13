@@ -5,9 +5,9 @@
 // NOTE: Leave the loops as 'for loops'. This is a small performance improvement.
 // ReSharper disable ForCanBeConvertedToForeach
 // ReSharper disable LoopCanBeConvertedToQuery
-namespace Carbonate.UniDirectional;
+namespace Carbonate.OneWay;
 
-using Core.UniDirectional;
+using Core.OneWay;
 
 /// <inheritdoc cref="IPullReactable{TDataOut}"/>
 public class PullReactable<TDataOut>

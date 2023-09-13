@@ -6,8 +6,8 @@ namespace Carbonate.Fluent;
 
 using Core.BiDirectional;
 using Core.NonDirectional;
-using Core.UniDirectional;
-using UniDirectional;
+using Core.OneWay;
+using OneWay;
 using NonDirectional;
 
 public class SubscriptionBuilder

@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace Carbonate.UniDirectional;
+namespace Carbonate.OneWay;
 
 /// <summary>
 /// Pushes out notifications.

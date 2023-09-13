@@ -6,7 +6,7 @@ namespace Carbonate;
 
 using System.Collections.ObjectModel;
 using Core;
-using UniDirectional;
+using OneWay;
 
 /// <summary>
 /// Defines a provider for pushing notifications or receiving responses with default behavior.

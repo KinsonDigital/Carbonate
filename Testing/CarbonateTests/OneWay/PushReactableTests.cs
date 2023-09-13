@@ -3,10 +3,10 @@
 // </copyright>
 
 // ReSharper disable AccessToModifiedClosure
-namespace CarbonateTests.UniDirectional;
+namespace CarbonateTests.OneWay;
 
-using Carbonate.Core.UniDirectional;
-using Carbonate.UniDirectional;
+using Carbonate.Core.OneWay;
+using Carbonate.OneWay;
 using FluentAssertions;
 using Moq;
 using Xunit;

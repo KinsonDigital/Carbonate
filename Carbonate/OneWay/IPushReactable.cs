@@ -2,10 +2,10 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace Carbonate.UniDirectional;
+namespace Carbonate.OneWay;
 
 using Core;
-using Core.UniDirectional;
+using Core.OneWay;
 
 /// <summary>
 /// Defines a provider for push-based notifications.

@@ -5,7 +5,7 @@
 // ReSharper disable InconsistentNaming
 namespace CarbonatePerfTests.MemPerfs;
 
-using Carbonate.UniDirectional;
+using Carbonate.OneWay;
 
 /// <summary>
 /// Used for testing different scenarios.

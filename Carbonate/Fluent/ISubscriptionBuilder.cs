@@ -6,7 +6,7 @@ namespace Carbonate.Fluent;
 
 using Core.BiDirectional;
 using Core.NonDirectional;
-using Core.UniDirectional;
+using Core.OneWay;
 
 public interface ISubscriptionBuilder : ISetters<ISubscriptionBuilder>, IWithIdStage<ISubscriptionBuilder>
 {

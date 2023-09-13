@@ -5,7 +5,7 @@
 namespace CarbonatePerfTests;
 
 using System.Runtime.CompilerServices;
-using Carbonate.UniDirectional;
+using Carbonate.OneWay;
 
 public class PtrDataStore
 {

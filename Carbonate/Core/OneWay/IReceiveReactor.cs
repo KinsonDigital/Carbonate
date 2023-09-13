@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace Carbonate.Core.UniDirectional;
+namespace Carbonate.Core.OneWay;
 
 /// <summary>
 /// A reactor capable of standard functionality that can receive push notifications.

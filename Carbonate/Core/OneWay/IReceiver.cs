@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace Carbonate.Core.UniDirectional;
+namespace Carbonate.Core.OneWay;
 
 /// <summary>
 /// Gives the ability to receive push notifications.

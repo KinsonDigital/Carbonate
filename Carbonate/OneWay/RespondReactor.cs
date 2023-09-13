@@ -2,10 +2,10 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace Carbonate.UniDirectional;
+namespace Carbonate.OneWay;
 
 using System.Diagnostics.CodeAnalysis;
-using Core.UniDirectional;
+using Core.OneWay;
 
 /// <inheritdoc cref="IRespondReactor{TDataOut}"/>
 [SuppressMessage(

@@ -6,7 +6,7 @@ namespace Carbonate.Fluent;
 
 using BiDirectional;
 using NonDirectional;
-using UniDirectional;
+using OneWay;
 
 public interface IReactableBuilder
     : ISetters<IReactableBuilder>, IWithIdStage<IReactableBuilder>

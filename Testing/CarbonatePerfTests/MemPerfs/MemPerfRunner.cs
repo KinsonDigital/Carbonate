@@ -5,7 +5,7 @@
 namespace CarbonatePerfTests.MemPerfs;
 
 using System.Diagnostics.CodeAnalysis;
-using Carbonate.UniDirectional;
+using Carbonate.OneWay;
 
 public static class MemPerfRunner
 {

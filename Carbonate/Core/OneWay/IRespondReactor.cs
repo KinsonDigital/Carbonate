@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace Carbonate.Core.UniDirectional;
+namespace Carbonate.Core.OneWay;
 
 /// <summary>
 /// Provides a mechanism for receiving responses.

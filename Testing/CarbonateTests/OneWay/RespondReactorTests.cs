@@ -2,9 +2,9 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace CarbonateTests.UniDirectional;
+namespace CarbonateTests.OneWay;
 
-using Carbonate.UniDirectional;
+using Carbonate.OneWay;
 using FluentAssertions;
 using Moq;
 using Xunit;

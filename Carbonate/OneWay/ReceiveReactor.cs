@@ -2,11 +2,11 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace Carbonate.UniDirectional;
+namespace Carbonate.OneWay;
 
 using System.Diagnostics.CodeAnalysis;
 using Core;
-using Core.UniDirectional;
+using Core.OneWay;
 
 /// <inheritdoc cref="IReceiveReactor{TDataIn}"/>
 [SuppressMessage(

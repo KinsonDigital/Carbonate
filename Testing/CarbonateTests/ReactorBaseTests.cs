@@ -4,7 +4,7 @@
 
 namespace CarbonateTests;
 
-using Carbonate.UniDirectional;
+using Carbonate.OneWay;
 using FluentAssertions;
 using Helpers.Fakes;
 using Xunit;
