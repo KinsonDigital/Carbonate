@@ -1,18 +1,18 @@
-﻿// <copyright file="RespondReactorTests.cs" company="KinsonDigital">
+﻿// <copyright file="RespondSubscriptionTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace CarbonateTests.TwoWay;
+namespace CarbonateTests.OneWay;
 
-using Carbonate.TwoWay;
+using Carbonate.OneWay;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 /// <summary>
-/// Tests the <see cref="RespondSubscription{TIn,TOut}"/> class.
+/// Tests the <see cref="RespondSubscription{TOut}"/> class.
 /// </summary>
-public class RespondReactorTests
+public class RespondSubscriptionTests
 {
     #region Constructor Tests
     [Fact]
@@ -22,7 +22,7 @@ public class RespondReactorTests
         var id = Guid.NewGuid();
 
         // Act
-        var sut = new RespondSubscription<int, string>(id);
+        var sut = new RespondSubscription<string>(id);
 
         // Assert
         sut.Id.Should().Be(id);
@@ -35,7 +35,7 @@ public class RespondReactorTests
         var id = Guid.NewGuid();
 
         // Act
-        var sut = new RespondSubscription<int, string>(id, "test-name");
+        var sut = new RespondSubscription<string>(id, "test-name");
 
         // Assert
         sut.Name.Should().Be("test-name");
@@ -44,62 +44,47 @@ public class RespondReactorTests
 
     #region Method Tests
     [Fact]
-    public void OnRespond_WhenUnsubscribed_ReturnsCorrectDefaultResult()
+    public void OnRespond_WhenUnsubscribed_DoesNotInvokeOnRespondAction()
     {
         // Arrange
-        var sut = new RespondSubscription<int, int>(Guid.NewGuid(),
-            onRespond: _ => 456);
+        var totalActionInvokes = 0;
+        var sut = new RespondSubscription<string>(
+            It.IsAny<Guid>(),
+            It.IsAny<string>(),
+            onRespond: () =>
+            {
+                totalActionInvokes++;
+                return It.IsAny<string>();
+            });
+
         sut.OnUnsubscribe();
 
         // Act
-        var actual = sut.OnRespond(123);
+        _ = sut.OnRespond();
 
         // Assert
-        actual.Should().Be(0);
+        totalActionInvokes.Should().Be(0);
     }
 
     [Fact]
-    public void OnRespond_WhenDataIsNull_ThrowsException()
+    public void OnRespond_WhenNotUnsubscribed_InvokesOnRespondAction()
     {
         // Arrange
-        var sut = new RespondSubscription<object, int>(Guid.NewGuid());
+        var totalActionInvokes = 0;
+        var sut = new RespondSubscription<string>(
+            It.IsAny<Guid>(),
+            It.IsAny<string>(),
+            onRespond: () =>
+            {
+                totalActionInvokes++;
+                return "return-value";
+            });
 
         // Act
-        var act = () => sut.OnRespond(null);
+        _ = sut.OnRespond();
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("The parameter must not be null. (Parameter 'data')");
-    }
-
-    [Fact]
-    public void OnRespond_WhenOnRespondDataIsNull_ReturnsCorrectDefaultResult()
-    {
-        // Arrange
-        var sut = new RespondSubscription<int, object>(Guid.NewGuid(),
-            onRespond: _ => null);
-
-        // Act
-        var actual = sut.OnRespond(123);
-
-        // Assert
-        actual.Should().BeNull();
-    }
-
-    [Fact]
-    public void OnRespond_WhenOnRespondDataIsNotNull_ReturnsCorrectResult()
-    {
-        // Arrange
-        var obj = new object();
-        var sut = new RespondSubscription<int, object>(Guid.NewGuid(),
-            onRespond: _ => obj);
-
-        // Act
-        var actual = sut.OnRespond(123);
-
-        // Assert
-        actual.Should().NotBeNull();
-        actual.Should().BeSameAs(obj);
+        totalActionInvokes.Should().Be(1);
     }
 
     [Fact]
@@ -108,7 +93,7 @@ public class RespondReactorTests
         // Arrange
         var totalActionInvokes = 0;
 
-        var sut = new RespondSubscription<int, string>(
+        var sut = new RespondSubscription<string>(
             It.IsAny<Guid>(),
             It.IsAny<string>(),
             onUnsubscribe: () => totalActionInvokes++);
@@ -128,7 +113,7 @@ public class RespondReactorTests
         // Arrange
         var totalActionInvokes = 0;
 
-        var sut = new RespondSubscription<int, string>(
+        var sut = new RespondSubscription<string>(
             It.IsAny<Guid>(),
             It.IsAny<string>(),
             onError: _ => totalActionInvokes++);
@@ -148,7 +133,7 @@ public class RespondReactorTests
         // Arrange
         var totalActionInvokes = 0;
 
-        var sut = new RespondSubscription<int, string>(
+        var sut = new RespondSubscription<string>(
             It.IsAny<Guid>(),
             It.IsAny<string>(),
             onError: _ => totalActionInvokes++);
@@ -168,7 +153,7 @@ public class RespondReactorTests
         // Arrange
         var totalActionInvokes = 0;
 
-        var sut = new RespondSubscription<int, string>(
+        var sut = new RespondSubscription<string>(
             It.IsAny<Guid>(),
             It.IsAny<string>(),
             onError: e =>
@@ -187,9 +172,9 @@ public class RespondReactorTests
     }
 
     [Theory]
-    [InlineData("test-value", "87e99bdc-a972-427a-90be-f2c07c4f9aef", "test-value - 87e99bdc-a972-427a-90be-f2c07c4f9aef")]
-    [InlineData(null, "87e99bdc-a972-427a-90be-f2c07c4f9aef", "87e99bdc-a972-427a-90be-f2c07c4f9aef")]
-    [InlineData("", "87e99bdc-a972-427a-90be-f2c07c4f9aef", "87e99bdc-a972-427a-90be-f2c07c4f9aef")]
+    [InlineData("test-value", "4ff67e7b-bdda-4e0c-b34c-0b32270c336d", "test-value - 4ff67e7b-bdda-4e0c-b34c-0b32270c336d")]
+    [InlineData(null, "4ff67e7b-bdda-4e0c-b34c-0b32270c336d", "4ff67e7b-bdda-4e0c-b34c-0b32270c336d")]
+    [InlineData("", "4ff67e7b-bdda-4e0c-b34c-0b32270c336d", "4ff67e7b-bdda-4e0c-b34c-0b32270c336d")]
     public void ToString_WhenInvoked_ReturnsCorrectResult(
         string name,
         string guid,
@@ -198,7 +183,9 @@ public class RespondReactorTests
         // Arrange
         var id = new Guid(guid);
 
-        var sut = new RespondSubscription<It.IsAnyType, It.IsAnyType>(id, name);
+        var sut = new RespondSubscription<It.IsAnyType>(
+            respondId: id,
+            name: name);
 
         // Act
         var actual = sut.ToString();

@@ -1,4 +1,4 @@
-﻿// <copyright file="ReceiveReactorTests.cs" company="KinsonDigital">
+﻿// <copyright file="ReceiveSubscriptionTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -11,7 +11,7 @@ using Xunit;
 /// <summary>
 /// Tests the <see cref="ReceiveSubscription{TIn}"/> class.
 /// </summary>
-public class ReceiveReactorTests
+public class ReceiveSubscriptionTests
 {
     #region Constructor Tests
     [Fact]

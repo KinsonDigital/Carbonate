@@ -1,4 +1,4 @@
-﻿// <copyright file="ReactorBaseTests.cs" company="KinsonDigital">
+﻿// <copyright file="SubscriptionBaseTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -9,7 +9,7 @@ using FluentAssertions;
 using Helpers.Fakes;
 using Xunit;
 
-public class ReactorBaseTests
+public class SubscriptionBaseTests
 {
     #region Method Tests
     [Fact]
