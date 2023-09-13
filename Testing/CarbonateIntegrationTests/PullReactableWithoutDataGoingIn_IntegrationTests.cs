@@ -5,7 +5,7 @@
 namespace CarbonateIntegrationTests;
 
 using System.Diagnostics.CodeAnalysis;
-using Carbonate.UniDirectional;
+using Carbonate.OneWay;
 using FluentAssertions;
 using Xunit;
 
@@ -21,8 +21,8 @@ public class PullReactableWithoutDataGoingIn_IntegrationTests
 
         var sut = new PullReactable<SampleData>();
 
-        sut.Subscribe(new RespondReactor<SampleData>(
-            respondId: respondId,
+        sut.Subscribe(new RespondSubscription<SampleData>(
+            id: respondId,
             name: "test-name",
             onRespond: () => new SampleData { IntValue = 123, StringValue = "test-str" }));
 

@@ -33,27 +33,31 @@ This library is still under development and is not at v1.0.0 yet!!  However, all
 
 <h2 style="font-weight:bold;border:0" align="center">📖 About Carbonate 📖</h2>
 
-**Carbonate** is a messaging library built on the observable pattern, empowering seamless and dependable push-and-pull message handling across various parts or systems within an application. This fosters decoupling among different components, enhancing your application's overall testability.
+**Carbonate** is a messaging library built on the observable pattern, empowering seamless and dependable push-and-pull message handling across various parts or systems within an application. This fosters decoupling among different components, enhancing your application's overall testability as well as separating cross cutting concerns.
 
-For a real-world example, check out the [Velaptor](https://github.com/KinsonDigital/Velaptor) code base which is an open source 2D game development framework.  This library has been vital for decoupling the different sub-systems and making Velaptor testable.
+You can chose if you want data to flow out with the push notification, if data can be returned from a notification, both out and returned in one notification or no data being sent out or returned.
+
+For a real-world example, check out the [Velaptor](https://github.com/KinsonDigital/Velaptor) code base which is an open source 2D game development framework.  This library has been vital for decoupling the different sub-systems and increasing it's testability.
 
 Go [here](https://refactoring.guru/design-patterns/observer) for information on the observer pattern. This design pattern has been extensively covered in various tutorials and examples across the web, making it well-documented, widely recognized, and a highly popular programming pattern.
 
-> **Note** Click [here](https://github.com/KinsonDigital/Carbonate/tree/preview/Samples) to view all of the sample projects.
+> **Note** Click [here](https://github.com/KinsonDigital/Carbonate/tree/preview/Samples/Samples) to view all of the sample projects.
 
 <h2 style="font-weight:bold;border:0" align="center">✨ Features & Benefits ✨</h2>
 
 **Features:**
-- Sends notifications of events with no data
-- Sends notifications of events with data
-- Sends notifications of events with data and returns data
+- Send push notifications with no data
+- Send push notifications with data only going out
+- Send push notifications with data only being returned
+- Send push notifications with data going out and and being returned
 - Interfaces and abstractions are provided for custom implementations and to provide testability
 
 
 **Benefits:**
 - Increases decoupling
 - Increases testability
-- Sends data and events without needing to change the public API
+- Works well with dependency injection
+- Sends data and events without needing to change the public API of your library/project
 - Promotes the [Open/Closed Principle](https://www.tutorialsteacher.com/csharp/open-closed-principle)
 
 <h2 style="font-weight:bold;border:0" align="center">💡 Examples 💡</h2>
@@ -62,33 +66,33 @@ Below are some examples to demonstrate some basic uses of ***Carbonate***.  This
 
 <h3 style="font-weight:bold;color: #00BBC6">Non-directional push notifications</h3>
 
-To send a _**non-directional**_ push notification of something that has occurred, you can use the `PushReactable` type. The subscriber will use the `ReceiveReactor` type for subscriptions. The term _**Non-directional**_ means that no data is being pushed out or returned from the notification call stack.  This is great for sending a notification that an event has occurred when no data is needed.
+To send a _**non-directional**_ push notification, you can use the `PushReactable` class. You subscribe using the `Subscribe()` method by sending in the subscription object. The term _**non-directional**_ means that no data is being sent out or returned from the notification call stack.  This is great for sending a notification that an event has occurred when no data is needed.
 
 ```cs
 var messenger = new PushReactable(); // Create the messenger object to push notifications
-var msgEventId = Guid.NewGuid(); // This is the ID used to identify the event
+var subId = Guid.NewGuid(); // This is the ID used to identify the event
 
 // Subscribe to the event to receive messages
-IDisposable unsubscriber = messenger.Subscribe(new ReceiveReactor(
-    eventId: msgEventId,
-    name: "my-subscription",
+IDisposable unsubscriber = messenger.Subscribe(new ReceiveSubscription(
+    id: subId,
     onReceive: () => Console.WriteLine("Received a message!"),
+    name: "my-subscription",
     onUnsubscribe: () => Console.WriteLine("Unsubscribed from notifications!"),
     onError: (ex) => Console.WriteLine($"Error: {ex.Message}")
 ));
 
-messenger.Push(msgEventId); // Will invoke all onReceive 'Actions'
+messenger.Push(subId); // Will invoke all onReceive 'Actions'
 unsubscriber.Dispose(); // Will only unsubscribe from this subscription
 ```
 
-Every notification sent out contains a unique ID, which subscribers must use to receive the intended notification, ensuring its exclusivity and eliminating the need for additional logic with other subscriptions.
+Every notification sent out contains a unique ID, which subscribers must use to receive the intended notification, ensuring its exclusivity and eliminating the need for additional logic with with each subscription to ignore some notifications and accept others.
 
 > **💡TIP💡**  
 > If you want to receive a single notification, unsubscribe from further notifications by calling the `Dispose()`
-> method on the `IDisposable` object returned by the `PushReactable` object. All reactable objects return this object for unsubscribing at a later time.
+> method on the `IDisposable` object returned by the _**Reactable**_ object. All reactable objects return this object for unsubscribing at a later time.
 > ```cs
-> new ReceiveReactor(
->     eventId: msgEventId,
+> new ReceiveSubscription(
+>     id: subId,
 >     onReceive: () =>
 >     {
 >        // Processing other required logic here . . .
@@ -98,13 +102,13 @@ Every notification sent out contains a unique ID, which subscribers must use to 
 
 > **Some notes about exceptions and unsubscribing**
 > - Throwing an exception in the 'onReceive' action implementation will invoke the 'onError' action for _**ALL**_ subscriptions.
-> - Invoking `messenger.Dispose()` will invoke the `onUnsubscribe` action for _**ALL**_ subscriptions.
+> - Invoking `*Reactable.Dispose()` method will invoke the `onUnsubscribe` action for _**ALL**_ subscriptions subscribed to the reactable.
 > - You can unsubscribe from a single subscription by calling the `Dispose()` method on the `IDisposable` object returned by the reactable's `Subscribe()` method.
 
 
-<h3 style="font-weight:bold;color: #00BBC6">Uni-directional push notifications</h3>
+<h3 style="font-weight:bold;color: #00BBC6">One way push notifications</h3>
 
-To facilitate one-directional data transfer through push notifications, you can employ the `PushReactable<T>` type for sending data, while subscribers utilize the `ReceiveReactor<T>` type for their subscriptions. Setting up and using this approach follows the same steps as in the previous example. In this context, the term one-directional signifies that data exclusively flows outward with the push notification.
+To facilitate _**one way**_ data transfer through push notifications, you can employ the `PushReactable<TIn>` type for sending data, while subscribers utilize the `ReceiveSubscription<TIn>` type for their subscriptions. Setting up and using this approach follows the same steps as in the previous example. In this context, the term one-directional signifies that data exclusively flows outward with the push notification.
 
 > **Note** The _**ONLY**_ difference with this example is that your sending some data _**WITH**_ your notification.  
 > The generic parameter `T` is the type of data you are sending out.
@@ -112,54 +116,54 @@ To facilitate one-directional data transfer through push notifications, you can 
 
 ```cs
 var messenger = new PushReactable<string>(); // Create the messenger object to push notifications
-var msgEventId = Guid.NewGuid(); // This is the ID used to identify the event
+var subId = Guid.NewGuid(); // This is the ID used to identify the event
 
 // Subscribe to the event to receive messages
-IDisposable unsubscriber = messenger.Subscribe(new ReceiveReactor<string>(
-    eventId: msgEventId,
+IDisposable unsubscriber = messenger.Subscribe(new ReceiveSubscription<string>(
+    id: subId,
+    onReceive: (msg) => Console.WriteLine(msg),
     name: "my-subscription",
-    onReceiveData: (msg) => Console.WriteLine(msg),
     onUnsubscribe: () => Console.WriteLine("Unsubscribed from notifications!"),
     onError: (ex) => Console.WriteLine($"Error: {ex.Message}")
 ));
 
-messenger.Push("hello world!", msgEventId); // Will invoke all onReceive 'Actions'
-messenger.Unsubscribe(msgEventId); // Will invoke all onUnsubscribe 'Actions'
+messenger.Push("hello world!", subId); // Will invoke all onReceive 'Actions'
+messenger.Unsubscribe(subId); // Will invoke all onUnsubscribe 'Actions'
 ```
 
 
-<h3 style="font-weight:bold;color: #00BBC6">Bi-directional push notifications</h3>
+<h3 style="font-weight:bold;color: #00BBC6">Two way push notifications</h3>
 
-To enable ***bi-directional*** push notifications, allowing data to be sent out and received back, you can employ the `PullReactable<T, T>` type. Subscribers, on the other hand, utilize the `RespondReactor<T, T>` for their notification subscriptions. This approach proves useful when you need to send a push notification with data required by the receiver, who then responds with data back to the original caller that initiated the notification.
+To enable ***two way*** push notifications, allowing data to be sent out and returned, you can employ the `PushPullReactable<TIn, TOut>` type. Subscribers, on the other hand, utilize the `RespondSubscription<TIn, TOut>` for their notification subscriptions. This approach proves useful when you need to send a push notification with data required by the receiver, who then responds with data back to the original caller that initiated the notification.
 
 ```cs
-var favoriteGetter = new PullReactable<string, string>();
-var msgEventId = Guid.NewGuid(); // This is the ID used to identify the event
+var favoriteMessenger = new PushPullReactable<string, string>();
+var subId = Guid.NewGuid(); // This is the ID used to identify the event
 
-var unsubscriber = favoriteGetter.Subscribe(new RespondReactor<string, string>(
-    respondId: msgEventId,
-    name: "adder",
-    onRespondData: (data) => data switch
+var unsubscriber = favoriteMessenger.Subscribe(new RespondSubscription<string, string>(
+    respondId: subId,
+    onRespond: (data) => data switch
         {
             "prog-lang" => "C#",
             "food" => "scotch eggs",
             "past-time" => "game development",
             "music" => "hard rock/metal",
         },
+    name: "favorites",
     onUnsubscribe: () => Console.WriteLine("Unsubscribed from notifications!"),
     onError: (ex) => Console.WriteLine($"Error: {ex.Message}")
 ));
 
-Console.WriteLine($"Favorite Language: {favoriteGetter.Pull("prog-lang", msgEventId)}");
-Console.WriteLine($"Favorite Food: {favoriteGetter.Pull("food", msgEventId)}");
-Console.WriteLine($"Favorite Past Time: {favoriteGetter.Pull("past-time", msgEventId)}");
-Console.WriteLine($"Favorite Music: {favoriteGetter.Pull("music", msgEventId)}");
+Console.WriteLine($"Favorite Language: {favoriteMessenger.Pull("prog-lang", subId)}");
+Console.WriteLine($"Favorite Food: {favoriteMessenger.Pull("food", subId)}");
+Console.WriteLine($"Favorite Past Time: {favoriteMessenger.Pull("past-time", subId)}");
+Console.WriteLine($"Favorite Music: {favoriteMessenger.Pull("music", subId)}");
 ```
 
-> **Note** The difference between _**bi-directional**_ and _**uni-directional**_ notifications is that _**bi-directional**_ notifications enable data exchange in both directions whereas _**uni-directional**_ notifications enable data exchange in one direction which sends data out and does not expect data to be returned. 
+> **Note** The difference between _**one way**_ and _**two way**_ notifications is that _**one way**_ notifications enable data travel in one direction whereas _**two way**_ notifications enable data exchange in both directions which sends data out.  The terms 'Push' and 'Pull' should give a clue as to the direction of travel of the data.
 
 
-> **💡TIP💡** Most of the time, the `PushReactable`, `PushReactable<T>`, and `PullReactable<string, string>` types will suit your needs.  However, But if you have any requirements that these can't provide, you can always create implementations of the interfaces provided.
+> **💡TIP💡** Most of the time, the `PushReactable`, `PushReactable<TIn>`, and `PullReactable<TIn, TOut>` types will suit your needs.  However, if you have any requirements that these can't provide, you can always create your own custom implementations of the interfaces provided.
 
 <h2 style="font-weight:bold;" align="center">🙏🏼 Contributing 🙏🏼</h2>
 

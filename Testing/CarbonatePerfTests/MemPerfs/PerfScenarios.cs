@@ -5,7 +5,7 @@
 // ReSharper disable InconsistentNaming
 namespace CarbonatePerfTests.MemPerfs;
 
-using Carbonate.UniDirectional;
+using Carbonate.OneWay;
 
 /// <summary>
 /// Used for testing different scenarios.
@@ -13,13 +13,13 @@ using Carbonate.UniDirectional;
 public enum PerfScenarios
 {
     /// <summary>
-    /// For testing the <see cref="PullReactable{TDataOut}"/>.<see cref="PullReactable{TDataOut}.Pull(System.Guid)"/>
+    /// For testing the <see cref="PullReactable{TOut}"/>.<see cref="PullReactable{TOut}.Pull(System.Guid)"/>
     /// method for <c>struct</c> types.
     /// </summary>
     PullReactable_Pull_Method_With_Struct,
 
     /// <summary>
-    /// For testing the <see cref="PullReactable{TDataOut}"/>.<see cref="PullReactable{TDataOut}.Pull(System.Guid)"/>
+    /// For testing the <see cref="PullReactable{TOut}"/>.<see cref="PullReactable{TOut}.Pull(System.Guid)"/>
     /// method for <see cref="nint"/> types.
     /// </summary>
     PullReactable_Pull_Method_With_Ptr,

@@ -4,7 +4,7 @@
 
 namespace CarbonatePerfTests;
 
-using Carbonate.UniDirectional;
+using Carbonate.OneWay;
 
 /// <summary>
 /// Used for performance testing.
@@ -30,8 +30,8 @@ public class StructDataStore
 
         this.dataItems = new Memory<StructItem>(newDataItems);
 
-        pullReactable.Subscribe(new RespondReactor<StructItem[]>(
-            respondId: Ids.GetDatId,
+        pullReactable.Subscribe(new RespondSubscription<StructItem[]>(
+            id: Ids.GetDatId,
             onRespond: () => this.dataItems.Span.ToArray()));
     }
 }

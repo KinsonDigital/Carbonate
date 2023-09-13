@@ -4,7 +4,7 @@
 
 namespace CarbonatePerfTests;
 
-using Carbonate.UniDirectional;
+using Carbonate.OneWay;
 
 /// <summary>
 /// Used for per testing.
