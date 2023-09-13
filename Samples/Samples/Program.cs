@@ -15,7 +15,7 @@ if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
     Console.SetWindowSize(Console.WindowWidth, Console.LargestWindowHeight);
 }
 
-var samples = new Dictionary<string, Action>()
+var samples = new Dictionary<string, Action>
 {
     ["Non-Directional Notifications Without Fluent Api"] = new NonDirectionalWithoutFluentApi().Run,
     ["One Way Notifications Without Fluent Api"] = new OneWayWithoutFluentApiSample().Run,
