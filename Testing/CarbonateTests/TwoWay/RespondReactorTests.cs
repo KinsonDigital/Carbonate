@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace CarbonateTests.BiDirectional;
+namespace CarbonateTests.TwoWay;
 
 using Carbonate.TwoWay;
 using FluentAssertions;
