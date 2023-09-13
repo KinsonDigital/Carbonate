@@ -1,4 +1,4 @@
-// <copyright file="ReactableBuilder.cs" company="KinsonDigital">
+﻿// <copyright file="ReactableBuilder.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -9,6 +9,7 @@ using TwoWay;
 using NonDirectional;
 using OneWay;
 
+/// <inheritdoc/>
 public class ReactableBuilder : IReactableBuilder
 {
     private Guid id;
@@ -16,11 +17,18 @@ public class ReactableBuilder : IReactableBuilder
     private Action? unsubscribe;
     private Action<Exception>? subOnError;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ReactableBuilder"/> class.
+    /// </summary>
+    /// <remarks>
+    ///     This is required to force users to use the <see cref="IReactableBuilder"/>.<see cref="IReactableBuilder.Create"/> to create
+    ///     new instances of the <see cref="ReactableBuilder"/> class.
+    /// </remarks>
     internal ReactableBuilder()
     {
     }
 
-    public IReactableBuilder WithId(Guid id)
+    /// <inheritdoc/>
     public IReactableBuilder WithId(Guid newId)
     {
         if (newId == Guid.Empty)
@@ -32,6 +40,7 @@ public class ReactableBuilder : IReactableBuilder
         return this;
     }
 
+    /// <inheritdoc/>
     public IReactableBuilder WithName(string name)
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
@@ -40,6 +49,7 @@ public class ReactableBuilder : IReactableBuilder
         return this;
     }
 
+    /// <inheritdoc/>
     public IReactableBuilder WhenUnsubscribing(Action onUnsubscribe)
     {
         ArgumentNullException.ThrowIfNull(onUnsubscribe);
@@ -48,6 +58,7 @@ public class ReactableBuilder : IReactableBuilder
         return this;
     }
 
+    /// <inheritdoc/>
     public IReactableBuilder WithError(Action<Exception> onError)
     {
         ArgumentNullException.ThrowIfNull(onError);
@@ -56,6 +67,7 @@ public class ReactableBuilder : IReactableBuilder
         return this;
     }
 
+    /// <inheritdoc/>
     public (IDisposable, IPushReactable) BuildPush(Action onReceive)
     {
         ArgumentNullException.ThrowIfNull(onReceive);
@@ -74,6 +86,7 @@ public class ReactableBuilder : IReactableBuilder
         return (unsubscriber, pushReactable);
     }
 
+    /// <inheritdoc/>
     public (IDisposable, IPushReactable<TIn>) BuildOneWayPush<TIn>(Action<TIn> onReceive)
     {
         ArgumentNullException.ThrowIfNull(onReceive);
@@ -92,6 +105,7 @@ public class ReactableBuilder : IReactableBuilder
         return (unsubscriber, pushReactable);
     }
 
+    /// <inheritdoc/>
     public (IDisposable, IPullReactable<TOut>) BuildOneWayPull<TOut>(Func<TOut> onRespond)
     {
         ArgumentNullException.ThrowIfNull(onRespond);
@@ -110,7 +124,7 @@ public class ReactableBuilder : IReactableBuilder
         return (unsubscriber, pushReactable);
     }
 
-    public (IDisposable, IPushPullReactable<TIn, TOut>) BuildTwoWayPull<TIn, TOut>(Func<TIn, TOut> onRespond)
+    /// <inheritdoc/>
     public (IDisposable, IPushPullReactable<TIn, TOut>) BuildTwoWayPull<TIn, TOut>(Func<TIn, TOut> onReceiveRespond)
     {
         ArgumentNullException.ThrowIfNull(onReceiveRespond);

@@ -1,4 +1,4 @@
-// <copyright file="SubscriptionBuilder.cs" company="KinsonDigital">
+﻿// <copyright file="SubscriptionBuilder.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -12,6 +12,7 @@ using OneWay;
 using NonDirectional;
 using TwoWay;
 
+/// <inheritdoc/>
 public class SubscriptionBuilder : ISubscriptionBuilder
 {
     private Guid id;
@@ -19,12 +20,25 @@ public class SubscriptionBuilder : ISubscriptionBuilder
     private Action? unsubscribe;
     private Action<Exception>? subOnError;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SubscriptionBuilder"/> class.
+    /// </summary>
+    /// <remarks>
+    ///     This is required to force users to use the <see cref="ISubscriptionBuilder"/>.<see cref="ISubscriptionBuilder.Create"/> to create
+    ///     new instances of the <see cref="SubscriptionBuilder"/> class.
+    /// </remarks>
     internal SubscriptionBuilder()
     {
     }
 
-    // REQUIRED
-    public ISubscriptionBuilder WithId(Guid id)
+    /// <summary>
+    /// Uses the given <paramref name="newId"/> for the final built subscription.
+    /// </summary>
+    /// <param name="newId">The ID to use for the subscription.</param>
+    /// <returns>The subscription builder with the <paramref name="newId"/> that will be applied to the final built subscription.</returns>
+    /// <exception cref="EmptySubscriptionIdException">
+    ///     Thrown if the given <paramref name="newId"/> is empty.
+    /// </exception>
     public ISubscriptionBuilder WithId(Guid newId)
     {
         if (newId == Guid.Empty)
@@ -36,7 +50,7 @@ public class SubscriptionBuilder : ISubscriptionBuilder
         return this;
     }
 
-    // OPTIONAL
+    /// <inheritdoc/>
     public ISubscriptionBuilder WithName(string name)
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
@@ -44,7 +58,7 @@ public class SubscriptionBuilder : ISubscriptionBuilder
         return this;
     }
 
-    // OPTIONAL
+    /// <inheritdoc/>
     public ISubscriptionBuilder WhenUnsubscribing(Action onUnsubscribe)
     {
         ArgumentNullException.ThrowIfNull(onUnsubscribe);
@@ -52,7 +66,7 @@ public class SubscriptionBuilder : ISubscriptionBuilder
         return this;
     }
 
-    // OPTIONAL
+    /// <inheritdoc/>
     public ISubscriptionBuilder WithError(Action<Exception> onError)
     {
         ArgumentNullException.ThrowIfNull(onError);
@@ -61,6 +75,7 @@ public class SubscriptionBuilder : ISubscriptionBuilder
         return this;
     }
 
+    /// <inheritdoc/>
     public IReceiveSubscription BuildNonReceive(Action onReceive)
     {
         ArgumentNullException.ThrowIfNull(onReceive);
@@ -73,6 +88,7 @@ public class SubscriptionBuilder : ISubscriptionBuilder
             onError: this.subOnError);
     }
 
+    /// <inheritdoc/>
     public IReceiveSubscription<TIn> BuildOneWayReceive<TIn>(Action<TIn> onReceive)
     {
         ArgumentNullException.ThrowIfNull(onReceive);
@@ -85,6 +101,7 @@ public class SubscriptionBuilder : ISubscriptionBuilder
             onError: this.subOnError);
     }
 
+    /// <inheritdoc/>
     public IRespondSubscription<TOut> BuildOneWayRespond<TOut>(Func<TOut> onRespond)
     {
         ArgumentNullException.ThrowIfNull(onRespond);
@@ -97,7 +114,7 @@ public class SubscriptionBuilder : ISubscriptionBuilder
             onError: this.subOnError);
     }
 
-    public IRespondSubscription<TIn, TOut> BuildTwoWayRespond<TIn, TOut>(Func<TIn, TOut> onRespond)
+    /// <inheritdoc/>
     public IRespondSubscription<TIn, TOut> BuildTwoWayRespond<TIn, TOut>(Func<TIn, TOut> onReceiveRespond)
     {
         ArgumentNullException.ThrowIfNull(onReceiveRespond);
