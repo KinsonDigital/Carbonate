@@ -8,9 +8,9 @@ using Core.BiDirectional;
 using Core.NonDirectional;
 using Core.UniDirectional;
 
-public interface ISubscription : ISetters<ISubscription>, IWithIdStage<ISubscription>
+public interface ISubscriptionBuilder : ISetters<ISubscriptionBuilder>, IWithIdStage<ISubscriptionBuilder>
 {
-    static IWithIdStage<ISubscription> CreateSubscription() => new Subscription();
+    static IWithIdStage<ISubscriptionBuilder> Create() => new SubscriptionBuilder();
 
     IReceiveReactor BuildNonReceive(Action receive);
     IReceiveReactor<TData> BuildUniReceive<TData>(Action<TData> receive);

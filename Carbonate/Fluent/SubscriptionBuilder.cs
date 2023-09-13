@@ -10,41 +10,41 @@ using Core.UniDirectional;
 using UniDirectional;
 using NonDirectional;
 
-public class Subscription
-    : ISubscription
+public class SubscriptionBuilder
+    : ISubscriptionBuilder
 {
     private Guid id;
     private string? name;
     private Action? unsubscribe;
     private Action<Exception>? onError;
 
-    internal Subscription()
+    internal SubscriptionBuilder()
     {
     }
 
     // REQUIRED
-    public ISubscription WithId(Guid id)
+    public ISubscriptionBuilder WithId(Guid id)
     {
         this.id = id;
         return this;
     }
 
     // OPTIONAL
-    public ISubscription WithName(string name)
+    public ISubscriptionBuilder WithName(string name)
     {
         this.name ??= name;
         return this;
     }
 
     // OPTIONAL
-    public ISubscription WhenUnsubscribing(Action unsubscribe)
+    public ISubscriptionBuilder WhenUnsubscribing(Action unsubscribe)
     {
         this.unsubscribe ??= unsubscribe;
         return this;
     }
 
     // OPTIONAL
-    public ISubscription WithError(Action<Exception> onError)
+    public ISubscriptionBuilder WithError(Action<Exception> onError)
     {
         this.onError ??= onError;
         return this;
