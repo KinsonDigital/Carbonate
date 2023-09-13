@@ -7,7 +7,7 @@ namespace CarbonateTests.TwoWay;
 using Carbonate.TwoWay;
 using Carbonate.Core.TwoWay;
 using FluentAssertions;
-using Moq;
+using NSubstitute;
 using Xunit;
 
 /// <summary>
@@ -25,30 +25,26 @@ public class PushPullReactableTests
 
         const string returnData = "return-value";
 
-        var mockSubA = new Mock<IRespondSubscription<int, string>>();
-        mockSubA.Name = nameof(mockSubA);
-        mockSubA.SetupGet(p => p.Id).Returns(respondIdA);
-        mockSubA.Setup(m => m.OnRespond(It.IsAny<int>()))
-            .Returns(returnData);
+        var mockSubA = Substitute.For<IRespondSubscription<int, string>>();
+        mockSubA.Id.Returns(respondIdA);
+        mockSubA.OnRespond(Arg.Any<int>()).Returns(returnData);
 
-        var mockSubB = new Mock<IRespondSubscription<int, string>>();
-        mockSubB.Name = nameof(mockSubB);
-        mockSubB.SetupGet(p => p.Id).Returns(respondIdB);
-        mockSubB.Setup(m => m.OnRespond(It.IsAny<int>()))
-            .Returns(returnData);
+        var mockSubB = Substitute.For<IRespondSubscription<int, string>>();
+        mockSubB.Id.Returns(respondIdB);
+        mockSubB.OnRespond(Arg.Any<int>()).Returns(returnData);
 
         const int data = 123;
 
         var sut = CreateSystemUnderTest();
-        sut.Subscribe(mockSubA.Object);
-        sut.Subscribe(mockSubB.Object);
+        sut.Subscribe(mockSubA);
+        sut.Subscribe(mockSubB);
 
         // Act
         var actual = sut.PushPull(data, respondIdB);
 
         // Assert
-        mockSubA.Verify(m => m.OnRespond(It.IsAny<int>()), Times.Never);
-        mockSubB.Verify(m => m.OnRespond(It.IsAny<int>()), Times.Once);
+        mockSubA.DidNotReceive().OnRespond(Arg.Any<int>());
+        mockSubB.Received().OnRespond(Arg.Any<int>());
         actual.Should().NotBeNull();
         actual.Should().NotBeNull();
         actual.Should().Be("return-value");

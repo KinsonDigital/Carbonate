@@ -8,7 +8,7 @@ namespace CarbonateTests.NonDirectional;
 using Carbonate.Core.NonDirectional;
 using Carbonate.NonDirectional;
 using FluentAssertions;
-using Moq;
+using NSubstitute;
 using Xunit;
 
 public class PushReactableTests
@@ -36,27 +36,27 @@ public class PushReactableTests
         var invokedEventId = Guid.NewGuid();
         var notInvokedEventId = Guid.NewGuid();
 
-        var mockSubA = new Mock<IReceiveSubscription>();
-        mockSubA.SetupGet(p => p.Id).Returns(invokedEventId);
+        var mockSubA = Substitute.For<IReceiveSubscription>();
+        mockSubA.Id.Returns(invokedEventId);
 
-        var mockSubB = new Mock<IReceiveSubscription>();
-        mockSubB.SetupGet(p => p.Id).Returns(notInvokedEventId);
+        var mockSubB = Substitute.For<IReceiveSubscription>();
+        mockSubB.Id.Returns(notInvokedEventId);
 
-        var mockSubC = new Mock<IReceiveSubscription>();
-        mockSubC.SetupGet(p => p.Id).Returns(invokedEventId);
+        var mockSubC = Substitute.For<IReceiveSubscription>();
+        mockSubC.Id.Returns(invokedEventId);
 
         var sut = CreateSystemUnderTest();
-        sut.Subscribe(mockSubA.Object);
-        sut.Subscribe(mockSubB.Object);
-        sut.Subscribe(mockSubC.Object);
+        sut.Subscribe(mockSubA);
+        sut.Subscribe(mockSubB);
+        sut.Subscribe(mockSubC);
 
         // Act
         sut.Push(invokedEventId);
 
         // Assert
-        mockSubA.Verify(m => m.OnReceive(), Times.Once);
-        mockSubB.Verify(m => m.OnReceive(), Times.Never);
-        mockSubC.Verify(m => m.OnReceive(), Times.Once);
+        mockSubA.Received(1).OnReceive();
+        mockSubB.DidNotReceive().OnReceive();
+        mockSubC.Received(1).OnReceive();
     }
 
     [Fact]

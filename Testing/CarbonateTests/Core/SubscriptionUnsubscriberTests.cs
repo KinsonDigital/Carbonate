@@ -7,7 +7,7 @@ namespace CarbonateTests.Core;
 using System.Diagnostics.CodeAnalysis;
 using Carbonate.Core;
 using FluentAssertions;
-using Moq;
+using NSubstitute;
 using Xunit;
 
 /// <summary>
@@ -52,9 +52,9 @@ public class SubscriptionUnsubscriberTests
     public void TotalSubscriptions_WhenInvoked_ReturnsCorrectResult()
     {
         // Arrange
-        var subscriptions = new[] { new Mock<ISubscription>().Object, new Mock<ISubscription>().Object };
+        var subscriptions = new[] { Substitute.For<ISubscription>(), Substitute.For<ISubscription>() };
 
-        var sut = new SubscriptionUnsubscriber(subscriptions.ToList(), new Mock<ISubscription>().Object);
+        var sut = new SubscriptionUnsubscriber(subscriptions.ToList(), Substitute.For<ISubscription>());
 
         // Act
         var actual = sut.TotalSubscriptions;
@@ -68,13 +68,13 @@ public class SubscriptionUnsubscriberTests
     public void Dispose_WhenInvoked_RemovesFromSubscriptionsList()
     {
         // Arrange
-        var subA = new Mock<ISubscription>();
-        var subB = new Mock<ISubscription>();
-        var subC = new Mock<ISubscription>();
+        var subA = Substitute.For<ISubscription>();
+        var subB = Substitute.For<ISubscription>();
+        var subC = Substitute.For<ISubscription>();
 
-        var subscriptions = new[] { subA.Object, subB.Object, subC.Object };
+        var subscriptions = new[] { subA, subB, subC };
 
-        var sut = new SubscriptionUnsubscriber(subscriptions.ToList(), subB.Object);
+        var sut = new SubscriptionUnsubscriber(subscriptions.ToList(), subB);
 
         // Act
         sut.Dispose();

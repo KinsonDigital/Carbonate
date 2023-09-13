@@ -8,7 +8,7 @@ namespace CarbonateTests.OneWay;
 using Carbonate.Core.OneWay;
 using Carbonate.OneWay;
 using FluentAssertions;
-using Moq;
+using NSubstitute;
 using Xunit;
 
 /// <summary>
@@ -24,7 +24,7 @@ public class PushReactableTests
         var sut = new PushReactable<object>();
 
         // Act
-        var act = () => sut.Push(null, It.IsAny<Guid>());
+        var act = () => sut.Push(null, Guid.NewGuid());
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
@@ -53,27 +53,27 @@ public class PushReactableTests
         var invokedEventId = Guid.NewGuid();
         var notInvokedEventId = Guid.NewGuid();
 
-        var mockSubA = new Mock<IReceiveSubscription<int>>();
-        mockSubA.SetupGet(p => p.Id).Returns(invokedEventId);
+        var mockSubA = Substitute.For<IReceiveSubscription<int>>();
+        mockSubA.Id.Returns(invokedEventId);
 
-        var mockSubB = new Mock<IReceiveSubscription<int>>();
-        mockSubB.SetupGet(p => p.Id).Returns(notInvokedEventId);
+        var mockSubB = Substitute.For<IReceiveSubscription<int>>();
+        mockSubB.Id.Returns(notInvokedEventId);
 
-        var mockSubC = new Mock<IReceiveSubscription<int>>();
-        mockSubC.SetupGet(p => p.Id).Returns(invokedEventId);
+        var mockSubC = Substitute.For<IReceiveSubscription<int>>();
+        mockSubC.Id.Returns(invokedEventId);
 
         var sut = CreateSystemUnderTest();
-        sut.Subscribe(mockSubA.Object);
-        sut.Subscribe(mockSubB.Object);
-        sut.Subscribe(mockSubC.Object);
+        sut.Subscribe(mockSubA);
+        sut.Subscribe(mockSubB);
+        sut.Subscribe(mockSubC);
 
         // Act
         sut.Push(123, invokedEventId);
 
         // Assert
-        mockSubA.Verify(m => m.OnReceive(It.IsAny<int>()), Times.Once);
-        mockSubB.Verify(m => m.OnReceive(It.IsAny<int>()), Times.Never);
-        mockSubC.Verify(m => m.OnReceive(It.IsAny<int>()), Times.Once);
+        mockSubA.Received(1).OnReceive(Arg.Any<int>());
+        mockSubB.DidNotReceive().OnReceive(Arg.Any<int>());
+        mockSubC.Received(1).OnReceive(Arg.Any<int>());
     }
 
     [Fact]
@@ -138,7 +138,7 @@ public class PushReactableTests
         sut.Subscribe(subB);
 
         // Act
-        sut.Push(It.IsAny<int>(), idA);
+        sut.Push(123, idA);
     }
     #endregion
 

@@ -6,7 +6,7 @@ namespace CarbonateTests.TwoWay;
 
 using Carbonate.TwoWay;
 using FluentAssertions;
-using Moq;
+using NSubstitute;
 using Xunit;
 
 /// <summary>
@@ -81,8 +81,8 @@ public class RespondSubscriptionTests
         var totalActionInvokes = 0;
 
         var sut = new RespondSubscription<int, string>(
-            It.IsAny<Guid>(),
-            It.IsAny<Func<int, string>>(),
+            Guid.NewGuid(),
+            onReceiveRespond: _ => string.Empty,
             onUnsubscribe: () => totalActionInvokes++);
 
         // Act
@@ -101,14 +101,14 @@ public class RespondSubscriptionTests
         var totalActionInvokes = 0;
 
         var sut = new RespondSubscription<int, string>(
-            It.IsAny<Guid>(),
-            It.IsAny<Func<int, string>>(),
+            Guid.NewGuid(),
+            onReceiveRespond: _ => string.Empty,
             onError: _ => totalActionInvokes++);
 
         sut.OnUnsubscribe();
 
         // Act
-        sut.OnError(It.IsAny<Exception>());
+        sut.OnError(Arg.Any<Exception>());
 
         // Assert
         totalActionInvokes.Should().Be(0);
@@ -121,8 +121,8 @@ public class RespondSubscriptionTests
         var totalActionInvokes = 0;
 
         var sut = new RespondSubscription<int, string>(
-            It.IsAny<Guid>(),
-            It.IsAny<Func<int, string>>(),
+            Guid.NewGuid(),
+            onReceiveRespond: _ => string.Empty,
             onError: _ => totalActionInvokes++);
 
         // Act
@@ -141,8 +141,8 @@ public class RespondSubscriptionTests
         var totalActionInvokes = 0;
 
         var sut = new RespondSubscription<int, string>(
-            It.IsAny<Guid>(),
-            It.IsAny<Func<int, string>>(),
+            Guid.NewGuid(),
+            onReceiveRespond: _ => string.Empty,
             onError: e =>
             {
                 e.Should().BeOfType<InvalidOperationException>();

@@ -7,7 +7,7 @@ namespace CarbonateTests.OneWay;
 using Carbonate.Core.OneWay;
 using Carbonate.OneWay;
 using FluentAssertions;
-using Moq;
+using NSubstitute;
 using Xunit;
 
 /// <summary>
@@ -24,24 +24,24 @@ public class PullReactableTests
 
         const string returnData = "return-value";
 
-        var mockSubA = new Mock<IRespondSubscription<string>>();
-        mockSubA.SetupGet(p => p.Id).Returns(respondId);
-        mockSubA.Setup(m => m.OnRespond()).Returns(returnData);
+        var mockSubA = Substitute.For<IRespondSubscription<string>>();
+        mockSubA.Id.Returns(respondId);
+        mockSubA.OnRespond().Returns(returnData);
 
-        var mockSubB = new Mock<IRespondSubscription<string>>();
-        mockSubB.SetupGet(p => p.Id).Returns(respondId);
-        mockSubB.Setup(m => m.OnRespond()).Returns(returnData);
+        var mockSubB = Substitute.For<IRespondSubscription<string>>();
+        mockSubB.Id.Returns(respondId);
+        mockSubB.OnRespond().Returns(returnData);
 
         var sut = CreateSystemUnderTest();
-        sut.Subscribe(mockSubA.Object);
-        sut.Subscribe(mockSubB.Object);
+        sut.Subscribe(mockSubA);
+        sut.Subscribe(mockSubB);
 
         // Act
         var actual = sut.Pull(respondId);
 
         // Assert
-        mockSubA.Verify(m => m.OnRespond(), Times.Once);
-        mockSubB.Verify(m => m.OnRespond(), Times.Never);
+        mockSubA.Received(1).OnRespond();
+        mockSubB.DidNotReceive().OnRespond();
         actual.Should().NotBeNull();
         actual.Should().NotBeNull();
         actual.Should().Be("return-value");
@@ -55,27 +55,27 @@ public class PullReactableTests
         var respondIdB = Guid.NewGuid();
         var respondIdC = Guid.NewGuid();
 
-        var mockSubA = new Mock<IRespondSubscription<string>>();
-        mockSubA.SetupGet(p => p.Id).Returns(respondIdA);
+        var mockSubA = Substitute.For<IRespondSubscription<string>>();
+        mockSubA.Id.Returns(respondIdA);
 
-        var mockSubB = new Mock<IRespondSubscription<string>>();
-        mockSubB.SetupGet(p => p.Id).Returns(respondIdB);
+        var mockSubB = Substitute.For<IRespondSubscription<string>>();
+        mockSubB.Id.Returns(respondIdB);
 
-        var mockSubC = new Mock<IRespondSubscription<string>>();
-        mockSubC.SetupGet(p => p.Id).Returns(respondIdC);
+        var mockSubC = Substitute.For<IRespondSubscription<string>>();
+        mockSubC.Id.Returns(respondIdC);
 
         var sut = CreateSystemUnderTest();
-        sut.Subscribe(mockSubA.Object);
-        sut.Subscribe(mockSubB.Object);
-        sut.Subscribe(mockSubC.Object);
+        sut.Subscribe(mockSubA);
+        sut.Subscribe(mockSubB);
+        sut.Subscribe(mockSubC);
 
         // Act
         sut.Pull(respondIdB);
 
         // Assert
-        mockSubA.Verify(m => m.OnRespond(), Times.Never);
-        mockSubB.Verify(m => m.OnRespond(), Times.Once);
-        mockSubC.Verify(m => m.OnRespond(), Times.Never);
+        mockSubA.DidNotReceive().OnRespond();
+        mockSubB.Received(1).OnRespond();
+        mockSubC.DidNotReceive().OnRespond();
     }
 
     [Fact]
@@ -85,7 +85,7 @@ public class PullReactableTests
         var sut = CreateSystemUnderTest();
 
         // Act
-        var actual = sut.Pull(It.IsAny<Guid>());
+        var actual = sut.Pull(Guid.NewGuid());
 
         // Assert
         actual.Should().BeNull();

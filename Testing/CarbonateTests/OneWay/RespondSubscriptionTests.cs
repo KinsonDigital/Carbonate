@@ -6,7 +6,7 @@ namespace CarbonateTests.OneWay;
 
 using Carbonate.OneWay;
 using FluentAssertions;
-using Moq;
+using NSubstitute;
 using Xunit;
 
 /// <summary>
@@ -22,7 +22,7 @@ public class RespondSubscriptionTests
         var id = Guid.NewGuid();
 
         // Act
-        var sut = new RespondSubscription<string>(id, It.IsAny<string>);
+        var sut = new RespondSubscription<string>(id, () => string.Empty);
 
         // Assert
         sut.Id.Should().Be(id);
@@ -49,13 +49,13 @@ public class RespondSubscriptionTests
         // Arrange
         var totalActionInvokes = 0;
         var sut = new RespondSubscription<string>(
-            It.IsAny<Guid>(),
+            Guid.NewGuid(),
             onRespond: () =>
             {
                 totalActionInvokes++;
-                return It.IsAny<string>();
+                return string.Empty;
             },
-            It.IsAny<string>());
+            "test-name");
 
         sut.OnUnsubscribe();
 
@@ -72,13 +72,13 @@ public class RespondSubscriptionTests
         // Arrange
         var totalActionInvokes = 0;
         var sut = new RespondSubscription<string>(
-            It.IsAny<Guid>(),
+            Guid.NewGuid(),
             onRespond: () =>
             {
                 totalActionInvokes++;
                 return "return-value";
             },
-            It.IsAny<string>());
+            "test-name");
 
         // Act
         _ = sut.OnRespond();
@@ -94,8 +94,8 @@ public class RespondSubscriptionTests
         var totalActionInvokes = 0;
 
         var sut = new RespondSubscription<string>(
-            It.IsAny<Guid>(),
-            It.IsAny<Func<string>>(),
+            Guid.NewGuid(),
+            onRespond: () => string.Empty,
             onUnsubscribe: () => totalActionInvokes++);
 
         // Act
@@ -114,14 +114,14 @@ public class RespondSubscriptionTests
         var totalActionInvokes = 0;
 
         var sut = new RespondSubscription<string>(
-            It.IsAny<Guid>(),
-            It.IsAny<Func<string>>(),
+            Guid.NewGuid(),
+            onRespond: () => string.Empty,
             onError: _ => totalActionInvokes++);
 
         sut.OnUnsubscribe();
 
         // Act
-        sut.OnError(It.IsAny<Exception>());
+        sut.OnError(Arg.Any<Exception>());
 
         // Assert
         totalActionInvokes.Should().Be(0);
@@ -134,8 +134,8 @@ public class RespondSubscriptionTests
         var totalActionInvokes = 0;
 
         var sut = new RespondSubscription<string>(
-            It.IsAny<Guid>(),
-            It.IsAny<Func<string>>(),
+            Guid.NewGuid(),
+            onRespond: () => string.Empty,
             onError: _ => totalActionInvokes++);
 
         // Act
@@ -154,8 +154,8 @@ public class RespondSubscriptionTests
         var totalActionInvokes = 0;
 
         var sut = new RespondSubscription<string>(
-            It.IsAny<Guid>(),
-            It.IsAny<Func<string>>(),
+            Guid.Empty,
+            onRespond: () => string.Empty,
             onError: e =>
             {
                 e.Should().BeOfType<InvalidOperationException>();
@@ -183,9 +183,9 @@ public class RespondSubscriptionTests
         // Arrange
         var id = new Guid(guid);
 
-        var sut = new RespondSubscription<It.IsAnyType>(
+        var sut = new RespondSubscription<string>(
             id: id,
-            onRespond: () => new It.IsAnyType(),
+            onRespond: () => string.Empty,
             name: name);
 
         // Act
