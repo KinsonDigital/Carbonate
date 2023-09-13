@@ -4,7 +4,7 @@
 
 namespace CarbonateTests.BiDirectional;
 
-using Carbonate.BiDirectional;
+using Carbonate.TwoWay;
 using FluentAssertions;
 using Moq;
 using Xunit;

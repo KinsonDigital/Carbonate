@@ -4,7 +4,7 @@
 
 // ReSharper disable UnusedVariable
 #pragma warning disable CS8509
-using Carbonate.BiDirectional;
+using Carbonate.TwoWay;
 
 var favoriteGetter = new PullReactable<string, string>();
 

@@ -1,19 +1,19 @@
-﻿// <copyright file="PullReactableTests.cs" company="KinsonDigital">
+﻿// <copyright file="PushPullReactableTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace CarbonateTests.BiDirectional;
+namespace CarbonateTests.TwoWay;
 
-using Carbonate.BiDirectional;
-using Carbonate.Core.BiDirectional;
+using Carbonate.TwoWay;
+using Carbonate.Core.TwoWay;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 /// <summary>
-/// Tests the <see cref="PullReactable{TDataIn,TDataOut}"/> class.
+/// Tests the <see cref="PushPullReactable{TDataIn,TDataOut}"/> class.
 /// </summary>
-public class PullReactableTests
+public class PushPullReactableTests
 {
     #region Method Tests
     [Fact]
@@ -58,7 +58,7 @@ public class PullReactableTests
     public void Pull_WithNoMatchingSubscription_ReturnsCorrectResult()
     {
         // Arrange
-        var sut = new PullReactable<int, int>();
+        var sut = new PushPullReactable<int, int>();
 
         // Act
         var actual = sut.Pull(123, Guid.NewGuid());
@@ -69,8 +69,8 @@ public class PullReactableTests
     #endregion
 
     /// <summary>
-    /// Creates a new instance of <see cref="PullReactable{TDataIn,TDataOut}"/> for the purpose of testing.
+    /// Creates a new instance of <see cref="PushPullReactable{TDataIn,TDataOut}"/> for the purpose of testing.
     /// </summary>
     /// <returns>The instance to test.</returns>
-    private static PullReactable<int, string> CreateSystemUnderTest() => new ();
+    private static PushPullReactable<int, string> CreateSystemUnderTest() => new ();
 }

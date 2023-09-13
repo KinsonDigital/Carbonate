@@ -2,10 +2,10 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace Carbonate.BiDirectional;
+namespace Carbonate.TwoWay;
 
 using System.Diagnostics.CodeAnalysis;
-using Core.BiDirectional;
+using Core.TwoWay;
 
 /// <inheritdoc cref="IRespondReactor{TDataIn,TDataOut}"/>
 [SuppressMessage(

@@ -2,10 +2,10 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace Carbonate.BiDirectional;
+namespace Carbonate.TwoWay;
 
 using Core;
-using Core.BiDirectional;
+using Core.TwoWay;
 
 /// <summary>
 /// Defines a provider for pull-based responses.

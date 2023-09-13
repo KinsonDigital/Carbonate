@@ -4,7 +4,7 @@
 
 namespace Carbonate.Fluent;
 
-using BiDirectional;
+using TwoWay;
 using NonDirectional;
 using OneWay;
 

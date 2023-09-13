@@ -5,7 +5,7 @@
 namespace CarbonateIntegrationTests;
 
 using System.Diagnostics.CodeAnalysis;
-using Carbonate.BiDirectional;
+using Carbonate.TwoWay;
 using FluentAssertions;
 using Xunit;
 

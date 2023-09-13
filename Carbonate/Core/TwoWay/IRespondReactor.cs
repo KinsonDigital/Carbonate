@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace Carbonate.Core.BiDirectional;
+namespace Carbonate.Core.TwoWay;
 
 /// <summary>
 /// Provides a mechanism for receiving responses.

@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace Carbonate.BiDirectional;
+namespace Carbonate.TwoWay;
 
 using System.Diagnostics.CodeAnalysis;
 
