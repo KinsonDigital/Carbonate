@@ -14,14 +14,14 @@ using Core.TwoWay;
     Justification = "Left unsealed to give users more control")]
 public class RespondReactor<TIn, TOut> : ReactorBase, IRespondReactor<TIn, TOut>
 {
-    private readonly Func<TIn, TOut?>? onRespondData;
+    private readonly Func<TIn, TOut?>? onRespond;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RespondReactor{TIn,TOut}"/> class.
     /// </summary>
     /// <param name="respondId">The ID of the <see cref="PushPullReactable{TIn,TOut}"/> requiring a response.</param>
     /// <param name="name">The name of the <see cref="RespondReactor{TIn,TOut}"/>.</param>
-    /// <param name="onRespondData">Executed when requesting a response with data.</param>
+    /// <param name="onRespond">Executed when requesting a response with data.</param>
     /// <param name="onUnsubscribe">
     ///     Executed when the provider has finished sending push-based notifications and is unsubscribed.
     /// </param>
@@ -34,10 +34,10 @@ public class RespondReactor<TIn, TOut> : ReactorBase, IRespondReactor<TIn, TOut>
     public RespondReactor(
         Guid respondId,
         string name = "",
-        Func<TIn, TOut?>? onRespondData = null,
+        Func<TIn, TOut?>? onRespond = null,
         Action? onUnsubscribe = null,
         Action<Exception>? onError = null)
-            : base(respondId, name, onUnsubscribe, onError) => this.onRespondData = onRespondData;
+            : base(respondId, name, onUnsubscribe, onError) => this.onRespond = onRespond;
 
     /// <inheritdoc/>
     public virtual TOut? OnRespond(TIn data)
@@ -52,7 +52,7 @@ public class RespondReactor<TIn, TOut> : ReactorBase, IRespondReactor<TIn, TOut>
             throw new ArgumentNullException(nameof(data), "The parameter must not be null.");
         }
 
-        return this.onRespondData is null ? default : this.onRespondData.Invoke(data);
+        return this.onRespond is null ? default : this.onRespond.Invoke(data);
     }
 
    /// <inheritdoc cref="object.ToString"/>

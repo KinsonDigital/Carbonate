@@ -15,14 +15,14 @@ using Core.OneWay;
     Justification = "Left unsealed to give users more control")]
 public class ReceiveReactor<TIn> : ReactorBase, IReceiveReactor<TIn>
 {
-    private readonly Action<TIn>? onReceiveData;
+    private readonly Action<TIn>? onReceive;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ReceiveReactor{T}"/> class.
     /// </summary>
     /// <param name="eventId">The ID of the event that was pushed by an <see cref="IReactable{IReceiveReactor}"/>.</param>
     /// <param name="name">The name of the <see cref="ReceiveReactor{T}"/>.</param>
-    /// <param name="onReceiveData">Executed when a push notification occurs with some data.</param>
+    /// <param name="onReceive">Executed when a push notification occurs with some data.</param>
     /// <param name="onUnsubscribe">
     ///     Executed when the provider has finished sending push-based notifications and is unsubscribed.
     /// </param>
@@ -35,10 +35,10 @@ public class ReceiveReactor<TIn> : ReactorBase, IReceiveReactor<TIn>
     public ReceiveReactor(
         Guid eventId,
         string name = "",
-        Action<TIn>? onReceiveData = null,
+        Action<TIn>? onReceive = null,
         Action? onUnsubscribe = null,
         Action<Exception>? onError = null)
-            : base(eventId, name, onUnsubscribe, onError) => this.onReceiveData = onReceiveData;
+            : base(eventId, name, onUnsubscribe, onError) => this.onReceive = onReceive;
 
     /// <inheritdoc />
     public virtual void OnReceive(TIn data)
@@ -53,7 +53,7 @@ public class ReceiveReactor<TIn> : ReactorBase, IReceiveReactor<TIn>
             throw new ArgumentNullException(nameof(data), "The parameter must not be null.");
         }
 
-        this.onReceiveData?.Invoke(data);
+        this.onReceive?.Invoke(data);
     }
 
     /// <inheritdoc cref="object.ToString"/>

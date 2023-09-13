@@ -98,7 +98,7 @@ public class PushReactableTests
 
         var initReactorC = new ReceiveReactor<int>(
             eventId: mainId,
-            onReceiveData: _ =>
+            onReceive: _ =>
             {
                 otherUnsubscriberA?.Dispose();
                 otherUnsubscriberB?.Dispose();
@@ -126,7 +126,7 @@ public class PushReactableTests
         var sut = CreateSystemUnderTest();
         var reactorA = new ReceiveReactor<int>(
             eventId: idA,
-            onReceiveData: _ => throw new Exception("test-exception"),
+            onReceive: _ => throw new Exception("test-exception"),
             onError: e =>
             {
                 // Assert

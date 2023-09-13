@@ -80,7 +80,7 @@ public class ReactableBuilder : IReactableBuilder
         var reactor = new ReceiveReactor<TIn>(
             eventId: this.id,
             name: this.name ?? string.Empty,
-            onReceiveData: onReceive,
+            onReceive: onReceive,
             onUnsubscribe: this.unsubscribe,
             onError: this.onError);
 
@@ -116,7 +116,7 @@ public class ReactableBuilder : IReactableBuilder
         var reactor = new RespondReactor<TIn, TOut>(
             respondId: this.id,
             name: this.name ?? string.Empty,
-            onRespondData: onRespond,
+            onRespond: onRespond,
             onUnsubscribe: this.unsubscribe,
             onError: this.onError);
 

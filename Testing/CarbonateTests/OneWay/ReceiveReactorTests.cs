@@ -39,7 +39,7 @@ public class ReceiveReactorTests
 
         const int data = 123;
 
-        var sut = new ReceiveReactor<int>(Guid.NewGuid(), onReceiveData: OnReceive);
+        var sut = new ReceiveReactor<int>(Guid.NewGuid(), onReceive: OnReceive);
 
         // Act
         sut.OnReceive(data);
@@ -57,7 +57,7 @@ public class ReceiveReactorTests
 
         const int data = 123;
 
-        var sut = new ReceiveReactor<int>(Guid.NewGuid(), onReceiveData: OnReceive);
+        var sut = new ReceiveReactor<int>(Guid.NewGuid(), onReceive: OnReceive);
 
         sut.OnUnsubscribe();
 

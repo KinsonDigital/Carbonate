@@ -48,7 +48,7 @@ public class RespondReactorTests
     {
         // Arrange
         var sut = new RespondReactor<int, int>(Guid.NewGuid(),
-            onRespondData: _ => 456);
+            onRespond: _ => 456);
         sut.OnUnsubscribe();
 
         // Act
@@ -77,7 +77,7 @@ public class RespondReactorTests
     {
         // Arrange
         var sut = new RespondReactor<int, object>(Guid.NewGuid(),
-            onRespondData: _ => null);
+            onRespond: _ => null);
 
         // Act
         var actual = sut.OnRespond(123);
@@ -92,7 +92,7 @@ public class RespondReactorTests
         // Arrange
         var obj = new object();
         var sut = new RespondReactor<int, object>(Guid.NewGuid(),
-            onRespondData: _ => obj);
+            onRespond: _ => obj);
 
         // Act
         var actual = sut.OnRespond(123);

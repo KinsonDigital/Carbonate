@@ -24,7 +24,7 @@ public class PushPullReactableWithData_IntegrationTests
         sut.Subscribe(new RespondReactor<int, SampleData>(
             respondId: respondId,
             name: "test-name",
-            onRespondData: _ => new SampleData { IntValue = 123, StringValue = "test-str" }));
+            onRespond: _ => new SampleData { IntValue = 123, StringValue = "test-str" }));
 
         // Act
         var actual = sut.PushPull(123, respondId);
