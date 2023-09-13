@@ -34,11 +34,11 @@ public class ReceiveSubscription<TIn> : SubscriptionBase, IReceiveSubscription<T
     /// </remarks>
     public ReceiveSubscription(
         Guid id,
-        string name = "",
         Action<TIn>? onReceive = null,
+        string name = "",
         Action? onUnsubscribe = null,
         Action<Exception>? onError = null)
-            : base(id, name, onUnsubscribe, onError) => this.onReceive = onReceive;
+            : base(id, onUnsubscribe, name, onError) => this.onReceive = onReceive;
 
     /// <inheritdoc />
     public virtual void OnReceive(TIn data)

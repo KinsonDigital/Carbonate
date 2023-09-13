@@ -30,8 +30,8 @@ public abstract class SubscriptionBase : ISubscription
     /// </remarks>
     protected SubscriptionBase(
         Guid id,
-        string name = "",
         Action? onUnsubscribe = null,
+        string name = "",
         Action<Exception>? onError = null)
     {
         Id = id;

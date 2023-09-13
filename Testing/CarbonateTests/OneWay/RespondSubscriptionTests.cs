@@ -35,7 +35,7 @@ public class RespondSubscriptionTests
         var id = Guid.NewGuid();
 
         // Act
-        var sut = new RespondSubscription<string>(id, "test-name");
+        var sut = new RespondSubscription<string>(id, () => "value", "test-name");
 
         // Assert
         sut.Name.Should().Be("test-name");
@@ -50,12 +50,12 @@ public class RespondSubscriptionTests
         var totalActionInvokes = 0;
         var sut = new RespondSubscription<string>(
             It.IsAny<Guid>(),
-            It.IsAny<string>(),
             onRespond: () =>
             {
                 totalActionInvokes++;
                 return It.IsAny<string>();
-            });
+            },
+            It.IsAny<string>());
 
         sut.OnUnsubscribe();
 
@@ -73,12 +73,12 @@ public class RespondSubscriptionTests
         var totalActionInvokes = 0;
         var sut = new RespondSubscription<string>(
             It.IsAny<Guid>(),
-            It.IsAny<string>(),
             onRespond: () =>
             {
                 totalActionInvokes++;
                 return "return-value";
-            });
+            },
+            It.IsAny<string>());
 
         // Act
         _ = sut.OnRespond();
@@ -95,7 +95,7 @@ public class RespondSubscriptionTests
 
         var sut = new RespondSubscription<string>(
             It.IsAny<Guid>(),
-            It.IsAny<string>(),
+            It.IsAny<Func<string>>(),
             onUnsubscribe: () => totalActionInvokes++);
 
         // Act
@@ -115,7 +115,7 @@ public class RespondSubscriptionTests
 
         var sut = new RespondSubscription<string>(
             It.IsAny<Guid>(),
-            It.IsAny<string>(),
+            It.IsAny<Func<string>>(),
             onError: _ => totalActionInvokes++);
 
         sut.OnUnsubscribe();
@@ -135,7 +135,7 @@ public class RespondSubscriptionTests
 
         var sut = new RespondSubscription<string>(
             It.IsAny<Guid>(),
-            It.IsAny<string>(),
+            It.IsAny<Func<string>>(),
             onError: _ => totalActionInvokes++);
 
         // Act
@@ -155,7 +155,7 @@ public class RespondSubscriptionTests
 
         var sut = new RespondSubscription<string>(
             It.IsAny<Guid>(),
-            It.IsAny<string>(),
+            It.IsAny<Func<string>>(),
             onError: e =>
             {
                 e.Should().BeOfType<InvalidOperationException>();

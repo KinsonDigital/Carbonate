@@ -33,11 +33,11 @@ public class RespondSubscription<TOut> : SubscriptionBase, IRespondSubscription<
     /// </remarks>
     public RespondSubscription(
         Guid id,
-        string name = "",
         Func<TOut?>? onRespond = null,
+        string name = "",
         Action? onUnsubscribe = null,
         Action<Exception>? onError = null)
-            : base(id, name, onUnsubscribe, onError) => this.onRespond = onRespond;
+            : base(id, onUnsubscribe, name, onError) => this.onRespond = onRespond;
 
     /// <inheritdoc />
     public virtual TOut? OnRespond()

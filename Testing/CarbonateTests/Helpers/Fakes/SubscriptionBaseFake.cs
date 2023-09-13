@@ -23,7 +23,7 @@ public class SubscriptionBaseFake : SubscriptionBase
         string name = "",
         Action? onUnsubscribe = null,
         Action<Exception>? onError = null)
-            : base(eventId, name, onUnsubscribe, onError)
+            : base(eventId, onUnsubscribe, name, onError)
     {
     }
 }

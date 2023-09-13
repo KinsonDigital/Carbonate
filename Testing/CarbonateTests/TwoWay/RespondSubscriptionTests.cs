@@ -35,7 +35,7 @@ public class RespondSubscriptionTests
         var id = Guid.NewGuid();
 
         // Act
-        var sut = new RespondSubscription<int, string>(id, "test-name");
+        var sut = new RespondSubscription<int, string>(id, _ => "value", "test-name");
 
         // Assert
         sut.Name.Should().Be("test-name");
@@ -110,7 +110,7 @@ public class RespondSubscriptionTests
 
         var sut = new RespondSubscription<int, string>(
             It.IsAny<Guid>(),
-            It.IsAny<string>(),
+            It.IsAny<Func<int, string>>(),
             onUnsubscribe: () => totalActionInvokes++);
 
         // Act
@@ -130,7 +130,7 @@ public class RespondSubscriptionTests
 
         var sut = new RespondSubscription<int, string>(
             It.IsAny<Guid>(),
-            It.IsAny<string>(),
+            It.IsAny<Func<int, string>>(),
             onError: _ => totalActionInvokes++);
 
         sut.OnUnsubscribe();
@@ -150,7 +150,7 @@ public class RespondSubscriptionTests
 
         var sut = new RespondSubscription<int, string>(
             It.IsAny<Guid>(),
-            It.IsAny<string>(),
+            It.IsAny<Func<int, string>>(),
             onError: _ => totalActionInvokes++);
 
         // Act
@@ -170,7 +170,7 @@ public class RespondSubscriptionTests
 
         var sut = new RespondSubscription<int, string>(
             It.IsAny<Guid>(),
-            It.IsAny<string>(),
+            It.IsAny<Func<int, string>>(),
             onError: e =>
             {
                 e.Should().BeOfType<InvalidOperationException>();
@@ -198,7 +198,7 @@ public class RespondSubscriptionTests
         // Arrange
         var id = new Guid(guid);
 
-        var sut = new RespondSubscription<It.IsAnyType, It.IsAnyType>(id, name);
+        var sut = new RespondSubscription<int, int>(id, _ => 123, name);
 
         // Act
         var actual = sut.ToString();
