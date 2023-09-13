@@ -33,9 +33,9 @@ public class SubscriptionBaseTests
     {
         // Arrange
         var totalInvokes = 0;
-        void OnUnsubscribe() => totalInvokes++;
+        void OnUnsubscribe() => totalInvokes += 1;
 
-        var sut = new ReceiveSubscription<int>(Guid.NewGuid(), onUnsubscribe: OnUnsubscribe);
+        var sut = new ReceiveSubscription<int>(Guid.NewGuid(), _ => { }, onUnsubscribe: OnUnsubscribe);
         sut.OnUnsubscribe();
 
         // Act
@@ -54,7 +54,7 @@ public class SubscriptionBaseTests
 
         var exception = new Exception("test-exception");
 
-        var sut = new ReceiveSubscription<int>(Guid.NewGuid(), onError: OnError);
+        var sut = new ReceiveSubscription<int>(Guid.NewGuid(), _ => { }, onError: OnError);
 
         // Act
         sut.OnError(exception);
@@ -72,7 +72,7 @@ public class SubscriptionBaseTests
 
         var exception = new Exception("test-exception");
 
-        var sut = new ReceiveSubscription<int>(Guid.NewGuid(), onError: OnError);
+        var sut = new ReceiveSubscription<int>(Guid.NewGuid(), _ => { }, onError: OnError);
 
         sut.OnUnsubscribe();
 

@@ -21,7 +21,7 @@ public class ReceiveSubscriptionTests
         var guid = Guid.NewGuid();
 
         // Act
-        var sut = new ReceiveSubscription<int>(guid);
+        var sut = new ReceiveSubscription<int>(guid, _ => { });
         var actual = sut.Id;
 
         // Assert
@@ -72,7 +72,7 @@ public class ReceiveSubscriptionTests
     public void OnReceive_WhenSendingNullData_ThrowsException()
     {
         // Arrange
-        var sut = new ReceiveSubscription<object>(Guid.NewGuid());
+        var sut = new ReceiveSubscription<object>(Guid.NewGuid(), _ => { });
 
         // Act
         var act = () => sut.OnReceive(null);
@@ -93,6 +93,7 @@ public class ReceiveSubscriptionTests
 
         var sut = new ReceiveSubscription<int>(
             id: id,
+            onReceive: _ => { },
             name: name);
 
         // Act

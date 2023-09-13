@@ -34,7 +34,7 @@ public class ReceiveSubscription<TIn> : SubscriptionBase, IReceiveSubscription<T
     /// </remarks>
     public ReceiveSubscription(
         Guid id,
-        Action<TIn>? onReceive = null,
+        Action<TIn> onReceive,
         string name = "",
         Action? onUnsubscribe = null,
         Action<Exception>? onError = null)

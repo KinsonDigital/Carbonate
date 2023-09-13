@@ -86,11 +86,10 @@ public class PushReactableTests
         IDisposable? otherUnsubscriberA = null;
         IDisposable? otherUnsubscriberB = null;
 
-        var initSubA = new ReceiveSubscription<int>(
-            id: mainId);
+        var initSubA = new ReceiveSubscription<int>(id: mainId, _ => { });
 
-        var otherSubA = new ReceiveSubscription<int>(id: otherId);
-        var otherSubB = new ReceiveSubscription<int>(id: otherId);
+        var otherSubA = new ReceiveSubscription<int>(id: otherId, _ => { });
+        var otherSubB = new ReceiveSubscription<int>(id: otherId, _ => { });
 
         const int data = 123;
 
@@ -133,7 +132,7 @@ public class PushReactableTests
                 e.Should().BeOfType<Exception>();
                 e.Message.Should().Be("test-exception");
             });
-        var subB = new ReceiveSubscription<int>(idB);
+        var subB = new ReceiveSubscription<int>(idB, _ => { });
 
         sut.Subscribe(subA);
         sut.Subscribe(subB);

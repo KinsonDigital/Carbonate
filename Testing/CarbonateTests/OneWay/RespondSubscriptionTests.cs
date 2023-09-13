@@ -22,7 +22,7 @@ public class RespondSubscriptionTests
         var id = Guid.NewGuid();
 
         // Act
-        var sut = new RespondSubscription<string>(id);
+        var sut = new RespondSubscription<string>(id, It.IsAny<string>);
 
         // Assert
         sut.Id.Should().Be(id);
@@ -185,6 +185,7 @@ public class RespondSubscriptionTests
 
         var sut = new RespondSubscription<It.IsAnyType>(
             id: id,
+            onRespond: () => new It.IsAnyType(),
             name: name);
 
         // Act

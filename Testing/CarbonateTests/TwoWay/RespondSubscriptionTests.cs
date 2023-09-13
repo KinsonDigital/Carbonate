@@ -22,7 +22,7 @@ public class RespondSubscriptionTests
         var id = Guid.NewGuid();
 
         // Act
-        var sut = new RespondSubscription<int, string>(id);
+        var sut = new RespondSubscription<int, string>(id, _ => string.Empty);
 
         // Assert
         sut.Id.Should().Be(id);
@@ -56,34 +56,6 @@ public class RespondSubscriptionTests
 
         // Assert
         actual.Should().Be(0);
-    }
-
-    [Fact]
-    public void OnRespond_WhenDataIsNull_ThrowsException()
-    {
-        // Arrange
-        var sut = new RespondSubscription<object, int>(Guid.NewGuid());
-
-        // Act
-        var act = () => sut.OnRespond(null);
-
-        // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("The parameter must not be null. (Parameter 'data')");
-    }
-
-    [Fact]
-    public void OnRespond_WhenOnRespondDataIsNull_ReturnsCorrectDefaultResult()
-    {
-        // Arrange
-        var sut = new RespondSubscription<int, object>(Guid.NewGuid(),
-            onRespond: _ => null);
-
-        // Act
-        var actual = sut.OnRespond(123);
-
-        // Assert
-        actual.Should().BeNull();
     }
 
     [Fact]

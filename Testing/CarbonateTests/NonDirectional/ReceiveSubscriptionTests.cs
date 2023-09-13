@@ -21,7 +21,7 @@ public class ReceiveSubscriptionTests
         var guid = Guid.NewGuid();
 
         // Act
-        var sut = new ReceiveSubscription(guid);
+        var sut = new ReceiveSubscription(guid, () => { });
         var actual = sut.Id;
 
         // Assert
@@ -71,7 +71,7 @@ public class ReceiveSubscriptionTests
         var onReceiveInvoked = false;
         void OnUnsubscribe() => onReceiveInvoked = true;
 
-        var sut = new ReceiveSubscription(Guid.NewGuid(), onUnsubscribe: OnUnsubscribe);
+        var sut = new ReceiveSubscription(Guid.NewGuid(), () => { }, onUnsubscribe: OnUnsubscribe);
 
         // Act
         sut.OnUnsubscribe();
@@ -85,9 +85,9 @@ public class ReceiveSubscriptionTests
     {
         // Arrange
         var totalInvokes = 0;
-        void OnUnsubscribe() => totalInvokes++;
+        void OnUnsubscribe() => totalInvokes += 1;
 
-        var sut = new ReceiveSubscription(Guid.NewGuid(), onUnsubscribe: OnUnsubscribe);
+        var sut = new ReceiveSubscription(Guid.NewGuid(), () => { }, onUnsubscribe: OnUnsubscribe);
         sut.OnUnsubscribe();
 
         // Act
@@ -106,7 +106,7 @@ public class ReceiveSubscriptionTests
 
         var exception = new Exception("test-exception");
 
-        var sut = new ReceiveSubscription(Guid.NewGuid(), onError: OnError);
+        var sut = new ReceiveSubscription(Guid.NewGuid(), () => { }, onError: OnError);
 
         // Act
         sut.OnError(exception);
@@ -124,7 +124,7 @@ public class ReceiveSubscriptionTests
 
         var exception = new Exception("test-exception");
 
-        var sut = new ReceiveSubscription(Guid.NewGuid(), onError: OnError);
+        var sut = new ReceiveSubscription(Guid.NewGuid(), () => { }, onError: OnError);
 
         sut.OnUnsubscribe();
 
@@ -146,6 +146,7 @@ public class ReceiveSubscriptionTests
 
         var sut = new ReceiveSubscription(
             id: id,
+            onReceive: () => { },
             name: name);
 
         // Act

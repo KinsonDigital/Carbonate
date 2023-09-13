@@ -191,16 +191,16 @@ public class ReactableBaseTests
         var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
         var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
 
-        var initSubA = new ReceiveSubscription<int>(
-            id: mainId);
+        var initSubA = new ReceiveSubscription<int>(id: mainId, _ => { });
 
-        var otherSubA = new ReceiveSubscription<int>(id: otherId);
-        var otherSubB = new ReceiveSubscription<int>(id: otherId);
+        var otherSubA = new ReceiveSubscription<int>(id: otherId, _ => { });
+        var otherSubB = new ReceiveSubscription<int>(id: otherId, _ => { });
 
         var sut = CreateSystemUnderTest();
 
         var initSubC = new ReceiveSubscription<int>(
             id: mainId,
+            onReceive: _ => { },
             onUnsubscribe: () =>
             {
                 sut.Unsubscribe(otherId);
@@ -271,16 +271,16 @@ public class ReactableBaseTests
         var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
         var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
 
-        var initSubA = new ReceiveSubscription<int>(
-            id: mainId);
+        var initSubA = new ReceiveSubscription<int>(id: mainId, _ => { });
 
-        var otherSubA = new ReceiveSubscription<int>(id: otherId);
-        var otherSubB = new ReceiveSubscription<int>(id: otherId);
+        var otherSubA = new ReceiveSubscription<int>(id: otherId, _ => { });
+        var otherSubB = new ReceiveSubscription<int>(id: otherId, _ => { });
 
         var sut = CreateSystemUnderTest();
 
         var initSubC = new ReceiveSubscription<int>(
             id: mainId,
+            onReceive: _ => { },
             onUnsubscribe: () =>
             {
                 sut.Unsubscribe(otherId);

@@ -33,7 +33,7 @@ public class RespondSubscription<TOut> : SubscriptionBase, IRespondSubscription<
     /// </remarks>
     public RespondSubscription(
         Guid id,
-        Func<TOut?>? onRespond = null,
+        Func<TOut> onRespond,
         string name = "",
         Action? onUnsubscribe = null,
         Action<Exception>? onError = null)
