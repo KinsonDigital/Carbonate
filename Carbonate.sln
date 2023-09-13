@@ -40,7 +40,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarbonatePerfTests", "Testi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{FE9E6658-14A2-452B-890D-6A4C98B1B14B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneWayNotifications", "Samples\OneWayNotifications\OneWayNotifications.csproj", "{28237DD8-C8DD-41B0-864C-4C73B37DC389}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples", "Samples\Samples\Samples.csproj", "{28237DD8-C8DD-41B0-864C-4C73B37DC389}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RunDebugConfigs", "RunDebugConfigs", "{6B7A6BC4-2C17-47BE-98CB-ED447D82A170}"
 	ProjectSection(SolutionItems) = preProject

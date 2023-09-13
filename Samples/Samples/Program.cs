@@ -6,7 +6,7 @@
 // ReSharper disable HeapView.DelegateAllocation
 // ReSharper disable HeapView.ObjectAllocation
 using System.Runtime.InteropServices;
-using OneWayNotifications;
+using Samples;
 
 // Check if the current platform is windows
 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))

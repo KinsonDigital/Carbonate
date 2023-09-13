@@ -5,7 +5,7 @@
 // ReSharper disable HeapView.ObjectAllocation.Evident
 // ReSharper disable HeapView.ObjectAllocation
 #pragma warning disable SA1512
-namespace OneWayNotifications;
+namespace Samples;
 
 using System.Diagnostics.CodeAnalysis;
 using Carbonate.OneWay;

@@ -6,7 +6,7 @@
 // ReSharper disable HeapView.ObjectAllocation
 #pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
 #pragma warning disable SA1512
-namespace OneWayNotifications;
+namespace Samples;
 
 using System.Diagnostics.CodeAnalysis;
 using Carbonate.TwoWay;

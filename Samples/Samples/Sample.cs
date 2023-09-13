@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace OneWayNotifications;
+namespace Samples;
 
 /// <summary>
 /// Represents a sample.
