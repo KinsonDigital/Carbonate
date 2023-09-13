@@ -26,8 +26,8 @@ public class NonDirectionalPushReactable_IntegrationTests
 
         var reactable = new PushReactable();
 
-        unsubscriber = reactable.Subscribe(new ReceiveReactor(
-            eventId: eventId,
+        unsubscriber = reactable.Subscribe(new ReceiveSubscription(
+            id: eventId,
             onReceive: () => { },
             onUnsubscribe: () => unsubscriber?.Dispose()));
 
@@ -36,6 +36,6 @@ public class NonDirectionalPushReactable_IntegrationTests
         reactable.Unsubscribe(eventId);
 
         // Assert
-        reactable.Reactors.Should().HaveCount(0);
+        reactable.Subscriptions.Should().HaveCount(0);
     }
 }

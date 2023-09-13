@@ -10,6 +10,6 @@ using Carbonate.Core;
 /// <summary>
 /// Used for the purpose of testing the <see cref="ReactableBase{T}"/> class.
 /// </summary>
-public class ReactableBaseFake : ReactableBase<IReactor>
+public class ReactableBaseFake : ReactableBase<ISubscription>
 {
 }

@@ -22,7 +22,11 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
-        <PackageReference Include="Moq" Version="[4.18.4, 4.19]" />
+        <PackageReference Include="NSubstitute" Version="5.1.0" />
+        <PackageReference Include="NSubstitute.Analyzers.CSharp" Version="1.0.16">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -46,5 +50,6 @@
       <None Remove="stylecop.json" />
       <AdditionalFiles Include="stylecop.json" />
     </ItemGroup>
+
 
 </Project>

@@ -23,15 +23,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{8518113E-D0C3-4E63-8F2E-542EB6D1CCE9}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\add-new-issue-to-project.yml = .github\workflows\add-new-issue-to-project.yml
 		.github\workflows\build-status-check.yml = .github\workflows\build-status-check.yml
 		.github\workflows\prepare-release.yml = .github\workflows\prepare-release.yml
 		.github\workflows\release.yml = .github\workflows\release.yml
 		.github\workflows\sonar-scan-pr-status-check.yml = .github\workflows\sonar-scan-pr-status-check.yml
 		.github\workflows\sync-bot.yml = .github\workflows\sync-bot.yml
-		.github\workflows\sync-issue-to-pr.yml = .github\workflows\sync-issue-to-pr.yml
 		.github\workflows\sync-status-check.yml = .github\workflows\sync-status-check.yml
 		.github\workflows\test-status-check.yml = .github\workflows\test-status-check.yml
+		.github\workflows\add-new-item-to-project.yml = .github\workflows\add-new-item-to-project.yml
+		.github\workflows\sync-pr-to-issue.yml = .github\workflows\sync-pr-to-issue.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarbonateIntegrationTests", "Testing\CarbonateIntegrationTests\CarbonateIntegrationTests.csproj", "{388E7191-CE3A-492C-9A19-AE67A659E466}"
@@ -40,11 +40,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarbonatePerfTests", "Testi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{FE9E6658-14A2-452B-890D-6A4C98B1B14B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NonDirectionalNotifications", "Samples\NonDirectionalNotifications\NonDirectionalNotifications.csproj", "{CFA0FA48-38CB-44A8-8486-60BD9E1F85D4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples", "Samples\Samples\Samples.csproj", "{28237DD8-C8DD-41B0-864C-4C73B37DC389}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniDirectionalNotifications", "Samples\UniDirectionalNotifications\UniDirectionalNotifications.csproj", "{28237DD8-C8DD-41B0-864C-4C73B37DC389}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BiDirectionalNotifications", "Samples\BiDirectionalNotifications\BiDirectionalNotifications.csproj", "{DC789258-76BF-482D-9449-784C77CDD023}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RunDebugConfigs", "RunDebugConfigs", "{6B7A6BC4-2C17-47BE-98CB-ED447D82A170}"
+	ProjectSection(SolutionItems) = preProject
+		.run\CarbonatePerfTests.run.xml = .run\CarbonatePerfTests.run.xml
+		.run\NonDirectional (Sample).run.xml = .run\NonDirectional (Sample).run.xml
+		.run\OneWay (Sample).run.xml = .run\OneWay (Sample).run.xml
+		.run\TwoWay (Sample).run.xml = .run\TwoWay (Sample).run.xml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -86,14 +90,6 @@ Global
 		{FA8B11A4-48C9-4824-A90F-9D39F3678028}.Release MemPerf|x64.Build.0 = Release MemPerf|x64
 		{FA8B11A4-48C9-4824-A90F-9D39F3678028}.Release|x64.ActiveCfg = Release|x64
 		{FA8B11A4-48C9-4824-A90F-9D39F3678028}.Release|x64.Build.0 = Release|x64
-		{CFA0FA48-38CB-44A8-8486-60BD9E1F85D4}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{CFA0FA48-38CB-44A8-8486-60BD9E1F85D4}.Debug|x64.Build.0 = Debug|Any CPU
-		{CFA0FA48-38CB-44A8-8486-60BD9E1F85D4}.Release Benchmark|x64.ActiveCfg = Debug|Any CPU
-		{CFA0FA48-38CB-44A8-8486-60BD9E1F85D4}.Release Benchmark|x64.Build.0 = Debug|Any CPU
-		{CFA0FA48-38CB-44A8-8486-60BD9E1F85D4}.Release MemPerf|x64.ActiveCfg = Debug|Any CPU
-		{CFA0FA48-38CB-44A8-8486-60BD9E1F85D4}.Release MemPerf|x64.Build.0 = Debug|Any CPU
-		{CFA0FA48-38CB-44A8-8486-60BD9E1F85D4}.Release|x64.ActiveCfg = Release|Any CPU
-		{CFA0FA48-38CB-44A8-8486-60BD9E1F85D4}.Release|x64.Build.0 = Release|Any CPU
 		{28237DD8-C8DD-41B0-864C-4C73B37DC389}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{28237DD8-C8DD-41B0-864C-4C73B37DC389}.Debug|x64.Build.0 = Debug|Any CPU
 		{28237DD8-C8DD-41B0-864C-4C73B37DC389}.Release Benchmark|x64.ActiveCfg = Debug|Any CPU
@@ -102,14 +98,6 @@ Global
 		{28237DD8-C8DD-41B0-864C-4C73B37DC389}.Release MemPerf|x64.Build.0 = Debug|Any CPU
 		{28237DD8-C8DD-41B0-864C-4C73B37DC389}.Release|x64.ActiveCfg = Release|Any CPU
 		{28237DD8-C8DD-41B0-864C-4C73B37DC389}.Release|x64.Build.0 = Release|Any CPU
-		{DC789258-76BF-482D-9449-784C77CDD023}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{DC789258-76BF-482D-9449-784C77CDD023}.Debug|x64.Build.0 = Debug|Any CPU
-		{DC789258-76BF-482D-9449-784C77CDD023}.Release Benchmark|x64.ActiveCfg = Debug|Any CPU
-		{DC789258-76BF-482D-9449-784C77CDD023}.Release Benchmark|x64.Build.0 = Debug|Any CPU
-		{DC789258-76BF-482D-9449-784C77CDD023}.Release MemPerf|x64.ActiveCfg = Debug|Any CPU
-		{DC789258-76BF-482D-9449-784C77CDD023}.Release MemPerf|x64.Build.0 = Debug|Any CPU
-		{DC789258-76BF-482D-9449-784C77CDD023}.Release|x64.ActiveCfg = Release|Any CPU
-		{DC789258-76BF-482D-9449-784C77CDD023}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -119,9 +107,8 @@ Global
 		{8518113E-D0C3-4E63-8F2E-542EB6D1CCE9} = {67F82AED-1502-4803-855A-CDB26DC685B4}
 		{388E7191-CE3A-492C-9A19-AE67A659E466} = {E204672C-F241-4BB7-AAE4-5147BC5B4FF5}
 		{FA8B11A4-48C9-4824-A90F-9D39F3678028} = {E204672C-F241-4BB7-AAE4-5147BC5B4FF5}
-		{CFA0FA48-38CB-44A8-8486-60BD9E1F85D4} = {FE9E6658-14A2-452B-890D-6A4C98B1B14B}
 		{28237DD8-C8DD-41B0-864C-4C73B37DC389} = {FE9E6658-14A2-452B-890D-6A4C98B1B14B}
-		{DC789258-76BF-482D-9449-784C77CDD023} = {FE9E6658-14A2-452B-890D-6A4C98B1B14B}
+		{6B7A6BC4-2C17-47BE-98CB-ED447D82A170} = {67F82AED-1502-4803-855A-CDB26DC685B4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DF1E613C-8039-4941-A938-2A7FA0741F5A}

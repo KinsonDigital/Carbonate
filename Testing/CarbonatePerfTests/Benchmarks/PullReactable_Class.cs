@@ -7,7 +7,7 @@ namespace CarbonatePerfTests.Benchmarks;
 using System.Diagnostics.CodeAnalysis;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Order;
-using Carbonate.UniDirectional;
+using Carbonate.OneWay;
 
 [MemoryDiagnoser]
 [Orderer(SummaryOrderPolicy.FastestToSlowest)]

@@ -7,7 +7,7 @@ namespace Carbonate.NonDirectional;
 using Core.NonDirectional;
 
 /// <inheritdoc cref="IPushReactable"/>
-public class PushReactable : ReactableBase<IReceiveReactor>, IPushReactable
+public class PushReactable : ReactableBase<IReceiveSubscription>, IPushReactable
 {
     /// <inheritdoc cref="IPushable.Push"/>
     public void Push(Guid eventId)
@@ -23,7 +23,7 @@ public class PushReactable : ReactableBase<IReceiveReactor>, IPushReactable
              * just in case the reactable is disposed(removed)
              * in the OnReceive() method.
              */
-            for (var i = Reactors.Count - 1; i >= 0; i--)
+            for (var i = Subscriptions.Count - 1; i >= 0; i--)
             {
                 /*NOTE:
                  * The purpose of this logic is to prevent array index errors
@@ -33,16 +33,16 @@ public class PushReactable : ReactableBase<IReceiveReactor>, IPushReactable
                  * If the current index is not less than or equal to
                  * the total number of items, reset the index to the last item
                  */
-                i = i > Reactors.Count - 1
-                    ? Reactors.Count - 1
+                i = i > Subscriptions.Count - 1
+                    ? Subscriptions.Count - 1
                     : i;
 
-                if (Reactors[i].Id != eventId)
+                if (Subscriptions[i].Id != eventId)
                 {
                     continue;
                 }
 
-                Reactors[i].OnReceive();
+                Subscriptions[i].OnReceive();
             }
         }
         catch (Exception e)
@@ -62,7 +62,7 @@ public class PushReactable : ReactableBase<IReceiveReactor>, IPushReactable
          * just in case the reactable is disposed(removed)
          * in the OnReceive() method.
          */
-        for (var i = Reactors.Count - 1; i >= 0; i--)
+        for (var i = Subscriptions.Count - 1; i >= 0; i--)
         {
             /*NOTE:
              * The purpose of this logic is to prevent array index errors
@@ -72,16 +72,16 @@ public class PushReactable : ReactableBase<IReceiveReactor>, IPushReactable
              * If the current index is not less than or equal to
              * the total number of items, reset the index to the last item
              */
-            i = i > Reactors.Count - 1
-                ? Reactors.Count - 1
+            i = i > Subscriptions.Count - 1
+                ? Subscriptions.Count - 1
                 : i;
 
-            if (Reactors[i].Id != eventId)
+            if (Subscriptions[i].Id != eventId)
             {
                 continue;
             }
 
-            Reactors[i].OnError(exception);
+            Subscriptions[i].OnError(exception);
         }
     }
 }

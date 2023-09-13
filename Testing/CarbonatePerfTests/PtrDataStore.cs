@@ -5,7 +5,7 @@
 namespace CarbonatePerfTests;
 
 using System.Runtime.CompilerServices;
-using Carbonate.UniDirectional;
+using Carbonate.OneWay;
 
 public class PtrDataStore
 {
@@ -25,8 +25,8 @@ public class PtrDataStore
 
         this.dataItems = new Memory<StructItem>(newDataItems);
 
-        pullReactable.Subscribe(new RespondReactor<nint>(
-            respondId: Ids.GetDatId,
+        pullReactable.Subscribe(new RespondSubscription<nint>(
+            id: Ids.GetDatId,
             onRespond: GetDataPtr));
     }
 
