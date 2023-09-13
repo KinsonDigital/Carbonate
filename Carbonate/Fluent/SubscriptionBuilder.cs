@@ -10,6 +10,7 @@ using Core.OneWay;
 using Exceptions;
 using OneWay;
 using NonDirectional;
+using TwoWay;
 
 public class SubscriptionBuilder : ISubscriptionBuilder
 {
@@ -86,12 +87,24 @@ public class SubscriptionBuilder : ISubscriptionBuilder
     public IRespondReactor<TOut> BuildOneWayRespond<TOut>(Func<TOut> onRespond)
     {
         ArgumentNullException.ThrowIfNull(onRespond);
-        return null;
+
+        return new RespondReactor<TOut>(
+            respondId: this.id,
+            name: this.name ?? string.Empty,
+            onRespond: onRespond,
+            onUnsubscribe: this.unsubscribe,
+            onError: this.onError);
     }
 
     public IRespondReactor<TIn, TOut> BuildTwoWayRespond<TIn, TOut>(Func<TIn, TOut> onRespond)
     {
         ArgumentNullException.ThrowIfNull(onRespond);
-        return null;
+
+        return new RespondReactor<TIn, TOut>(
+            respondId: this.id,
+            name: this.name ?? string.Empty,
+            onRespondData: onRespond,
+            onUnsubscribe: this.unsubscribe,
+            onError: this.onError);
     }
 }
