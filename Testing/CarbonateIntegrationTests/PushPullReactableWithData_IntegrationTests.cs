@@ -1,4 +1,4 @@
-﻿// <copyright file="PullReactableWithData_IntegrationTests.cs" company="KinsonDigital">
+﻿// <copyright file="PushPullReactableWithData_IntegrationTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -10,7 +10,7 @@ using FluentAssertions;
 using Xunit;
 
 [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Integrations Tests Are Named In This Way")]
-public class PullReactableWithData_IntegrationTests
+public class PushPullReactableWithData_IntegrationTests
 {
     #region Method Tests
     [Fact]
