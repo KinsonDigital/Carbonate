@@ -19,7 +19,7 @@ public class RespondSubscription<TOut> : SubscriptionBase, IRespondSubscription<
     /// <summary>
     /// Initializes a new instance of the <see cref="RespondSubscription{TOut}"/> class.
     /// </summary>
-    /// <param name="respondId">The ID of the <see cref="IPullReactable{TOut}"/> requiring a response.</param>
+    /// <param name="id">The ID of the <see cref="IPullReactable{TOut}"/> requiring a response.</param>
     /// <param name="name">The name of the <see cref="RespondSubscription{TOut}"/>.</param>
     /// <param name="onRespond">Executed when requesting a response with no data.</param>
     /// <param name="onUnsubscribe">
@@ -32,12 +32,12 @@ public class RespondSubscription<TOut> : SubscriptionBase, IRespondSubscription<
     ///     It is only metadata for debugging or miscellaneous purposes.
     /// </remarks>
     public RespondSubscription(
-        Guid respondId,
+        Guid id,
         string name = "",
         Func<TOut?>? onRespond = null,
         Action? onUnsubscribe = null,
         Action<Exception>? onError = null)
-            : base(respondId, name, onUnsubscribe, onError) => this.onRespond = onRespond;
+            : base(id, name, onUnsubscribe, onError) => this.onRespond = onRespond;
 
     /// <inheritdoc />
     public virtual TOut? OnRespond()
