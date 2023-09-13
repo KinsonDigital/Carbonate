@@ -1,11 +1,11 @@
-// <copyright file="ReactorUnsubscriber.cs" company="KinsonDigital">
+﻿// <copyright file="SubscriptionUnsubscriber.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
 namespace Carbonate.Core;
 
 /// <summary>
-/// A reactor unsubscriber for unsubscribing from a <see cref="IReactable{TReactor}"/>.
+/// A subscription unsubscriber for unsubscribing from a <see cref="IReactable{TSubscription}"/>.
 /// </summary>
 internal sealed class SubscriptionUnsubscriber : IDisposable
 {
@@ -14,10 +14,10 @@ internal sealed class SubscriptionUnsubscriber : IDisposable
     private bool isDisposed;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ReactorUnsubscriber"/> class.
+    /// Initializes a new instance of the <see cref="SubscriptionUnsubscriber"/> class.
     /// </summary>
-    /// <param name="reactors">The list of reactor subscriptions.</param>
-    /// <param name="subscription">The reactor that has been subscribed.</param>
+    /// <param name="subscriptions">The list of subscriptions.</param>
+    /// <param name="subscription">The subscription that has been subscribed.</param>
     internal SubscriptionUnsubscriber(List<ISubscription> subscriptions, ISubscription subscription)
     {
         this.subscriptions = subscriptions ?? throw new ArgumentNullException(nameof(subscriptions), "The parameter must not be null.");

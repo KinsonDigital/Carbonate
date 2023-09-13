@@ -20,7 +20,7 @@ public class ReceiveSubscription<TIn> : SubscriptionBase, IReceiveSubscription<T
     /// <summary>
     /// Initializes a new instance of the <see cref="ReceiveSubscription{TIn}"/> class.
     /// </summary>
-    /// <param name="eventId">The ID of the event that was pushed by an <see cref="IReactable{IReceiveReactor}"/>.</param>
+    /// <param name="eventId">The ID of the event that was pushed by an <see cref="IReactable{TSubscription}"/>.</param>
     /// <param name="name">The name of the <see cref="ReceiveSubscription{TIn}"/>.</param>
     /// <param name="onReceive">Executed when a push notification occurs with some data.</param>
     /// <param name="onUnsubscribe">

@@ -9,12 +9,12 @@ using System.Collections.ObjectModel;
 /// <summary>
 /// Defines a provider for pushing notifications or receiving responses.
 /// </summary>
-/// <typeparam name="TSubscription">The reactor that can subscribed to events.</typeparam>
+/// <typeparam name="TSubscription">The subscription that can react to events.</typeparam>
 public interface IReactable<TSubscription> : IDisposable
     where TSubscription : class, ISubscription
 {
     /// <summary>
-    /// Gets the list of reactors that are subscribed to this <see cref="IReactable{T}"/>.
+    /// Gets the list of subscriptions that are subscribed to this <see cref="IReactable{T}"/>.
     /// </summary>
     ReadOnlyCollection<TSubscription> Subscriptions { get; }
 
@@ -24,11 +24,11 @@ public interface IReactable<TSubscription> : IDisposable
     ReadOnlyCollection<Guid> SubscriptionIds { get; }
 
     /// <summary>
-    /// Notifies the provider that an reactor is to receive notifications.
+    /// Notifies the provider that an subscription is to receive notifications.
     /// </summary>
     /// <param name="subscription">The object that is to receive notifications.</param>
     /// <returns>
-    ///     A reference to an interface that allows reactors to stop receiving
+    ///     A reference to an interface that allows subscriptions to stop receiving
     ///     notifications before the provider has finished sending them.
     /// </returns>
     IDisposable Subscribe(TSubscription subscription);
@@ -43,7 +43,7 @@ public interface IReactable<TSubscription> : IDisposable
     void Unsubscribe(Guid id);
 
     /// <summary>
-    /// Unsubscribes all of the currently subscribed reactors.
+    /// Unsubscribes all of the currently subscribed subscriptions.
     /// </summary>
     void UnsubscribeAll();
 }

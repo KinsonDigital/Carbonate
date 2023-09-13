@@ -1,4 +1,4 @@
-// <copyright file="ReactableBase.cs" company="KinsonDigital">
+﻿// <copyright file="ReactableBase.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -11,7 +11,7 @@ using OneWay;
 /// <summary>
 /// Defines a provider for pushing notifications or receiving responses with default behavior.
 /// </summary>
-/// <typeparam name="TSubscription">The type of reactor to use.</typeparam>
+/// <typeparam name="TSubscription">The type of subscription to use.</typeparam>
 public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
     where TSubscription : class, ISubscription
 {
@@ -68,7 +68,7 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
 
         /* Keep this loop as a for-loop.  Do not convert to for-each.
          * This is due to the Dispose() method possibly being called during
-         * iteration of the reactors list which will cause an exception.
+         * iteration of the subscriptions list which will cause an exception.
         */
         for (var i = this.subscriptions.Count - 1; i >= 0; i--)
         {
@@ -96,7 +96,7 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
             var nothingRemoved = Math.Abs(beforeTotal - this.subscriptions.Count) <= 0;
 
             // Make sure that the OnUnsubscribe implementation did not remove
-            // the reactor before attempting to remove it
+            // the subscription before attempting to remove it
             if (nothingRemoved)
             {
                 this.subscriptions.Remove(this.subscriptions[i]);
@@ -117,7 +117,7 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
 
         /* Keep this loop as a for-loop.  Do not convert to for-each.
          * This is due to the Dispose() method possibly being called during
-         * iteration of the reactors list which will cause an exception.
+         * iteration of the subscriptions list which will cause an exception.
         */
         for (var i = this.subscriptions.Count - 1; i >= 0; i--)
         {

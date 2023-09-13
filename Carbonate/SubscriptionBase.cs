@@ -17,7 +17,7 @@ public abstract class SubscriptionBase : ISubscription
     /// <summary>
     /// Initializes a new instance of the <see cref="SubscriptionBase"/> class.
     /// </summary>
-    /// <param name="eventId">The ID of the event that was pushed by an <see cref="IReactable{TReactor}"/>.</param>
+    /// <param name="eventId">The ID of the event that was pushed by an <see cref="IReactable{TSubscription}"/>.</param>
     /// <param name="name">The name of the <see cref="ISubscription"/>.</param>
     /// <param name="onUnsubscribe">
     ///     Executed when the provider has finished sending push-based notifications and is unsubscribed.

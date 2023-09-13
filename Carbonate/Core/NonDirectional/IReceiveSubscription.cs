@@ -5,7 +5,7 @@
 namespace Carbonate.Core.NonDirectional;
 
 /// <summary>
-/// A reactor capable of standard functionality that can receive push notifications.
+/// A subscription capable of standard functionality that can receive push notifications.
 /// </summary>
 public interface IReceiveSubscription : ISubscription, IReceiver
 {
