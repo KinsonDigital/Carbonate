@@ -96,11 +96,11 @@ public class SubscriptionBuilder : ISubscriptionBuilder
             onError: this.onError);
     }
 
-    public IRespondReactor<TIn, TOut> BuildTwoWayRespond<TIn, TOut>(Func<TIn, TOut> onRespond)
+    public IRespondSubscription<TIn, TOut> BuildTwoWayRespond<TIn, TOut>(Func<TIn, TOut> onRespond)
     {
         ArgumentNullException.ThrowIfNull(onRespond);
 
-        return new RespondReactor<TIn, TOut>(
+        return new RespondSubscription<TIn, TOut>(
             respondId: this.id,
             name: this.name ?? string.Empty,
             onRespond: onRespond,

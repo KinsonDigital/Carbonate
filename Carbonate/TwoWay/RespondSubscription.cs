@@ -7,20 +7,20 @@ namespace Carbonate.TwoWay;
 using System.Diagnostics.CodeAnalysis;
 using Core.TwoWay;
 
-/// <inheritdoc cref="IRespondReactor{TIn,TOut}"/>
+/// <inheritdoc cref="IRespondSubscription{TIn,TOut}"/>
 [SuppressMessage(
     "ReSharper",
     "ClassWithVirtualMembersNeverInherited.Global",
     Justification = "Left unsealed to give users more control")]
-public class RespondReactor<TIn, TOut> : ReactorBase, IRespondReactor<TIn, TOut>
+public class RespondSubscription<TIn, TOut> : ReactorBase, IRespondSubscription<TIn, TOut>
 {
     private readonly Func<TIn, TOut?>? onRespond;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="RespondReactor{TIn,TOut}"/> class.
+    /// Initializes a new instance of the <see cref="RespondSubscription{TIn,TOut}"/> class.
     /// </summary>
     /// <param name="respondId">The ID of the <see cref="PushPullReactable{TIn,TOut}"/> requiring a response.</param>
-    /// <param name="name">The name of the <see cref="RespondReactor{TIn,TOut}"/>.</param>
+    /// <param name="name">The name of the <see cref="RespondSubscription{TIn,TOut}"/>.</param>
     /// <param name="onRespond">Executed when requesting a response with data.</param>
     /// <param name="onUnsubscribe">
     ///     Executed when the provider has finished sending push-based notifications and is unsubscribed.
@@ -31,7 +31,7 @@ public class RespondReactor<TIn, TOut> : ReactorBase, IRespondReactor<TIn, TOut>
     ///     <br/>
     ///     It is only metadata for debugging or miscellaneous purposes.
     /// </remarks>
-    public RespondReactor(
+    public RespondSubscription(
         Guid respondId,
         string name = "",
         Func<TIn, TOut?>? onRespond = null,

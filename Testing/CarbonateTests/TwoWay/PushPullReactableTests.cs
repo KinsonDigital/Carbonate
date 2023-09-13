@@ -25,13 +25,13 @@ public class PushPullReactableTests
 
         const string returnData = "return-value";
 
-        var mockReactorA = new Mock<IRespondReactor<int, string>>();
+        var mockReactorA = new Mock<IRespondSubscription<int, string>>();
         mockReactorA.Name = nameof(mockReactorA);
         mockReactorA.SetupGet(p => p.Id).Returns(respondIdA);
         mockReactorA.Setup(m => m.OnRespond(It.IsAny<int>()))
             .Returns(returnData);
 
-        var mockReactorB = new Mock<IRespondReactor<int, string>>();
+        var mockReactorB = new Mock<IRespondSubscription<int, string>>();
         mockReactorB.Name = nameof(mockReactorB);
         mockReactorB.SetupGet(p => p.Id).Returns(respondIdB);
         mockReactorB.Setup(m => m.OnRespond(It.IsAny<int>()))

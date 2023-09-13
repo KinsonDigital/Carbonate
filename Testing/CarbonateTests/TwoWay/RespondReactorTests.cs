@@ -10,7 +10,7 @@ using Moq;
 using Xunit;
 
 /// <summary>
-/// Tests the <see cref="RespondReactor{TIn,TOut}"/> class.
+/// Tests the <see cref="RespondSubscription{TIn,TOut}"/> class.
 /// </summary>
 public class RespondReactorTests
 {
@@ -22,7 +22,7 @@ public class RespondReactorTests
         var id = Guid.NewGuid();
 
         // Act
-        var sut = new RespondReactor<int, string>(id);
+        var sut = new RespondSubscription<int, string>(id);
 
         // Assert
         sut.Id.Should().Be(id);
@@ -35,7 +35,7 @@ public class RespondReactorTests
         var id = Guid.NewGuid();
 
         // Act
-        var sut = new RespondReactor<int, string>(id, "test-name");
+        var sut = new RespondSubscription<int, string>(id, "test-name");
 
         // Assert
         sut.Name.Should().Be("test-name");
@@ -47,7 +47,7 @@ public class RespondReactorTests
     public void OnRespond_WhenUnsubscribed_ReturnsCorrectDefaultResult()
     {
         // Arrange
-        var sut = new RespondReactor<int, int>(Guid.NewGuid(),
+        var sut = new RespondSubscription<int, int>(Guid.NewGuid(),
             onRespond: _ => 456);
         sut.OnUnsubscribe();
 
@@ -62,7 +62,7 @@ public class RespondReactorTests
     public void OnRespond_WhenDataIsNull_ThrowsException()
     {
         // Arrange
-        var sut = new RespondReactor<object, int>(Guid.NewGuid());
+        var sut = new RespondSubscription<object, int>(Guid.NewGuid());
 
         // Act
         var act = () => sut.OnRespond(null);
@@ -76,7 +76,7 @@ public class RespondReactorTests
     public void OnRespond_WhenOnRespondDataIsNull_ReturnsCorrectDefaultResult()
     {
         // Arrange
-        var sut = new RespondReactor<int, object>(Guid.NewGuid(),
+        var sut = new RespondSubscription<int, object>(Guid.NewGuid(),
             onRespond: _ => null);
 
         // Act
@@ -91,7 +91,7 @@ public class RespondReactorTests
     {
         // Arrange
         var obj = new object();
-        var sut = new RespondReactor<int, object>(Guid.NewGuid(),
+        var sut = new RespondSubscription<int, object>(Guid.NewGuid(),
             onRespond: _ => obj);
 
         // Act
@@ -108,7 +108,7 @@ public class RespondReactorTests
         // Arrange
         var totalActionInvokes = 0;
 
-        var sut = new RespondReactor<int, string>(
+        var sut = new RespondSubscription<int, string>(
             It.IsAny<Guid>(),
             It.IsAny<string>(),
             onUnsubscribe: () => totalActionInvokes++);
@@ -128,7 +128,7 @@ public class RespondReactorTests
         // Arrange
         var totalActionInvokes = 0;
 
-        var sut = new RespondReactor<int, string>(
+        var sut = new RespondSubscription<int, string>(
             It.IsAny<Guid>(),
             It.IsAny<string>(),
             onError: _ => totalActionInvokes++);
@@ -148,7 +148,7 @@ public class RespondReactorTests
         // Arrange
         var totalActionInvokes = 0;
 
-        var sut = new RespondReactor<int, string>(
+        var sut = new RespondSubscription<int, string>(
             It.IsAny<Guid>(),
             It.IsAny<string>(),
             onError: _ => totalActionInvokes++);
@@ -168,7 +168,7 @@ public class RespondReactorTests
         // Arrange
         var totalActionInvokes = 0;
 
-        var sut = new RespondReactor<int, string>(
+        var sut = new RespondSubscription<int, string>(
             It.IsAny<Guid>(),
             It.IsAny<string>(),
             onError: e =>
@@ -198,7 +198,7 @@ public class RespondReactorTests
         // Arrange
         var id = new Guid(guid);
 
-        var sut = new RespondReactor<It.IsAnyType, It.IsAnyType>(id, name);
+        var sut = new RespondSubscription<It.IsAnyType, It.IsAnyType>(id, name);
 
         // Act
         var actual = sut.ToString();

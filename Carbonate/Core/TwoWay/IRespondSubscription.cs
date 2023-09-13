@@ -9,6 +9,6 @@ namespace Carbonate.Core.TwoWay;
 /// </summary>
 /// <typeparam name="TIn">The type of data coming in.</typeparam>
 /// <typeparam name="TOut">The type of data going out.</typeparam>
-public interface IRespondReactor<in TIn, out TOut> : IReactor, IResponder<TIn, TOut>
+public interface IRespondSubscription<in TIn, out TOut> : IReactor, IResponder<TIn, TOut>
 {
 }

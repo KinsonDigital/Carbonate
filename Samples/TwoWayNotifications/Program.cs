@@ -10,7 +10,7 @@ var favoriteGetter = new PushPullReactable<string, string>();
 
 var msgEventId = Guid.NewGuid(); // This is the ID used to identify the event
 
-IDisposable unsubscriber = favoriteGetter.Subscribe(new RespondReactor<string, string>(
+IDisposable unsubscriber = favoriteGetter.Subscribe(new RespondSubscription<string, string>(
     respondId: msgEventId,
     name: "adder",
     onRespond: (data) => data switch
