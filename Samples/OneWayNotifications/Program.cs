@@ -39,7 +39,7 @@ var subscription = subscriptionBuilder
     .WithName(nameof(subscriptionBuilder))
     .WhenUnsubscribing(() => Console.WriteLine("Unsubscribed from notifications!"))
     .WithError(ex => Console.WriteLine($"Error: {ex.Message}"))
-    .BuildUniReceive<string>(msg => Console.WriteLine(msg));
+    .BuildOneWayReceive<string>(msg => Console.WriteLine(msg));
 
 IDisposable subscriptionUnsubscriber = subscriptionMessenger.Subscribe(subscription);
 
