@@ -9,9 +9,9 @@ using System.Diagnostics.CodeAnalysis;
 /// <summary>
 /// Gives the ability to push and pull data from a source using a messaging mechanism.
 /// </summary>
-/// <typeparam name="TDataIn">The type of data coming in.</typeparam>
-/// <typeparam name="TDataOut">The type of data going out.</typeparam>
-public interface IPushablePullable<TDataIn, out TDataOut>
+/// <typeparam name="TIn">The type of data coming in.</typeparam>
+/// <typeparam name="TOut">The type of data going out.</typeparam>
+public interface IPushablePullable<TIn, out TOut>
 {
     /// <summary>
     /// Requests to pull data from a source that matches the given <paramref name="respondId"/>,
@@ -22,5 +22,5 @@ public interface IPushablePullable<TDataIn, out TDataOut>
     /// <returns>The data result going out.</returns>
     [SuppressMessage("ReSharper", "UnusedParameter.Global", Justification = "Public API.")]
     [SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = "Public API.")]
-    TDataOut? PushPull(in TDataIn data, Guid respondId);
+    TOut? PushPull(in TIn data, Guid respondId);
 }

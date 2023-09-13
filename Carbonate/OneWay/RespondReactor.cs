@@ -7,20 +7,20 @@ namespace Carbonate.OneWay;
 using System.Diagnostics.CodeAnalysis;
 using Core.OneWay;
 
-/// <inheritdoc cref="IRespondReactor{TDataOut}"/>
+/// <inheritdoc cref="IRespondReactor{TOut}"/>
 [SuppressMessage(
     "ReSharper",
     "ClassWithVirtualMembersNeverInherited.Global",
     Justification = "Left unsealed to give users more control")]
-public class RespondReactor<TDataOut> : ReactorBase, IRespondReactor<TDataOut>
+public class RespondReactor<TOut> : ReactorBase, IRespondReactor<TOut>
 {
-    private readonly Func<TDataOut?>? onRespond;
+    private readonly Func<TOut?>? onRespond;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="RespondReactor{TDataOut}"/> class.
+    /// Initializes a new instance of the <see cref="RespondReactor{TOut}"/> class.
     /// </summary>
-    /// <param name="respondId">The ID of the <see cref="IPullReactable{TDataOut}"/> requiring a response.</param>
-    /// <param name="name">The name of the <see cref="RespondReactor{TDataOut}"/>.</param>
+    /// <param name="respondId">The ID of the <see cref="IPullReactable{TOut}"/> requiring a response.</param>
+    /// <param name="name">The name of the <see cref="RespondReactor{TOut}"/>.</param>
     /// <param name="onRespond">Executed when requesting a response with no data.</param>
     /// <param name="onUnsubscribe">
     ///     Executed when the provider has finished sending push-based notifications and is unsubscribed.
@@ -34,13 +34,13 @@ public class RespondReactor<TDataOut> : ReactorBase, IRespondReactor<TDataOut>
     public RespondReactor(
         Guid respondId,
         string name = "",
-        Func<TDataOut?>? onRespond = null,
+        Func<TOut?>? onRespond = null,
         Action? onUnsubscribe = null,
         Action<Exception>? onError = null)
             : base(respondId, name, onUnsubscribe, onError) => this.onRespond = onRespond;
 
     /// <inheritdoc />
-    public virtual TDataOut? OnRespond()
+    public virtual TOut? OnRespond()
     {
         if (Unsubscribed)
         {

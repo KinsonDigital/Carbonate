@@ -7,7 +7,7 @@ namespace Carbonate.Core.OneWay;
 /// <summary>
 /// Provides a mechanism for receiving responses.
 /// </summary>
-/// <typeparam name="TDataOut">The type of data going out.</typeparam>
-public interface IRespondReactor<out TDataOut> : IReactor, IResponder<TDataOut>
+/// <typeparam name="TOut">The type of data going out.</typeparam>
+public interface IRespondReactor<out TOut> : IReactor, IResponder<TOut>
 {
 }

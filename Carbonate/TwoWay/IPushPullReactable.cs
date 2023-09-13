@@ -10,8 +10,8 @@ using Core.TwoWay;
 /// <summary>
 /// Defines a provider for pull-based responses.
 /// </summary>
-/// <typeparam name="TDataIn">The type of data coming in.</typeparam>
-/// <typeparam name="TDataOut">The type of data going out.</typeparam>
-public interface IPushPullReactable<TDataIn, TDataOut> : IReactable<IRespondReactor<TDataIn, TDataOut>>, IPushablePullable<TDataIn, TDataOut>
+/// <typeparam name="TIn">The type of data coming in.</typeparam>
+/// <typeparam name="TOut">The type of data going out.</typeparam>
+public interface IPushPullReactable<TIn, TOut> : IReactable<IRespondReactor<TIn, TOut>>, IPushablePullable<TIn, TOut>
 {
 }

@@ -9,12 +9,12 @@ namespace Carbonate.OneWay;
 
 using Core.OneWay;
 
-/// <inheritdoc cref="IPullReactable{TDataOut}"/>
-public class PullReactable<TDataOut>
-    : ReactableBase<IRespondReactor<TDataOut>>, IPullReactable<TDataOut>
+/// <inheritdoc cref="IPullReactable{TOut}"/>
+public class PullReactable<TOut>
+    : ReactableBase<IRespondReactor<TOut>>, IPullReactable<TOut>
 {
     /// <inheritdoc/>
-    public TDataOut? Pull(Guid respondId)
+    public TOut? Pull(Guid respondId)
     {
         for (var i = 0; i < Reactors.Count; i++)
         {
@@ -23,7 +23,7 @@ public class PullReactable<TDataOut>
                 continue;
             }
 
-            return Reactors[i].OnRespond() ?? default(TDataOut);
+            return Reactors[i].OnRespond() ?? default(TOut);
         }
 
         return default;

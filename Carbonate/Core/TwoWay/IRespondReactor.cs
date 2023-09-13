@@ -7,8 +7,8 @@ namespace Carbonate.Core.TwoWay;
 /// <summary>
 /// Provides a mechanism for receiving responses.
 /// </summary>
-/// <typeparam name="TDataIn">The type of data coming in.</typeparam>
-/// <typeparam name="TDataOut">The type of data going out.</typeparam>
-public interface IRespondReactor<in TDataIn, out TDataOut> : IReactor, IResponder<TDataIn, TDataOut>
+/// <typeparam name="TIn">The type of data coming in.</typeparam>
+/// <typeparam name="TOut">The type of data going out.</typeparam>
+public interface IRespondReactor<in TIn, out TOut> : IReactor, IResponder<TIn, TOut>
 {
 }

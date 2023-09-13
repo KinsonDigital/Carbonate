@@ -10,7 +10,7 @@ using Moq;
 using Xunit;
 
 /// <summary>
-/// Tests the <see cref="RespondReactor{TDataIn,TDataOut}"/> class.
+/// Tests the <see cref="RespondReactor{TIn,TOut}"/> class.
 /// </summary>
 public class RespondReactorTests
 {

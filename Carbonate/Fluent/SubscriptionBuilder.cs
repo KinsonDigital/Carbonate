@@ -59,10 +59,10 @@ public class SubscriptionBuilder
             onUnsubscribe: this.unsubscribe,
             onError: this.onError);
 
-    public IReceiveReactor<TDataIn> BuildUniReceive<TDataIn>(Action<TDataIn> receive)
+    public IReceiveReactor<TIn> BuildUniReceive<TIn>(Action<TIn> receive)
     {
         // TODO: check arg for null
-        return new ReceiveReactor<TDataIn>(
+        return new ReceiveReactor<TIn>(
             eventId: this.id,
             name: this.name ?? string.Empty,
             onReceiveData: receive,
@@ -70,13 +70,13 @@ public class SubscriptionBuilder
             onError: this.onError);
     }
 
-    public IRespondReactor<TDataOut> BuildUniRespond<TDataOut>(Func<TDataOut> respond)
+    public IRespondReactor<TOut> BuildUniRespond<TOut>(Func<TOut> respond)
     {
         // TODO: check arg for null
         return null;
     }
 
-    public IRespondReactor<TDataIn, TDataOut> BuildBiRespond<TDataIn, TDataOut>(Func<TDataIn, TDataOut> respond)
+    public IRespondReactor<TIn, TOut> BuildBiRespond<TIn, TOut>(Func<TIn, TOut> respond)
     {
         // TODO: check arg for null
         return null;

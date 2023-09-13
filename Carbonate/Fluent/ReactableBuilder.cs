@@ -60,48 +60,48 @@ public class ReactableBuilder
         return (subscription, pushReactable);
     }
 
-    public (IDisposable, IPushReactable<TDataIn>) BuildUniPush<TDataIn>(Action<TDataIn> receive)
+    public (IDisposable, IPushReactable<TIn>) BuildUniPush<TIn>(Action<TIn> receive)
     {
-        var reactor = new ReceiveReactor<TDataIn>(
+        var reactor = new ReceiveReactor<TIn>(
             eventId: this.id,
             name: this.name ?? string.Empty,
             onReceiveData: receive,
             onUnsubscribe: this.unsubscribe,
             onError: this.onError);
 
-        var pushReactable = new PushReactable<TDataIn>();
+        var pushReactable = new PushReactable<TIn>();
 
         var subscription = pushReactable.Subscribe(reactor);
 
         return (subscription, pushReactable);
     }
 
-    public (IDisposable, IPullReactable<TDataOut>) BuildUniPull<TDataOut>(Func<TDataOut> respond)
+    public (IDisposable, IPullReactable<TOut>) BuildUniPull<TOut>(Func<TOut> respond)
     {
-        var reactor = new RespondReactor<TDataOut>(
+        var reactor = new RespondReactor<TOut>(
             respondId: this.id,
             name: this.name ?? string.Empty,
             onRespond: respond,
             onUnsubscribe: this.unsubscribe,
             onError: this.onError);
 
-        var pushReactable = new PullReactable<TDataOut>();
+        var pushReactable = new PullReactable<TOut>();
 
         var subscription = pushReactable.Subscribe(reactor);
 
         return (subscription, pushReactable);
     }
 
-    public (IDisposable, IPushPullReactable<TDataIn, TDataOut>) BuildBiPull<TDataIn, TDataOut>(Func<TDataIn, TDataOut> respond)
+    public (IDisposable, IPushPullReactable<TIn, TOut>) BuildBiPull<TIn, TOut>(Func<TIn, TOut> respond)
     {
-        var reactor = new RespondReactor<TDataIn, TDataOut>(
+        var reactor = new RespondReactor<TIn, TOut>(
             respondId: this.id,
             name: this.name ?? string.Empty,
             onRespondData: respond,
             onUnsubscribe: this.unsubscribe,
             onError: this.onError);
 
-        var pushReactable = new PushPullReactable<TDataIn, TDataOut>();
+        var pushReactable = new PushPullReactable<TIn, TOut>();
 
         var subscription = pushReactable.Subscribe(reactor);
 

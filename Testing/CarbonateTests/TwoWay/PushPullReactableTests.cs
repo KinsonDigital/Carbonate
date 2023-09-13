@@ -11,7 +11,7 @@ using Moq;
 using Xunit;
 
 /// <summary>
-/// Tests the <see cref="PushPullReactable{TDataIn,TDataOut}"/> class.
+/// Tests the <see cref="PushPullReactable{TIn,TOut}"/> class.
 /// </summary>
 public class PushPullReactableTests
 {
@@ -69,7 +69,7 @@ public class PushPullReactableTests
     #endregion
 
     /// <summary>
-    /// Creates a new instance of <see cref="PushPullReactable{TDataIn,TDataOut}"/> for the purpose of testing.
+    /// Creates a new instance of <see cref="PushPullReactable{TIn,TOut}"/> for the purpose of testing.
     /// </summary>
     /// <returns>The instance to test.</returns>
     private static PushPullReactable<int, string> CreateSystemUnderTest() => new ();

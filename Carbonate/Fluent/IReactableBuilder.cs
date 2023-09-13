@@ -15,9 +15,9 @@ public interface IReactableBuilder
 
     (IDisposable, IPushReactable) BuildNonPush(Action receive);
 
-    (IDisposable, IPushReactable<TDataIn>) BuildUniPush<TDataIn>(Action<TDataIn> receive);
+    (IDisposable, IPushReactable<TIn>) BuildUniPush<TIn>(Action<TIn> receive);
 
-    (IDisposable, IPullReactable<TDataOut>) BuildUniPull<TDataOut>(Func<TDataOut> respond);
+    (IDisposable, IPullReactable<TOut>) BuildUniPull<TOut>(Func<TOut> respond);
 
-    (IDisposable, IPushPullReactable<TDataIn, TDataOut>) BuildBiPull<TDataIn, TDataOut>(Func<TDataIn, TDataOut> respond);
+    (IDisposable, IPushPullReactable<TIn, TOut>) BuildBiPull<TIn, TOut>(Func<TIn, TOut> respond);
 }

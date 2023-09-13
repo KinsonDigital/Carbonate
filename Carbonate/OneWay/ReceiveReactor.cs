@@ -8,14 +8,14 @@ using System.Diagnostics.CodeAnalysis;
 using Core;
 using Core.OneWay;
 
-/// <inheritdoc cref="IReceiveReactor{TDataIn}"/>
+/// <inheritdoc cref="IReceiveReactor{TIn}"/>
 [SuppressMessage(
     "ReSharper",
     "ClassWithVirtualMembersNeverInherited.Global",
     Justification = "Left unsealed to give users more control")]
-public class ReceiveReactor<TDataIn> : ReactorBase, IReceiveReactor<TDataIn>
+public class ReceiveReactor<TIn> : ReactorBase, IReceiveReactor<TIn>
 {
-    private readonly Action<TDataIn>? onReceiveData;
+    private readonly Action<TIn>? onReceiveData;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ReceiveReactor{T}"/> class.
@@ -35,13 +35,13 @@ public class ReceiveReactor<TDataIn> : ReactorBase, IReceiveReactor<TDataIn>
     public ReceiveReactor(
         Guid eventId,
         string name = "",
-        Action<TDataIn>? onReceiveData = null,
+        Action<TIn>? onReceiveData = null,
         Action? onUnsubscribe = null,
         Action<Exception>? onError = null)
             : base(eventId, name, onUnsubscribe, onError) => this.onReceiveData = onReceiveData;
 
     /// <inheritdoc />
-    public virtual void OnReceive(TDataIn data)
+    public virtual void OnReceive(TIn data)
     {
         if (Unsubscribed)
         {

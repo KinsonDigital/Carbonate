@@ -9,11 +9,11 @@ namespace Carbonate.TwoWay;
 
 using Core.TwoWay;
 
-/// <inheritdoc cref="IPushPullReactable{TDataIn,TDataOut}"/>
-public class PushPullReactable<TDataIn, TDataOut> : ReactableBase<IRespondReactor<TDataIn, TDataOut>>, IPushPullReactable<TDataIn, TDataOut>
+/// <inheritdoc cref="IPushPullReactable{TIn,TOut}"/>
+public class PushPullReactable<TIn, TOut> : ReactableBase<IRespondReactor<TIn, TOut>>, IPushPullReactable<TIn, TOut>
 {
     /// <inheritdoc/>
-    public TDataOut? PushPull(in TDataIn data, Guid respondId)
+    public TOut? PushPull(in TIn data, Guid respondId)
     {
         for (var i = 0; i < Reactors.Count; i++)
         {

@@ -7,12 +7,12 @@ namespace Carbonate.OneWay;
 using Core.OneWay;
 
 /// <inheritdoc cref="IPushReactable{T}"/>
-public class PushReactable<TDataIn>
-    : ReactableBase<IReceiveReactor<TDataIn>>, IPushReactable<TDataIn>
+public class PushReactable<TIn>
+    : ReactableBase<IReceiveReactor<TIn>>, IPushReactable<TIn>
 {
     /// <inheritdoc/>
     /// <exception cref="ObjectDisposedException">Thrown if this method is invoked after disposal.</exception>
-    public void Push(in TDataIn data, Guid eventId)
+    public void Push(in TIn data, Guid eventId)
     {
         if (data is null)
         {
@@ -21,7 +21,7 @@ public class PushReactable<TDataIn>
 
         if (IsDisposed)
         {
-            throw new ObjectDisposedException(nameof(PushReactable<TDataIn>), $"{nameof(PushReactable<TDataIn>)} disposed.");
+            throw new ObjectDisposedException(nameof(PushReactable<TIn>), $"{nameof(PushReactable<TIn>)} disposed.");
         }
 
         try

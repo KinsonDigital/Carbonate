@@ -7,20 +7,20 @@ namespace Carbonate.TwoWay;
 using System.Diagnostics.CodeAnalysis;
 using Core.TwoWay;
 
-/// <inheritdoc cref="IRespondReactor{TDataIn,TDataOut}"/>
+/// <inheritdoc cref="IRespondReactor{TIn,TOut}"/>
 [SuppressMessage(
     "ReSharper",
     "ClassWithVirtualMembersNeverInherited.Global",
     Justification = "Left unsealed to give users more control")]
-public class RespondReactor<TDataIn, TDataOut> : ReactorBase, IRespondReactor<TDataIn, TDataOut>
+public class RespondReactor<TIn, TOut> : ReactorBase, IRespondReactor<TIn, TOut>
 {
-    private readonly Func<TDataIn, TDataOut?>? onRespondData;
+    private readonly Func<TIn, TOut?>? onRespondData;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="RespondReactor{TDataIn,TDataOut}"/> class.
+    /// Initializes a new instance of the <see cref="RespondReactor{TIn,TOut}"/> class.
     /// </summary>
-    /// <param name="respondId">The ID of the <see cref="PushPullReactable{TDataIn,TDataOut}"/> requiring a response.</param>
-    /// <param name="name">The name of the <see cref="RespondReactor{TDataIn,TDataOut}"/>.</param>
+    /// <param name="respondId">The ID of the <see cref="PushPullReactable{TIn,TOut}"/> requiring a response.</param>
+    /// <param name="name">The name of the <see cref="RespondReactor{TIn,TOut}"/>.</param>
     /// <param name="onRespondData">Executed when requesting a response with data.</param>
     /// <param name="onUnsubscribe">
     ///     Executed when the provider has finished sending push-based notifications and is unsubscribed.
@@ -34,13 +34,13 @@ public class RespondReactor<TDataIn, TDataOut> : ReactorBase, IRespondReactor<TD
     public RespondReactor(
         Guid respondId,
         string name = "",
-        Func<TDataIn, TDataOut?>? onRespondData = null,
+        Func<TIn, TOut?>? onRespondData = null,
         Action? onUnsubscribe = null,
         Action<Exception>? onError = null)
             : base(respondId, name, onUnsubscribe, onError) => this.onRespondData = onRespondData;
 
     /// <inheritdoc/>
-    public virtual TDataOut? OnRespond(TDataIn data)
+    public virtual TOut? OnRespond(TIn data)
     {
         if (Unsubscribed)
         {

@@ -9,8 +9,8 @@ using System.Diagnostics.CodeAnalysis;
 /// <summary>
 /// Pushes out notifications.
 /// </summary>
-/// <typeparam name="TDataIn">The type of data coming in.</typeparam>
-public interface IPushable<TDataIn>
+/// <typeparam name="TIn">The type of data coming in.</typeparam>
+public interface IPushable<TIn>
 {
     /// <summary>
     /// Pushes a single notification with the given <paramref name="data"/> for an event that matches the given <paramref name="eventId"/>.
@@ -18,5 +18,5 @@ public interface IPushable<TDataIn>
     /// <param name="data">The data that contains the data to push.</param>
     /// <param name="eventId">The ID of the event where the notification will be pushed.</param>
     [SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = "Public API.")]
-    void Push(in TDataIn data, Guid eventId);
+    void Push(in TIn data, Guid eventId);
 }

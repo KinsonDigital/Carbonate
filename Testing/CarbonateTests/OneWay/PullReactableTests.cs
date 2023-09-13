@@ -11,7 +11,7 @@ using Moq;
 using Xunit;
 
 /// <summary>
-/// Tests the <see cref="PullReactable{TDataOut}"/> class.
+/// Tests the <see cref="PullReactable{TOut}"/> class.
 /// </summary>
 public class PullReactableTests
 {
@@ -93,7 +93,7 @@ public class PullReactableTests
     #endregion
 
     /// <summary>
-    /// Creates a new instance of <see cref="PullReactable{TDataOut}"/> for the purpose of testing.
+    /// Creates a new instance of <see cref="PullReactable{TOut}"/> for the purpose of testing.
     /// </summary>
     /// <returns>The instance to test.</returns>
     private static PullReactable<string> CreateSystemUnderTest() => new ();

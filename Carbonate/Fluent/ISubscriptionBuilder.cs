@@ -15,5 +15,5 @@ public interface ISubscriptionBuilder : ISetters<ISubscriptionBuilder>, IWithIdS
     IReceiveReactor BuildNonReceive(Action receive);
     IReceiveReactor<TData> BuildUniReceive<TData>(Action<TData> receive);
     IRespondReactor<TData> BuildUniRespond<TData>(Func<TData> respond);
-    IRespondReactor<TDataIn, TDataOut> BuildBiRespond<TDataIn, TDataOut>(Func<TDataIn, TDataOut> respond);
+    IRespondReactor<TIn, TOut> BuildBiRespond<TIn, TOut>(Func<TIn, TOut> respond);
 }
