@@ -1,4 +1,4 @@
-// <copyright file="Subscription.cs" company="KinsonDigital">
+﻿// <copyright file="SubscriptionBuilder.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -7,11 +7,11 @@ namespace Carbonate.Fluent;
 using Core.TwoWay;
 using Core.NonDirectional;
 using Core.OneWay;
+using Exceptions;
 using OneWay;
 using NonDirectional;
 
-public class SubscriptionBuilder
-    : ISubscriptionBuilder
+public class SubscriptionBuilder : ISubscriptionBuilder
 {
     private Guid id;
     private string? name;
@@ -25,6 +25,11 @@ public class SubscriptionBuilder
     // REQUIRED
     public ISubscriptionBuilder WithId(Guid id)
     {
+        if (id == Guid.Empty)
+        {
+            throw new EmptySubscriptionIdException();
+        }
+
         this.id = id;
         return this;
     }
@@ -32,6 +37,7 @@ public class SubscriptionBuilder
     // OPTIONAL
     public ISubscriptionBuilder WithName(string name)
     {
+        ArgumentException.ThrowIfNullOrEmpty(name);
         this.name ??= name;
         return this;
     }
@@ -39,7 +45,7 @@ public class SubscriptionBuilder
     // OPTIONAL
     public ISubscriptionBuilder WhenUnsubscribing(Action onUnsubscribe)
     {
-        this.unsubscribe ??= unsubscribe;
+        ArgumentNullException.ThrowIfNull(onUnsubscribe);
         this.unsubscribe ??= onUnsubscribe;
         return this;
     }
@@ -47,12 +53,16 @@ public class SubscriptionBuilder
     // OPTIONAL
     public ISubscriptionBuilder WithError(Action<Exception> onError)
     {
+        ArgumentNullException.ThrowIfNull(onError);
+
         this.onError ??= onError;
         return this;
     }
 
     public IReceiveReactor BuildNonReceive(Action onReceive)
     {
+        ArgumentNullException.ThrowIfNull(onReceive);
+
         return new ReceiveReactor(
             eventId: this.id,
             name: this.name ?? string.Empty,
@@ -63,7 +73,7 @@ public class SubscriptionBuilder
 
     public IReceiveReactor<TIn> BuildOneWayReceive<TIn>(Action<TIn> onReceive)
     {
-        // TODO: check arg for null
+        ArgumentNullException.ThrowIfNull(onReceive);
 
         return new ReceiveReactor<TIn>(
             eventId: this.id,
@@ -75,13 +85,13 @@ public class SubscriptionBuilder
 
     public IRespondReactor<TOut> BuildOneWayRespond<TOut>(Func<TOut> onRespond)
     {
-        // TODO: check arg for null
+        ArgumentNullException.ThrowIfNull(onRespond);
         return null;
     }
 
     public IRespondReactor<TIn, TOut> BuildTwoWayRespond<TIn, TOut>(Func<TIn, TOut> onRespond)
     {
-        // TODO: check arg for null
+        ArgumentNullException.ThrowIfNull(onRespond);
         return null;
     }
 }

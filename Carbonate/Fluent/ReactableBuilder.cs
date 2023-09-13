@@ -4,12 +4,12 @@
 
 namespace Carbonate.Fluent;
 
+using Exceptions;
 using TwoWay;
 using NonDirectional;
 using OneWay;
 
-public class ReactableBuilder
-    : IReactableBuilder
+public class ReactableBuilder : IReactableBuilder
 {
     private Guid id;
     private string? name;
@@ -22,30 +22,43 @@ public class ReactableBuilder
 
     public IReactableBuilder WithId(Guid id)
     {
+        if (id == Guid.Empty)
+        {
+            throw new EmptySubscriptionIdException();
+        }
+
         this.id = id;
         return this;
     }
 
     public IReactableBuilder WithName(string name)
     {
+        ArgumentException.ThrowIfNullOrEmpty(name);
+
         this.name = name;
         return this;
     }
 
     public IReactableBuilder WhenUnsubscribing(Action onUnsubscribe)
     {
+        ArgumentNullException.ThrowIfNull(onUnsubscribe);
+
         this.unsubscribe = onUnsubscribe;
         return this;
     }
 
     public IReactableBuilder WithError(Action<Exception> onError)
     {
+        ArgumentNullException.ThrowIfNull(onError);
+
         this.onError = onError;
         return this;
     }
 
     public (IDisposable, IPushReactable) BuildPush(Action onReceive)
     {
+        ArgumentNullException.ThrowIfNull(onReceive);
+
         var reactor = new ReceiveReactor(
             eventId: this.id,
             name: this.name ?? string.Empty,
@@ -62,6 +75,8 @@ public class ReactableBuilder
 
     public (IDisposable, IPushReactable<TIn>) BuildOneWayPush<TIn>(Action<TIn> onReceive)
     {
+        ArgumentNullException.ThrowIfNull(onReceive);
+
         var reactor = new ReceiveReactor<TIn>(
             eventId: this.id,
             name: this.name ?? string.Empty,
@@ -78,6 +93,8 @@ public class ReactableBuilder
 
     public (IDisposable, IPullReactable<TOut>) BuildOneWayPull<TOut>(Func<TOut> onRespond)
     {
+        ArgumentNullException.ThrowIfNull(onRespond);
+
         var reactor = new RespondReactor<TOut>(
             respondId: this.id,
             name: this.name ?? string.Empty,
@@ -94,6 +111,8 @@ public class ReactableBuilder
 
     public (IDisposable, IPushPullReactable<TIn, TOut>) BuildTwoWayPull<TIn, TOut>(Func<TIn, TOut> onRespond)
     {
+        ArgumentNullException.ThrowIfNull(onRespond);
+
         var reactor = new RespondReactor<TIn, TOut>(
             respondId: this.id,
             name: this.name ?? string.Empty,
