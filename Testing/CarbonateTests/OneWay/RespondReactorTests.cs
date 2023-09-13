@@ -10,7 +10,7 @@ using Moq;
 using Xunit;
 
 /// <summary>
-/// Tests the <see cref="RespondReactor{TOut}"/> class.
+/// Tests the <see cref="RespondSubscription{TOut}"/> class.
 /// </summary>
 public class RespondReactorTests
 {
@@ -22,7 +22,7 @@ public class RespondReactorTests
         var id = Guid.NewGuid();
 
         // Act
-        var sut = new RespondReactor<string>(id);
+        var sut = new RespondSubscription<string>(id);
 
         // Assert
         sut.Id.Should().Be(id);
@@ -35,7 +35,7 @@ public class RespondReactorTests
         var id = Guid.NewGuid();
 
         // Act
-        var sut = new RespondReactor<string>(id, "test-name");
+        var sut = new RespondSubscription<string>(id, "test-name");
 
         // Assert
         sut.Name.Should().Be("test-name");
@@ -48,7 +48,7 @@ public class RespondReactorTests
     {
         // Arrange
         var totalActionInvokes = 0;
-        var sut = new RespondReactor<string>(
+        var sut = new RespondSubscription<string>(
             It.IsAny<Guid>(),
             It.IsAny<string>(),
             onRespond: () =>
@@ -71,7 +71,7 @@ public class RespondReactorTests
     {
         // Arrange
         var totalActionInvokes = 0;
-        var sut = new RespondReactor<string>(
+        var sut = new RespondSubscription<string>(
             It.IsAny<Guid>(),
             It.IsAny<string>(),
             onRespond: () =>
@@ -93,7 +93,7 @@ public class RespondReactorTests
         // Arrange
         var totalActionInvokes = 0;
 
-        var sut = new RespondReactor<string>(
+        var sut = new RespondSubscription<string>(
             It.IsAny<Guid>(),
             It.IsAny<string>(),
             onUnsubscribe: () => totalActionInvokes++);
@@ -113,7 +113,7 @@ public class RespondReactorTests
         // Arrange
         var totalActionInvokes = 0;
 
-        var sut = new RespondReactor<string>(
+        var sut = new RespondSubscription<string>(
             It.IsAny<Guid>(),
             It.IsAny<string>(),
             onError: _ => totalActionInvokes++);
@@ -133,7 +133,7 @@ public class RespondReactorTests
         // Arrange
         var totalActionInvokes = 0;
 
-        var sut = new RespondReactor<string>(
+        var sut = new RespondSubscription<string>(
             It.IsAny<Guid>(),
             It.IsAny<string>(),
             onError: _ => totalActionInvokes++);
@@ -153,7 +153,7 @@ public class RespondReactorTests
         // Arrange
         var totalActionInvokes = 0;
 
-        var sut = new RespondReactor<string>(
+        var sut = new RespondSubscription<string>(
             It.IsAny<Guid>(),
             It.IsAny<string>(),
             onError: e =>
@@ -183,7 +183,7 @@ public class RespondReactorTests
         // Arrange
         var id = new Guid(guid);
 
-        var sut = new RespondReactor<It.IsAnyType>(
+        var sut = new RespondSubscription<It.IsAnyType>(
             respondId: id,
             name: name);
 

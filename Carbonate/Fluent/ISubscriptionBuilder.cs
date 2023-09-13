@@ -14,6 +14,6 @@ public interface ISubscriptionBuilder : ISetters<ISubscriptionBuilder>, IWithIdS
 
     IReceiveSubscription BuildNonReceive(Action onReceive);
     IReceiveSubscription<TData> BuildOneWayReceive<TData>(Action<TData> onReceive);
-    IRespondReactor<TData> BuildOneWayRespond<TData>(Func<TData> onRespond);
+    IRespondSubscription<TData> BuildOneWayRespond<TData>(Func<TData> onRespond);
     IRespondReactor<TIn, TOut> BuildTwoWayRespond<TIn, TOut>(Func<TIn, TOut> onRespond);
 }

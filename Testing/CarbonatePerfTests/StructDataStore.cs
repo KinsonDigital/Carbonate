@@ -30,7 +30,7 @@ public class StructDataStore
 
         this.dataItems = new Memory<StructItem>(newDataItems);
 
-        pullReactable.Subscribe(new RespondReactor<StructItem[]>(
+        pullReactable.Subscribe(new RespondSubscription<StructItem[]>(
             respondId: Ids.GetDatId,
             onRespond: () => this.dataItems.Span.ToArray()));
     }

@@ -25,7 +25,7 @@ public class PtrDataStore
 
         this.dataItems = new Memory<StructItem>(newDataItems);
 
-        pullReactable.Subscribe(new RespondReactor<nint>(
+        pullReactable.Subscribe(new RespondSubscription<nint>(
             respondId: Ids.GetDatId,
             onRespond: GetDataPtr));
     }

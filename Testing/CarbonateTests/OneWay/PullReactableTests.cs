@@ -24,11 +24,11 @@ public class PullReactableTests
 
         const string returnData = "return-value";
 
-        var mockReactorA = new Mock<IRespondReactor<string>>();
+        var mockReactorA = new Mock<IRespondSubscription<string>>();
         mockReactorA.SetupGet(p => p.Id).Returns(respondId);
         mockReactorA.Setup(m => m.OnRespond()).Returns(returnData);
 
-        var mockReactorB = new Mock<IRespondReactor<string>>();
+        var mockReactorB = new Mock<IRespondSubscription<string>>();
         mockReactorB.SetupGet(p => p.Id).Returns(respondId);
         mockReactorB.Setup(m => m.OnRespond()).Returns(returnData);
 
@@ -55,13 +55,13 @@ public class PullReactableTests
         var respondIdB = Guid.NewGuid();
         var respondIdC = Guid.NewGuid();
 
-        var mockReactorA = new Mock<IRespondReactor<string>>();
+        var mockReactorA = new Mock<IRespondSubscription<string>>();
         mockReactorA.SetupGet(p => p.Id).Returns(respondIdA);
 
-        var mockReactorB = new Mock<IRespondReactor<string>>();
+        var mockReactorB = new Mock<IRespondSubscription<string>>();
         mockReactorB.SetupGet(p => p.Id).Returns(respondIdB);
 
-        var mockReactorC = new Mock<IRespondReactor<string>>();
+        var mockReactorC = new Mock<IRespondSubscription<string>>();
         mockReactorC.SetupGet(p => p.Id).Returns(respondIdC);
 
         var sut = CreateSystemUnderTest();

@@ -11,7 +11,7 @@ using Core.OneWay;
 
 /// <inheritdoc cref="IPullReactable{TOut}"/>
 public class PullReactable<TOut>
-    : ReactableBase<IRespondReactor<TOut>>, IPullReactable<TOut>
+    : ReactableBase<IRespondSubscription<TOut>>, IPullReactable<TOut>
 {
     /// <inheritdoc/>
     public TOut? Pull(Guid respondId)

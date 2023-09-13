@@ -21,7 +21,7 @@ public class PullReactableWithoutDataGoingIn_IntegrationTests
 
         var sut = new PullReactable<SampleData>();
 
-        sut.Subscribe(new RespondReactor<SampleData>(
+        sut.Subscribe(new RespondSubscription<SampleData>(
             respondId: respondId,
             name: "test-name",
             onRespond: () => new SampleData { IntValue = 123, StringValue = "test-str" }));

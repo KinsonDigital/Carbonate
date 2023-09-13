@@ -7,20 +7,20 @@ namespace Carbonate.OneWay;
 using System.Diagnostics.CodeAnalysis;
 using Core.OneWay;
 
-/// <inheritdoc cref="IRespondReactor{TOut}"/>
+/// <inheritdoc cref="IRespondSubscription{TOut}"/>
 [SuppressMessage(
     "ReSharper",
     "ClassWithVirtualMembersNeverInherited.Global",
     Justification = "Left unsealed to give users more control")]
-public class RespondReactor<TOut> : ReactorBase, IRespondReactor<TOut>
+public class RespondSubscription<TOut> : ReactorBase, IRespondSubscription<TOut>
 {
     private readonly Func<TOut?>? onRespond;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="RespondReactor{TOut}"/> class.
+    /// Initializes a new instance of the <see cref="RespondSubscription{TOut}"/> class.
     /// </summary>
     /// <param name="respondId">The ID of the <see cref="IPullReactable{TOut}"/> requiring a response.</param>
-    /// <param name="name">The name of the <see cref="RespondReactor{TOut}"/>.</param>
+    /// <param name="name">The name of the <see cref="RespondSubscription{TOut}"/>.</param>
     /// <param name="onRespond">Executed when requesting a response with no data.</param>
     /// <param name="onUnsubscribe">
     ///     Executed when the provider has finished sending push-based notifications and is unsubscribed.
@@ -31,7 +31,7 @@ public class RespondReactor<TOut> : ReactorBase, IRespondReactor<TOut>
     ///     <br/>
     ///     It is only metadata for debugging or miscellaneous purposes.
     /// </remarks>
-    public RespondReactor(
+    public RespondSubscription(
         Guid respondId,
         string name = "",
         Func<TOut?>? onRespond = null,
