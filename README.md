@@ -41,7 +41,8 @@ For a real-world example, check out the [Velaptor](https://github.com/KinsonDigi
 
 Go [here](https://refactoring.guru/design-patterns/observer) for information on the observer pattern. This design pattern has been extensively covered in various tutorials and examples across the web, making it well-documented, widely recognized, and a highly popular programming pattern.
 
-> **Note** Click [here](https://github.com/KinsonDigital/Carbonate/tree/preview/Samples/Samples) to view all of the sample projects.
+> **Note**
+> Click [here](https://github.com/KinsonDigital/Carbonate/tree/preview/Samples/Samples) to view all of the sample projects.
 
 <h2 style="font-weight:bold;border:0" align="center">✨ Features & Benefits ✨</h2>
 
@@ -100,7 +101,8 @@ Every notification sent out contains a unique ID, which subscribers must use to 
 >     });
 > ```
 
-> **Some notes about exceptions and unsubscribing**
+> **Note**
+> Some notes about exceptions and unsubscribing**
 > - Throwing an exception in the 'onReceive' action implementation will invoke the 'onError' action for _**ALL**_ subscriptions.
 > - Invoking `*Reactable.Dispose()` method will invoke the `onUnsubscribe` action for _**ALL**_ subscriptions subscribed to the reactable.
 > - You can unsubscribe from a single subscription by calling the `Dispose()` method on the `IDisposable` object returned by the reactable's `Subscribe()` method.
@@ -110,7 +112,8 @@ Every notification sent out contains a unique ID, which subscribers must use to 
 
 To facilitate _**one way**_ data transfer through push notifications, you can employ the `PushReactable<TIn>` type for sending data, while subscribers utilize the `ReceiveSubscription<TIn>` type for their subscriptions. Setting up and using this approach follows the same steps as in the previous example. In this context, the term one-directional signifies that data exclusively flows outward with the push notification.
 
-> **Note** The _**ONLY**_ difference with this example is that your sending some data _**WITH**_ your notification.  
+> **Note**
+> The _**ONLY**_ difference with this example is that your sending some data _**WITH**_ your notification.  
 > The generic parameter `T` is the type of data you are sending out.
 > All other behaviors are the same.
 
@@ -160,10 +163,12 @@ Console.WriteLine($"Favorite Past Time: {favoriteMessenger.Pull("past-time", sub
 Console.WriteLine($"Favorite Music: {favoriteMessenger.Pull("music", subId)}");
 ```
 
-> **Note** The difference between _**one way**_ and _**two way**_ notifications is that _**one way**_ notifications enable data travel in one direction whereas _**two way**_ notifications enable data exchange in both directions which sends data out.  The terms 'Push' and 'Pull' should give a clue as to the direction of travel of the data.
+> **Note**
+> The difference between _**one way**_ and _**two way**_ notifications is that _**one way**_ notifications enable data travel in one direction whereas _**two way**_ notifications enable data exchange in both directions which sends data out.  The terms 'Push' and 'Pull' should give a clue as to the direction of travel of the data.
 
 
-> **💡TIP💡** Most of the time, the `PushReactable`, `PushReactable<TIn>`, and `PullReactable<TIn, TOut>` types will suit your needs.  However, if you have any requirements that these can't provide, you can always create your own custom implementations of the interfaces provided.
+> **💡TIP💡**
+> Most of the time, the `PushReactable`, `PushReactable<TIn>`, and `PullReactable<TIn, TOut>` types will suit your needs.  However, if you have any requirements that these can't provide, you can always create your own custom implementations of the interfaces provided.
 
 <h2 style="font-weight:bold;" align="center">🙏🏼 Contributing 🙏🏼</h2>
 
