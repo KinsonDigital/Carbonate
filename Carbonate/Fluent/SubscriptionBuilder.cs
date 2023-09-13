@@ -1,4 +1,4 @@
-﻿// <copyright file="SubscriptionBuilder.cs" company="KinsonDigital">
+// <copyright file="SubscriptionBuilder.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -15,9 +15,9 @@ using TwoWay;
 public class SubscriptionBuilder : ISubscriptionBuilder
 {
     private Guid id;
-    private string? name;
+    private string? subName;
     private Action? unsubscribe;
-    private Action<Exception>? onError;
+    private Action<Exception>? subOnError;
 
     internal SubscriptionBuilder()
     {
@@ -25,13 +25,14 @@ public class SubscriptionBuilder : ISubscriptionBuilder
 
     // REQUIRED
     public ISubscriptionBuilder WithId(Guid id)
+    public ISubscriptionBuilder WithId(Guid newId)
     {
-        if (id == Guid.Empty)
+        if (newId == Guid.Empty)
         {
             throw new EmptySubscriptionIdException();
         }
 
-        this.id = id;
+        this.id = newId;
         return this;
     }
 
@@ -39,7 +40,7 @@ public class SubscriptionBuilder : ISubscriptionBuilder
     public ISubscriptionBuilder WithName(string name)
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
-        this.name ??= name;
+        this.subName ??= name;
         return this;
     }
 
@@ -56,7 +57,7 @@ public class SubscriptionBuilder : ISubscriptionBuilder
     {
         ArgumentNullException.ThrowIfNull(onError);
 
-        this.onError ??= onError;
+        this.subOnError ??= onError;
         return this;
     }
 
@@ -66,10 +67,10 @@ public class SubscriptionBuilder : ISubscriptionBuilder
 
         return new ReceiveSubscription(
             id: this.id,
-            name: this.name ?? string.Empty,
+            name: this.subName ?? string.Empty,
             onReceive: onReceive,
             onUnsubscribe: this.unsubscribe,
-            onError: this.onError);
+            onError: this.subOnError);
     }
 
     public IReceiveSubscription<TIn> BuildOneWayReceive<TIn>(Action<TIn> onReceive)
@@ -78,10 +79,10 @@ public class SubscriptionBuilder : ISubscriptionBuilder
 
         return new ReceiveSubscription<TIn>(
             id: this.id,
-            name: this.name ?? string.Empty,
+            name: this.subName ?? string.Empty,
             onReceive: onReceive,
             onUnsubscribe: this.unsubscribe,
-            onError: this.onError);
+            onError: this.subOnError);
     }
 
     public IRespondSubscription<TOut> BuildOneWayRespond<TOut>(Func<TOut> onRespond)
@@ -90,10 +91,10 @@ public class SubscriptionBuilder : ISubscriptionBuilder
 
         return new RespondSubscription<TOut>(
             id: this.id,
-            name: this.name ?? string.Empty,
+            name: this.subName ?? string.Empty,
             onRespond: onRespond,
             onUnsubscribe: this.unsubscribe,
-            onError: this.onError);
+            onError: this.subOnError);
     }
 
     public IRespondSubscription<TIn, TOut> BuildTwoWayRespond<TIn, TOut>(Func<TIn, TOut> onRespond)
@@ -102,9 +103,9 @@ public class SubscriptionBuilder : ISubscriptionBuilder
 
         return new RespondSubscription<TIn, TOut>(
             id: this.id,
-            name: this.name ?? string.Empty,
+            name: this.subName ?? string.Empty,
             onRespond: onRespond,
             onUnsubscribe: this.unsubscribe,
-            onError: this.onError);
+            onError: this.subOnError);
     }
 }

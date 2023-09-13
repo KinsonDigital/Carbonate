@@ -6,5 +6,5 @@ namespace Carbonate.Fluent;
 
 public interface IWithIdStage<out TResult>
 {
-    public TResult WithId(Guid id);
+    public TResult WithId(Guid newId);
 }

@@ -1,4 +1,4 @@
-﻿// <copyright file="ReactableBuilder.cs" company="KinsonDigital">
+// <copyright file="ReactableBuilder.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -12,22 +12,23 @@ using OneWay;
 public class ReactableBuilder : IReactableBuilder
 {
     private Guid id;
-    private string? name;
+    private string? subName;
     private Action? unsubscribe;
-    private Action<Exception>? onError;
+    private Action<Exception>? subOnError;
 
     internal ReactableBuilder()
     {
     }
 
     public IReactableBuilder WithId(Guid id)
+    public IReactableBuilder WithId(Guid newId)
     {
-        if (id == Guid.Empty)
+        if (newId == Guid.Empty)
         {
             throw new EmptySubscriptionIdException();
         }
 
-        this.id = id;
+        this.id = newId;
         return this;
     }
 
@@ -35,7 +36,7 @@ public class ReactableBuilder : IReactableBuilder
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
 
-        this.name = name;
+        this.subName = name;
         return this;
     }
 
@@ -51,7 +52,7 @@ public class ReactableBuilder : IReactableBuilder
     {
         ArgumentNullException.ThrowIfNull(onError);
 
-        this.onError = onError;
+        this.subOnError = onError;
         return this;
     }
 
@@ -61,10 +62,10 @@ public class ReactableBuilder : IReactableBuilder
 
         var subscription = new ReceiveSubscription(
             id: this.id,
-            name: this.name ?? string.Empty,
+            name: this.subName ?? string.Empty,
             onReceive: onReceive,
             onUnsubscribe: this.unsubscribe,
-            onError: this.onError);
+            onError: this.subOnError);
 
         var pushReactable = new PushReactable();
 
@@ -79,10 +80,10 @@ public class ReactableBuilder : IReactableBuilder
 
         var subscription = new ReceiveSubscription<TIn>(
             id: this.id,
-            name: this.name ?? string.Empty,
+            name: this.subName ?? string.Empty,
             onReceive: onReceive,
             onUnsubscribe: this.unsubscribe,
-            onError: this.onError);
+            onError: this.subOnError);
 
         var pushReactable = new PushReactable<TIn>();
 
@@ -97,10 +98,10 @@ public class ReactableBuilder : IReactableBuilder
 
         var subscription = new RespondSubscription<TOut>(
             id: this.id,
-            name: this.name ?? string.Empty,
+            name: this.subName ?? string.Empty,
             onRespond: onRespond,
             onUnsubscribe: this.unsubscribe,
-            onError: this.onError);
+            onError: this.subOnError);
 
         var pushReactable = new PullReactable<TOut>();
 
@@ -115,10 +116,10 @@ public class ReactableBuilder : IReactableBuilder
 
         var subscription = new RespondSubscription<TIn, TOut>(
             id: this.id,
-            name: this.name ?? string.Empty,
+            name: this.subName ?? string.Empty,
             onRespond: onRespond,
             onUnsubscribe: this.unsubscribe,
-            onError: this.onError);
+            onError: this.subOnError);
 
         var pushReactable = new PushPullReactable<TIn, TOut>();
 
