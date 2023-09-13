@@ -46,6 +46,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneWayNotifications", "Samp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoWayNotifications", "Samples\TwoWayNotifications\TwoWayNotifications.csproj", "{DC789258-76BF-482D-9449-784C77CDD023}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RunDebugConfigs", "RunDebugConfigs", "{6B7A6BC4-2C17-47BE-98CB-ED447D82A170}"
+	ProjectSection(SolutionItems) = preProject
+		.run\CarbonatePerfTests.run.xml = .run\CarbonatePerfTests.run.xml
+		.run\NonDirectional (Sample).run.xml = .run\NonDirectional (Sample).run.xml
+		.run\OneWay (Sample).run.xml = .run\OneWay (Sample).run.xml
+		.run\TwoWay (Sample).run.xml = .run\TwoWay (Sample).run.xml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -122,6 +130,7 @@ Global
 		{CFA0FA48-38CB-44A8-8486-60BD9E1F85D4} = {FE9E6658-14A2-452B-890D-6A4C98B1B14B}
 		{28237DD8-C8DD-41B0-864C-4C73B37DC389} = {FE9E6658-14A2-452B-890D-6A4C98B1B14B}
 		{DC789258-76BF-482D-9449-784C77CDD023} = {FE9E6658-14A2-452B-890D-6A4C98B1B14B}
+		{6B7A6BC4-2C17-47BE-98CB-ED447D82A170} = {67F82AED-1502-4803-855A-CDB26DC685B4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DF1E613C-8039-4941-A938-2A7FA0741F5A}
