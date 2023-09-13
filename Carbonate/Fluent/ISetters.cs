@@ -7,6 +7,6 @@ namespace Carbonate.Fluent;
 public interface ISetters<out TResult>
 {
     TResult WithName(string name);
-    TResult WhenUnsubscribing(Action unsubscribe);
+    TResult WhenUnsubscribing(Action onUnsubscribe);
     TResult WithError(Action<Exception> onError);
 }

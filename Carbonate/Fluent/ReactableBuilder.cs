@@ -32,9 +32,9 @@ public class ReactableBuilder
         return this;
     }
 
-    public IReactableBuilder WhenUnsubscribing(Action unsubscribe)
+    public IReactableBuilder WhenUnsubscribing(Action onUnsubscribe)
     {
-        this.unsubscribe = unsubscribe;
+        this.unsubscribe = onUnsubscribe;
         return this;
     }
 
@@ -44,12 +44,12 @@ public class ReactableBuilder
         return this;
     }
 
-    public (IDisposable, IPushReactable) BuildNonPush(Action receive)
+    public (IDisposable, IPushReactable) BuildPush(Action onReceive)
     {
         var reactor = new ReceiveReactor(
             eventId: this.id,
             name: this.name ?? string.Empty,
-            onReceive: receive,
+            onReceive: onReceive,
             onUnsubscribe: this.unsubscribe,
             onError: this.onError);
 
@@ -60,12 +60,12 @@ public class ReactableBuilder
         return (subscription, pushReactable);
     }
 
-    public (IDisposable, IPushReactable<TIn>) BuildUniPush<TIn>(Action<TIn> receive)
+    public (IDisposable, IPushReactable<TIn>) BuildOneWayPush<TIn>(Action<TIn> onReceive)
     {
         var reactor = new ReceiveReactor<TIn>(
             eventId: this.id,
             name: this.name ?? string.Empty,
-            onReceiveData: receive,
+            onReceiveData: onReceive,
             onUnsubscribe: this.unsubscribe,
             onError: this.onError);
 
@@ -76,12 +76,12 @@ public class ReactableBuilder
         return (subscription, pushReactable);
     }
 
-    public (IDisposable, IPullReactable<TOut>) BuildUniPull<TOut>(Func<TOut> respond)
+    public (IDisposable, IPullReactable<TOut>) BuildOneWayPull<TOut>(Func<TOut> onRespond)
     {
         var reactor = new RespondReactor<TOut>(
             respondId: this.id,
             name: this.name ?? string.Empty,
-            onRespond: respond,
+            onRespond: onRespond,
             onUnsubscribe: this.unsubscribe,
             onError: this.onError);
 
@@ -92,12 +92,12 @@ public class ReactableBuilder
         return (subscription, pushReactable);
     }
 
-    public (IDisposable, IPushPullReactable<TIn, TOut>) BuildBiPull<TIn, TOut>(Func<TIn, TOut> respond)
+    public (IDisposable, IPushPullReactable<TIn, TOut>) BuildTwoWayPull<TIn, TOut>(Func<TIn, TOut> onRespond)
     {
         var reactor = new RespondReactor<TIn, TOut>(
             respondId: this.id,
             name: this.name ?? string.Empty,
-            onRespondData: respond,
+            onRespondData: onRespond,
             onUnsubscribe: this.unsubscribe,
             onError: this.onError);
 

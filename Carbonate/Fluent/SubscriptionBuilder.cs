@@ -1,4 +1,4 @@
-﻿// <copyright file="Subscription.cs" company="KinsonDigital">
+// <copyright file="Subscription.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -37,9 +37,10 @@ public class SubscriptionBuilder
     }
 
     // OPTIONAL
-    public ISubscriptionBuilder WhenUnsubscribing(Action unsubscribe)
+    public ISubscriptionBuilder WhenUnsubscribing(Action onUnsubscribe)
     {
         this.unsubscribe ??= unsubscribe;
+        this.unsubscribe ??= onUnsubscribe;
         return this;
     }
 
@@ -50,33 +51,35 @@ public class SubscriptionBuilder
         return this;
     }
 
-    public IReceiveReactor BuildNonReceive(Action receive) =>
-        // TODO: check arg for null
-        new ReceiveReactor(
-            eventId: this.id,
-            name: this.name ?? string.Empty,
-            onReceive: receive,
-            onUnsubscribe: this.unsubscribe,
-            onError: this.onError);
-
-    public IReceiveReactor<TIn> BuildUniReceive<TIn>(Action<TIn> receive)
+    public IReceiveReactor BuildNonReceive(Action onReceive)
     {
-        // TODO: check arg for null
-        return new ReceiveReactor<TIn>(
+        return new ReceiveReactor(
             eventId: this.id,
             name: this.name ?? string.Empty,
-            onReceiveData: receive,
+            onReceive: onReceive,
             onUnsubscribe: this.unsubscribe,
             onError: this.onError);
     }
 
-    public IRespondReactor<TOut> BuildUniRespond<TOut>(Func<TOut> respond)
+    public IReceiveReactor<TIn> BuildOneWayReceive<TIn>(Action<TIn> onReceive)
+    {
+        // TODO: check arg for null
+
+        return new ReceiveReactor<TIn>(
+            eventId: this.id,
+            name: this.name ?? string.Empty,
+            onReceiveData: onReceive,
+            onUnsubscribe: this.unsubscribe,
+            onError: this.onError);
+    }
+
+    public IRespondReactor<TOut> BuildOneWayRespond<TOut>(Func<TOut> onRespond)
     {
         // TODO: check arg for null
         return null;
     }
 
-    public IRespondReactor<TIn, TOut> BuildBiRespond<TIn, TOut>(Func<TIn, TOut> respond)
+    public IRespondReactor<TIn, TOut> BuildTwoWayRespond<TIn, TOut>(Func<TIn, TOut> onRespond)
     {
         // TODO: check arg for null
         return null;

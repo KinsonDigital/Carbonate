@@ -13,11 +13,11 @@ public interface IReactableBuilder
 {
     static IWithIdStage<IReactableBuilder> Create() => new ReactableBuilder();
 
-    (IDisposable, IPushReactable) BuildNonPush(Action receive);
+    (IDisposable, IPushReactable) BuildPush(Action onReceive);
 
-    (IDisposable, IPushReactable<TIn>) BuildUniPush<TIn>(Action<TIn> receive);
+    (IDisposable, IPushReactable<TIn>) BuildOneWayPush<TIn>(Action<TIn> onReceive);
 
-    (IDisposable, IPullReactable<TOut>) BuildUniPull<TOut>(Func<TOut> respond);
+    (IDisposable, IPullReactable<TOut>) BuildOneWayPull<TOut>(Func<TOut> onRespond);
 
-    (IDisposable, IPushPullReactable<TIn, TOut>) BuildBiPull<TIn, TOut>(Func<TIn, TOut> respond);
+    (IDisposable, IPushPullReactable<TIn, TOut>) BuildTwoWayPull<TIn, TOut>(Func<TIn, TOut> onRespond);
 }
