@@ -42,9 +42,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{FE9E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NonDirectionalNotifications", "Samples\NonDirectionalNotifications\NonDirectionalNotifications.csproj", "{CFA0FA48-38CB-44A8-8486-60BD9E1F85D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniDirectionalNotifications", "Samples\UniDirectionalNotifications\UniDirectionalNotifications.csproj", "{28237DD8-C8DD-41B0-864C-4C73B37DC389}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneWayNotifications", "Samples\OneWayNotifications\OneWayNotifications.csproj", "{28237DD8-C8DD-41B0-864C-4C73B37DC389}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BiDirectionalNotifications", "Samples\BiDirectionalNotifications\BiDirectionalNotifications.csproj", "{DC789258-76BF-482D-9449-784C77CDD023}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoWayNotifications", "Samples\TwoWayNotifications\TwoWayNotifications.csproj", "{DC789258-76BF-482D-9449-784C77CDD023}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

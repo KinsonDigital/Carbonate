@@ -6,7 +6,6 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
-        <RootNamespace>UniPushNotificationsWithData</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
