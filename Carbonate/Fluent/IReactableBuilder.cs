@@ -11,7 +11,7 @@ using UniDirectional;
 public interface IReactableBuilder
     : ISetters<IReactableBuilder>, IWithIdStage<IReactableBuilder>
 {
-    static IWithIdStage<IReactableBuilder> CreateBuilder() => new ReactableBuilder();
+    static IWithIdStage<IReactableBuilder> Create() => new ReactableBuilder();
 
     (IDisposable, IPushReactable) BuildNonPush(Action receive);
 
