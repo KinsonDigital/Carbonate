@@ -26,7 +26,7 @@ public class NonDirectionalPushReactable_IntegrationTests
 
         var reactable = new PushReactable();
 
-        unsubscriber = reactable.Subscribe(new ReceiveReactor(
+        unsubscriber = reactable.Subscribe(new ReceiveSubscription(
             eventId: eventId,
             onReceive: () => { },
             onUnsubscribe: () => unsubscriber?.Dispose()));

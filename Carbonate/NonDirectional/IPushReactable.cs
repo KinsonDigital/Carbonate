@@ -10,6 +10,6 @@ using Core.NonDirectional;
 /// <summary>
 /// Defines a provider for push-based notifications.
 /// </summary>
-public interface IPushReactable : IReactable<IReceiveReactor>, IPushable
+public interface IPushReactable : IReactable<IReceiveSubscription>, IPushable
 {
 }

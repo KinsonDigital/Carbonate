@@ -1,4 +1,4 @@
-﻿// <copyright file="ReceiveReactor.cs" company="KinsonDigital">
+﻿// <copyright file="ReceiveSubscription.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -8,20 +8,20 @@ using System.Diagnostics.CodeAnalysis;
 using Core;
 using Core.NonDirectional;
 
-/// <inheritdoc cref="IReceiveReactor"/>
+/// <inheritdoc cref="IReceiveSubscription"/>
 [SuppressMessage(
     "ReSharper",
     "ClassWithVirtualMembersNeverInherited.Global",
     Justification = "Left unsealed to give users more control")]
-public class ReceiveReactor : ReactorBase, IReceiveReactor
+public class ReceiveSubscription : ReactorBase, IReceiveSubscription
 {
     private readonly Action? onReceive;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ReceiveReactor"/> class.
+    /// Initializes a new instance of the <see cref="ReceiveSubscription"/> class.
     /// </summary>
     /// <param name="eventId">The ID of the event that was pushed by an <see cref="IReactable{IReceiveReactor}"/>.</param>
-    /// <param name="name">The name of the <see cref="ReceiveReactor"/>.</param>
+    /// <param name="name">The name of the <see cref="ReceiveSubscription"/>.</param>
     /// <param name="onReceive">Executed when a push notification occurs with no data.</param>
     /// <param name="onUnsubscribe">
     ///     Executed when the provider has finished sending push-based notifications and is unsubscribed.
@@ -32,7 +32,7 @@ public class ReceiveReactor : ReactorBase, IReceiveReactor
     ///     <br/>
     ///     It is only metadata for debugging or miscellaneous purposes.
     /// </remarks>
-    public ReceiveReactor(
+    public ReceiveSubscription(
         Guid eventId,
         string name = "",
         Action? onReceive = null,

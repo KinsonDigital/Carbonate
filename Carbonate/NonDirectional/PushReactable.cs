@@ -7,7 +7,7 @@ namespace Carbonate.NonDirectional;
 using Core.NonDirectional;
 
 /// <inheritdoc cref="IPushReactable"/>
-public class PushReactable : ReactableBase<IReceiveReactor>, IPushReactable
+public class PushReactable : ReactableBase<IReceiveSubscription>, IPushReactable
 {
     /// <inheritdoc cref="IPushable.Push"/>
     public void Push(Guid eventId)

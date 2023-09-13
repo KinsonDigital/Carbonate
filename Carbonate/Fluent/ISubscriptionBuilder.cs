@@ -12,7 +12,7 @@ public interface ISubscriptionBuilder : ISetters<ISubscriptionBuilder>, IWithIdS
 {
     static IWithIdStage<ISubscriptionBuilder> Create() => new SubscriptionBuilder();
 
-    IReceiveReactor BuildNonReceive(Action onReceive);
+    IReceiveSubscription BuildNonReceive(Action onReceive);
     IReceiveReactor<TData> BuildOneWayReceive<TData>(Action<TData> onReceive);
     IRespondReactor<TData> BuildOneWayRespond<TData>(Func<TData> onRespond);
     IRespondReactor<TIn, TOut> BuildTwoWayRespond<TIn, TOut>(Func<TIn, TOut> onRespond);

@@ -36,13 +36,13 @@ public class PushReactableTests
         var invokedEventId = Guid.NewGuid();
         var notInvokedEventId = Guid.NewGuid();
 
-        var mockReactorA = new Mock<IReceiveReactor>();
+        var mockReactorA = new Mock<IReceiveSubscription>();
         mockReactorA.SetupGet(p => p.Id).Returns(invokedEventId);
 
-        var mockReactorB = new Mock<IReceiveReactor>();
+        var mockReactorB = new Mock<IReceiveSubscription>();
         mockReactorB.SetupGet(p => p.Id).Returns(notInvokedEventId);
 
-        var mockReactorC = new Mock<IReceiveReactor>();
+        var mockReactorC = new Mock<IReceiveSubscription>();
         mockReactorC.SetupGet(p => p.Id).Returns(invokedEventId);
 
         var sut = CreateSystemUnderTest();
@@ -69,15 +69,15 @@ public class PushReactableTests
         IDisposable? otherUnsubscriberA = null;
         IDisposable? otherUnsubscriberB = null;
 
-        var initReactorA = new ReceiveReactor(
+        var initReactorA = new ReceiveSubscription(
             eventId: mainId);
 
-        var otherReactorA = new ReceiveReactor(eventId: otherId);
-        var otherReactorB = new ReceiveReactor(eventId: otherId);
+        var otherReactorA = new ReceiveSubscription(eventId: otherId);
+        var otherReactorB = new ReceiveSubscription(eventId: otherId);
 
         var sut = CreateSystemUnderTest();
 
-        var initReactorC = new ReceiveReactor(
+        var initReactorC = new ReceiveSubscription(
             eventId: mainId,
             onReceive: () =>
             {
@@ -104,7 +104,7 @@ public class PushReactableTests
         var idA = Guid.NewGuid();
         var idB = Guid.NewGuid();
 
-        var reactorA = new ReceiveReactor(
+        var reactorA = new ReceiveSubscription(
             eventId: idA,
             onReceive: () => throw new Exception("test-exception"),
             onError: e =>
@@ -113,7 +113,7 @@ public class PushReactableTests
                 e.Message.Should().Be("test-exception");
             });
 
-        var reactorB = new ReceiveReactor(eventId: idB);
+        var reactorB = new ReceiveSubscription(eventId: idB);
 
         var sut = CreateSystemUnderTest();
 

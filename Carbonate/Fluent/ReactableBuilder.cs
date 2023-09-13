@@ -59,7 +59,7 @@ public class ReactableBuilder : IReactableBuilder
     {
         ArgumentNullException.ThrowIfNull(onReceive);
 
-        var reactor = new ReceiveReactor(
+        var reactor = new ReceiveSubscription(
             eventId: this.id,
             name: this.name ?? string.Empty,
             onReceive: onReceive,

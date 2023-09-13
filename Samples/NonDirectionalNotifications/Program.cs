@@ -9,7 +9,7 @@ var messenger = new PushReactable(); // Create the messenger object to push noti
 var msgEventId = Guid.NewGuid(); // This is the ID used to identify the event
 
 // Subscribe to the event to receive messages
-IDisposable unsubscriber = messenger.Subscribe(new ReceiveReactor(
+IDisposable unsubscriber = messenger.Subscribe(new ReceiveSubscription(
     eventId: msgEventId,
     name: "my-subscription",
     onReceive: () => Console.WriteLine("Received a message!"),

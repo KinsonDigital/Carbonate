@@ -9,7 +9,7 @@ using FluentAssertions;
 using Xunit;
 
 /// <summary>
-/// Tests the <see cref="ReceiveReactor"/> class.
+/// Tests the <see cref="ReceiveSubscription"/> class.
 /// </summary>
 public class ReceiveReactorTests
 {
@@ -21,7 +21,7 @@ public class ReceiveReactorTests
         var guid = Guid.NewGuid();
 
         // Act
-        var sut = new ReceiveReactor(guid);
+        var sut = new ReceiveSubscription(guid);
         var actual = sut.Id;
 
         // Assert
@@ -37,7 +37,7 @@ public class ReceiveReactorTests
         var onReceiveInvoked = false;
         void OnReceive() => onReceiveInvoked = true;
 
-        var sut = new ReceiveReactor(Guid.NewGuid(), onReceive: OnReceive);
+        var sut = new ReceiveSubscription(Guid.NewGuid(), onReceive: OnReceive);
 
         // Act
         sut.OnReceive();
@@ -53,7 +53,7 @@ public class ReceiveReactorTests
         var onReceiveInvoked = false;
         void OnReceive() => onReceiveInvoked = true;
 
-        var sut = new ReceiveReactor(Guid.NewGuid(), onReceive: OnReceive);
+        var sut = new ReceiveSubscription(Guid.NewGuid(), onReceive: OnReceive);
 
         sut.OnUnsubscribe();
 
@@ -71,7 +71,7 @@ public class ReceiveReactorTests
         var onReceiveInvoked = false;
         void OnUnsubscribe() => onReceiveInvoked = true;
 
-        var sut = new ReceiveReactor(Guid.NewGuid(), onUnsubscribe: OnUnsubscribe);
+        var sut = new ReceiveSubscription(Guid.NewGuid(), onUnsubscribe: OnUnsubscribe);
 
         // Act
         sut.OnUnsubscribe();
@@ -87,7 +87,7 @@ public class ReceiveReactorTests
         var totalInvokes = 0;
         void OnUnsubscribe() => totalInvokes++;
 
-        var sut = new ReceiveReactor(Guid.NewGuid(), onUnsubscribe: OnUnsubscribe);
+        var sut = new ReceiveSubscription(Guid.NewGuid(), onUnsubscribe: OnUnsubscribe);
         sut.OnUnsubscribe();
 
         // Act
@@ -106,7 +106,7 @@ public class ReceiveReactorTests
 
         var exception = new Exception("test-exception");
 
-        var sut = new ReceiveReactor(Guid.NewGuid(), onError: OnError);
+        var sut = new ReceiveSubscription(Guid.NewGuid(), onError: OnError);
 
         // Act
         sut.OnError(exception);
@@ -124,7 +124,7 @@ public class ReceiveReactorTests
 
         var exception = new Exception("test-exception");
 
-        var sut = new ReceiveReactor(Guid.NewGuid(), onError: OnError);
+        var sut = new ReceiveSubscription(Guid.NewGuid(), onError: OnError);
 
         sut.OnUnsubscribe();
 
@@ -144,7 +144,7 @@ public class ReceiveReactorTests
         // Arrange
         var id = new Guid("5739afd9-be4c-4402-a12d-6bcde35cc8c3");
 
-        var sut = new ReceiveReactor(
+        var sut = new ReceiveSubscription(
             eventId: id,
             name: name);
 

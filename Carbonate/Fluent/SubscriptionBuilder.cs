@@ -60,11 +60,11 @@ public class SubscriptionBuilder : ISubscriptionBuilder
         return this;
     }
 
-    public IReceiveReactor BuildNonReceive(Action onReceive)
+    public IReceiveSubscription BuildNonReceive(Action onReceive)
     {
         ArgumentNullException.ThrowIfNull(onReceive);
 
-        return new ReceiveReactor(
+        return new ReceiveSubscription(
             eventId: this.id,
             name: this.name ?? string.Empty,
             onReceive: onReceive,
