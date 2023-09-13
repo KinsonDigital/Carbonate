@@ -111,13 +111,14 @@ public class ReactableBuilder : IReactableBuilder
     }
 
     public (IDisposable, IPushPullReactable<TIn, TOut>) BuildTwoWayPull<TIn, TOut>(Func<TIn, TOut> onRespond)
+    public (IDisposable, IPushPullReactable<TIn, TOut>) BuildTwoWayPull<TIn, TOut>(Func<TIn, TOut> onReceiveRespond)
     {
-        ArgumentNullException.ThrowIfNull(onRespond);
+        ArgumentNullException.ThrowIfNull(onReceiveRespond);
 
         var subscription = new RespondSubscription<TIn, TOut>(
             id: this.id,
             name: this.subName ?? string.Empty,
-            onReceiveRespond: onRespond,
+            onReceiveRespond: onReceiveRespond,
             onUnsubscribe: this.unsubscribe,
             onError: this.subOnError);
 
