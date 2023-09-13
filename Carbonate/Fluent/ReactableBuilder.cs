@@ -117,7 +117,7 @@ public class ReactableBuilder : IReactableBuilder
         var subscription = new RespondSubscription<TIn, TOut>(
             id: this.id,
             name: this.subName ?? string.Empty,
-            onRespond: onRespond,
+            onReceiveRespond: onRespond,
             onUnsubscribe: this.unsubscribe,
             onError: this.subOnError);
 

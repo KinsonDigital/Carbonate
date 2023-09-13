@@ -138,7 +138,7 @@ public class SubscriptionBuilderTests
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'onRespond')");
+            .WithMessage("Value cannot be null. (Parameter 'onReceiveRespond')");
     }
 
     [Fact]

@@ -98,13 +98,14 @@ public class SubscriptionBuilder : ISubscriptionBuilder
     }
 
     public IRespondSubscription<TIn, TOut> BuildTwoWayRespond<TIn, TOut>(Func<TIn, TOut> onRespond)
+    public IRespondSubscription<TIn, TOut> BuildTwoWayRespond<TIn, TOut>(Func<TIn, TOut> onReceiveRespond)
     {
-        ArgumentNullException.ThrowIfNull(onRespond);
+        ArgumentNullException.ThrowIfNull(onReceiveRespond);
 
         return new RespondSubscription<TIn, TOut>(
             id: this.id,
             name: this.subName ?? string.Empty,
-            onRespond: onRespond,
+            onReceiveRespond: onReceiveRespond,
             onUnsubscribe: this.unsubscribe,
             onError: this.subOnError);
     }

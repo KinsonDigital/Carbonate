@@ -48,7 +48,7 @@ public class RespondSubscriptionTests
     {
         // Arrange
         var sut = new RespondSubscription<int, int>(Guid.NewGuid(),
-            onRespond: _ => 456);
+            onReceiveRespond: _ => 456);
         sut.OnUnsubscribe();
 
         // Act
@@ -64,7 +64,7 @@ public class RespondSubscriptionTests
         // Arrange
         var obj = new object();
         var sut = new RespondSubscription<int, object>(Guid.NewGuid(),
-            onRespond: _ => obj);
+            onReceiveRespond: _ => obj);
 
         // Act
         var actual = sut.OnRespond(123);

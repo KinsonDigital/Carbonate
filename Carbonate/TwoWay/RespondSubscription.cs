@@ -14,14 +14,14 @@ using Core.TwoWay;
     Justification = "Left unsealed to give users more control")]
 public class RespondSubscription<TIn, TOut> : SubscriptionBase, IRespondSubscription<TIn, TOut>
 {
-    private readonly Func<TIn, TOut?>? onRespond;
+    private readonly Func<TIn, TOut?>? onReceiveRespond;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RespondSubscription{TIn,TOut}"/> class.
     /// </summary>
     /// <param name="id">The ID of the <see cref="PushPullReactable{TIn,TOut}"/> requiring a response.</param>
     /// <param name="name">The name of the <see cref="RespondSubscription{TIn,TOut}"/>.</param>
-    /// <param name="onRespond">Executed when requesting a response with data.</param>
+    /// <param name="onReceiveRespond">Executed when requesting a response with data.</param>
     /// <param name="onUnsubscribe">
     ///     Executed when the provider has finished sending push-based notifications and is unsubscribed.
     /// </param>
@@ -33,11 +33,11 @@ public class RespondSubscription<TIn, TOut> : SubscriptionBase, IRespondSubscrip
     /// </remarks>
     public RespondSubscription(
         Guid id,
-        Func<TIn, TOut> onRespond,
+        Func<TIn, TOut> onReceiveRespond,
         string name = "",
         Action? onUnsubscribe = null,
         Action<Exception>? onError = null)
-            : base(id, onUnsubscribe, name, onError) => this.onRespond = onRespond;
+            : base(id, onUnsubscribe, name, onError) => this.onReceiveRespond = onReceiveRespond;
 
     /// <inheritdoc/>
     public virtual TOut? OnRespond(TIn data)
@@ -52,7 +52,7 @@ public class RespondSubscription<TIn, TOut> : SubscriptionBase, IRespondSubscrip
             throw new ArgumentNullException(nameof(data), "The parameter must not be null.");
         }
 
-        return this.onRespond is null ? default : this.onRespond.Invoke(data);
+        return this.onReceiveRespond is null ? default : this.onReceiveRespond.Invoke(data);
     }
 
    /// <inheritdoc cref="object.ToString"/>

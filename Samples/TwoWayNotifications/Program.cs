@@ -13,7 +13,7 @@ var msgEventId = Guid.NewGuid(); // This is the ID used to identify the event
 IDisposable unsubscriber = favoriteGetter.Subscribe(new RespondSubscription<string, string>(
     id: msgEventId,
     name: "adder",
-    onRespond: (data) => data switch
+    onReceiveRespond: (data) => data switch
         {
             "prog-lang" => "C#",
             "food" => "scotch eggs",
