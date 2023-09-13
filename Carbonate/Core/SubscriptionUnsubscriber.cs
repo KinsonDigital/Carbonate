@@ -1,4 +1,4 @@
-﻿// <copyright file="ReactorUnsubscriber.cs" company="KinsonDigital">
+// <copyright file="ReactorUnsubscriber.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -7,9 +7,9 @@ namespace Carbonate.Core;
 /// <summary>
 /// A reactor unsubscriber for unsubscribing from a <see cref="IReactable{TReactor}"/>.
 /// </summary>
-internal sealed class ReactorUnsubscriber : IDisposable
+internal sealed class SubscriptionUnsubscriber : IDisposable
 {
-    private readonly List<ISubscription> reactors;
+    private readonly List<ISubscription> subscriptions;
     private readonly ISubscription subscription;
     private bool isDisposed;
 
@@ -18,16 +18,16 @@ internal sealed class ReactorUnsubscriber : IDisposable
     /// </summary>
     /// <param name="reactors">The list of reactor subscriptions.</param>
     /// <param name="subscription">The reactor that has been subscribed.</param>
-    internal ReactorUnsubscriber(List<ISubscription> reactors, ISubscription subscription)
+    internal SubscriptionUnsubscriber(List<ISubscription> subscriptions, ISubscription subscription)
     {
-        this.reactors = reactors ?? throw new ArgumentNullException(nameof(reactors), "The parameter must not be null.");
+        this.subscriptions = subscriptions ?? throw new ArgumentNullException(nameof(subscriptions), "The parameter must not be null.");
         this.subscription = subscription ?? throw new ArgumentNullException(nameof(subscription), "The parameter must not be null.");
     }
 
     /// <summary>
     /// Gets the total number of subscriptions.
     /// </summary>
-    public int TotalReactors => this.reactors.Count;
+    public int TotalSubscriptions => this.subscriptions.Count;
 
     /// <inheritdoc cref="IDisposable.Dispose"/>
     public void Dispose() => Dispose(true);
@@ -45,9 +45,9 @@ internal sealed class ReactorUnsubscriber : IDisposable
 
         if (disposing)
         {
-            if (this.reactors.Contains(this.subscription))
+            if (this.subscriptions.Contains(this.subscription))
             {
-                this.reactors.Remove(this.subscription);
+                this.subscriptions.Remove(this.subscription);
             }
         }
 

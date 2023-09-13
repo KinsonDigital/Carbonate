@@ -59,7 +59,7 @@ public class ReactableBuilder : IReactableBuilder
     {
         ArgumentNullException.ThrowIfNull(onReceive);
 
-        var reactor = new ReceiveSubscription(
+        var subscription = new ReceiveSubscription(
             eventId: this.id,
             name: this.name ?? string.Empty,
             onReceive: onReceive,
@@ -68,16 +68,16 @@ public class ReactableBuilder : IReactableBuilder
 
         var pushReactable = new PushReactable();
 
-        var subscription = pushReactable.Subscribe(reactor);
+        var unsubscriber = pushReactable.Subscribe(subscription);
 
-        return (subscription, pushReactable);
+        return (unsubscriber, pushReactable);
     }
 
     public (IDisposable, IPushReactable<TIn>) BuildOneWayPush<TIn>(Action<TIn> onReceive)
     {
         ArgumentNullException.ThrowIfNull(onReceive);
 
-        var reactor = new ReceiveSubscription<TIn>(
+        var subscription = new ReceiveSubscription<TIn>(
             eventId: this.id,
             name: this.name ?? string.Empty,
             onReceive: onReceive,
@@ -86,16 +86,16 @@ public class ReactableBuilder : IReactableBuilder
 
         var pushReactable = new PushReactable<TIn>();
 
-        var subscription = pushReactable.Subscribe(reactor);
+        var unsubscriber = pushReactable.Subscribe(subscription);
 
-        return (subscription, pushReactable);
+        return (unsubscriber, pushReactable);
     }
 
     public (IDisposable, IPullReactable<TOut>) BuildOneWayPull<TOut>(Func<TOut> onRespond)
     {
         ArgumentNullException.ThrowIfNull(onRespond);
 
-        var reactor = new RespondSubscription<TOut>(
+        var subscription = new RespondSubscription<TOut>(
             respondId: this.id,
             name: this.name ?? string.Empty,
             onRespond: onRespond,
@@ -104,16 +104,16 @@ public class ReactableBuilder : IReactableBuilder
 
         var pushReactable = new PullReactable<TOut>();
 
-        var subscription = pushReactable.Subscribe(reactor);
+        var unsubscriber = pushReactable.Subscribe(subscription);
 
-        return (subscription, pushReactable);
+        return (unsubscriber, pushReactable);
     }
 
     public (IDisposable, IPushPullReactable<TIn, TOut>) BuildTwoWayPull<TIn, TOut>(Func<TIn, TOut> onRespond)
     {
         ArgumentNullException.ThrowIfNull(onRespond);
 
-        var reactor = new RespondSubscription<TIn, TOut>(
+        var subscription = new RespondSubscription<TIn, TOut>(
             respondId: this.id,
             name: this.name ?? string.Empty,
             onRespond: onRespond,
@@ -122,8 +122,8 @@ public class ReactableBuilder : IReactableBuilder
 
         var pushReactable = new PushPullReactable<TIn, TOut>();
 
-        var subscription = pushReactable.Subscribe(reactor);
+        var unsubscriber = pushReactable.Subscribe(subscription);
 
-        return (subscription, pushReactable);
+        return (unsubscriber, pushReactable);
     }
 }

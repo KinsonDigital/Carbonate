@@ -1,4 +1,4 @@
-﻿// <copyright file="ReactableBase.cs" company="KinsonDigital">
+// <copyright file="ReactableBase.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -15,14 +15,14 @@ using OneWay;
 public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
     where TSubscription : class, ISubscription
 {
-    private readonly List<TSubscription> reactors = new ();
+    private readonly List<TSubscription> subscriptions = new ();
     private bool notificationsEnded;
 
     /// <inheritdoc/>
-    public ReadOnlyCollection<TSubscription> Subscriptions => this.reactors.AsReadOnly();
+    public ReadOnlyCollection<TSubscription> Subscriptions => this.subscriptions.AsReadOnly();
 
     /// <inheritdoc/>
-    public ReadOnlyCollection<Guid> SubscriptionIds => this.reactors
+    public ReadOnlyCollection<Guid> SubscriptionIds => this.subscriptions
         .Select(r => r.Id)
         .Distinct()
         .ToList().AsReadOnly();
@@ -47,9 +47,9 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
             throw new ArgumentNullException(nameof(subscription), "The parameter must not be null.");
         }
 
-        this.reactors.Add(subscription);
+        this.subscriptions.Add(subscription);
 
-        return new ReactorUnsubscriber(this.reactors.Cast<ISubscription>().ToList(), subscription);
+        return new SubscriptionUnsubscriber(this.subscriptions.Cast<ISubscription>().ToList(), subscription);
     }
 
     /// <inheritdoc/>
@@ -70,7 +70,7 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
          * This is due to the Dispose() method possibly being called during
          * iteration of the reactors list which will cause an exception.
         */
-        for (var i = this.reactors.Count - 1; i >= 0; i--)
+        for (var i = this.subscriptions.Count - 1; i >= 0; i--)
         {
             /*NOTE:
              * The purpose of this logic is to prevent array index errors
@@ -80,30 +80,30 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
              * If the current index is not less than or equal to
              * the total number of items, reset the index to the last item
              */
-            i = i > this.reactors.Count - 1
-                ? this.reactors.Count - 1
+            i = i > this.subscriptions.Count - 1
+                ? this.subscriptions.Count - 1
                 : i;
 
-            if (this.reactors[i].Id != id)
+            if (this.subscriptions[i].Id != id)
             {
                 continue;
             }
 
-            var beforeTotal = this.reactors.Count;
+            var beforeTotal = this.subscriptions.Count;
 
-            this.reactors[i].OnUnsubscribe();
+            this.subscriptions[i].OnUnsubscribe();
 
-            var nothingRemoved = Math.Abs(beforeTotal - this.reactors.Count) <= 0;
+            var nothingRemoved = Math.Abs(beforeTotal - this.subscriptions.Count) <= 0;
 
             // Make sure that the OnUnsubscribe implementation did not remove
             // the reactor before attempting to remove it
             if (nothingRemoved)
             {
-                this.reactors.Remove(this.reactors[i]);
+                this.subscriptions.Remove(this.subscriptions[i]);
             }
         }
 
-        this.notificationsEnded = this.reactors.All(r => r.Unsubscribed);
+        this.notificationsEnded = this.subscriptions.All(r => r.Unsubscribed);
     }
 
     /// <inheritdoc/>
@@ -119,7 +119,7 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
          * This is due to the Dispose() method possibly being called during
          * iteration of the reactors list which will cause an exception.
         */
-        for (var i = this.reactors.Count - 1; i >= 0; i--)
+        for (var i = this.subscriptions.Count - 1; i >= 0; i--)
         {
             /*NOTE:
              * The purpose of this logic is to prevent array index errors
@@ -129,14 +129,14 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
              * If the current index is not less than or equal to
              * the total number of items, reset the index to the last item
              */
-            i = i > this.reactors.Count - 1
-                ? this.reactors.Count - 1
+            i = i > this.subscriptions.Count - 1
+                ? this.subscriptions.Count - 1
                 : i;
 
-            this.reactors[i].OnUnsubscribe();
+            this.subscriptions[i].OnUnsubscribe();
         }
 
-        this.reactors.Clear();
+        this.subscriptions.Clear();
     }
 
     /// <inheritdoc cref="IDisposable.Dispose"/>

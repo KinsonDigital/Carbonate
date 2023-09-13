@@ -1,4 +1,4 @@
-﻿// <copyright file="ReactorUnsubscriberTests.cs" company="KinsonDigital">
+﻿// <copyright file="SubscriptionUnsubscriberTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -10,9 +10,9 @@ using Moq;
 using Xunit;
 
 /// <summary>
-/// Tests the <see cref="ReactorUnsubscriber"/> class.
+/// Tests the <see cref="SubscriptionUnsubscriber"/> class.
 /// </summary>
-public class ReactorUnsubscriberTests
+public class SubscriptionUnsubscriberTests
 {
     #region Constructor Tests
     [Fact]
@@ -21,7 +21,7 @@ public class ReactorUnsubscriberTests
         // Arrange & Act
         var act = () =>
         {
-            _ = new ReactorUnsubscriber(null, null);
+            _ = new SubscriptionUnsubscriber(null, null);
         };
 
         // Assert
@@ -36,7 +36,7 @@ public class ReactorUnsubscriberTests
         // Arrange & Act
         var act = () =>
         {
-            _ = new ReactorUnsubscriber(Array.Empty<ISubscription>().ToList(), null);
+            _ = new SubscriptionUnsubscriber(Array.Empty<ISubscription>().ToList(), null);
         };
 
         // Assert
@@ -53,10 +53,10 @@ public class ReactorUnsubscriberTests
         // Arrange
         var reactors = new[] { new Mock<ISubscription>().Object, new Mock<ISubscription>().Object };
 
-        var sut = new ReactorUnsubscriber(reactors.ToList(), new Mock<ISubscription>().Object);
+        var sut = new SubscriptionUnsubscriber(reactors.ToList(), new Mock<ISubscription>().Object);
 
         // Act
-        var actual = sut.TotalReactors;
+        var actual = sut.TotalSubscriptions;
 
         // Assert
         actual.Should().Be(2);
@@ -72,13 +72,13 @@ public class ReactorUnsubscriberTests
 
         var reactors = new[] { reactorA.Object, reactorB.Object, reactorC.Object };
 
-        var sut = new ReactorUnsubscriber(reactors.ToList(), reactorB.Object);
+        var sut = new SubscriptionUnsubscriber(reactors.ToList(), reactorB.Object);
 
         // Act
         sut.Dispose();
         sut.Dispose();
 
-        var actual = sut.TotalReactors;
+        var actual = sut.TotalSubscriptions;
 
         // Assert
         actual.Should().Be(2);
