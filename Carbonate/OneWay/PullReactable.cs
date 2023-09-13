@@ -16,14 +16,14 @@ public class PullReactable<TOut>
     /// <inheritdoc/>
     public TOut? Pull(Guid respondId)
     {
-        for (var i = 0; i < Reactors.Count; i++)
+        for (var i = 0; i < Subscriptions.Count; i++)
         {
-            if (Reactors[i].Id != respondId)
+            if (Subscriptions[i].Id != respondId)
             {
                 continue;
             }
 
-            return Reactors[i].OnRespond() ?? default(TOut);
+            return Subscriptions[i].OnRespond() ?? default(TOut);
         }
 
         return default;

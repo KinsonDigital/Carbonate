@@ -16,7 +16,7 @@ public interface IReactable<TSubscription> : IDisposable
     /// <summary>
     /// Gets the list of reactors that are subscribed to this <see cref="IReactable{T}"/>.
     /// </summary>
-    ReadOnlyCollection<TSubscription> Reactors { get; }
+    ReadOnlyCollection<TSubscription> Subscriptions { get; }
 
     /// <summary>
     /// Gets the list of subscription IDs.
@@ -26,12 +26,12 @@ public interface IReactable<TSubscription> : IDisposable
     /// <summary>
     /// Notifies the provider that an reactor is to receive notifications.
     /// </summary>
-    /// <param name="reactor">The object that is to receive notifications.</param>
+    /// <param name="subscription">The object that is to receive notifications.</param>
     /// <returns>
     ///     A reference to an interface that allows reactors to stop receiving
     ///     notifications before the provider has finished sending them.
     /// </returns>
-    IDisposable Subscribe(TSubscription reactor);
+    IDisposable Subscribe(TSubscription subscription);
 
     /// <summary>
     /// Unsubscribes notifications to all <see cref="ISubscription"/>s that match the given <paramref name="id"/>.

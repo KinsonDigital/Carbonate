@@ -15,14 +15,14 @@ public class PushPullReactable<TIn, TOut> : ReactableBase<IRespondSubscription<T
     /// <inheritdoc/>
     public TOut? PushPull(in TIn data, Guid respondId)
     {
-        for (var i = 0; i < Reactors.Count; i++)
+        for (var i = 0; i < Subscriptions.Count; i++)
         {
-            if (Reactors[i].Id != respondId)
+            if (Subscriptions[i].Id != respondId)
             {
                 continue;
             }
 
-            return Reactors[i].OnRespond(data);
+            return Subscriptions[i].OnRespond(data);
         }
 
         return default;

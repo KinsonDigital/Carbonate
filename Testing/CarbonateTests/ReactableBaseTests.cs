@@ -99,7 +99,7 @@ public class ReactableBaseTests
         var reactorUnsubscriberA = sut.Subscribe(mockReactorA.Object);
         var reactorUnsubscriberB = sut.Subscribe(mockReactorB.Object);
 
-        var actual = sut.Reactors;
+        var actual = sut.Subscriptions;
 
         // Assert
         actual.Should().BeEquivalentTo(expected);
@@ -152,7 +152,7 @@ public class ReactableBaseTests
         mockReactorA.Verify(m => m.OnUnsubscribe(), Times.Once);
         mockReactorB.Verify(m => m.OnUnsubscribe(), Times.Never);
         mockReactorC.Verify(m => m.OnUnsubscribe(), Times.Once);
-        sut.Reactors.Should().HaveCount(1);
+        sut.Subscriptions.Should().HaveCount(1);
     }
 
     [Fact]
@@ -180,7 +180,7 @@ public class ReactableBaseTests
         // Assert
         mockReactorA.Verify(m => m.OnUnsubscribe(), Times.Once);
         mockReactorB.Verify(m => m.OnUnsubscribe(), Times.Once);
-        sut.Reactors.Should().BeEmpty();
+        sut.Subscriptions.Should().BeEmpty();
     }
 
     [Fact]
@@ -260,7 +260,7 @@ public class ReactableBaseTests
         mockReactorA.Verify(m => m.OnUnsubscribe(), Times.Once);
         mockReactorB.Verify(m => m.OnUnsubscribe(), Times.Once);
         mockReactorC.Verify(m => m.OnUnsubscribe(), Times.Once);
-        sut.Reactors.Should().BeEmpty();
+        sut.Subscriptions.Should().BeEmpty();
     }
 
     [Fact]
@@ -322,7 +322,7 @@ public class ReactableBaseTests
         mockReactorA.Verify(m => m.OnUnsubscribe(), Times.Once);
         mockReactorB.Verify(m => m.OnUnsubscribe(), Times.Once);
 
-        sut.Reactors.Should().BeEmpty();
+        sut.Subscriptions.Should().BeEmpty();
     }
     #endregion
 

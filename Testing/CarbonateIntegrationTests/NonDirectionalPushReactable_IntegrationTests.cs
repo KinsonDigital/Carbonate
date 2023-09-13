@@ -36,6 +36,6 @@ public class NonDirectionalPushReactable_IntegrationTests
         reactable.Unsubscribe(eventId);
 
         // Assert
-        reactable.Reactors.Should().HaveCount(0);
+        reactable.Subscriptions.Should().HaveCount(0);
     }
 }

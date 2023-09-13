@@ -19,7 +19,7 @@ public abstract class ReactableBase<T> : IReactable<T>
     private bool notificationsEnded;
 
     /// <inheritdoc/>
-    public ReadOnlyCollection<T> Reactors => this.reactors.AsReadOnly();
+    public ReadOnlyCollection<T> Subscriptions => this.reactors.AsReadOnly();
 
     /// <inheritdoc/>
     public ReadOnlyCollection<Guid> SubscriptionIds => this.reactors
@@ -34,22 +34,22 @@ public abstract class ReactableBase<T> : IReactable<T>
 
     /// <inheritdoc/>
     /// <exception cref="ObjectDisposedException">Thrown if this method is invoked after disposal.</exception>
-    /// <exception cref="ArgumentNullException">Thrown if the given <paramref name="reactor"/> is null.</exception>
-    public virtual IDisposable Subscribe(T reactor)
+    /// <exception cref="ArgumentNullException">Thrown if the given <paramref name="subscription"/> is null.</exception>
+    public virtual IDisposable Subscribe(T subscription)
     {
         if (IsDisposed)
         {
             throw new ObjectDisposedException(nameof(PushReactable<T>), $"{nameof(PushReactable<T>)} disposed.");
         }
 
-        if (reactor is null)
+        if (subscription is null)
         {
-            throw new ArgumentNullException(nameof(reactor), "The parameter must not be null.");
+            throw new ArgumentNullException(nameof(subscription), "The parameter must not be null.");
         }
 
-        this.reactors.Add(reactor);
+        this.reactors.Add(subscription);
 
-        return new ReactorUnsubscriber(this.reactors.Cast<ISubscription>().ToList(), reactor);
+        return new ReactorUnsubscriber(this.reactors.Cast<ISubscription>().ToList(), subscription);
     }
 
     /// <inheritdoc/>

@@ -30,7 +30,7 @@ public class PushReactable<TIn>
              * just in case the reactable is disposed(removed)
              * in the OnReceive() method.
              */
-            for (var i = Reactors.Count - 1; i >= 0; i--)
+            for (var i = Subscriptions.Count - 1; i >= 0; i--)
             {
                 /*NOTE:
                  * The purpose of this logic is to prevent array index errors
@@ -40,16 +40,16 @@ public class PushReactable<TIn>
                  * If the current index is not less than or equal to
                  * the total number of items, reset the index to the last item
                  */
-                i = i > Reactors.Count - 1
-                    ? Reactors.Count - 1
+                i = i > Subscriptions.Count - 1
+                    ? Subscriptions.Count - 1
                     : i;
 
-                if (Reactors[i].Id != eventId)
+                if (Subscriptions[i].Id != eventId)
                 {
                     continue;
                 }
 
-                Reactors[i].OnReceive(data);
+                Subscriptions[i].OnReceive(data);
             }
         }
         catch (Exception e)
@@ -69,7 +69,7 @@ public class PushReactable<TIn>
          * just in case the reactable is disposed(removed)
          * in the OnReceive() method.
          */
-        for (var i = Reactors.Count - 1; i >= 0; i--)
+        for (var i = Subscriptions.Count - 1; i >= 0; i--)
         {
             /*NOTE:
              * The purpose of this logic is to prevent array index errors
@@ -79,16 +79,16 @@ public class PushReactable<TIn>
              * If the current index is not less than or equal to
              * the total number of items, reset the index to the last item
              */
-            i = i > Reactors.Count - 1
-                ? Reactors.Count - 1
+            i = i > Subscriptions.Count - 1
+                ? Subscriptions.Count - 1
                 : i;
 
-            if (Reactors[i].Id != eventId)
+            if (Subscriptions[i].Id != eventId)
             {
                 continue;
             }
 
-            Reactors[i].OnError(exception);
+            Subscriptions[i].OnError(exception);
         }
     }
 }
