@@ -92,7 +92,7 @@ public class ReactableBuilder
         return (subscription, pushReactable);
     }
 
-    public (IDisposable, IPullReactable<TDataIn, TDataOut>) BuildBiPull<TDataIn, TDataOut>(Func<TDataIn, TDataOut> respond)
+    public (IDisposable, IPushPullReactable<TDataIn, TDataOut>) BuildBiPull<TDataIn, TDataOut>(Func<TDataIn, TDataOut> respond)
     {
         var reactor = new RespondReactor<TDataIn, TDataOut>(
             respondId: this.id,
@@ -101,7 +101,7 @@ public class ReactableBuilder
             onUnsubscribe: this.unsubscribe,
             onError: this.onError);
 
-        var pushReactable = new PullReactable<TDataIn, TDataOut>();
+        var pushReactable = new PushPullReactable<TDataIn, TDataOut>();
 
         var subscription = pushReactable.Subscribe(reactor);
 

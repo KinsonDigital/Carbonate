@@ -44,7 +44,7 @@ public class PushPullReactableTests
         sut.Subscribe(mockReactorB.Object);
 
         // Act
-        var actual = sut.Pull(data, respondIdB);
+        var actual = sut.PushPull(data, respondIdB);
 
         // Assert
         mockReactorA.Verify(m => m.OnRespond(It.IsAny<int>()), Times.Never);
@@ -61,7 +61,7 @@ public class PushPullReactableTests
         var sut = new PushPullReactable<int, int>();
 
         // Act
-        var actual = sut.Pull(123, Guid.NewGuid());
+        var actual = sut.PushPull(123, Guid.NewGuid());
 
         // Assert
         actual.Should().Be(0);

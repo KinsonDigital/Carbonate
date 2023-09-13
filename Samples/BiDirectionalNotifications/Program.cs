@@ -6,7 +6,7 @@
 #pragma warning disable CS8509
 using Carbonate.TwoWay;
 
-var favoriteGetter = new PullReactable<string, string>();
+var favoriteGetter = new PushPullReactable<string, string>();
 
 var msgEventId = Guid.NewGuid(); // This is the ID used to identify the event
 
@@ -23,7 +23,7 @@ IDisposable unsubscriber = favoriteGetter.Subscribe(new RespondReactor<string, s
     onUnsubscribe: () => Console.WriteLine("Unsubscribed from notifications!"),
     onError: (ex) => Console.WriteLine($"Error: {ex.Message}")));
 
-Console.WriteLine($"Favorite Language: {favoriteGetter.Pull("prog-lang", msgEventId)}");
-Console.WriteLine($"Favorite Food: {favoriteGetter.Pull("food", msgEventId)}");
-Console.WriteLine($"Favorite Past Time: {favoriteGetter.Pull("past-time", msgEventId)}");
-Console.WriteLine($"Favorite Music: {favoriteGetter.Pull("music", msgEventId)}");
+Console.WriteLine($"Favorite Language: {favoriteGetter.PushPull("prog-lang", msgEventId)}");
+Console.WriteLine($"Favorite Food: {favoriteGetter.PushPull("food", msgEventId)}");
+Console.WriteLine($"Favorite Past Time: {favoriteGetter.PushPull("past-time", msgEventId)}");
+Console.WriteLine($"Favorite Music: {favoriteGetter.PushPull("music", msgEventId)}");

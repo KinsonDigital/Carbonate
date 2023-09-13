@@ -5,7 +5,6 @@
 // ReSharper disable UnusedVariable
 // ReSharper disable ConvertClosureToMethodGroup
 
-using Carbonate;
 using Carbonate.Fluent;
 using Carbonate.OneWay;
 

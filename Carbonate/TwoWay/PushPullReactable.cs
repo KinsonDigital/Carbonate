@@ -1,4 +1,4 @@
-﻿// <copyright file="PullReactable.cs" company="KinsonDigital">
+﻿// <copyright file="PushPullReactable.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -9,12 +9,11 @@ namespace Carbonate.TwoWay;
 
 using Core.TwoWay;
 
-/// <inheritdoc cref="IPullReactable{TDataIn,TDataOut}"/>
-public class PullReactable<TDataIn, TDataOut>
-    : ReactableBase<IRespondReactor<TDataIn, TDataOut>>, IPullReactable<TDataIn, TDataOut>
+/// <inheritdoc cref="IPushPullReactable{TDataIn,TDataOut}"/>
+public class PushPullReactable<TDataIn, TDataOut> : ReactableBase<IRespondReactor<TDataIn, TDataOut>>, IPushPullReactable<TDataIn, TDataOut>
 {
     /// <inheritdoc/>
-    public TDataOut? Pull(in TDataIn data, Guid respondId)
+    public TDataOut? PushPull(in TDataIn data, Guid respondId)
     {
         for (var i = 0; i < Reactors.Count; i++)
         {

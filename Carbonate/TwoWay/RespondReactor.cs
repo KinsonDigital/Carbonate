@@ -19,7 +19,7 @@ public class RespondReactor<TDataIn, TDataOut> : ReactorBase, IRespondReactor<TD
     /// <summary>
     /// Initializes a new instance of the <see cref="RespondReactor{TDataIn,TDataOut}"/> class.
     /// </summary>
-    /// <param name="respondId">The ID of the <see cref="PullReactable{TDataIn,TDataOut}"/> requiring a response.</param>
+    /// <param name="respondId">The ID of the <see cref="PushPullReactable{TDataIn,TDataOut}"/> requiring a response.</param>
     /// <param name="name">The name of the <see cref="RespondReactor{TDataIn,TDataOut}"/>.</param>
     /// <param name="onRespondData">Executed when requesting a response with data.</param>
     /// <param name="onUnsubscribe">

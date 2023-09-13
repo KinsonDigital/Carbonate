@@ -14,12 +14,12 @@ public class PullReactableWithData_IntegrationTests
 {
     #region Method Tests
     [Fact]
-    public void WhenUsingPull_WithOutgoingData_ReturnsCorrectResult()
+    public void WhenUsingPushPull_WithOutgoingData_ReturnsCorrectResult()
     {
         // Arrange
         var respondId = Guid.NewGuid();
 
-        var sut = new PullReactable<int, SampleData>();
+        var sut = new PushPullReactable<int, SampleData>();
 
         sut.Subscribe(new RespondReactor<int, SampleData>(
             respondId: respondId,
@@ -27,7 +27,7 @@ public class PullReactableWithData_IntegrationTests
             onRespondData: _ => new SampleData { IntValue = 123, StringValue = "test-str" }));
 
         // Act
-        var actual = sut.Pull(123, respondId);
+        var actual = sut.PushPull(123, respondId);
 
         // Assert
         actual.Should().NotBeNull();
