@@ -8,7 +8,7 @@ using Core.OneWay;
 
 /// <inheritdoc cref="IPushReactable{T}"/>
 public class PushReactable<TIn>
-    : ReactableBase<IReceiveReactor<TIn>>, IPushReactable<TIn>
+    : ReactableBase<IReceiveSubscription<TIn>>, IPushReactable<TIn>
 {
     /// <inheritdoc/>
     /// <exception cref="ObjectDisposedException">Thrown if this method is invoked after disposal.</exception>

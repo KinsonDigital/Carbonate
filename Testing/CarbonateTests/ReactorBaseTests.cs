@@ -35,7 +35,7 @@ public class ReactorBaseTests
         var totalInvokes = 0;
         void OnUnsubscribe() => totalInvokes++;
 
-        var sut = new ReceiveReactor<int>(Guid.NewGuid(), onUnsubscribe: OnUnsubscribe);
+        var sut = new ReceiveSubscription<int>(Guid.NewGuid(), onUnsubscribe: OnUnsubscribe);
         sut.OnUnsubscribe();
 
         // Act
@@ -54,7 +54,7 @@ public class ReactorBaseTests
 
         var exception = new Exception("test-exception");
 
-        var sut = new ReceiveReactor<int>(Guid.NewGuid(), onError: OnError);
+        var sut = new ReceiveSubscription<int>(Guid.NewGuid(), onError: OnError);
 
         // Act
         sut.OnError(exception);
@@ -72,7 +72,7 @@ public class ReactorBaseTests
 
         var exception = new Exception("test-exception");
 
-        var sut = new ReceiveReactor<int>(Guid.NewGuid(), onError: OnError);
+        var sut = new ReceiveSubscription<int>(Guid.NewGuid(), onError: OnError);
 
         sut.OnUnsubscribe();
 

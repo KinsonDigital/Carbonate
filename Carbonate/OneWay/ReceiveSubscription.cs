@@ -8,20 +8,20 @@ using System.Diagnostics.CodeAnalysis;
 using Core;
 using Core.OneWay;
 
-/// <inheritdoc cref="IReceiveReactor{TIn}"/>
+/// <inheritdoc cref="IReceiveSubscription{TIn}"/>
 [SuppressMessage(
     "ReSharper",
     "ClassWithVirtualMembersNeverInherited.Global",
     Justification = "Left unsealed to give users more control")]
-public class ReceiveReactor<TIn> : ReactorBase, IReceiveReactor<TIn>
+public class ReceiveSubscription<TIn> : ReactorBase, IReceiveSubscription<TIn>
 {
     private readonly Action<TIn>? onReceive;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ReceiveReactor{T}"/> class.
+    /// Initializes a new instance of the <see cref="ReceiveSubscription{TIn}"/> class.
     /// </summary>
     /// <param name="eventId">The ID of the event that was pushed by an <see cref="IReactable{IReceiveReactor}"/>.</param>
-    /// <param name="name">The name of the <see cref="ReceiveReactor{T}"/>.</param>
+    /// <param name="name">The name of the <see cref="ReceiveSubscription{TIn}"/>.</param>
     /// <param name="onReceive">Executed when a push notification occurs with some data.</param>
     /// <param name="onUnsubscribe">
     ///     Executed when the provider has finished sending push-based notifications and is unsubscribed.
@@ -32,7 +32,7 @@ public class ReceiveReactor<TIn> : ReactorBase, IReceiveReactor<TIn>
     ///     <br/>
     ///     It is only metadata for debugging or miscellaneous purposes.
     /// </remarks>
-    public ReceiveReactor(
+    public ReceiveSubscription(
         Guid eventId,
         string name = "",
         Action<TIn>? onReceive = null,

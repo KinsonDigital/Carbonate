@@ -32,13 +32,13 @@ public class ReactableBaseTests
 
         var expected = new[] { eventIdA, eventIdB };
 
-        var mockReactorA = new Mock<IReceiveReactor<int>>();
+        var mockReactorA = new Mock<IReceiveSubscription<int>>();
         mockReactorA.SetupGet(p => p.Id).Returns(eventIdA);
 
-        var mockReactorB = new Mock<IReceiveReactor<int>>();
+        var mockReactorB = new Mock<IReceiveSubscription<int>>();
         mockReactorB.SetupGet(p => p.Id).Returns(eventIdB);
 
-        var mockReactorC = new Mock<IReceiveReactor<int>>();
+        var mockReactorC = new Mock<IReceiveSubscription<int>>();
         mockReactorC.SetupGet(p => p.Id).Returns(eventIdC);
 
         var sut = CreateSystemUnderTest();
@@ -88,8 +88,8 @@ public class ReactableBaseTests
     public void Subscribe_WhenInvoked_ReactorsPropReturnsReactors()
     {
         // Arrange
-        var mockReactorA = new Mock<IReceiveReactor<int>>();
-        var mockReactorB = new Mock<IReceiveReactor<int>>();
+        var mockReactorA = new Mock<IReceiveSubscription<int>>();
+        var mockReactorB = new Mock<IReceiveSubscription<int>>();
 
         var expected = new[] { mockReactorA.Object, mockReactorB.Object };
 
@@ -161,11 +161,11 @@ public class ReactableBaseTests
         // Arrange
         var eventToUnsubscribeFrom = Guid.NewGuid();
 
-        var mockReactorA = new Mock<IReceiveReactor<int>>();
+        var mockReactorA = new Mock<IReceiveSubscription<int>>();
         mockReactorA.SetupGet(p => p.Id).Returns(eventToUnsubscribeFrom);
         mockReactorA.Setup(m => m.Unsubscribed).Returns(true);
 
-        var mockReactorB = new Mock<IReceiveReactor<int>>();
+        var mockReactorB = new Mock<IReceiveSubscription<int>>();
         mockReactorB.SetupGet(p => p.Id).Returns(eventToUnsubscribeFrom);
         mockReactorB.Setup(m => m.Unsubscribed).Returns(true);
 
@@ -190,15 +190,15 @@ public class ReactableBaseTests
         var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
         var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
 
-        var initReactorA = new ReceiveReactor<int>(
+        var initReactorA = new ReceiveSubscription<int>(
             eventId: mainId);
 
-        var otherReactorA = new ReceiveReactor<int>(eventId: otherId);
-        var otherReactorB = new ReceiveReactor<int>(eventId: otherId);
+        var otherReactorA = new ReceiveSubscription<int>(eventId: otherId);
+        var otherReactorB = new ReceiveSubscription<int>(eventId: otherId);
 
         var sut = CreateSystemUnderTest();
 
-        var initReactorC = new ReceiveReactor<int>(
+        var initReactorC = new ReceiveSubscription<int>(
             eventId: mainId,
             onUnsubscribe: () =>
             {
@@ -239,13 +239,13 @@ public class ReactableBaseTests
         var eventToUnsubscribeFrom = Guid.NewGuid();
         var eventNotToUnsubscribeFrom = Guid.NewGuid();
 
-        var mockReactorA = new Mock<IReceiveReactor<int>>();
+        var mockReactorA = new Mock<IReceiveSubscription<int>>();
         mockReactorA.SetupGet(p => p.Id).Returns(eventToUnsubscribeFrom);
 
-        var mockReactorB = new Mock<IReceiveReactor<int>>();
+        var mockReactorB = new Mock<IReceiveSubscription<int>>();
         mockReactorB.SetupGet(p => p.Id).Returns(eventNotToUnsubscribeFrom);
 
-        var mockReactorC = new Mock<IReceiveReactor<int>>();
+        var mockReactorC = new Mock<IReceiveSubscription<int>>();
         mockReactorC.SetupGet(p => p.Id).Returns(eventToUnsubscribeFrom);
 
         // Act
@@ -270,15 +270,15 @@ public class ReactableBaseTests
         var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
         var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
 
-        var initReactorA = new ReceiveReactor<int>(
+        var initReactorA = new ReceiveSubscription<int>(
             eventId: mainId);
 
-        var otherReactorA = new ReceiveReactor<int>(eventId: otherId);
-        var otherReactorB = new ReceiveReactor<int>(eventId: otherId);
+        var otherReactorA = new ReceiveSubscription<int>(eventId: otherId);
+        var otherReactorB = new ReceiveSubscription<int>(eventId: otherId);
 
         var sut = CreateSystemUnderTest();
 
-        var initReactorC = new ReceiveReactor<int>(
+        var initReactorC = new ReceiveSubscription<int>(
             eventId: mainId,
             onUnsubscribe: () =>
             {
@@ -304,10 +304,10 @@ public class ReactableBaseTests
         var eventIdA = Guid.NewGuid();
         var eventIdB = Guid.NewGuid();
 
-        var mockReactorA = new Mock<IReceiveReactor<int>>();
+        var mockReactorA = new Mock<IReceiveSubscription<int>>();
         mockReactorA.SetupGet(p => p.Id).Returns(eventIdA);
 
-        var mockReactorB = new Mock<IReceiveReactor<int>>();
+        var mockReactorB = new Mock<IReceiveSubscription<int>>();
         mockReactorB.SetupGet(p => p.Id).Returns(eventIdB);
 
         var sut = CreateSystemUnderTest();

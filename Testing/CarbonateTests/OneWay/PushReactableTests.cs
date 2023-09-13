@@ -53,13 +53,13 @@ public class PushReactableTests
         var invokedEventId = Guid.NewGuid();
         var notInvokedEventId = Guid.NewGuid();
 
-        var mockReactorA = new Mock<IReceiveReactor<int>>();
+        var mockReactorA = new Mock<IReceiveSubscription<int>>();
         mockReactorA.SetupGet(p => p.Id).Returns(invokedEventId);
 
-        var mockReactorB = new Mock<IReceiveReactor<int>>();
+        var mockReactorB = new Mock<IReceiveSubscription<int>>();
         mockReactorB.SetupGet(p => p.Id).Returns(notInvokedEventId);
 
-        var mockReactorC = new Mock<IReceiveReactor<int>>();
+        var mockReactorC = new Mock<IReceiveSubscription<int>>();
         mockReactorC.SetupGet(p => p.Id).Returns(invokedEventId);
 
         var sut = CreateSystemUnderTest();
@@ -86,17 +86,17 @@ public class PushReactableTests
         IDisposable? otherUnsubscriberA = null;
         IDisposable? otherUnsubscriberB = null;
 
-        var initReactorA = new ReceiveReactor<int>(
+        var initReactorA = new ReceiveSubscription<int>(
             eventId: mainId);
 
-        var otherReactorA = new ReceiveReactor<int>(eventId: otherId);
-        var otherReactorB = new ReceiveReactor<int>(eventId: otherId);
+        var otherReactorA = new ReceiveSubscription<int>(eventId: otherId);
+        var otherReactorB = new ReceiveSubscription<int>(eventId: otherId);
 
         const int data = 123;
 
         var sut = CreateSystemUnderTest();
 
-        var initReactorC = new ReceiveReactor<int>(
+        var initReactorC = new ReceiveSubscription<int>(
             eventId: mainId,
             onReceive: _ =>
             {
@@ -124,7 +124,7 @@ public class PushReactableTests
         var idB = Guid.NewGuid();
 
         var sut = CreateSystemUnderTest();
-        var reactorA = new ReceiveReactor<int>(
+        var reactorA = new ReceiveSubscription<int>(
             eventId: idA,
             onReceive: _ => throw new Exception("test-exception"),
             onError: e =>
@@ -133,7 +133,7 @@ public class PushReactableTests
                 e.Should().BeOfType<Exception>();
                 e.Message.Should().Be("test-exception");
             });
-        var reactorB = new ReceiveReactor<int>(idB);
+        var reactorB = new ReceiveSubscription<int>(idB);
 
         sut.Subscribe(reactorA);
         sut.Subscribe(reactorB);

@@ -72,11 +72,11 @@ public class SubscriptionBuilder : ISubscriptionBuilder
             onError: this.onError);
     }
 
-    public IReceiveReactor<TIn> BuildOneWayReceive<TIn>(Action<TIn> onReceive)
+    public IReceiveSubscription<TIn> BuildOneWayReceive<TIn>(Action<TIn> onReceive)
     {
         ArgumentNullException.ThrowIfNull(onReceive);
 
-        return new ReceiveReactor<TIn>(
+        return new ReceiveSubscription<TIn>(
             eventId: this.id,
             name: this.name ?? string.Empty,
             onReceive: onReceive,

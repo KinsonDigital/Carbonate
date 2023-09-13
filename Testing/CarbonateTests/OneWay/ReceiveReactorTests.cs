@@ -9,7 +9,7 @@ using FluentAssertions;
 using Xunit;
 
 /// <summary>
-/// Tests the <see cref="ReceiveReactor{T}"/> class.
+/// Tests the <see cref="ReceiveSubscription{TIn}"/> class.
 /// </summary>
 public class ReceiveReactorTests
 {
@@ -21,7 +21,7 @@ public class ReceiveReactorTests
         var guid = Guid.NewGuid();
 
         // Act
-        var sut = new ReceiveReactor<int>(guid);
+        var sut = new ReceiveSubscription<int>(guid);
         var actual = sut.Id;
 
         // Assert
@@ -39,7 +39,7 @@ public class ReceiveReactorTests
 
         const int data = 123;
 
-        var sut = new ReceiveReactor<int>(Guid.NewGuid(), onReceive: OnReceive);
+        var sut = new ReceiveSubscription<int>(Guid.NewGuid(), onReceive: OnReceive);
 
         // Act
         sut.OnReceive(data);
@@ -57,7 +57,7 @@ public class ReceiveReactorTests
 
         const int data = 123;
 
-        var sut = new ReceiveReactor<int>(Guid.NewGuid(), onReceive: OnReceive);
+        var sut = new ReceiveSubscription<int>(Guid.NewGuid(), onReceive: OnReceive);
 
         sut.OnUnsubscribe();
 
@@ -72,7 +72,7 @@ public class ReceiveReactorTests
     public void OnReceive_WhenSendingNullData_ThrowsException()
     {
         // Arrange
-        var sut = new ReceiveReactor<object>(Guid.NewGuid());
+        var sut = new ReceiveSubscription<object>(Guid.NewGuid());
 
         // Act
         var act = () => sut.OnReceive(null);
@@ -91,7 +91,7 @@ public class ReceiveReactorTests
         // Arrange
         var id = new Guid("5739afd9-be4c-4402-a12d-6bcde35cc8c3");
 
-        var sut = new ReceiveReactor<int>(
+        var sut = new ReceiveSubscription<int>(
             eventId: id,
             name: name);
 
