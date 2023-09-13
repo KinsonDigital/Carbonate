@@ -88,6 +88,7 @@ unsubscriber.Dispose(); // Will only unsubscribe from this subscription
 
 Every notification sent out contains a unique ID, which subscribers must use to receive the intended notification, ensuring its exclusivity and eliminating the need for additional logic with with each subscription to ignore some notifications and accept others.
 
+> **Note**
 > **💡TIP💡**  
 > If you want to receive a single notification, unsubscribe from further notifications by calling the `Dispose()`
 > method on the `IDisposable` object returned by the _**Reactable**_ object. All reactable objects return this object for unsubscribing at a later time.
@@ -167,6 +168,7 @@ Console.WriteLine($"Favorite Music: {favoriteMessenger.Pull("music", subId)}");
 > The difference between _**one way**_ and _**two way**_ notifications is that _**one way**_ notifications enable data travel in one direction whereas _**two way**_ notifications enable data exchange in both directions which sends data out.  The terms 'Push' and 'Pull' should give a clue as to the direction of travel of the data.
 
 
+> **Note**
 > **💡TIP💡**
 > Most of the time, the `PushReactable`, `PushReactable<TIn>`, and `PullReactable<TIn, TOut>` types will suit your needs.  However, if you have any requirements that these can't provide, you can always create your own custom implementations of the interfaces provided.
 
