@@ -17,7 +17,7 @@ public abstract class SubscriptionBase : ISubscription
     /// <summary>
     /// Initializes a new instance of the <see cref="SubscriptionBase"/> class.
     /// </summary>
-    /// <param name="eventId">The ID of the event that was pushed by an <see cref="IReactable{TSubscription}"/>.</param>
+    /// <param name="id">The ID of the event that was pushed by an <see cref="IReactable{TSubscription}"/>.</param>
     /// <param name="name">The name of the <see cref="ISubscription"/>.</param>
     /// <param name="onUnsubscribe">
     ///     Executed when the provider has finished sending push-based notifications and is unsubscribed.
@@ -29,12 +29,12 @@ public abstract class SubscriptionBase : ISubscription
     ///     It is only metadata for debugging or miscellaneous purposes.
     /// </remarks>
     protected SubscriptionBase(
-        Guid eventId,
+        Guid id,
         string name = "",
         Action? onUnsubscribe = null,
         Action<Exception>? onError = null)
     {
-        Id = eventId;
+        Id = id;
         Name = string.IsNullOrEmpty(name) ? string.Empty : name;
         this.onUnsubscribe = onUnsubscribe;
         this.onError = onError;
