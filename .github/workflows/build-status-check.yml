@@ -35,7 +35,7 @@ jobs:
     name: Build Samples
     uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v13.0.1
     with:
-      project-name: "${{ vars.PROJECT_NAME }}/Samples/Samples"
+      project-name: "Samples"
       build-config: Debug
       net-sdk-version: "${{ vars.NET_SDK_VERSION }}"
 
