@@ -13,27 +13,36 @@ on:
 
 
 jobs:
-  main_build_status_check:
+  build_main_project:
     name: Build ${{ vars.PROJECT_NAME }}
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v13.0.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v13.0.1
     with:
       project-name: "${{ vars.PROJECT_NAME }}"
       build-config: Debug
       net-sdk-version: "${{ vars.NET_SDK_VERSION }}"
 
 
-  perf_build_status_check:
+  build_perf_project:
     name: Build ${{ vars.PROJECT_NAME }}PerfTests
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v13.0.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v13.0.1
     with:
       project-name: "${{ vars.PROJECT_NAME }}PerfTests"
       build-config: Debug
       net-sdk-version: "${{ vars.NET_SDK_VERSION }}"
 
 
+  build_samples_project:
+    name: Build Samples
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v13.0.1
+    with:
+      project-name: "Samples"
+      build-config: Debug
+      net-sdk-version: "${{ vars.NET_SDK_VERSION }}"
+
+
   build_status_check:
     name: ${{ vars.PROJECT_NAME }} Build Status Check
-    needs: [main_build_status_check, perf_build_status_check]
+    needs: [build_main_project, build_perf_project, build_samples_project]
     runs-on: ubuntu-latest
     steps:
       - name: Print Status Check Pass Message

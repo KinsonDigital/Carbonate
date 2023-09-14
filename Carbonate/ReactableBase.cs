@@ -6,23 +6,23 @@ namespace Carbonate;
 
 using System.Collections.ObjectModel;
 using Core;
-using UniDirectional;
+using OneWay;
 
 /// <summary>
 /// Defines a provider for pushing notifications or receiving responses with default behavior.
 /// </summary>
-/// <typeparam name="T">The type of reactor to use.</typeparam>
-public abstract class ReactableBase<T> : IReactable<T>
-    where T : class, IReactor
+/// <typeparam name="TSubscription">The type of subscription to use.</typeparam>
+public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
+    where TSubscription : class, ISubscription
 {
-    private readonly List<T> reactors = new ();
+    private readonly List<TSubscription> subscriptions = new ();
     private bool notificationsEnded;
 
     /// <inheritdoc/>
-    public ReadOnlyCollection<T> Reactors => this.reactors.AsReadOnly();
+    public ReadOnlyCollection<TSubscription> Subscriptions => this.subscriptions.AsReadOnly();
 
     /// <inheritdoc/>
-    public ReadOnlyCollection<Guid> SubscriptionIds => this.reactors
+    public ReadOnlyCollection<Guid> SubscriptionIds => this.subscriptions
         .Select(r => r.Id)
         .Distinct()
         .ToList().AsReadOnly();
@@ -34,22 +34,22 @@ public abstract class ReactableBase<T> : IReactable<T>
 
     /// <inheritdoc/>
     /// <exception cref="ObjectDisposedException">Thrown if this method is invoked after disposal.</exception>
-    /// <exception cref="ArgumentNullException">Thrown if the given <paramref name="reactor"/> is null.</exception>
-    public virtual IDisposable Subscribe(T reactor)
+    /// <exception cref="ArgumentNullException">Thrown if the given <paramref name="subscription"/> is null.</exception>
+    public virtual IDisposable Subscribe(TSubscription subscription)
     {
         if (IsDisposed)
         {
-            throw new ObjectDisposedException(nameof(PushReactable<T>), $"{nameof(PushReactable<T>)} disposed.");
+            throw new ObjectDisposedException(nameof(PushReactable<TSubscription>), $"{nameof(PushReactable<TSubscription>)} disposed.");
         }
 
-        if (reactor is null)
+        if (subscription is null)
         {
-            throw new ArgumentNullException(nameof(reactor), "The parameter must not be null.");
+            throw new ArgumentNullException(nameof(subscription), "The parameter must not be null.");
         }
 
-        this.reactors.Add(reactor);
+        this.subscriptions.Add(subscription);
 
-        return new ReactorUnsubscriber(this.reactors.Cast<IReactor>().ToList(), reactor);
+        return new SubscriptionUnsubscriber(this.subscriptions.Cast<ISubscription>().ToList(), subscription);
     }
 
     /// <inheritdoc/>
@@ -58,7 +58,7 @@ public abstract class ReactableBase<T> : IReactable<T>
     {
         if (IsDisposed)
         {
-            throw new ObjectDisposedException(nameof(PushReactable<T>), $"{nameof(PushReactable<T>)} disposed.");
+            throw new ObjectDisposedException(nameof(PushReactable<TSubscription>), $"{nameof(PushReactable<TSubscription>)} disposed.");
         }
 
         if (this.notificationsEnded)
@@ -68,9 +68,9 @@ public abstract class ReactableBase<T> : IReactable<T>
 
         /* Keep this loop as a for-loop.  Do not convert to for-each.
          * This is due to the Dispose() method possibly being called during
-         * iteration of the reactors list which will cause an exception.
+         * iteration of the subscriptions list which will cause an exception.
         */
-        for (var i = this.reactors.Count - 1; i >= 0; i--)
+        for (var i = this.subscriptions.Count - 1; i >= 0; i--)
         {
             /*NOTE:
              * The purpose of this logic is to prevent array index errors
@@ -80,30 +80,30 @@ public abstract class ReactableBase<T> : IReactable<T>
              * If the current index is not less than or equal to
              * the total number of items, reset the index to the last item
              */
-            i = i > this.reactors.Count - 1
-                ? this.reactors.Count - 1
+            i = i > this.subscriptions.Count - 1
+                ? this.subscriptions.Count - 1
                 : i;
 
-            if (this.reactors[i].Id != id)
+            if (this.subscriptions[i].Id != id)
             {
                 continue;
             }
 
-            var beforeTotal = this.reactors.Count;
+            var beforeTotal = this.subscriptions.Count;
 
-            this.reactors[i].OnUnsubscribe();
+            this.subscriptions[i].OnUnsubscribe();
 
-            var nothingRemoved = Math.Abs(beforeTotal - this.reactors.Count) <= 0;
+            var nothingRemoved = Math.Abs(beforeTotal - this.subscriptions.Count) <= 0;
 
             // Make sure that the OnUnsubscribe implementation did not remove
-            // the reactor before attempting to remove it
+            // the subscription before attempting to remove it
             if (nothingRemoved)
             {
-                this.reactors.Remove(this.reactors[i]);
+                this.subscriptions.Remove(this.subscriptions[i]);
             }
         }
 
-        this.notificationsEnded = this.reactors.All(r => r.Unsubscribed);
+        this.notificationsEnded = this.subscriptions.All(r => r.Unsubscribed);
     }
 
     /// <inheritdoc/>
@@ -112,14 +112,14 @@ public abstract class ReactableBase<T> : IReactable<T>
     {
         if (IsDisposed)
         {
-            throw new ObjectDisposedException(nameof(PushReactable<T>), $"{nameof(PushReactable<T>)} disposed.");
+            throw new ObjectDisposedException(nameof(PushReactable<TSubscription>), $"{nameof(PushReactable<TSubscription>)} disposed.");
         }
 
         /* Keep this loop as a for-loop.  Do not convert to for-each.
          * This is due to the Dispose() method possibly being called during
-         * iteration of the reactors list which will cause an exception.
+         * iteration of the subscriptions list which will cause an exception.
         */
-        for (var i = this.reactors.Count - 1; i >= 0; i--)
+        for (var i = this.subscriptions.Count - 1; i >= 0; i--)
         {
             /*NOTE:
              * The purpose of this logic is to prevent array index errors
@@ -129,14 +129,14 @@ public abstract class ReactableBase<T> : IReactable<T>
              * If the current index is not less than or equal to
              * the total number of items, reset the index to the last item
              */
-            i = i > this.reactors.Count - 1
-                ? this.reactors.Count - 1
+            i = i > this.subscriptions.Count - 1
+                ? this.subscriptions.Count - 1
                 : i;
 
-            this.reactors[i].OnUnsubscribe();
+            this.subscriptions[i].OnUnsubscribe();
         }
 
-        this.reactors.Clear();
+        this.subscriptions.Clear();
     }
 
     /// <inheritdoc cref="IDisposable.Dispose"/>
@@ -151,8 +151,8 @@ public abstract class ReactableBase<T> : IReactable<T>
     /// </summary>
     /// <param name="disposing">Disposes managed resources when <c>true</c>.</param>
     /// <remarks>
-    ///     All <see cref="IReactor"/>s that are still subscribed will have its <see cref="IReactor.OnUnsubscribe"/>
-    ///     method invoked and the <see cref="IReactor"/>s will be unsubscribed.
+    ///     All <see cref="ISubscription"/>s that are still subscribed will have its <see cref="ISubscription.OnUnsubscribe"/>
+    ///     method invoked and the <see cref="ISubscription"/>s will be unsubscribed.
     /// </remarks>
     private void Dispose(bool disposing)
     {
