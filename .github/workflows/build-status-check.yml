@@ -20,6 +20,9 @@ jobs:
       project-name: "${{ vars.PROJECT_NAME }}"
       build-config: Debug
       net-sdk-version: "${{ vars.NET_SDK_VERSION }}"
+      checkout-ref: ${{ github.event.pull_request.head.ref }}
+      checkout-repository: ${{ github.event.pull_request.head.repo.full_name }}
+
 
 
   build_perf_project:
@@ -29,6 +32,9 @@ jobs:
       project-name: "${{ vars.PROJECT_NAME }}PerfTests"
       build-config: Debug
       net-sdk-version: "${{ vars.NET_SDK_VERSION }}"
+      checkout-ref: ${{ github.event.pull_request.head.ref }}
+      checkout-repository: ${{ github.event.pull_request.head.repo.full_name }}
+
 
 
   build_samples_project:
@@ -38,6 +44,9 @@ jobs:
       project-name: "Samples"
       build-config: Debug
       net-sdk-version: "${{ vars.NET_SDK_VERSION }}"
+      checkout-ref: ${{ github.event.pull_request.head.ref }}
+      checkout-repository: ${{ github.event.pull_request.head.repo.full_name }}
+
 
 
   build_status_check:
