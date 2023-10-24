@@ -15,24 +15,28 @@ on:
 jobs:
   main_tests:
     name: Run ${{ vars.PROJECT_NAME }} Tests
-    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v13.1.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v13.3.0
     with:
       project-name: "${{ vars.PROJECT_NAME }}Tests"
       build-config: Debug
       net-sdk-version: "${{ vars.NET_SDK_VERSION }}"
       checkout-ref: ${{ github.event.pull_request.head.ref }}
       checkout-repository: ${{ github.event.pull_request.head.repo.full_name }}
+    secrets:
+      cicd-pat: ${{ secrets.CICD_TOKEN }}
 
 
   integration_tests:
     name: Run ${{ vars.PROJECT_NAME }} Integration Tests
-    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v13.1.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v13.3.0
     with:
       project-name: "${{ vars.PROJECT_NAME }}IntegrationTests"
       build-config: Debug
       net-sdk-version: "${{ vars.NET_SDK_VERSION }}"
       checkout-ref: ${{ github.event.pull_request.head.ref }}
       checkout-repository: ${{ github.event.pull_request.head.repo.full_name }}
+    secrets:
+      cicd-pat: ${{ secrets.CICD_TOKEN }}
 
 
   test_status_check:
