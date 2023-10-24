@@ -24,7 +24,6 @@ jobs:
       checkout-repository: ${{ github.event.pull_request.head.repo.full_name }}
 
 
-
   build_perf_project:
     name: Build ${{ vars.PROJECT_NAME }}PerfTests
     uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v13.1.0
@@ -36,7 +35,6 @@ jobs:
       checkout-repository: ${{ github.event.pull_request.head.repo.full_name }}
 
 
-
   build_samples_project:
     name: Build Samples
     uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v13.1.0
@@ -46,7 +44,6 @@ jobs:
       net-sdk-version: "${{ vars.NET_SDK_VERSION }}"
       checkout-ref: ${{ github.event.pull_request.head.ref }}
       checkout-repository: ${{ github.event.pull_request.head.repo.full_name }}
-
 
 
   build_status_check:
