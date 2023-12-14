@@ -33,11 +33,11 @@ This library is still under development and is not at v1.0.0 yet!!  However, all
 
 <h2 style="font-weight:bold;border:0" align="center">📖 About Carbonate 📖</h2>
 
-**Carbonate** is a messaging library built on the observable pattern, empowering seamless and dependable push-and-pull message handling across various parts or systems within an application. This fosters decoupling among different components, enhancing your application's overall testability as well as separating cross cutting concerns.
+**Carbonate** is a messaging library built on the observable pattern, empowering seamless and dependable push-and-pull message handling across various parts or systems within an application. This fosters decoupling among different components, enhancing your application's overall testability as well as separating cross-cutting concerns.
 
-You can chose if you want data to flow out with the push notification, if data can be returned from a notification, both out and returned in one notification or no data being sent out or returned.
+You can choose if you want data to flow out with the push notification if data can be returned from a notification, both out and returned in one notification or if no data is being sent out or returned.
 
-For a real-world example, check out the [Velaptor](https://github.com/KinsonDigital/Velaptor) code base which is an open source 2D game development framework.  This library has been vital for decoupling the different sub-systems and increasing it's testability.
+For a real-world example, check out the [Velaptor](https://github.com/KinsonDigital/Velaptor) code base which is an open-source 2D game development framework.  This library has been vital for decoupling the different sub-systems and increasing its testability.
 
 Go [here](https://refactoring.guru/design-patterns/observer) for information on the observer pattern. This design pattern has been extensively covered in various tutorials and examples across the web, making it well-documented, widely recognized, and a highly popular programming pattern.
 
@@ -138,7 +138,7 @@ messenger.Unsubscribe(subId); // Will invoke all onUnsubscribe 'Actions'
 
 <h3 style="font-weight:bold;color: #00BBC6">Two way push notifications</h3>
 
-To enable ***two way*** push notifications, allowing data to be sent out and returned, you can employ the `PushPullReactable<TIn, TOut>` type. Subscribers, on the other hand, utilize the `RespondSubscription<TIn, TOut>` for their notification subscriptions. This approach proves useful when you need to send a push notification with data required by the receiver, who then responds with data back to the original caller that initiated the notification.
+To enable ***two way*** push notifications, allowing data to be sent out and returned, you can employ the `PushPullReactable<TIn, TOut>` type. Subscribers, on the other hand, utilize the `RespondSubscription<TIn, TOut>` for their notification subscriptions. This approach proves useful when you need to send a push notification with data required by the receiver, who then responds with data back to the original caller who initiated the notification.
 
 ```cs
 var favoriteMessenger = new PushPullReactable<string, string>();
