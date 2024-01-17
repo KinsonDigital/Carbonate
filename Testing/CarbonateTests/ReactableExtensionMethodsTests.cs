@@ -18,6 +18,22 @@ using Xunit;
 /// </summary>
 public class ReactableExtensionMethodsTests
 {
+    #region Test Data
+#pragma warning disable SA1514
+    /// <summary>
+    /// Gets unsubscribe and on error delegate data for testing.
+    /// </summary>
+    public static TheoryData<Action?, Action<Exception>?> SubscribeErrorData =>
+        new ()
+        {
+            { null, null },
+            { null, _ => { } },
+            { () => { }, null },
+            { () => { }, _ => { } },
+        };
+#pragma warning restore SA1514
+    #endregion
+
     #region Method Exception Tests
     #region CreateNonReceiveOrRespond With 4 Params
     [Fact]
@@ -433,9 +449,10 @@ public class ReactableExtensionMethodsTests
     #endregion
 
     #region Method Non-Exception Tests
-    [Fact]
+    [Theory]
+    [MemberData(nameof(SubscribeErrorData))]
     [SuppressMessage("ReSharper", "ConvertToLocalFunction", Justification = "Not required for testing.")]
-    public void CreateNonReceiveOrRespond_WhenInvokingWithIdAndName_CreatesSubscription()
+    public void CreateNonReceiveOrRespond_WhenInvokingWithIdAndName_CreatesSubscription(Action? onUnsubscribe, Action<Exception>? onError)
     {
         // Arrange
         var id = Guid.NewGuid();
@@ -445,16 +462,17 @@ public class ReactableExtensionMethodsTests
         var sut = new PushReactable();
 
         // Act
-        var unsubscriber = sut.CreateNonReceiveOrRespond(id, expectedName, expectedAction);
+        var unsubscriber = sut.CreateNonReceiveOrRespond(id, expectedName, expectedAction, onUnsubscribe, onError);
 
         // Assert
         Assert.NotNull(unsubscriber);
         sut.SubscriptionIds.Should().BeEquivalentTo(expectedIds);
     }
 
-    [Fact]
+    [Theory]
+    [MemberData(nameof(SubscribeErrorData))]
     [SuppressMessage("ReSharper", "ConvertToLocalFunction", Justification = "Not required for testing.")]
-    public void CreateNonReceiveOrRespond_WhenInvokingWithIdAndAutoName_CreatesSubscription()
+    public void CreateNonReceiveOrRespond_WhenInvokingWithIdAndAutoName_CreatesSubscription(Action? onUnsubscribe, Action<Exception>? onError)
     {
         // Arrange
         var id = Guid.NewGuid();
@@ -463,16 +481,17 @@ public class ReactableExtensionMethodsTests
         var sut = new PushReactable();
 
         // Act
-        var unsubscriber = sut.CreateNonReceiveOrRespond(id, expectedAction);
+        var unsubscriber = sut.CreateNonReceiveOrRespond(id, expectedAction, onUnsubscribe, onError);
 
         // Assert
         Assert.NotNull(unsubscriber);
         sut.SubscriptionIds.Should().BeEquivalentTo(expectedIds);
     }
 
-    [Fact]
+    [Theory]
+    [MemberData(nameof(SubscribeErrorData))]
     [SuppressMessage("ReSharper", "ConvertToLocalFunction", Justification = "Not required for testing.")]
-    public void CreateOneWayReceive_WhenInvokingWithIdAndName_CreatesSubscription()
+    public void CreateOneWayReceive_WhenInvokingWithIdAndName_CreatesSubscription(Action? onUnsubscribe, Action<Exception>? onError)
     {
         // Arrange
         var id = Guid.NewGuid();
@@ -482,16 +501,17 @@ public class ReactableExtensionMethodsTests
         var sut = new PushReactable<int>();
 
         // Act
-        var unsubscriber = sut.CreateOneWayReceive(id, expectedName, expectedAction);
+        var unsubscriber = sut.CreateOneWayReceive(id, expectedName, expectedAction, onUnsubscribe, onError);
 
         // Assert
         Assert.NotNull(unsubscriber);
         sut.SubscriptionIds.Should().BeEquivalentTo(expectedIds);
     }
 
-    [Fact]
+    [Theory]
+    [MemberData(nameof(SubscribeErrorData))]
     [SuppressMessage("ReSharper", "ConvertToLocalFunction", Justification = "Not required for testing.")]
-    public void CreateOneWayReceive_WhenInvokingWithIdAndAutoName_CreatesSubscription()
+    public void CreateOneWayReceive_WhenInvokingWithIdAndAutoName_CreatesSubscription(Action? onUnsubscribe, Action<Exception>? onError)
     {
         // Arrange
         var id = Guid.NewGuid();
@@ -500,16 +520,17 @@ public class ReactableExtensionMethodsTests
         var sut = new PushReactable<int>();
 
         // Act
-        var unsubscriber = sut.CreateOneWayReceive(id, expectedAction);
+        var unsubscriber = sut.CreateOneWayReceive(id, expectedAction, onUnsubscribe, onError);
 
         // Assert
         Assert.NotNull(unsubscriber);
         sut.SubscriptionIds.Should().BeEquivalentTo(expectedIds);
     }
 
-    [Fact]
+    [Theory]
+    [MemberData(nameof(SubscribeErrorData))]
     [SuppressMessage("ReSharper", "ConvertToLocalFunction", Justification = "Not required for testing.")]
-    public void CreateOneWayRespond_WhenInvokingWithIdAndName_CreatesSubscription()
+    public void CreateOneWayRespond_WhenInvokingWithIdAndName_CreatesSubscription(Action? onUnsubscribe, Action<Exception>? onError)
     {
         // Arrange
         var id = Guid.NewGuid();
@@ -519,16 +540,17 @@ public class ReactableExtensionMethodsTests
         var sut = new PullReactable<int>();
 
         // Act
-        var unsubscriber = sut.CreateOneWayRespond(id, expectedName, expectedAction);
+        var unsubscriber = sut.CreateOneWayRespond(id, expectedName, expectedAction, onUnsubscribe, onError);
 
         // Assert
         Assert.NotNull(unsubscriber);
         sut.SubscriptionIds.Should().BeEquivalentTo(expectedIds);
     }
 
-    [Fact]
+    [Theory]
+    [MemberData(nameof(SubscribeErrorData))]
     [SuppressMessage("ReSharper", "ConvertToLocalFunction", Justification = "Not required for testing.")]
-    public void CreateOneWayRespond_WhenInvokingWithIdAndAutoName_CreatesSubscription()
+    public void CreateOneWayRespond_WhenInvokingWithIdAndAutoName_CreatesSubscription(Action? onUnsubscribe, Action<Exception>? onError)
     {
         // Arrange
         var id = Guid.NewGuid();
@@ -537,7 +559,7 @@ public class ReactableExtensionMethodsTests
         var sut = new PullReactable<int>();
 
         // Act
-        var unsubscriber = sut.CreateOneWayRespond(id, expectedAction);
+        var unsubscriber = sut.CreateOneWayRespond(id, expectedAction, onUnsubscribe, onError);
 
         // Assert
         Assert.NotNull(unsubscriber);

@@ -1,4 +1,4 @@
-// <copyright file="ReactableExtensionMethods.cs" company="KinsonDigital">
+﻿// <copyright file="ReactableExtensionMethods.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -23,6 +23,10 @@ public static class ReactableExtensionMethods
     /// <param name="id">The unique id.</param>
     /// <param name="name">The name of the subscription.</param>
     /// <param name="onReceive">The delegate to execute when receiving a notification.</param>
+    /// <param name="onUnsubscribe">
+    ///     Executed when the notification provider has finished sending push-based notifications.
+    /// </param>
+    /// <param name="onError">Executed when the notification provider experiences an error.</param>
     /// <returns>
     ///     A <see cref="IDisposable"/> object that can be used to unsubscribe the subscription.
     /// </returns>
@@ -52,7 +56,9 @@ public static class ReactableExtensionMethods
         this IPushReactable reactable,
         Guid id,
         string name,
-        Action onReceive)
+        Action onReceive,
+        Action? onUnsubscribe = null,
+        Action<Exception>? onError = null)
     {
         ArgumentNullException.ThrowIfNull(reactable);
 
@@ -66,12 +72,31 @@ public static class ReactableExtensionMethods
 
         name = name.Trim();
 
-        var projOpenedSub = ISubscriptionBuilder.Create()
-            .WithId(id)
-            .WithName(name)
-            .BuildNonReceiveOrRespond(onReceive);
+        var subscription = (onSubscribe: onUnsubscribe, onError) switch
+        {
+            (null, null) => ISubscriptionBuilder.Create()
+                .WithId(id)
+                .WithName(name)
+                .BuildNonReceiveOrRespond(onReceive),
+            (null, not null) => ISubscriptionBuilder.Create()
+                .WithId(id)
+                .WithName(name)
+                .WithError(onError)
+                .BuildNonReceiveOrRespond(onReceive),
+            (not null, null) => ISubscriptionBuilder.Create()
+                .WithId(id)
+                .WithName(name)
+                .WhenUnsubscribing(onUnsubscribe)
+                .BuildNonReceiveOrRespond(onReceive),
+            (not null, not null) => ISubscriptionBuilder.Create()
+                .WithId(id)
+                .WithName(name)
+                .WhenUnsubscribing(onUnsubscribe)
+                .WithError(onError)
+                .BuildNonReceiveOrRespond(onReceive)
+        };
 
-        return reactable.Subscribe(projOpenedSub);
+        return reactable.Subscribe(subscription);
     }
 
     /// <summary>
@@ -81,6 +106,10 @@ public static class ReactableExtensionMethods
     /// <param name="reactable">The reactable to create a subscription with.</param>
     /// <param name="id">The unique id.</param>
     /// <param name="onReceive">The delegate to execute when receiving a notification.</param>
+    /// <param name="onUnsubscribe">
+    ///     Executed when the notification provider has finished sending push-based notifications.
+    /// </param>
+    /// <param name="onError">Executed when the notification provider experiences an error.</param>
     /// <param name="callerMemberName">The name of the caller.</param>
     /// <param name="callerFilePath">The file path of the caller.</param>
     /// <returns>
@@ -101,6 +130,8 @@ public static class ReactableExtensionMethods
         this IPushReactable reactable,
         Guid id,
         Action onReceive,
+        Action? onUnsubscribe = null,
+        Action<Exception>? onError = null,
         [CallerMemberName] string callerMemberName = "",
         [CallerFilePath] string callerFilePath = "")
     {
@@ -127,7 +158,7 @@ public static class ReactableExtensionMethods
         var callerName = $"{className}.{callerMemberName}";
         var subName = $"{callerName}() - {id}";
 
-        return reactable.CreateNonReceiveOrRespond(id, subName, onReceive);
+        return reactable.CreateNonReceiveOrRespond(id, subName, onReceive, onUnsubscribe, onError);
     }
 
     /// <summary>
@@ -138,6 +169,10 @@ public static class ReactableExtensionMethods
     /// <param name="id">The unique id.</param>
     /// <param name="name">The name of the subscription.</param>
     /// <param name="onReceive">The delegate to execute to receive data from the source.</param>
+    /// <param name="onUnsubscribe">
+    ///     Executed when the notification provider has finished sending push-based notifications.
+    /// </param>
+    /// <param name="onError">Executed when the notification provider experiences an error.</param>
     /// <typeparam name="TIn">The type of data coming from the source.</typeparam>
     /// <returns>
     ///     A <see cref="IDisposable"/> object that can be used to unsubscribe the subscription.
@@ -168,7 +203,9 @@ public static class ReactableExtensionMethods
         this IPushReactable<TIn> reactable,
         Guid id,
         string name,
-        Action<TIn> onReceive)
+        Action<TIn> onReceive,
+        Action? onUnsubscribe = null,
+        Action<Exception>? onError = null)
     {
         ArgumentNullException.ThrowIfNull(reactable);
 
@@ -182,12 +219,31 @@ public static class ReactableExtensionMethods
 
         name = name.Trim();
 
-        var projOpenedSub = ISubscriptionBuilder.Create()
-            .WithId(id)
-            .WithName(name)
-            .BuildOneWayReceive(onReceive);
+        var subscription = (onSubscribe: onUnsubscribe, onError) switch
+        {
+            (null, null) => ISubscriptionBuilder.Create()
+                .WithId(id)
+                .WithName(name)
+                .BuildOneWayReceive(onReceive),
+            (null, not null) => ISubscriptionBuilder.Create()
+                .WithId(id)
+                .WithName(name)
+                .WithError(onError)
+                .BuildOneWayReceive(onReceive),
+            (not null, null) => ISubscriptionBuilder.Create()
+                .WithId(id)
+                .WithName(name)
+                .WhenUnsubscribing(onUnsubscribe)
+                .BuildOneWayReceive(onReceive),
+            (not null, not null) => ISubscriptionBuilder.Create()
+                .WithId(id)
+                .WithName(name)
+                .WhenUnsubscribing(onUnsubscribe)
+                .WithError(onError)
+                .BuildOneWayReceive(onReceive)
+        };
 
-        return reactable.Subscribe(projOpenedSub);
+        return reactable.Subscribe(subscription);
     }
 
     /// <summary>
@@ -197,6 +253,10 @@ public static class ReactableExtensionMethods
     /// <param name="reactable">The reactable to create a subscription with.</param>
     /// <param name="id">The unique id.</param>
     /// <param name="onReceive">The delegate to execute to receive data from the source.</param>
+    /// <param name="onUnsubscribe">
+    ///     Executed when the notification provider has finished sending push-based notifications.
+    /// </param>
+    /// <param name="onError">Executed when the notification provider experiences an error.</param>
     /// <param name="callerMemberName">The name of the caller.</param>
     /// <param name="callerFilePath">The file path of the caller.</param>
     /// <typeparam name="TIn">The type of data coming from the source.</typeparam>
@@ -220,6 +280,8 @@ public static class ReactableExtensionMethods
         this IPushReactable<TIn> reactable,
         Guid id,
         Action<TIn> onReceive,
+        Action? onUnsubscribe = null,
+        Action<Exception>? onError = null,
         [CallerMemberName] string callerMemberName = "",
         [CallerFilePath] string callerFilePath = "")
     {
@@ -245,7 +307,7 @@ public static class ReactableExtensionMethods
         var callerName = $"{className}.{callerMemberName}";
         var subName = $"{callerName}() - {id}";
 
-        return reactable.CreateOneWayReceive(id, subName, onReceive);
+        return reactable.CreateOneWayReceive(id, subName, onReceive, onUnsubscribe, onError);
     }
 
     /// <summary>
@@ -256,6 +318,10 @@ public static class ReactableExtensionMethods
     /// <param name="id">The unique id.</param>
     /// <param name="name">The name of the subscription.</param>
     /// <param name="onRespond">The delegate to execute to respond with data to the source.</param>
+    /// <param name="onUnsubscribe">
+    ///     Executed when the notification provider has finished sending push-based notifications.
+    /// </param>
+    /// <param name="onError">Executed when the notification provider experiences an error.</param>
     /// <typeparam name="TOut">The type of data going back to the source.</typeparam>
     /// <returns>
     ///     A <see cref="IDisposable"/> object that can be used to unsubscribe the subscription.
@@ -286,7 +352,9 @@ public static class ReactableExtensionMethods
         this IPullReactable<TOut> reactable,
         Guid id,
         string name,
-        Func<TOut> onRespond)
+        Func<TOut> onRespond,
+        Action? onUnsubscribe = null,
+        Action<Exception>? onError = null)
     {
         ArgumentNullException.ThrowIfNull(reactable);
 
@@ -300,12 +368,31 @@ public static class ReactableExtensionMethods
 
         name = name.Trim();
 
-        var projOpenedSub = ISubscriptionBuilder.Create()
-            .WithId(id)
-            .WithName(name)
-            .BuildOneWayRespond(onRespond);
+        var subscription = (onSubscribe: onUnsubscribe, onError) switch
+        {
+            (null, null) => ISubscriptionBuilder.Create()
+                .WithId(id)
+                .WithName(name)
+                .BuildOneWayRespond(onRespond),
+            (null, not null) => ISubscriptionBuilder.Create()
+                .WithId(id)
+                .WithName(name)
+                .WithError(onError)
+                .BuildOneWayRespond(onRespond),
+            (not null, null) => ISubscriptionBuilder.Create()
+                .WithId(id)
+                .WithName(name)
+                .WhenUnsubscribing(onUnsubscribe)
+                .BuildOneWayRespond(onRespond),
+            (not null, not null) => ISubscriptionBuilder.Create()
+                .WithId(id)
+                .WithName(name)
+                .WhenUnsubscribing(onUnsubscribe)
+                .WithError(onError)
+                .BuildOneWayRespond(onRespond)
+        };
 
-        return reactable.Subscribe(projOpenedSub);
+        return reactable.Subscribe(subscription);
     }
 
     /// <summary>
@@ -315,6 +402,10 @@ public static class ReactableExtensionMethods
     /// <param name="reactable">The reactable to create a subscription with.</param>
     /// <param name="id">The unique id.</param>
     /// <param name="onRespond">The delegate to execute to respond with data to the source.</param>
+    /// <param name="onUnsubscribe">
+    ///     Executed when the notification provider has finished sending push-based notifications.
+    /// </param>
+    /// <param name="onError">Executed when the notification provider experiences an error.</param>
     /// <param name="callerMemberName">The name of the caller.</param>
     /// <param name="callerFilePath">The file path of the caller.</param>
     /// <typeparam name="TOut">The type of data going back to the source.</typeparam>
@@ -338,6 +429,8 @@ public static class ReactableExtensionMethods
         this IPullReactable<TOut> reactable,
         Guid id,
         Func<TOut> onRespond,
+        Action? onUnsubscribe = null,
+        Action<Exception>? onError = null,
         [CallerMemberName] string callerMemberName = "",
         [CallerFilePath] string callerFilePath = "")
     {
@@ -363,7 +456,7 @@ public static class ReactableExtensionMethods
         var callerName = $"{className}.{callerMemberName}";
         var subName = $"{callerName}() - {id}";
 
-        return reactable.CreateOneWayRespond(id, subName, onRespond);
+        return reactable.CreateOneWayRespond(id, subName, onRespond, onUnsubscribe, onError);
     }
 
     /// <summary>
@@ -374,6 +467,10 @@ public static class ReactableExtensionMethods
     /// <param name="id">The unique id.</param>
     /// <param name="name">The name of the subscription.</param>
     /// <param name="onReceiveRespond">The delegate to execute to receive data from the source and return data to the source.</param>
+    /// <param name="onUnsubscribe">
+    ///     Executed when the notification provider has finished sending push-based notifications.
+    /// </param>
+    /// <param name="onError">Executed when the notification provider experiences an error.</param>
     /// <typeparam name="TIn">The type of data coming from the source.</typeparam>
     /// <typeparam name="TOut">The type of data going back to the source.</typeparam>
     /// <returns>
@@ -405,7 +502,9 @@ public static class ReactableExtensionMethods
         this IPushPullReactable<TIn, TOut> reactable,
         Guid id,
         string name,
-        Func<TIn, TOut> onReceiveRespond)
+        Func<TIn, TOut> onReceiveRespond,
+        Action? onUnsubscribe = null,
+        Action<Exception>? onError = null)
     {
         ArgumentNullException.ThrowIfNull(reactable);
 
@@ -419,12 +518,31 @@ public static class ReactableExtensionMethods
 
         name = name.Trim();
 
-        var projOpenedSub = ISubscriptionBuilder.Create()
-            .WithId(id)
-            .WithName(name)
-            .BuildTwoWay(onReceiveRespond);
+        var subscription = (onSubscribe: onUnsubscribe, onError) switch
+        {
+            (null, null) => ISubscriptionBuilder.Create()
+                .WithId(id)
+                .WithName(name)
+                .BuildTwoWay(onReceiveRespond),
+            (null, not null) => ISubscriptionBuilder.Create()
+                .WithId(id)
+                .WithName(name)
+                .WithError(onError)
+                .BuildTwoWay(onReceiveRespond),
+            (not null, null) => ISubscriptionBuilder.Create()
+                .WithId(id)
+                .WithName(name)
+                .WhenUnsubscribing(onUnsubscribe)
+                .BuildTwoWay(onReceiveRespond),
+            (not null, not null) => ISubscriptionBuilder.Create()
+                .WithId(id)
+                .WithName(name)
+                .WhenUnsubscribing(onUnsubscribe)
+                .WithError(onError)
+                .BuildTwoWay(onReceiveRespond)
+        };
 
-        return reactable.Subscribe(projOpenedSub);
+        return reactable.Subscribe(subscription);
     }
 
     /// <summary>
@@ -434,6 +552,10 @@ public static class ReactableExtensionMethods
     /// <param name="reactable">The reactable to create a subscription with.</param>
     /// <param name="id">The unique id.</param>
     /// <param name="onReceiveRespond">The delegate to execute to receive data from the source and return data to the source.</param>
+    /// <param name="onUnsubscribe">
+    ///     Executed when the notification provider has finished sending push-based notifications.
+    /// </param>
+    /// <param name="onError">Executed when the notification provider experiences an error.</param>
     /// <param name="callerMemberName">The name of the caller.</param>
     /// <param name="callerFilePath">The file path of the caller.</param>
     /// <typeparam name="TIn">The type of data coming from the source.</typeparam>
@@ -458,6 +580,8 @@ public static class ReactableExtensionMethods
         this IPushPullReactable<TIn, TOut> reactable,
         Guid id,
         Func<TIn, TOut> onReceiveRespond,
+        Action? onUnsubscribe = null,
+        Action<Exception>? onError = null,
         [CallerMemberName] string callerMemberName = "",
         [CallerFilePath] string callerFilePath = "")
     {
@@ -483,6 +607,6 @@ public static class ReactableExtensionMethods
         var callerName = $"{className}.{callerMemberName}";
         var subName = $"{callerName}() - {id}";
 
-        return reactable.CreateTwoWay(id, subName, onReceiveRespond);
+        return reactable.CreateTwoWay(id, subName, onReceiveRespond, onUnsubscribe, onError);
     }
 }
