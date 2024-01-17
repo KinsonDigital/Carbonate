@@ -125,7 +125,7 @@ public class SubscriptionBuilderTests
     }
 
     [Fact]
-    public void BuildTwoWayRespond_WithNullParam_ThrowsException()
+    public void BuildTwoWay_WithNullParam_ThrowsException()
     {
         // Arrange
         var sut = ISubscriptionBuilder.Create();
@@ -134,7 +134,7 @@ public class SubscriptionBuilderTests
         var act = () => sut
             .WithId(Guid.NewGuid())
             .WithName("test-name")
-            .BuildTwoWayRespond<int, int>(null);
+            .BuildTwoWay<int, int>(null);
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
@@ -196,7 +196,7 @@ public class SubscriptionBuilderTests
     }
 
     [Fact]
-    public void BuildTwoWayRespond_WhenInvoked_SetsIdAndNameProps()
+    public void BuildTwoWay_WhenInvoked_SetsIdAndNameProps()
     {
         // Arrange
         var expectedId = Guid.NewGuid();
@@ -206,7 +206,7 @@ public class SubscriptionBuilderTests
         var sub = sut
             .WithId(expectedId)
             .WithName("test-name")
-            .BuildTwoWayRespond<int, int>(_ => 123);
+            .BuildTwoWay<int, int>(_ => 123);
 
         // Assert
         sub.Id.Should().Be(expectedId);

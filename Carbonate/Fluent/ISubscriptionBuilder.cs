@@ -53,5 +53,5 @@ public interface ISubscriptionBuilder : ISetters<ISubscriptionBuilder>, IWithIdS
     /// <typeparam name="TIn">The type of data that will come in with a push notification.</typeparam>
     /// <typeparam name="TOut">The type of data to return to the source that sent the notification.</typeparam>
     /// <returns>The built subscription.</returns>
-    IRespondSubscription<TIn, TOut> BuildTwoWayRespond<TIn, TOut>(Func<TIn, TOut> onReceiveRespond);
+    IRespondSubscription<TIn, TOut> BuildTwoWay<TIn, TOut>(Func<TIn, TOut> onReceiveRespond);
 }
