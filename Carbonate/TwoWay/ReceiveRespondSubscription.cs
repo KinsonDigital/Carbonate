@@ -21,7 +21,7 @@ public class ReceiveRespondSubscription<TIn, TOut> : SubscriptionBase, IReceiveR
     /// </summary>
     /// <param name="id">The ID of the <see cref="PushPullReactable{TIn,TOut}"/> requiring a response.</param>
     /// <param name="name">The name of the <see cref="ReceiveRespondSubscription{TIn,TOut}"/>.</param>
-    /// <param name="onReceiveRespond">Executed when requesting a response with data.</param>
+    /// <param name="onReceiveRespond">The delegate to execute to receive data from the source and return data to the source.</param>
     /// <param name="onUnsubscribe">
     ///     Executed when the provider has finished sending push-based notifications and is unsubscribed.
     /// </param>

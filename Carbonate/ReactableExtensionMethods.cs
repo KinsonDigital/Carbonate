@@ -1,4 +1,4 @@
-// <copyright file="ReactableExtensionMethods.cs" company="KinsonDigital">
+﻿// <copyright file="ReactableExtensionMethods.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -22,7 +22,7 @@ public static class ReactableExtensionMethods
     /// <param name="reactable">The reactable to create a subscription with.</param>
     /// <param name="id">The unique id.</param>
     /// <param name="name">The name of the subscription.</param>
-    /// <param name="onReceive">The action to execute when receiving a notification.</param>
+    /// <param name="onReceive">The delegate to execute when receiving a notification.</param>
     /// <returns>
     ///     A <see cref="IDisposable"/> object that can be used to unsubscribe the subscription.
     /// </returns>
@@ -74,7 +74,7 @@ public static class ReactableExtensionMethods
     /// </summary>
     /// <param name="reactable">The reactable to create a subscription with.</param>
     /// <param name="id">The unique id.</param>
-    /// <param name="onReceive">The action to execute when receiving a notification.</param>
+    /// <param name="onReceive">The delegate to execute when receiving a notification.</param>
     /// <param name="callerMemberName">The name of the caller.</param>
     /// <param name="callerFilePath">The file path of the caller.</param>
     /// <returns>
@@ -136,7 +136,7 @@ public static class ReactableExtensionMethods
     /// <param name="reactable">The reactable to create a subscription with.</param>
     /// <param name="id">The unique id.</param>
     /// <param name="name">The name of the subscription.</param>
-    /// <param name="onReceive">The action to execute when receiving a notification.</param>
+    /// <param name="onReceive">The delegate to execute to receive data from the source.</param>
     /// <typeparam name="TIn">The type of data coming from the source.</typeparam>
     /// <returns>
     ///     A <see cref="IDisposable"/> object that can be used to unsubscribe the subscription.
@@ -192,7 +192,7 @@ public static class ReactableExtensionMethods
     /// </summary>
     /// <param name="reactable">The reactable to create a subscription with.</param>
     /// <param name="id">The unique id.</param>
-    /// <param name="onReceive">The action to execute when receiving a notification.</param>
+    /// <param name="onReceive">The delegate to execute to receive data from the source.</param>
     /// <param name="callerMemberName">The name of the caller.</param>
     /// <param name="callerFilePath">The file path of the caller.</param>
     /// <typeparam name="TIn">The type of data coming from the source.</typeparam>
@@ -257,8 +257,8 @@ public static class ReactableExtensionMethods
     /// <param name="reactable">The reactable to create a subscription with.</param>
     /// <param name="id">The unique id.</param>
     /// <param name="name">The name of the subscription.</param>
-    /// <param name="onRespond">The action to execute when receiving a notification.</param>
-    /// <typeparam name="TOut">The type of data coming from the subscription.</typeparam>
+    /// <param name="onRespond">The delegate to execute to respond with data to the source.</param>
+    /// <typeparam name="TOut">The type of data going back to the source.</typeparam>
     /// <returns>
     ///     A <see cref="IDisposable"/> object that can be used to unsubscribe the subscription.
     /// </returns>
@@ -312,10 +312,10 @@ public static class ReactableExtensionMethods
     /// </summary>
     /// <param name="reactable">The reactable to create a subscription with.</param>
     /// <param name="id">The unique id.</param>
-    /// <param name="onRespond">The action to execute when receiving a notification.</param>
+    /// <param name="onRespond">The delegate to execute to respond with data to the source.</param>
     /// <param name="callerMemberName">The name of the caller.</param>
     /// <param name="callerFilePath">The file path of the caller.</param>
-    /// <typeparam name="TOut">The type of data coming from the subscription.</typeparam>
+    /// <typeparam name="TOut">The type of data going back to the source.</typeparam>
     /// <returns>
     ///     A <see cref="IDisposable"/> object that can be used to unsubscribe the subscription.
     /// </returns>

@@ -5,7 +5,7 @@
 namespace Carbonate.Core.TwoWay;
 
 /// <summary>
-/// Provides a mechanism for receiving responses.
+/// Provides a mechanism for receiving notifications and responding with data.
 /// </summary>
 /// <typeparam name="TIn">The type of data coming from the source.</typeparam>
 /// <typeparam name="TOut">The type of data going back to the source.</typeparam>

@@ -21,7 +21,7 @@ public class RespondSubscription<TOut> : SubscriptionBase, IRespondSubscription<
     /// </summary>
     /// <param name="id">The ID of the <see cref="IPullReactable{TOut}"/> requiring a response.</param>
     /// <param name="name">The name of the <see cref="RespondSubscription{TOut}"/>.</param>
-    /// <param name="onRespond">Executed when requesting a response with no data.</param>
+    /// <param name="onRespond">The delegate to execute to respond with data to the source.</param>
     /// <param name="onUnsubscribe">
     ///     Executed when the provider has finished sending push-based notifications and is unsubscribed.
     /// </param>
