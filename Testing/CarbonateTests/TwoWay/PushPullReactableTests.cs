@@ -25,11 +25,11 @@ public class PushPullReactableTests
 
         const string returnData = "return-value";
 
-        var mockSubA = Substitute.For<IRespondSubscription<int, string>>();
+        var mockSubA = Substitute.For<IReceiveRespondSubscription<int, string>>();
         mockSubA.Id.Returns(respondIdA);
         mockSubA.OnRespond(Arg.Any<int>()).Returns(returnData);
 
-        var mockSubB = Substitute.For<IRespondSubscription<int, string>>();
+        var mockSubB = Substitute.For<IReceiveRespondSubscription<int, string>>();
         mockSubB.Id.Returns(respondIdB);
         mockSubB.OnRespond(Arg.Any<int>()).Returns(returnData);
 

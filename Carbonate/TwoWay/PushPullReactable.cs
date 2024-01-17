@@ -10,7 +10,7 @@ namespace Carbonate.TwoWay;
 using Core.TwoWay;
 
 /// <inheritdoc cref="IPushPullReactable{TIn,TOut}"/>
-public class PushPullReactable<TIn, TOut> : ReactableBase<IRespondSubscription<TIn, TOut>>, IPushPullReactable<TIn, TOut>
+public class PushPullReactable<TIn, TOut> : ReactableBase<IReceiveRespondSubscription<TIn, TOut>>, IPushPullReactable<TIn, TOut>
 {
     /// <inheritdoc/>
     public TOut? PushPull(in TIn data, Guid respondId)

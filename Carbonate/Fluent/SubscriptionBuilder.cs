@@ -1,4 +1,4 @@
-// <copyright file="SubscriptionBuilder.cs" company="KinsonDigital">
+﻿// <copyright file="SubscriptionBuilder.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -115,11 +115,11 @@ public class SubscriptionBuilder : ISubscriptionBuilder
     }
 
     /// <inheritdoc/>
-    public IRespondSubscription<TIn, TOut> BuildTwoWay<TIn, TOut>(Func<TIn, TOut> onReceiveRespond)
+    public IReceiveRespondSubscription<TIn, TOut> BuildTwoWay<TIn, TOut>(Func<TIn, TOut> onReceiveRespond)
     {
         ArgumentNullException.ThrowIfNull(onReceiveRespond);
 
-        return new RespondSubscription<TIn, TOut>(
+        return new ReceiveRespondSubscription<TIn, TOut>(
             id: this.id,
             name: this.subName ?? string.Empty,
             onReceiveRespond: onReceiveRespond,
