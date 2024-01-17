@@ -175,7 +175,7 @@ public class RespondSubscriptionTests
     [InlineData(null, "4ff67e7b-bdda-4e0c-b34c-0b32270c336d", "4ff67e7b-bdda-4e0c-b34c-0b32270c336d")]
     [InlineData("", "4ff67e7b-bdda-4e0c-b34c-0b32270c336d", "4ff67e7b-bdda-4e0c-b34c-0b32270c336d")]
     public void ToString_WhenInvoked_ReturnsCorrectResult(
-        string name,
+        string? name,
         string guid,
         string expected)
     {

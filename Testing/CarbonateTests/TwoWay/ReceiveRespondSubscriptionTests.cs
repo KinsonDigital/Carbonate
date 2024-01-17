@@ -162,7 +162,7 @@ public class ReceiveRespondSubscriptionTests
     [InlineData(null, "87e99bdc-a972-427a-90be-f2c07c4f9aef", "87e99bdc-a972-427a-90be-f2c07c4f9aef")]
     [InlineData("", "87e99bdc-a972-427a-90be-f2c07c4f9aef", "87e99bdc-a972-427a-90be-f2c07c4f9aef")]
     public void ToString_WhenInvoked_ReturnsCorrectResult(
-        string name,
+        string? name,
         string guid,
         string expected)
     {

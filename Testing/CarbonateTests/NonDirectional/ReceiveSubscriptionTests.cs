@@ -139,7 +139,7 @@ public class ReceiveSubscriptionTests
     [InlineData(null, "5739afd9-be4c-4402-a12d-6bcde35cc8c3")]
     [InlineData("", "5739afd9-be4c-4402-a12d-6bcde35cc8c3")]
     [InlineData("test-value", "test-value - 5739afd9-be4c-4402-a12d-6bcde35cc8c3")]
-    public void ToString_WhenInvoked_ReturnsCorrectResult(string name, string expected)
+    public void ToString_WhenInvoked_ReturnsCorrectResult(string? name, string expected)
     {
         // Arrange
         var id = new Guid("5739afd9-be4c-4402-a12d-6bcde35cc8c3");

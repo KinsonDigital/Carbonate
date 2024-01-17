@@ -32,7 +32,7 @@ public class SubscriptionBuilderTests
     [Theory]
     [InlineData(null, "Value cannot be null. (Parameter 'name')")]
     [InlineData("", "The value cannot be an empty string. (Parameter 'name')")]
-    public void WithName_WithNullOrEmptyName_ThrowsException(string name, string expectedMsg)
+    public void WithName_WithNullOrEmptyName_ThrowsException(string? name, string expectedMsg)
     {
         // Arrange
         var sut = ISubscriptionBuilder.Create();
