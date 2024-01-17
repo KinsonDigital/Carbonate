@@ -121,12 +121,7 @@ public static class ReactableExtensionMethods
         var callerName = $"{className}.{callerMemberName}";
         var subName = $"{callerName}() - {id}";
 
-        var projOpenedSub = ISubscriptionBuilder.Create()
-            .WithId(id)
-            .WithName(subName)
-            .BuildNonReceiveOrRespond(onReceive);
-
-        return reactable.Subscribe(projOpenedSub);
+        return reactable.CreateNonReceiveOrRespond(id, subName, onReceive);
     }
 
     /// <summary>
@@ -242,12 +237,7 @@ public static class ReactableExtensionMethods
         var callerName = $"{className}.{callerMemberName}";
         var subName = $"{callerName}() - {id}";
 
-        var projOpenedSub = ISubscriptionBuilder.Create()
-            .WithId(id)
-            .WithName(subName)
-            .BuildOneWayReceive(onReceive);
-
-        return reactable.Subscribe(projOpenedSub);
+        return reactable.CreateOneWayReceive(id, subName, onReceive);
     }
 
     /// <summary>
@@ -361,12 +351,7 @@ public static class ReactableExtensionMethods
         var callerName = $"{className}.{callerMemberName}";
         var subName = $"{callerName}() - {id}";
 
-        var projOpenedSub = ISubscriptionBuilder.Create()
-            .WithId(id)
-            .WithName(subName)
-            .BuildOneWayRespond(onRespond);
-
-        return reactable.Subscribe(projOpenedSub);
+        return reactable.CreateOneWayRespond(id, subName, onRespond);
     }
 
     /// <summary>
@@ -482,11 +467,6 @@ public static class ReactableExtensionMethods
         var callerName = $"{className}.{callerMemberName}";
         var subName = $"{callerName}() - {id}";
 
-        var projOpenedSub = ISubscriptionBuilder.Create()
-            .WithId(id)
-            .WithName(subName)
-            .BuildTwoWay(onReceiveRespond);
-
-        return reactable.Subscribe(projOpenedSub);
+        return reactable.CreateTwoWay(id, subName, onReceiveRespond);
     }
 }
