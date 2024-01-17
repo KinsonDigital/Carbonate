@@ -76,7 +76,7 @@ public class SubscriptionBuilder : ISubscriptionBuilder
     }
 
     /// <inheritdoc/>
-    public IReceiveSubscription BuildNonReceive(Action onReceive)
+    public IReceiveSubscription BuildNonReceiveOrRespond(Action onReceive)
     {
         ArgumentNullException.ThrowIfNull(onReceive);
 

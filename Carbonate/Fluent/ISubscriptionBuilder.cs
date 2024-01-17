@@ -25,7 +25,7 @@ public interface ISubscriptionBuilder : ISetters<ISubscriptionBuilder>, IWithIdS
     /// </summary>
     /// <param name="onReceive">The notification delegate.</param>
     /// <returns>The built subscription.</returns>
-    IReceiveSubscription BuildNonReceive(Action onReceive);
+    IReceiveSubscription BuildNonReceiveOrRespond(Action onReceive);
 
     /// <summary>
     /// Builds a new <see cref="IReceiveSubscription{TIn}"/> subscription with the given <paramref name="onReceive"/> delegate

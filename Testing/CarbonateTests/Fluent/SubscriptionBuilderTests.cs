@@ -74,7 +74,7 @@ public class SubscriptionBuilderTests
     }
 
     [Fact]
-    public void BuildNonReceive_WithNullParam_ThrowsException()
+    public void BuildNonReceiveOrRespond_WithNullParam_ThrowsException()
     {
         // Arrange
         var sut = ISubscriptionBuilder.Create();
@@ -83,7 +83,7 @@ public class SubscriptionBuilderTests
         var act = () => sut
             .WithId(Guid.NewGuid())
             .WithName("test-name")
-            .BuildNonReceive(null);
+            .BuildNonReceiveOrRespond(null);
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
@@ -142,7 +142,7 @@ public class SubscriptionBuilderTests
     }
 
     [Fact]
-    public void BuildNonReceive_WhenInvoked_SetsIdAndNameProps()
+    public void BuildNonReceiveOrRespond_WhenInvoked_SetsIdAndNameProps()
     {
         // Arrange
         var expectedId = Guid.NewGuid();
@@ -152,7 +152,7 @@ public class SubscriptionBuilderTests
         var sub = sut
             .WithId(expectedId)
             .WithName("test-name")
-            .BuildNonReceive(() => { });
+            .BuildNonReceiveOrRespond(() => { });
 
         // Assert
         sub.Id.Should().Be(expectedId);
