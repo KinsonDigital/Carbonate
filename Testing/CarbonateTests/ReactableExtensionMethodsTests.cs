@@ -8,6 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 using Carbonate;
 using Carbonate.NonDirectional;
 using Carbonate.OneWay;
+using Carbonate.TwoWay;
 using FluentAssertions;
 using NSubstitute;
 using Xunit;
@@ -324,6 +325,109 @@ public class ReactableExtensionMethodsTests
         // Assert
         act.Should().Throw<ArgumentException>()
             .WithMessage("Value cannot be null. (Parameter 'onRespond')");
+    }
+    #endregion
+
+    #region CreateTwoWay With 4 Params
+    [Fact]
+    public void CreateTwoWay_WhenInvokingWithIdAndNameAndWithNullReactable_ThrowsException()
+    {
+        // Arrange
+        IPushPullReactable<int, bool>? sut = null;
+
+        // Act
+        var act = () => sut.CreateTwoWay(Guid.Empty, "test-name", _ => true);
+
+        // Assert
+        act.Should().Throw<ArgumentNullException>()
+            .WithMessage("Value cannot be null. (Parameter 'reactable')");
+    }
+
+    [Fact]
+    public void CreateTwoWay_WhenInvokingWithIdAndNameAndWithEmptyId_ThrowsException()
+    {
+        // Arrange
+        var sut = new PushPullReactable<int, bool>();
+
+        // Act
+        var act = () => sut.CreateTwoWay(Guid.Empty, "test-name", _ => true);
+
+        // Assert
+        act.Should().Throw<ArgumentException>()
+            .WithMessage("The id cannot be empty. (Parameter 'id')");
+    }
+
+    [Theory]
+    [InlineData(null, "Value cannot be null. (Parameter 'name')")]
+    [InlineData("", "The value cannot be an empty string. (Parameter 'name')")]
+    public void CreateTwoWay_WhenInvokingWithIdAndNameAndWithNullOrEmptyName_ThrowsException(string? name, string expected)
+    {
+        // Arrange
+        var sut = new PushPullReactable<int, bool>();
+
+        // Act
+        var act = () => sut.CreateTwoWay(Guid.NewGuid(), name, null);
+
+        // Assert
+        act.Should().Throw<ArgumentException>().WithMessage(expected);
+    }
+
+    [Fact]
+    public void CreateTwoWay_WhenInvokingWithIdAndNameAndWithNullOnReceive_ThrowsException()
+    {
+        // Arrange
+        var sut = new PushPullReactable<int, bool>();
+
+        // Act
+        var act = () => sut.CreateTwoWay(Guid.NewGuid(), "test-name", null);
+
+        // Assert
+        act.Should().Throw<ArgumentException>()
+            .WithMessage("Value cannot be null. (Parameter 'onReceiveRespond')");
+    }
+    #endregion
+
+    #region CreateTwoWay With 5 Params
+    [Fact]
+    public void CreateTwoWay_WhenInvokingWithIdAndAutoNameAndWithNullReactable_ThrowsException()
+    {
+        // Arrange
+        IPushPullReactable<int, bool>? sut = null;
+
+        // Act
+        var act = () => sut.CreateTwoWay(Guid.Empty, _ => true);
+
+        // Assert
+        act.Should().Throw<ArgumentNullException>()
+            .WithMessage("Value cannot be null. (Parameter 'reactable')");
+    }
+
+    [Fact]
+    public void CreateTwoWay_WhenInvokingWithIdAndAutoNameAndWithEmptyId_ThrowsException()
+    {
+        // Arrange
+        var sut = new PushPullReactable<int, bool>();
+
+        // Act
+        var act = () => sut.CreateTwoWay(Guid.Empty, _ => true);
+
+        // Assert
+        act.Should().Throw<ArgumentException>()
+            .WithMessage("The id cannot be empty. (Parameter 'id')");
+    }
+
+    [Fact]
+    public void CreateTwoWay_WhenInvokingWithIdAndAutoNameAndWithNullOnRespond_ThrowsException()
+    {
+        // Arrange
+        var sut = new PushPullReactable<int, bool>();
+
+        // Act
+        var act = () => sut.CreateTwoWay(Guid.NewGuid(), null);
+
+        // Assert
+        act.Should().Throw<ArgumentException>()
+            .WithMessage("Value cannot be null. (Parameter 'onReceiveRespond')");
     }
     #endregion
     #endregion
