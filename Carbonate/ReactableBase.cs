@@ -5,6 +5,7 @@
 namespace Carbonate;
 
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using Core;
 using OneWay;
 
@@ -154,7 +155,11 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
     ///     All <see cref="ISubscription"/>s that are still subscribed will have its <see cref="ISubscription.OnUnsubscribe"/>
     ///     method invoked and the <see cref="ISubscription"/>s will be unsubscribed.
     /// </remarks>
-    private void Dispose(bool disposing)
+    [SuppressMessage(
+        "ReSharper",
+        "VirtualMemberNeverOverridden.Global",
+        Justification = "Used by library users.")]
+    protected virtual void Dispose(bool disposing)
     {
         if (IsDisposed)
         {
