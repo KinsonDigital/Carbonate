@@ -37,7 +37,7 @@ public class OneWayWithoutFluentApiSample : Sample
             onReceive: Console.WriteLine,
             name: "my-subscription",
             onUnsubscribe: () => Console.WriteLine("Unsubscribed from notifications!"),
-            onError: (ex) => Console.WriteLine($"Error: {ex.Message}")));
+            onError: ex => Console.WriteLine($"Error: {ex.Message}")));
 
         dataSender.Push("hello world!", msgEventId); // Will invoke all onReceive 'Actions'
         unsubscriber.Dispose(); // This will only unsubscribe the single subscription created above
