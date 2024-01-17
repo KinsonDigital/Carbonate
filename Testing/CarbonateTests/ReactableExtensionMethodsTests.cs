@@ -63,7 +63,7 @@ public class ReactableExtensionMethodsTests
     }
 
     [Fact]
-    public void CreateNonReceiveOrRespond_WhenInvokingWithIdAndNameAndWithNullAction_ThrowsException()
+    public void CreateNonReceiveOrRespond_WhenInvokingWithIdAndNameAndWithNullOnReceive_ThrowsException()
     {
         // Arrange
         var sut = new PushReactable();
@@ -73,7 +73,7 @@ public class ReactableExtensionMethodsTests
 
         // Assert
         act.Should().Throw<ArgumentException>()
-            .WithMessage("Value cannot be null. (Parameter 'action')");
+            .WithMessage("Value cannot be null. (Parameter 'onReceive')");
     }
     #endregion
 
@@ -107,7 +107,7 @@ public class ReactableExtensionMethodsTests
     }
 
     [Fact]
-    public void CreateNonReceiveOrRespond_WhenInvokingWithIdAndActionAndWithNullAction_ThrowsException()
+    public void CreateNonReceiveOrRespond_WhenInvokingWithIdAndActionAndWithNullOnReceive_ThrowsException()
     {
         // Arrange
         var sut = new PushReactable();
@@ -117,7 +117,110 @@ public class ReactableExtensionMethodsTests
 
         // Assert
         act.Should().Throw<ArgumentException>()
-            .WithMessage("Value cannot be null. (Parameter 'action')");
+            .WithMessage("Value cannot be null. (Parameter 'onReceive')");
+    }
+    #endregion
+
+    #region CreateOneWayReceive With 4 Params
+    [Fact]
+    public void CreateOneWayReceive_WhenInvokingWithIdAndNameAndWithNullReactable_ThrowsException()
+    {
+        // Arrange
+        IPushReactable<int>? sut = null;
+
+        // Act
+        var act = () => sut.CreateOneWayReceive(Guid.Empty, "test-name", _ => { });
+
+        // Assert
+        act.Should().Throw<ArgumentNullException>()
+            .WithMessage("Value cannot be null. (Parameter 'reactable')");
+    }
+
+    [Fact]
+    public void CreateOneWayReceive_WhenInvokingWithIdAndNameAndWithEmptyId_ThrowsException()
+    {
+        // Arrange
+        var sut = new PushReactable<int>();
+
+        // Act
+        var act = () => sut.CreateOneWayReceive(Guid.Empty, "test-name", _ => { });
+
+        // Assert
+        act.Should().Throw<ArgumentException>()
+            .WithMessage("The id cannot be empty. (Parameter 'id')");
+    }
+
+    [Theory]
+    [InlineData(null, "Value cannot be null. (Parameter 'name')")]
+    [InlineData("", "The value cannot be an empty string. (Parameter 'name')")]
+    public void CreateOneWayReceive_WhenInvokingWithIdAndNameAndWithNullOrEmptyName_ThrowsException(string? name, string expected)
+    {
+        // Arrange
+        var sut = new PushReactable<int>();
+
+        // Act
+        var act = () => sut.CreateOneWayReceive(Guid.NewGuid(), name, null);
+
+        // Assert
+        act.Should().Throw<ArgumentException>().WithMessage(expected);
+    }
+
+    [Fact]
+    public void CreateOneWayReceive_WhenInvokingWithIdAndNameAndWithNullOnReceive_ThrowsException()
+    {
+        // Arrange
+        var sut = new PushReactable<int>();
+
+        // Act
+        var act = () => sut.CreateOneWayReceive(Guid.NewGuid(), "test-name", null);
+
+        // Assert
+        act.Should().Throw<ArgumentException>()
+            .WithMessage("Value cannot be null. (Parameter 'onReceive')");
+    }
+    #endregion
+
+    #region CreateOneWayReceive With 5 Params
+    [Fact]
+    public void CreateOneWayReceive_WhenInvokingWithIdAndAutoNameAndWithNullReactable_ThrowsException()
+    {
+        // Arrange
+        IPushReactable<int>? sut = null;
+
+        // Act
+        var act = () => sut.CreateOneWayReceive(Guid.Empty, _ => { });
+
+        // Assert
+        act.Should().Throw<ArgumentNullException>()
+            .WithMessage("Value cannot be null. (Parameter 'reactable')");
+    }
+
+    [Fact]
+    public void CreateOneWayReceive_WhenInvokingWithIdAndAutoNameAndWithEmptyId_ThrowsException()
+    {
+        // Arrange
+        var sut = new PushReactable<int>();
+
+        // Act
+        var act = () => sut.CreateOneWayReceive(Guid.Empty, _ => { });
+
+        // Assert
+        act.Should().Throw<ArgumentException>()
+            .WithMessage("The id cannot be empty. (Parameter 'id')");
+    }
+
+    [Fact]
+    public void CreateOneWayReceive_WhenInvokingWithIdAndAutoNameAndWithNullOnReceive_ThrowsException()
+    {
+        // Arrange
+        var sut = new PushReactable<int>();
+
+        // Act
+        var act = () => sut.CreateOneWayReceive(Guid.NewGuid(), null);
+
+        // Assert
+        act.Should().Throw<ArgumentException>()
+            .WithMessage("Value cannot be null. (Parameter 'onReceive')");
     }
     #endregion
     #endregion
@@ -154,6 +257,43 @@ public class ReactableExtensionMethodsTests
 
         // Act
         var unsubscriber = sut.CreateNonReceiveOrRespond(id, expectedAction);
+
+        // Assert
+        Assert.NotNull(unsubscriber);
+        sut.SubscriptionIds.Should().BeEquivalentTo(expectedIds);
+    }
+
+    [Fact]
+    [SuppressMessage("ReSharper", "ConvertToLocalFunction", Justification = "Not required for testing.")]
+    public void CreateOneWayReceive_WhenInvokingWithIdAndName_CreatesSubscription()
+    {
+        // Arrange
+        var id = Guid.NewGuid();
+        var expectedIds = new[] { id }.AsReadOnly();
+        const string expectedName = "test-name";
+        var expectedAction = (int _) => { };
+        var sut = new PushReactable<int>();
+
+        // Act
+        var unsubscriber = sut.CreateOneWayReceive(id, expectedName, expectedAction);
+
+        // Assert
+        Assert.NotNull(unsubscriber);
+        sut.SubscriptionIds.Should().BeEquivalentTo(expectedIds);
+    }
+
+    [Fact]
+    [SuppressMessage("ReSharper", "ConvertToLocalFunction", Justification = "Not required for testing.")]
+    public void CreateOneWayReceive_WhenInvokingWithIdAndAutoName_CreatesSubscription()
+    {
+        // Arrange
+        var id = Guid.NewGuid();
+        var expectedIds = new[] { id }.AsReadOnly();
+        var expectedAction = (int _) => { };
+        var sut = new PushReactable<int>();
+
+        // Act
+        var unsubscriber = sut.CreateOneWayReceive(id, expectedAction);
 
         // Assert
         Assert.NotNull(unsubscriber);
