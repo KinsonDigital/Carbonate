@@ -4,9 +4,7 @@
 
 namespace CarbonateIntegrationTests;
 
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using Carbonate;
 using Carbonate.NonDirectional;
 using Carbonate.OneWay;
 using Carbonate.TwoWay;

@@ -10,7 +10,6 @@ using Carbonate.NonDirectional;
 using Carbonate.OneWay;
 using Carbonate.TwoWay;
 using FluentAssertions;
-using NSubstitute;
 using Xunit;
 
 /// <summary>
@@ -43,7 +42,7 @@ public class ReactableExtensionMethodsTests
         IPushReactable? sut = null;
 
         // Act
-        var act = () => sut.CreateNonReceiveOrRespond(Arg.Any<Guid>(), Arg.Any<string>(), Arg.Any<Action>());
+        var act = () => sut.CreateNonReceiveOrRespond(Guid.NewGuid(), "test-name", () => { });
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
@@ -57,7 +56,7 @@ public class ReactableExtensionMethodsTests
         var sut = new PushReactable();
 
         // Act
-        var act = () => sut.CreateNonReceiveOrRespond(Arg.Any<Guid>(), Arg.Any<string>(), Arg.Any<Action>());
+        var act = () => sut.CreateNonReceiveOrRespond(Guid.Empty, "test-name", () => { });
 
         // Assert
         act.Should().Throw<ArgumentException>()
@@ -73,7 +72,7 @@ public class ReactableExtensionMethodsTests
         var sut = new PushReactable();
 
         // Act
-        var act = () => sut.CreateNonReceiveOrRespond(Guid.NewGuid(), name, Arg.Any<Action>());
+        var act = () => sut.CreateNonReceiveOrRespond(Guid.NewGuid(), name, () => { });
 
         // Assert
         act.Should().Throw<ArgumentException>().WithMessage(expected);
@@ -86,7 +85,7 @@ public class ReactableExtensionMethodsTests
         var sut = new PushReactable();
 
         // Act
-        var act = () => sut.CreateNonReceiveOrRespond(Guid.NewGuid(), "test-name", Arg.Any<Action>());
+        var act = () => sut.CreateNonReceiveOrRespond(Guid.NewGuid(), "test-name", null);
 
         // Assert
         act.Should().Throw<ArgumentException>()
@@ -102,7 +101,7 @@ public class ReactableExtensionMethodsTests
         IPushReactable? sut = null;
 
         // Act
-        var act = () => sut.CreateNonReceiveOrRespond(Arg.Any<Guid>(), Arg.Any<Action>());
+        var act = () => sut.CreateNonReceiveOrRespond(Guid.NewGuid(), () => { });
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
@@ -116,7 +115,7 @@ public class ReactableExtensionMethodsTests
         var sut = new PushReactable();
 
         // Act
-        var act = () => sut.CreateNonReceiveOrRespond(Arg.Any<Guid>(), Arg.Any<Action>());
+        var act = () => sut.CreateNonReceiveOrRespond(Guid.Empty, () => { });
 
         // Assert
         act.Should().Throw<ArgumentException>()
@@ -130,7 +129,7 @@ public class ReactableExtensionMethodsTests
         var sut = new PushReactable();
 
         // Act
-        var act = () => sut.CreateNonReceiveOrRespond(Guid.NewGuid(), Arg.Any<Action>());
+        var act = () => sut.CreateNonReceiveOrRespond(Guid.NewGuid(), null);
 
         // Assert
         act.Should().Throw<ArgumentException>()

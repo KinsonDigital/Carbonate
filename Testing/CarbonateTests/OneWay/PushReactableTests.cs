@@ -50,8 +50,8 @@ public class PushReactableTests
     public void Push_WhenInvoking_NotifiesCorrectSubscriptionsThatMatchEventId()
     {
         // Arrange
-        var invokedEventId = Guid.NewGuid();
-        var notInvokedEventId = Guid.NewGuid();
+        var invokedEventId = new Guid("0cf574c1-f62c-4b89-be0f-19e6a6f8de35");
+        var notInvokedEventId = new Guid("1eba03c2-a911-45d0-aa62-11ac7eb17a0d");
 
         var mockSubA = Substitute.For<IReceiveSubscription<int>>();
         mockSubA.Id.Returns(invokedEventId);
@@ -71,9 +71,9 @@ public class PushReactableTests
         sut.Push(123, invokedEventId);
 
         // Assert
-        mockSubA.Received(1).OnReceive(Arg.Any<int>());
-        mockSubB.DidNotReceive().OnReceive(Arg.Any<int>());
-        mockSubC.Received(1).OnReceive(Arg.Any<int>());
+        mockSubA.Received(1).OnReceive(123);
+        mockSubB.DidNotReceive().OnReceive(123);
+        mockSubC.Received(1).OnReceive(123);
     }
 
     [Fact]

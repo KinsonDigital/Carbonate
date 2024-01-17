@@ -6,7 +6,6 @@ namespace CarbonateTests.TwoWay;
 
 using Carbonate.TwoWay;
 using FluentAssertions;
-using NSubstitute;
 using Xunit;
 
 /// <summary>
@@ -108,7 +107,7 @@ public class ReceiveRespondSubscriptionTests
         sut.OnUnsubscribe();
 
         // Act
-        sut.OnError(Arg.Any<Exception>());
+        sut.OnError(new Exception());
 
         // Assert
         totalActionInvokes.Should().Be(0);
