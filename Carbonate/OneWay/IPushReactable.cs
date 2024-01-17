@@ -10,7 +10,7 @@ using Core.OneWay;
 /// <summary>
 /// Defines a provider for push-based notifications.
 /// </summary>
-/// <typeparam name="TIn">The type of data coming in.</typeparam>
+/// <typeparam name="TIn">The type of data coming from the source.</typeparam>
 public interface IPushReactable<TIn> : IReactable<IReceiveSubscription<TIn>>, IPushable<TIn>
 {
 }

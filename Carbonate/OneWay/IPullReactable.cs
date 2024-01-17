@@ -10,7 +10,7 @@ using Core.OneWay;
 /// <summary>
 /// Defines a provider for pull-based responses.
 /// </summary>
-/// <typeparam name="TOut">The type of data going out.</typeparam>
+/// <typeparam name="TOut">The type of data going back to the source.</typeparam>
 public interface IPullReactable<TOut> : IReactable<IRespondSubscription<TOut>>, IPullable<TOut>
 {
 }
