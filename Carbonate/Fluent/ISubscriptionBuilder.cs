@@ -1,4 +1,4 @@
-﻿// <copyright file="ISubscriptionBuilder.cs" company="KinsonDigital">
+// <copyright file="ISubscriptionBuilder.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -37,7 +37,7 @@ public interface ISubscriptionBuilder : ISetters<ISubscriptionBuilder>, IWithIdS
     IReceiveSubscription<TIn> BuildOneWayReceive<TIn>(Action<TIn> onReceive);
 
     /// <summary>
-    /// Builds a new <see cref="IReceiveSubscription{TOut}"/> subscription with the given <paramref name="onRespond"/> delegate
+    /// Builds a new <see cref="IRespondSubscription{TOut}"/> subscription with the given <paramref name="onRespond"/> delegate
     /// that will be executed every time a notification is pushed from the source.
     /// </summary>
     /// <param name="onRespond">The notification delegate.</param>
@@ -46,7 +46,7 @@ public interface ISubscriptionBuilder : ISetters<ISubscriptionBuilder>, IWithIdS
     IRespondSubscription<TOut> BuildOneWayRespond<TOut>(Func<TOut> onRespond);
 
     /// <summary>
-    /// Builds a new <see cref="IReceiveSubscription{TOut}"/> subscription with the given <paramref name="onReceiveRespond"/> delegate
+    /// Builds a new <see cref="IRespondSubscription{TIn, TOut}"/> subscription with the given <paramref name="onReceiveRespond"/> delegate
     /// that will be executed every time a notification is pushed from the source.
     /// </summary>
     /// <param name="onReceiveRespond">The notification delegate to receive data and respond with data.</param>
