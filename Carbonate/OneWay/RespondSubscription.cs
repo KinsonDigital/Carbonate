@@ -23,11 +23,11 @@ public class RespondSubscription<TOut> : SubscriptionBase, IRespondSubscription<
     /// <param name="name">The name of the <see cref="RespondSubscription{TOut}"/>.</param>
     /// <param name="onRespond">The delegate to execute to respond with data to the source.</param>
     /// <param name="onUnsubscribe">
-    ///     Executed when the provider has finished sending push-based notifications and is unsubscribed.
+    ///     Executed when the notification provider has finished sending push-based notifications.
     /// </param>
-    /// <param name="onError">Executed when the provider experiences an error.</param>
+    /// <param name="onError">Executed when the notification provider experiences an error.</param>
     /// <remarks>
-    ///     Note:  The <paramref name="name"/> is not used for unique identification purposes.
+    ///     Note:  The <paramref name="name"/> parameter is not used for unique identification purposes.
     ///     <br/>
     ///     It is only metadata for debugging or miscellaneous purposes.
     /// </remarks>

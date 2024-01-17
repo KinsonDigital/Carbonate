@@ -1,4 +1,4 @@
-﻿// <copyright file="ReactableExtensionMethods.cs" company="KinsonDigital">
+// <copyright file="ReactableExtensionMethods.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -26,7 +26,13 @@ public static class ReactableExtensionMethods
     /// <returns>
     ///     A <see cref="IDisposable"/> object that can be used to unsubscribe the subscription.
     /// </returns>
-    /// <remarks>No data travels to or from the subscription.</remarks>
+    /// <remarks>
+    ///     No data travels to or from the subscription.
+    ///     <br/>
+    ///     Note:  The <paramref name="name"/> parameter is not used for unique identification purposes.
+    ///     <br/>
+    ///     It is only metadata for debugging or miscellaneous purposes.
+    /// </remarks>
     /// <exception cref="ArgumentException">
     ///     Thrown if the following param are empty:
     ///     <list type="bullet">
@@ -137,8 +143,11 @@ public static class ReactableExtensionMethods
     ///     A <see cref="IDisposable"/> object that can be used to unsubscribe the subscription.
     /// </returns>
     /// <remarks>
-    ///     The direction of travel that the data takes is from the source.  The consumer of the data
-    ///     is the <paramref name="onReceive"/> delegate in the subscription.
+    ///     The data travels from the source to the subscription.
+    ///     <br/>
+    ///     Note:  The <paramref name="name"/> parameter is not used for unique identification purposes.
+    ///     <br/>
+    ///     It is only metadata for debugging or miscellaneous purposes.
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     Thrown if the following param are empty:
@@ -195,8 +204,7 @@ public static class ReactableExtensionMethods
     ///     A <see cref="IDisposable"/> object that can be used to unsubscribe the subscription.
     /// </returns>
     /// <remarks>
-    ///     The direction of travel that the data takes is from the source.  The consumer of the data
-    ///     is the <paramref name="onReceive"/> delegate in the subscription.
+    ///     The data travels from the source to the subscription.
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     Thrown if the <paramref name="id"/> param is empty.
@@ -254,6 +262,10 @@ public static class ReactableExtensionMethods
     /// </returns>
     /// <remarks>
     ///     The data travels from the subscription and back to the source.
+    ///     <br/>
+    ///     Note:  The <paramref name="name"/> parameter is not used for unique identification purposes.
+    ///     <br/>
+    ///     It is only metadata for debugging or miscellaneous purposes.
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     Thrown if the following param are empty:
@@ -368,7 +380,11 @@ public static class ReactableExtensionMethods
     ///     A <see cref="IDisposable"/> object that can be used to unsubscribe the subscription.
     /// </returns>
     /// <remarks>
-    ///     The data travels from the subscription and back to the source.
+    ///     The data travels from the source to the subscription and back to the source.
+    ///     <br/>
+    ///     Note:  The <paramref name="name"/> parameter is not used for unique identification purposes.
+    ///     <br/>
+    ///     It is only metadata for debugging or miscellaneous purposes.
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     Thrown if the following param are empty:
@@ -426,7 +442,7 @@ public static class ReactableExtensionMethods
     ///     A <see cref="IDisposable"/> object that can be used to unsubscribe the subscription.
     /// </returns>
     /// <remarks>
-    ///     The data travels from the subscription and back to the source.
+    ///     The data travels from the source to the subscription and back to the source.
     /// </remarks>
     /// <exception cref="ArgumentException">
     ///     Thrown if the <paramref name="id"/> param is empty.
