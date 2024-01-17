@@ -2,6 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+// ReSharper disable RedundantTypeDeclarationBody
 namespace Carbonate.Core.TwoWay;
 
 /// <summary>
