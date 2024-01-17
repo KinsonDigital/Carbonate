@@ -59,7 +59,7 @@ public void Ctor_WithNull$PARAM_1$Param_ThrowsException()
     // Assert
     act.Should()
         .Throw&lt;ArgumentNullException&gt;()
-        .WithMessage("The parameter must not be null. (Parameter '$END$$PARAM_1$')");
+        .WithMessage("Value cannot be null. (Parameter '$END$$PARAM_1$')");
 }</s:String>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=CD4EA244FF8D2E42AF8B55F15CF641CA/@KeyIndexDefined">True</s:Boolean>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=CD4EA244FF8D2E42AF8B55F15CF641CA/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
