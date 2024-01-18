@@ -9,7 +9,7 @@ using System.Diagnostics.CodeAnalysis;
 /// <summary>
 /// Pushes out notifications.
 /// </summary>
-/// <typeparam name="TIn">The type of data coming in.</typeparam>
+/// <typeparam name="TIn">The type of data coming from the source.</typeparam>
 public interface IPushable<TIn>
 {
     /// <summary>

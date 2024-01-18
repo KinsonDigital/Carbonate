@@ -20,20 +20,20 @@ public class PushPullReactableTests
     public void Pull_WithMatchingSubscription_ReturnsCorrectResult()
     {
         // Arrange
-        var respondIdA = Guid.NewGuid();
-        var respondIdB = Guid.NewGuid();
+        var respondIdA = new Guid("a1c34c09-2a5c-4482-8699-4586ee31a126");
+        var respondIdB = new Guid("e8804d3e-a002-4ed8-8263-038668190141");
 
         const string returnData = "return-value";
 
-        var mockSubA = Substitute.For<IRespondSubscription<int, string>>();
+        var mockSubA = Substitute.For<IReceiveRespondSubscription<int, string>>();
         mockSubA.Id.Returns(respondIdA);
         mockSubA.OnRespond(Arg.Any<int>()).Returns(returnData);
 
-        var mockSubB = Substitute.For<IRespondSubscription<int, string>>();
+        var mockSubB = Substitute.For<IReceiveRespondSubscription<int, string>>();
         mockSubB.Id.Returns(respondIdB);
         mockSubB.OnRespond(Arg.Any<int>()).Returns(returnData);
 
-        const int data = 123;
+        const int data = 654;
 
         var sut = CreateSystemUnderTest();
         sut.Subscribe(mockSubA);
@@ -43,8 +43,8 @@ public class PushPullReactableTests
         var actual = sut.PushPull(data, respondIdB);
 
         // Assert
-        mockSubA.DidNotReceive().OnRespond(Arg.Any<int>());
-        mockSubB.Received().OnRespond(Arg.Any<int>());
+        mockSubA.DidNotReceive().OnRespond(321);
+        mockSubB.Received().OnRespond(654);
         actual.Should().NotBeNull();
         actual.Should().NotBeNull();
         actual.Should().Be("return-value");

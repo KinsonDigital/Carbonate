@@ -9,8 +9,8 @@ using System.Diagnostics.CodeAnalysis;
 /// <summary>
 /// Gives the ability to push and pull data from a source using a messaging mechanism.
 /// </summary>
-/// <typeparam name="TIn">The type of data coming in.</typeparam>
-/// <typeparam name="TOut">The type of data going out.</typeparam>
+/// <typeparam name="TIn">The type of data coming from the source.</typeparam>
+/// <typeparam name="TOut">The type of data going back to the source.</typeparam>
 public interface IPushablePullable<TIn, out TOut>
 {
     /// <summary>

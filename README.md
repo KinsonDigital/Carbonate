@@ -35,11 +35,13 @@ This library is still under development and is not at v1.0.0 yet!!  However, all
 
 **Carbonate** is a messaging library built on the observable pattern, empowering seamless and dependable push-and-pull message handling across various parts or systems within an application. This fosters decoupling among different components, enhancing your application's overall testability as well as separating cross-cutting concerns.
 
-You can choose if you want data to flow out with the push notification if data can be returned from a notification, both out and returned in one notification or if no data is being sent out or returned.
+You can choose if you want to send out a push notification with or without data or if you want to poll for a notification with or without data.  These result in data only flowing in one direction.
+
+You can also choose to push data out and receive data back in a single notification.
 
 For a real-world example, check out the [Velaptor](https://github.com/KinsonDigital/Velaptor) code base which is an open-source 2D game development framework.  This library has been vital for decoupling the different sub-systems and increasing its testability.
 
-Go [here](https://refactoring.guru/design-patterns/observer) for information on the observer pattern. This design pattern has been extensively covered in various tutorials and examples across the web, making it well-documented, widely recognized, and a highly popular programming pattern.
+Go [here](https://refactoring.guru/design-patterns/observer) for information on the observable pattern. This design pattern has been extensively covered in various tutorials and examples across the web, making it well-documented, widely recognized, and a highly popular programming pattern.
 
 > **Note**
 > Click [here](https://github.com/KinsonDigital/Carbonate/tree/preview/Samples/Samples) to view all of the sample projects.
@@ -74,52 +76,57 @@ var messenger = new PushReactable(); // Create the messenger object to push noti
 var subId = Guid.NewGuid(); // This is the ID used to identify the event
 
 // Subscribe to the event to receive messages
-IDisposable unsubscriber = messenger.Subscribe(new ReceiveSubscription(
+var subscription = new ReceiveSubscription(
     id: subId,
     onReceive: () => Console.WriteLine("Received a message!"),
     name: "my-subscription",
     onUnsubscribe: () => Console.WriteLine("Unsubscribed from notifications!"),
     onError: (ex) => Console.WriteLine($"Error: {ex.Message}")
-));
+);
 
-messenger.Push(subId); // Will invoke all onReceive 'Actions'
+IDisposable unsubscriber = messenger.Subscribe(subscription);
+
+messenger.Push(subId); // Will invoke all onReceive 'Actions' subscribed to this reactable
 unsubscriber.Dispose(); // Will only unsubscribe from this subscription
 ```
 
-Every notification sent out contains a unique ID, which subscribers must use to receive the intended notification, ensuring its exclusivity and eliminating the need for additional logic with with each subscription to ignore some notifications and accept others.
+Every notification sent out contains a unique ID, which subscribers must use to receive the intended notification, ensuring its exclusivity and eliminating the need for additional logic to filter out each notification going out.
 
 > **Note**
 > **💡TIP💡**  
 > If you want to receive a single notification, unsubscribe from further notifications by calling the `Dispose()`
-> method on the `IDisposable` object returned by the _**Reactable**_ object. All reactable objects return this object for unsubscribing at a later time.
+> method on the `IDisposable` object returned by the _**Reactable**_ object. All reactable objects return an unsubscriber object for unsubscribing at a later time.  The unsubscriber is returned when invoking the `Subscribe()`` method.
 > ```cs
-> new ReceiveSubscription(
+> var mySubscription = new ReceiveSubscription(
 >     id: subId,
->     onReceive: () =>
+>     name: "my-subscription",
+>     onReceive: () => { Console.WriteLine("Received notification!"); }
+>     onUnsubscribe: () =>
 >     {
->        // Processing other required logic here . . .
->        unsubscriber.Dispose(); // Will unsubscribe itself when receiving the notification
+>        unsubscriber.Dispose(); // Will unsubscribe from further notifications
 >     });
 > ```
 
 > **Note**
 > Some notes about exceptions and unsubscribing**
-> - Throwing an exception in the 'onReceive' action implementation will invoke the 'onError' action for _**ALL**_ subscriptions.
-> - Invoking `*Reactable.Dispose()` method will invoke the `onUnsubscribe` action for _**ALL**_ subscriptions subscribed to the reactable.
+> - Throwing an exception in the 'onReceive' action delegate implementation will invoke the 'onError' action for _**ALL**_ subscriptions.
+> - Invoking `*Reactable.Dispose()` method will invoke the `onUnsubscribe` action for _**ALL**_ subscriptions subscribed to that reactable.
 > - You can unsubscribe from a single subscription by calling the `Dispose()` method on the `IDisposable` object returned by the reactable's `Subscribe()` method.
 
 
 <h3 style="font-weight:bold;color: #00BBC6">One way push notifications</h3>
 
-To facilitate _**one way**_ data transfer through push notifications, you can employ the `PushReactable<TIn>` type for sending data, while subscribers utilize the `ReceiveSubscription<TIn>` type for their subscriptions. Setting up and using this approach follows the same steps as in the previous example. In this context, the term one-directional signifies that data exclusively flows outward with the push notification.
+To facilitate _**one way**_ data transfer through push notifications, you can employ the `PushReactable<TIn>` or `PullReactable<TOut>` types while subscribers utilize the `ReceiveSubscription<TIn>` or `RespondSubscription<TOut>` types for their subscriptions. Setting up and using this approach follows the same steps as in the previous example. In this context, the term one-directional signifies that data exclusively flows in one direction either out from the source or in from the source in the notification.
 
 > **Note**
-> The _**ONLY**_ difference with this example is that your sending some data _**WITH**_ your notification.  
-> The generic parameter `T` is the type of data you are sending out.
-> All other behaviors are the same.
+> The _**ONLY**_ difference with this example is that your sending some data out _**WITH**_ your notification, or
+> receiving data back _**WITH**_ the notification.
+> The generic parameters `TIn` and `TOut` are the types of data you are sending out or receiving back.
+
+<h4>One Way Out Notification</h4>
 
 ```cs
-var messenger = new PushReactable<string>(); // Create the messenger object to push notifications
+var messenger = new PushReactable<string>(); // Create the messenger object to push notifications with data
 var subId = Guid.NewGuid(); // This is the ID used to identify the event
 
 // Subscribe to the event to receive messages
@@ -131,20 +138,39 @@ IDisposable unsubscriber = messenger.Subscribe(new ReceiveSubscription<string>(
     onError: (ex) => Console.WriteLine($"Error: {ex.Message}")
 ));
 
-messenger.Push("hello world!", subId); // Will invoke all onReceive 'Actions'
-messenger.Unsubscribe(subId); // Will invoke all onUnsubscribe 'Actions'
+messenger.Push("hello from source!", subId); // Will invoke all onReceive 'Actions' that have subscribed with 'subId'.
+messenger.Unsubscribe(subId); // Will invoke all onUnsubscribe 'Actions' that have subscribed with 'subId'.
 ```
 
+<h4>One Way In Notification(Polling)</h4>
+
+```cs
+var messenger = new PullReactable<string>(); // Create the messenger object to push notifications to receive data
+var subId = Guid.NewGuid(); // This is the ID used to identify the event
+
+// Subscribe to the event to receive messages
+IDisposable unsubscriber = messenger.Subscribe(new RespondSubscription<string>(
+    id: subId,
+    onRespond: (msg) => "hello from subscriber!",
+    name: "my-subscription",
+    onUnsubscribe: () => Console.WriteLine("Unsubscribed from notifications!"),
+    onError: (ex) => Console.WriteLine($"Error: {ex.Message}")
+));
+
+var response = messenger.Pull(subId); // Will invoke all onRespond 'Actions' that have subscribed with 'subId'.
+Console.WriteLine(response);
+messenger.Unsubscribe(subId); // Will invoke all onUnsubscribe 'Actions' that have subscribed with 'subId'.
+```
 
 <h3 style="font-weight:bold;color: #00BBC6">Two way push notifications</h3>
 
-To enable ***two way*** push notifications, allowing data to be sent out and returned, you can employ the `PushPullReactable<TIn, TOut>` type. Subscribers, on the other hand, utilize the `RespondSubscription<TIn, TOut>` for their notification subscriptions. This approach proves useful when you need to send a push notification with data required by the receiver, who then responds with data back to the original caller who initiated the notification.
+To enable ***two way*** push notifications, allowing data to be sent out and returned, you can employ the `PushPullReactable<TIn, TOut>` type. Subscribers, on the other hand, utilize the `ReceiveRespondSubscription<TIn, TOut>` for their notification subscriptions. This approach proves useful when you need to send a push notification with data required by the receiver, who then responds with data back to the original caller who initiated the notification.
 
 ```cs
 var favoriteMessenger = new PushPullReactable<string, string>();
 var subId = Guid.NewGuid(); // This is the ID used to identify the event
 
-var unsubscriber = favoriteMessenger.Subscribe(new RespondSubscription<string, string>(
+var unsubscriber = favoriteMessenger.Subscribe(new ReceiveRespondSubscription<string, string>(
     respondId: subId,
     onRespond: (data) => data switch
         {
@@ -158,19 +184,19 @@ var unsubscriber = favoriteMessenger.Subscribe(new RespondSubscription<string, s
     onError: (ex) => Console.WriteLine($"Error: {ex.Message}")
 ));
 
-Console.WriteLine($"Favorite Language: {favoriteMessenger.Pull("prog-lang", subId)}");
-Console.WriteLine($"Favorite Food: {favoriteMessenger.Pull("food", subId)}");
-Console.WriteLine($"Favorite Past Time: {favoriteMessenger.Pull("past-time", subId)}");
-Console.WriteLine($"Favorite Music: {favoriteMessenger.Pull("music", subId)}");
+Console.WriteLine($"Favorite Language: {favoriteMessenger.PushPull("prog-lang", subId)}");
+Console.WriteLine($"Favorite Food: {favoriteMessenger.PushPull("food", subId)}");
+Console.WriteLine($"Favorite Past Time: {favoriteMessenger.PushPull("past-time", subId)}");
+Console.WriteLine($"Favorite Music: {favoriteMessenger.PushPull("music", subId)}");
 ```
 
 > **Note**
-> The difference between _**one way**_ and _**two way**_ notifications is that _**one way**_ notifications enable data travel in one direction whereas _**two way**_ notifications enable data exchange in both directions which sends data out.  The terms 'Push' and 'Pull' should give a clue as to the direction of travel of the data.
+> The difference between _**one way**_ and _**two way**_ notifications is that _**one way**_ notifications enable data travel in one direction whereas _**two way**_ notifications enable data exchange in both directions.  The terms 'Push', 'Pull', 'Receive', and 'Respond' should give a clue as to the direction of travel of the data.
 
 
 > **Note**
 > **💡TIP💡**
-> Most of the time, the `PushReactable`, `PushReactable<TIn>`, and `PullReactable<TIn, TOut>` types will suit your needs.  However, if you have any requirements that these can't provide, you can always create your own custom implementations of the interfaces provided.
+> Most of the time, the `PushReactable`, `PushReactable<TIn>`, and `PushPullReactable<TIn, TOut>` classes will suit your needs.  However, if you have any requirements that these can't provide, you can always create your own custom implementations of the interfaces provided.
 
 <h2 style="font-weight:bold;" align="center">🙏🏼 Contributing 🙏🏼</h2>
 

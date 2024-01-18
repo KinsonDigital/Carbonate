@@ -45,9 +45,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RunDebugConfigs", "RunDebugConfigs", "{6B7A6BC4-2C17-47BE-98CB-ED447D82A170}"
 	ProjectSection(SolutionItems) = preProject
 		.run\CarbonatePerfTests.run.xml = .run\CarbonatePerfTests.run.xml
-		.run\NonDirectional (Sample).run.xml = .run\NonDirectional (Sample).run.xml
-		.run\OneWay (Sample).run.xml = .run\OneWay (Sample).run.xml
-		.run\TwoWay (Sample).run.xml = .run\TwoWay (Sample).run.xml
+		.run\Samples.run.xml = .run\Samples.run.xml
 	EndProjectSection
 EndProject
 Global

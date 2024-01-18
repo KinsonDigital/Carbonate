@@ -1,4 +1,4 @@
-﻿// <copyright file="RespondSubscription.cs" company="KinsonDigital">
+﻿// <copyright file="ReceiveRespondSubscription.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -7,31 +7,31 @@ namespace Carbonate.TwoWay;
 using System.Diagnostics.CodeAnalysis;
 using Core.TwoWay;
 
-/// <inheritdoc cref="IRespondSubscription{TIn,TOut}"/>
+/// <inheritdoc cref="IReceiveRespondSubscription{TIn,TOut}"/>
 [SuppressMessage(
     "ReSharper",
     "ClassWithVirtualMembersNeverInherited.Global",
     Justification = "Left unsealed to give users more control")]
-public class RespondSubscription<TIn, TOut> : SubscriptionBase, IRespondSubscription<TIn, TOut>
+public class ReceiveRespondSubscription<TIn, TOut> : SubscriptionBase, IReceiveRespondSubscription<TIn, TOut>
 {
     private readonly Func<TIn, TOut?>? onReceiveRespond;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="RespondSubscription{TIn,TOut}"/> class.
+    /// Initializes a new instance of the <see cref="ReceiveRespondSubscription{TIn,TOut}"/> class.
     /// </summary>
     /// <param name="id">The ID of the <see cref="PushPullReactable{TIn,TOut}"/> requiring a response.</param>
-    /// <param name="name">The name of the <see cref="RespondSubscription{TIn,TOut}"/>.</param>
-    /// <param name="onReceiveRespond">Executed when requesting a response with data.</param>
+    /// <param name="name">The name of the <see cref="ReceiveRespondSubscription{TIn,TOut}"/>.</param>
+    /// <param name="onReceiveRespond">The delegate to execute to receive data from the source and return data to the source.</param>
     /// <param name="onUnsubscribe">
-    ///     Executed when the provider has finished sending push-based notifications and is unsubscribed.
+    ///     Executed when the notification provider has finished sending push-based notifications.
     /// </param>
-    /// <param name="onError">Executed when the provider experiences an error.</param>
+    /// <param name="onError">Executed when the notification provider experiences an error.</param>
     /// <remarks>
-    ///     Note:  The <paramref name="name"/> is not used for unique identification purposes.
+    ///     Note:  The <paramref name="name"/> parameter is not used for unique identification purposes.
     ///     <br/>
     ///     It is only metadata for debugging or miscellaneous purposes.
     /// </remarks>
-    public RespondSubscription(
+    public ReceiveRespondSubscription(
         Guid id,
         Func<TIn, TOut> onReceiveRespond,
         string name = "",

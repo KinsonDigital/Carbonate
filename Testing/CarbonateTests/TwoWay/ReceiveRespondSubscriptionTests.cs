@@ -1,4 +1,4 @@
-﻿// <copyright file="RespondSubscriptionTests.cs" company="KinsonDigital">
+﻿// <copyright file="ReceiveRespondSubscriptionTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -6,13 +6,12 @@ namespace CarbonateTests.TwoWay;
 
 using Carbonate.TwoWay;
 using FluentAssertions;
-using NSubstitute;
 using Xunit;
 
 /// <summary>
-/// Tests the <see cref="RespondSubscription{TIn,TOut}"/> class.
+/// Tests the <see cref="ReceiveRespondSubscription{TIn,TOut}"/> class.
 /// </summary>
-public class RespondSubscriptionTests
+public class ReceiveRespondSubscriptionTests
 {
     #region Constructor Tests
     [Fact]
@@ -22,7 +21,7 @@ public class RespondSubscriptionTests
         var id = Guid.NewGuid();
 
         // Act
-        var sut = new RespondSubscription<int, string>(id, _ => string.Empty);
+        var sut = new ReceiveRespondSubscription<int, string>(id, _ => string.Empty);
 
         // Assert
         sut.Id.Should().Be(id);
@@ -35,7 +34,7 @@ public class RespondSubscriptionTests
         var id = Guid.NewGuid();
 
         // Act
-        var sut = new RespondSubscription<int, string>(id, _ => "value", "test-name");
+        var sut = new ReceiveRespondSubscription<int, string>(id, _ => "value", "test-name");
 
         // Assert
         sut.Name.Should().Be("test-name");
@@ -47,7 +46,7 @@ public class RespondSubscriptionTests
     public void OnRespond_WhenUnsubscribed_ReturnsCorrectDefaultResult()
     {
         // Arrange
-        var sut = new RespondSubscription<int, int>(Guid.NewGuid(),
+        var sut = new ReceiveRespondSubscription<int, int>(Guid.NewGuid(),
             onReceiveRespond: _ => 456);
         sut.OnUnsubscribe();
 
@@ -63,7 +62,7 @@ public class RespondSubscriptionTests
     {
         // Arrange
         var obj = new object();
-        var sut = new RespondSubscription<int, object>(Guid.NewGuid(),
+        var sut = new ReceiveRespondSubscription<int, object>(Guid.NewGuid(),
             onReceiveRespond: _ => obj);
 
         // Act
@@ -80,7 +79,7 @@ public class RespondSubscriptionTests
         // Arrange
         var totalActionInvokes = 0;
 
-        var sut = new RespondSubscription<int, string>(
+        var sut = new ReceiveRespondSubscription<int, string>(
             Guid.NewGuid(),
             onReceiveRespond: _ => string.Empty,
             onUnsubscribe: () => totalActionInvokes++);
@@ -100,7 +99,7 @@ public class RespondSubscriptionTests
         // Arrange
         var totalActionInvokes = 0;
 
-        var sut = new RespondSubscription<int, string>(
+        var sut = new ReceiveRespondSubscription<int, string>(
             Guid.NewGuid(),
             onReceiveRespond: _ => string.Empty,
             onError: _ => totalActionInvokes++);
@@ -108,7 +107,7 @@ public class RespondSubscriptionTests
         sut.OnUnsubscribe();
 
         // Act
-        sut.OnError(Arg.Any<Exception>());
+        sut.OnError(new Exception());
 
         // Assert
         totalActionInvokes.Should().Be(0);
@@ -120,7 +119,7 @@ public class RespondSubscriptionTests
         // Arrange
         var totalActionInvokes = 0;
 
-        var sut = new RespondSubscription<int, string>(
+        var sut = new ReceiveRespondSubscription<int, string>(
             Guid.NewGuid(),
             onReceiveRespond: _ => string.Empty,
             onError: _ => totalActionInvokes++);
@@ -140,7 +139,7 @@ public class RespondSubscriptionTests
         // Arrange
         var totalActionInvokes = 0;
 
-        var sut = new RespondSubscription<int, string>(
+        var sut = new ReceiveRespondSubscription<int, string>(
             Guid.NewGuid(),
             onReceiveRespond: _ => string.Empty,
             onError: e =>
@@ -163,14 +162,14 @@ public class RespondSubscriptionTests
     [InlineData(null, "87e99bdc-a972-427a-90be-f2c07c4f9aef", "87e99bdc-a972-427a-90be-f2c07c4f9aef")]
     [InlineData("", "87e99bdc-a972-427a-90be-f2c07c4f9aef", "87e99bdc-a972-427a-90be-f2c07c4f9aef")]
     public void ToString_WhenInvoked_ReturnsCorrectResult(
-        string name,
+        string? name,
         string guid,
         string expected)
     {
         // Arrange
         var id = new Guid(guid);
 
-        var sut = new RespondSubscription<int, int>(id, _ => 123, name);
+        var sut = new ReceiveRespondSubscription<int, int>(id, _ => 123, name);
 
         // Act
         var actual = sut.ToString();

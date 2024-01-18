@@ -30,10 +30,10 @@ public class TwoWayWithoutFluentApi : Sample
         var msgEventId = Guid.NewGuid(); // This is the ID used to identify the event
         var favoriteRequester = new PushPullReactable<string, string>();
 
-        var unsubscriber = favoriteRequester.Subscribe(new RespondSubscription<string, string>(
+        var unsubscriber = favoriteRequester.Subscribe(new ReceiveRespondSubscription<string, string>(
             id: msgEventId,
             name: "adder",
-            onReceiveRespond: (data) => data switch
+            onReceiveRespond: data => data switch
             {
                 "prog-lang" => "C#",
                 "food" => "scotch eggs",
@@ -41,7 +41,7 @@ public class TwoWayWithoutFluentApi : Sample
                 "music" => "hard rock/metal",
             },
             onUnsubscribe: () => Console.WriteLine("Unsubscribed from notifications!"),
-            onError: (ex) => Console.WriteLine($"Error: {ex.Message}")));
+            onError: ex => Console.WriteLine($"Error: {ex.Message}")));
 
         // Print the results of the data returned for each push notification
         Console.WriteLine($"Favorite Language: {favoriteRequester.PushPull("prog-lang", msgEventId)}");

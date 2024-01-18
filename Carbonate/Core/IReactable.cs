@@ -28,8 +28,7 @@ public interface IReactable<TSubscription> : IDisposable
     /// </summary>
     /// <param name="subscription">The object that is to receive notifications.</param>
     /// <returns>
-    ///     A reference to an interface that allows subscriptions to stop receiving
-    ///     notifications before the provider has finished sending them.
+    ///     A <see cref="IDisposable"/> object that can be used to unsubscribe the <paramref name="subscription"/>.
     /// </returns>
     IDisposable Subscribe(TSubscription subscription);
 

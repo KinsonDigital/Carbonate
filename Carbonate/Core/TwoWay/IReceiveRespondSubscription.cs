@@ -1,18 +1,15 @@
-﻿// <copyright file="IPushPullReactable.cs" company="KinsonDigital">
+﻿// <copyright file="IReceiveRespondSubscription.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
 // ReSharper disable RedundantTypeDeclarationBody
-namespace Carbonate.TwoWay;
-
-using Core;
-using Core.TwoWay;
+namespace Carbonate.Core.TwoWay;
 
 /// <summary>
-/// Defines a provider for pull-based responses.
+/// Provides a mechanism for receiving notifications and responding with data.
 /// </summary>
 /// <typeparam name="TIn">The type of data coming from the source.</typeparam>
 /// <typeparam name="TOut">The type of data going back to the source.</typeparam>
-public interface IPushPullReactable<TIn, TOut> : IReactable<IReceiveRespondSubscription<TIn, TOut>>, IPushablePullable<TIn, TOut>
+public interface IReceiveRespondSubscription<in TIn, out TOut> : ISubscription, IResponder<TIn, TOut>
 {
 }

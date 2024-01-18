@@ -22,13 +22,13 @@ public class ReceiveSubscription<TIn> : SubscriptionBase, IReceiveSubscription<T
     /// </summary>
     /// <param name="id">The ID of the event that was pushed by an <see cref="IReactable{TSubscription}"/>.</param>
     /// <param name="name">The name of the <see cref="ReceiveSubscription{TIn}"/>.</param>
-    /// <param name="onReceive">Executed when a push notification occurs with some data.</param>
+    /// <param name="onReceive">The delegate to execute to receive data from the source.</param>
     /// <param name="onUnsubscribe">
-    ///     Executed when the provider has finished sending push-based notifications and is unsubscribed.
+    ///     Executed when the notification provider has finished sending push-based notifications.
     /// </param>
-    /// <param name="onError">Executed when the provider experiences an error.</param>
+    /// <param name="onError">Executed when the notification provider experiences an error.</param>
     /// <remarks>
-    ///     Note:  The <paramref name="name"/> is not used for unique identification purposes.
+    ///     Note:  The <paramref name="name"/> parameter is not used for unique identification purposes.
     ///     <br/>
     ///     It is only metadata for debugging or miscellaneous purposes.
     /// </remarks>
