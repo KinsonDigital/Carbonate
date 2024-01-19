@@ -1,9 +1,10 @@
-// <copyright file="PullReactable.cs" company="KinsonDigital">
+﻿// <copyright file="PullReactable.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
 namespace Carbonate.OneWay;
 
+using System.Runtime.InteropServices;
 using Core.OneWay;
 
 /// <inheritdoc cref="IPullReactable{TOut}"/>
@@ -13,14 +14,14 @@ public class PullReactable<TOut>
     /// <inheritdoc/>
     public TOut? Pull(Guid id)
     {
-        for (var i = 0; i < InternalSubscriptions.Count; i++)
+        foreach (var subscription in CollectionsMarshal.AsSpan(InternalSubscriptions))
         {
-            if (InternalSubscriptions[i].Id != id)
+            if (subscription.Id != id)
             {
                 continue;
             }
 
-            return InternalSubscriptions[i].OnRespond() ?? default(TOut);
+            return subscription.OnRespond() ?? default(TOut);
         }
 
         return default;
