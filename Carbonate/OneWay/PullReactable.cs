@@ -1,4 +1,4 @@
-﻿// <copyright file="PullReactable.cs" company="KinsonDigital">
+// <copyright file="PullReactable.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -14,11 +14,11 @@ public class PullReactable<TOut>
     : ReactableBase<IRespondSubscription<TOut>>, IPullReactable<TOut>
 {
     /// <inheritdoc/>
-    public TOut? Pull(Guid respondId)
+    public TOut? Pull(Guid id)
     {
         for (var i = 0; i < Subscriptions.Count; i++)
         {
-            if (Subscriptions[i].Id != respondId)
+            if (Subscriptions[i].Id != id)
             {
                 continue;
             }

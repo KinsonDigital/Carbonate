@@ -1,4 +1,4 @@
-﻿// <copyright file="PushPullReactable.cs" company="KinsonDigital">
+// <copyright file="PushPullReactable.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -13,11 +13,11 @@ using Core.TwoWay;
 public class PushPullReactable<TIn, TOut> : ReactableBase<IReceiveRespondSubscription<TIn, TOut>>, IPushPullReactable<TIn, TOut>
 {
     /// <inheritdoc/>
-    public TOut? PushPull(in TIn data, Guid respondId)
+    public TOut? PushPull(in TIn data, Guid id)
     {
         for (var i = 0; i < Subscriptions.Count; i++)
         {
-            if (Subscriptions[i].Id != respondId)
+            if (Subscriptions[i].Id != id)
             {
                 continue;
             }

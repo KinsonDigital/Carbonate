@@ -1,4 +1,4 @@
-﻿// <copyright file="PushReactable.cs" company="KinsonDigital">
+// <copyright file="PushReactable.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -10,7 +10,7 @@ using Core.NonDirectional;
 public class PushReactable : ReactableBase<IReceiveSubscription>, IPushReactable
 {
     /// <inheritdoc cref="IPushable.Push"/>
-    public void Push(Guid eventId)
+    public void Push(Guid id)
     {
         if (IsDisposed)
         {
@@ -37,7 +37,7 @@ public class PushReactable : ReactableBase<IReceiveSubscription>, IPushReactable
                     ? Subscriptions.Count - 1
                     : i;
 
-                if (Subscriptions[i].Id != eventId)
+                if (Subscriptions[i].Id != id)
                 {
                     continue;
                 }
@@ -52,11 +52,11 @@ public class PushReactable : ReactableBase<IReceiveSubscription>, IPushReactable
     }
 
     /// <summary>
-    /// Sends an error to all of the subscribers that match the given <paramref name="eventId"/>.
+    /// Sends an error to all of the subscribers that match the given <paramref name="id"/>.
     /// </summary>
     /// <param name="exception">The exception that occurred.</param>
-    /// <param name="eventId">The ID of the event where the notification will be pushed.</param>
-    private void SendError(Exception exception, Guid eventId)
+    /// <param name="id">The ID of the event where the notification will be pushed.</param>
+    private void SendError(Exception exception, Guid id)
     {
         /* Work from the end to the beginning of the list
          * just in case the reactable is disposed(removed)
@@ -76,7 +76,7 @@ public class PushReactable : ReactableBase<IReceiveSubscription>, IPushReactable
                 ? Subscriptions.Count - 1
                 : i;
 
-            if (Subscriptions[i].Id != eventId)
+            if (Subscriptions[i].Id != id)
             {
                 continue;
             }

@@ -12,7 +12,7 @@ public class PushReactable<TIn>
 {
     /// <inheritdoc/>
     /// <exception cref="ObjectDisposedException">Thrown if this method is invoked after disposal.</exception>
-    public void Push(in TIn data, Guid eventId)
+    public void Push(in TIn data, Guid id)
     {
         if (data is null)
         {
@@ -54,16 +54,16 @@ public class PushReactable<TIn>
         }
         catch (Exception e)
         {
-            SendError(e, eventId);
+            SendError(e, id);
         }
     }
 
     /// <summary>
-    /// Sends an error to all of the subscribers that match the given <paramref name="eventId"/>.
+    /// Sends an error to all of the subscribers that match the given <paramref name="id"/>.
     /// </summary>
     /// <param name="exception">The exception that occurred.</param>
-    /// <param name="eventId">The ID of the event where the notification will be pushed.</param>
-    private void SendError(Exception exception, Guid eventId)
+    /// <param name="id">The ID of the event where the notification will be pushed.</param>
+    private void SendError(Exception exception, Guid id)
     {
         /* Work from the end to the beginning of the list
          * just in case the reactable is disposed(removed)
@@ -83,7 +83,7 @@ public class PushReactable<TIn>
                 ? Subscriptions.Count - 1
                 : i;
 
-            if (Subscriptions[i].Id != eventId)
+            if (Subscriptions[i].Id != id)
             {
                 continue;
             }
