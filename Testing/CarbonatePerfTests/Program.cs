@@ -1,4 +1,4 @@
-// <copyright file="Program.cs" company="KinsonDigital">
+﻿// <copyright file="Program.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -9,6 +9,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
+using Carbonate.NonDirectional;
 using Carbonate.OneWay;
 using CarbonatePerfTests.Benchmarks;
 
@@ -29,6 +30,10 @@ Console.WriteLine("This application is for testing purposes only.");
 Console.WriteLine("This can only be run with the following solution configurations:");
 Console.WriteLine("\t- PullReactable");
 Console.WriteLine("\t- PushReactable");
+
+#elif RELEASE_NONDIRPUSHREACTABLE
+
+summary = BenchmarkRunner.Run<NonDir_PushReactable_Class>();
 
 #elif RELEASE_ONEWAYPULLREACTABLE
 
