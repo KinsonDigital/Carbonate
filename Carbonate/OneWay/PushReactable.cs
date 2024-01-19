@@ -4,6 +4,7 @@
 
 namespace Carbonate.OneWay;
 
+using System.Runtime.InteropServices;
 using Core.OneWay;
 
 /// <inheritdoc cref="IPushReactable{T}"/>
@@ -26,30 +27,14 @@ public class PushReactable<TIn>
 
         try
         {
-            /* Work from the end to the beginning of the list
-             * just in case the reactable is disposed(removed)
-             * in the OnReceive() method.
-             */
-            for (var i = InternalSubscriptions.Count - 1; i >= 0; i--)
+            foreach (var subscription in CollectionsMarshal.AsSpan(InternalSubscriptions))
             {
-                /*NOTE:
-                 * The purpose of this logic is to prevent array index errors
-                 * if an OnReceive() implementation ends up unsubscribing a single
-                 * subscription or unsubscribing from a single event id
-                 *
-                 * If the current index is not less than or equal to
-                 * the total number of items, reset the index to the last item
-                 */
-                i = i > InternalSubscriptions.Count - 1
-                    ? InternalSubscriptions.Count - 1
-                    : i;
-
-                if (InternalSubscriptions[i].Id != id)
+                if (subscription.Id != id)
                 {
                     continue;
                 }
 
-                InternalSubscriptions[i].OnReceive(data);
+                subscription.OnReceive(data);
             }
         }
         catch (Exception e)
