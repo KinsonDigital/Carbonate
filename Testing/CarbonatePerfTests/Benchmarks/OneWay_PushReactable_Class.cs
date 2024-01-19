@@ -14,6 +14,12 @@ using Carbonate.OneWay;
 [SuppressMessage("csharpsquid", "S101", Justification = "Perf testing")]
 public class OneWay_PushReactable_Class
 {
+    private const string NameSpace = nameof(Carbonate.OneWay);
+    private const string IntType = "int";
+    private const string StructType = nameof(StructItem);
+    private const string PushIntClassName = $"{nameof(PushReactable<int>)}<{IntType}>";
+    private const string PushStructClassName = $"{nameof(PushReactable<StructItem>)}<{StructType}>";
+    private const string MethodName = $"{nameof(IPushReactable<int>.Push)}()";
     private readonly Guid setupAId = Guid.NewGuid();
     private readonly Guid setupBId = Guid.NewGuid();
     private PushReactable<int>? pushReactableA;
@@ -40,13 +46,13 @@ public class OneWay_PushReactable_Class
         }
     }
 
-    [Benchmark(Description = "OneWay.PushReactable.Push() Method | int")]
+    [Benchmark(Description = $"{NameSpace}.{PushIntClassName}.{MethodName}")]
     public void PushReactable_Push_Method_Setup_A()
     {
         this.pushReactableA.Push(123, this.setupAId);
     }
 
-    [Benchmark(Description = "OneWay.PushReactable.Push() Method | struct")]
+    [Benchmark(Description = $"{NameSpace}.{PushStructClassName}.{MethodName}")]
     public void PushReactable_Push_Method_Setup_B()
     {
         this.pushReactableB.Push(this.structItem, this.setupBId);

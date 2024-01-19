@@ -1,4 +1,4 @@
-﻿// <copyright file="OneWay_PullReactable_Class.cs" company="KinsonDigital">
+// <copyright file="OneWay_PullReactable_Class.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -14,6 +14,12 @@ using Carbonate.OneWay;
 [SuppressMessage("csharpsquid", "S101", Justification = "Perf testing")]
 public class OneWay_PullReactable_Class
 {
+    private const string NameSpace = nameof(Carbonate.OneWay);
+    private const string IntType = "int";
+    private const string StructType = nameof(StructItem);
+    private const string PullIntClassName = $"{nameof(PullReactable<int>)}<{IntType}>";
+    private const string PullStructClassName = $"{nameof(PullReactable<StructItem>)}<{StructType}>";
+    private const string MethodName = $"{nameof(IPullReactable<int>.Pull)}()";
     private readonly Guid setupAId = Guid.NewGuid();
     private readonly Guid setupBId = Guid.NewGuid();
     private PullReactable<int>? pullReactableA;
@@ -40,13 +46,13 @@ public class OneWay_PullReactable_Class
         }
     }
 
-    [Benchmark(Description = "OneWay.PullReactable.Pull() Method | int")]
+    [Benchmark(Description = $"{NameSpace}.{PullIntClassName}.{MethodName}")]
     public void PullReactable_Pull_Method_Setup_A()
     {
         _ = this.pullReactableA.Pull(this.setupAId);
     }
 
-    [Benchmark(Description = "OneWay.PullReactable.Pull() Method | struct")]
+    [Benchmark(Description = $"{NameSpace}.{PullStructClassName}.{MethodName}")]
     public void PullReactable_Pull_Method_Setup_B()
     {
         _ = this.pullReactableB.Pull(this.setupBId);

@@ -1,12 +1,20 @@
-﻿// <copyright file="Program.cs" company="KinsonDigital">
+// <copyright file="Program.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+#pragma warning disable SA1200
 // ReSharper disable RedundantUsingDirective
+// ReSharper disable JoinDeclarationAndInitializer
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
 using Carbonate.OneWay;
 using CarbonatePerfTests.Benchmarks;
+
+#if RELEASE_NONDIRPUSHREACTABLE || RELEASE_ONEWAYPULLREACTABLE || RELEASE_ONEWAYPUSHREACTABLE
+Summary? summary;
+#endif
 
 #if DEBUG
 
@@ -24,14 +32,16 @@ Console.WriteLine("\t- PushReactable");
 
 #elif RELEASE_ONEWAYPULLREACTABLE
 
-var summary = BenchmarkRunner.Run<PullReactable_Class>();
-Console.WriteLine(summary);
+summary = BenchmarkRunner.Run<OneWay_PullReactable_Class>();
 
 #elif RELEASE_ONEWAYPUSHREACTABLE
 
-var summary = BenchmarkRunner.Run<OneWay_PushReactable_Class>();
-Console.WriteLine(summary);
+summary = BenchmarkRunner.Run<OneWay_PushReactable_Class>();
 
+#endif
+
+#if RELEASE_NONDIRPUSHREACTABLE || RELEASE_ONEWAYPULLREACTABLE || RELEASE_ONEWAYPUSHREACTABLE
+Console.WriteLine(summary);
 #endif
 
 Console.ReadLine();
