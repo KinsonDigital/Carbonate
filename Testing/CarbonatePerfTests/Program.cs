@@ -3,7 +3,9 @@
 // </copyright>
 
 // ReSharper disable RedundantUsingDirective
+using System.Runtime.InteropServices;
 using BenchmarkDotNet.Running;
+using Carbonate.OneWay;
 using CarbonatePerfTests.Benchmarks;
 
 #if DEBUG
