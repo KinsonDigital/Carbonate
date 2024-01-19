@@ -1,4 +1,4 @@
-// <copyright file="PushPullReactable.cs" company="KinsonDigital">
+﻿// <copyright file="PushPullReactable.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -15,7 +15,7 @@ public class PushPullReactable<TIn, TOut> : ReactableBase<IReceiveRespondSubscri
     /// <inheritdoc/>
     public TOut? PushPull(in TIn data, Guid id)
     {
-        for (var i = 0; i < Subscriptions.Count; i++)
+        for (var i = 0; i < Subscriptions.Length; i++)
         {
             if (Subscriptions[i].Id != id)
             {

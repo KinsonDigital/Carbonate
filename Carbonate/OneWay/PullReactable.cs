@@ -2,9 +2,6 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-// NOTE: Leave the loops as 'for loops'. This is a small performance improvement.
-// ReSharper disable ForCanBeConvertedToForeach
-// ReSharper disable LoopCanBeConvertedToQuery
 namespace Carbonate.OneWay;
 
 using Core.OneWay;
@@ -16,14 +13,14 @@ public class PullReactable<TOut>
     /// <inheritdoc/>
     public TOut? Pull(Guid id)
     {
-        for (var i = 0; i < Subscriptions.Count; i++)
+        for (var i = 0; i < InternalSubscriptions.Count; i++)
         {
-            if (Subscriptions[i].Id != id)
+            if (InternalSubscriptions[i].Id != id)
             {
                 continue;
             }
 
-            return Subscriptions[i].OnRespond() ?? default(TOut);
+            return InternalSubscriptions[i].OnRespond() ?? default(TOut);
         }
 
         return default;

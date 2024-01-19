@@ -1,4 +1,4 @@
-// <copyright file="PushReactable.cs" company="KinsonDigital">
+﻿// <copyright file="PushReactable.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -23,7 +23,7 @@ public class PushReactable : ReactableBase<IReceiveSubscription>, IPushReactable
              * just in case the reactable is disposed(removed)
              * in the OnReceive() method.
              */
-            for (var i = Subscriptions.Count - 1; i >= 0; i--)
+            for (var i = InternalSubscriptions.Count - 1; i >= 0; i--)
             {
                 /*NOTE:
                  * The purpose of this logic is to prevent array index errors
@@ -33,21 +33,21 @@ public class PushReactable : ReactableBase<IReceiveSubscription>, IPushReactable
                  * If the current index is not less than or equal to
                  * the total number of items, reset the index to the last item
                  */
-                i = i > Subscriptions.Count - 1
-                    ? Subscriptions.Count - 1
+                i = i > InternalSubscriptions.Count - 1
+                    ? InternalSubscriptions.Count - 1
                     : i;
 
-                if (Subscriptions[i].Id != id)
+                if (InternalSubscriptions[i].Id != id)
                 {
                     continue;
                 }
 
-                Subscriptions[i].OnReceive();
+                InternalSubscriptions[i].OnReceive();
             }
         }
         catch (Exception e)
         {
-            SendError(e, eventId);
+            SendError(e, id);
         }
     }
 
@@ -62,7 +62,7 @@ public class PushReactable : ReactableBase<IReceiveSubscription>, IPushReactable
          * just in case the reactable is disposed(removed)
          * in the OnReceive() method.
          */
-        for (var i = Subscriptions.Count - 1; i >= 0; i--)
+        for (var i = InternalSubscriptions.Count - 1; i >= 0; i--)
         {
             /*NOTE:
              * The purpose of this logic is to prevent array index errors
@@ -72,16 +72,16 @@ public class PushReactable : ReactableBase<IReceiveSubscription>, IPushReactable
              * If the current index is not less than or equal to
              * the total number of items, reset the index to the last item
              */
-            i = i > Subscriptions.Count - 1
-                ? Subscriptions.Count - 1
+            i = i > InternalSubscriptions.Count - 1
+                ? InternalSubscriptions.Count - 1
                 : i;
 
-            if (Subscriptions[i].Id != id)
+            if (InternalSubscriptions[i].Id != id)
             {
                 continue;
             }
 
-            Subscriptions[i].OnError(exception);
+            InternalSubscriptions[i].OnError(exception);
         }
     }
 }

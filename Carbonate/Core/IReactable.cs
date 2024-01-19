@@ -4,6 +4,7 @@
 
 namespace Carbonate.Core;
 
+using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 
 /// <summary>
@@ -16,7 +17,7 @@ public interface IReactable<TSubscription> : IDisposable
     /// <summary>
     /// Gets the list of subscriptions that are subscribed to this <see cref="IReactable{T}"/>.
     /// </summary>
-    ReadOnlyCollection<TSubscription> Subscriptions { get; }
+    ImmutableArray<TSubscription> Subscriptions { get; }
 
     /// <summary>
     /// Gets the list of subscription IDs.

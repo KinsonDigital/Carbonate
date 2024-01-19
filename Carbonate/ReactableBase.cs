@@ -1,9 +1,10 @@
-// <copyright file="ReactableBase.cs" company="KinsonDigital">
+﻿// <copyright file="ReactableBase.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
 namespace Carbonate;
 
+using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using Core;
@@ -16,17 +17,21 @@ using OneWay;
 public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
     where TSubscription : class, ISubscription
 {
-    private readonly List<TSubscription> subscriptions = new ();
     private bool notificationsEnded;
 
     /// <inheritdoc/>
-    public ReadOnlyCollection<TSubscription> Subscriptions => this.subscriptions.AsReadOnly();
+    public ImmutableArray<TSubscription> Subscriptions => InternalSubscriptions.ToImmutableArray();
 
     /// <inheritdoc/>
-    public ReadOnlyCollection<Guid> SubscriptionIds => this.subscriptions
+    public ReadOnlyCollection<Guid> SubscriptionIds => InternalSubscriptions
         .Select(r => r.Id)
         .Distinct()
         .ToList().AsReadOnly();
+
+    /// <summary>
+    /// Gets the list of subscriptions that are subscribed.
+    /// </summary>
+    internal List<TSubscription> InternalSubscriptions { get; } = [];
 
     /// <summary>
     /// Gets a value indicating whether or not if the <see cref="ReactableBase{T}"/> has been disposed.
@@ -48,9 +53,9 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
             throw new ArgumentNullException(nameof(subscription), "The parameter must not be null.");
         }
 
-        this.subscriptions.Add(subscription);
+        InternalSubscriptions.Add(subscription);
 
-        return new SubscriptionUnsubscriber(this.subscriptions.Cast<ISubscription>().ToList(), subscription);
+        return new SubscriptionUnsubscriber(InternalSubscriptions.Cast<ISubscription>().ToList(), subscription);
     }
 
     /// <inheritdoc/>
@@ -71,7 +76,7 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
          * This is due to the Dispose() method possibly being called during
          * iteration of the subscriptions list which will cause an exception.
         */
-        for (var i = this.subscriptions.Count - 1; i >= 0; i--)
+        for (var i = InternalSubscriptions.Count - 1; i >= 0; i--)
         {
             /*NOTE:
              * The purpose of this logic is to prevent array index errors
@@ -81,30 +86,30 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
              * If the current index is not less than or equal to
              * the total number of items, reset the index to the last item
              */
-            i = i > this.subscriptions.Count - 1
-                ? this.subscriptions.Count - 1
+            i = i > InternalSubscriptions.Count - 1
+                ? InternalSubscriptions.Count - 1
                 : i;
 
-            if (this.subscriptions[i].Id != id)
+            if (InternalSubscriptions[i].Id != id)
             {
                 continue;
             }
 
-            var beforeTotal = this.subscriptions.Count;
+            var beforeTotal = InternalSubscriptions.Count;
 
-            this.subscriptions[i].OnUnsubscribe();
+            InternalSubscriptions[i].OnUnsubscribe();
 
-            var nothingRemoved = Math.Abs(beforeTotal - this.subscriptions.Count) <= 0;
+            var nothingRemoved = Math.Abs(beforeTotal - InternalSubscriptions.Count) <= 0;
 
             // Make sure that the OnUnsubscribe implementation did not remove
             // the subscription before attempting to remove it
             if (nothingRemoved)
             {
-                this.subscriptions.Remove(this.subscriptions[i]);
+                InternalSubscriptions.Remove(InternalSubscriptions[i]);
             }
         }
 
-        this.notificationsEnded = this.subscriptions.TrueForAll(r => r.Unsubscribed);
+        this.notificationsEnded = InternalSubscriptions.TrueForAll(r => r.Unsubscribed);
     }
 
     /// <inheritdoc/>
@@ -120,7 +125,7 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
          * This is due to the Dispose() method possibly being called during
          * iteration of the subscriptions list which will cause an exception.
         */
-        for (var i = this.subscriptions.Count - 1; i >= 0; i--)
+        for (var i = InternalSubscriptions.Count - 1; i >= 0; i--)
         {
             /*NOTE:
              * The purpose of this logic is to prevent array index errors
@@ -130,14 +135,14 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
              * If the current index is not less than or equal to
              * the total number of items, reset the index to the last item
              */
-            i = i > this.subscriptions.Count - 1
-                ? this.subscriptions.Count - 1
+            i = i > InternalSubscriptions.Count - 1
+                ? InternalSubscriptions.Count - 1
                 : i;
 
-            this.subscriptions[i].OnUnsubscribe();
+            InternalSubscriptions[i].OnUnsubscribe();
         }
 
-        this.subscriptions.Clear();
+        InternalSubscriptions.Clear();
     }
 
     /// <inheritdoc cref="IDisposable.Dispose"/>
