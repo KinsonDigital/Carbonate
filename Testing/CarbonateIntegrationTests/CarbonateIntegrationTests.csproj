@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
-        <Configurations>Release;Debug</Configurations>
+        <Configurations>Release;Debug;Release OneWayPullReactable;Release OneWayPushReactable;Release NonDirPushReactable</Configurations>
         <Platforms>x64</Platforms>
     </PropertyGroup>
 

@@ -6,16 +6,23 @@
         <LangVersion>12.0</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Configurations>Release;Debug;Release Benchmark;Release MemPerf</Configurations>
+        <Configurations>Release;Debug;Release OneWayPushReactable;Release OneWayPullReactable;Release NonDirPushReactable</Configurations>
         <Platforms>x64</Platforms>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release Benchmark|x64' ">
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release OneWayPushReactable|x64' ">
       <Optimize>true</Optimize>
+      <OutputPath>bin\x64\OneWayPushReactable\</OutputPath>
     </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release MemPerf|x64' ">
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release OneWayPullReactable|x64' ">
+      <Optimize>true</Optimize>
+      <OutputPath>bin\x64\OneWayPullReactable\</OutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release NonDirPushReactable|x64' ">
+      <OutputPath>bin\x64\NonDirPushReactable\</OutputPath>
       <Optimize>true</Optimize>
     </PropertyGroup>
 

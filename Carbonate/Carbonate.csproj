@@ -38,7 +38,7 @@
 
         <!-- Ignore warning CS7035 about version syntax. -->
         <NoWarn>CS7035</NoWarn>
-        <Configurations>Debug;Release</Configurations>
+        <Configurations>Debug;Release;Release OneWayPullReactable;Release OneWayPushReactable;Release NonDirPushReactable</Configurations>
     </PropertyGroup>
 
     <PropertyGroup>
