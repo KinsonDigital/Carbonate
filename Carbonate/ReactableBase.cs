@@ -1,4 +1,4 @@
-﻿// <copyright file="ReactableBase.cs" company="KinsonDigital">
+// <copyright file="ReactableBase.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -104,7 +104,7 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
             }
         }
 
-        this.notificationsEnded = this.subscriptions.All(r => r.Unsubscribed);
+        this.notificationsEnded = this.subscriptions.TrueForAll(r => r.Unsubscribed);
     }
 
     /// <inheritdoc/>
