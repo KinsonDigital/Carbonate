@@ -7,6 +7,7 @@
 // ReSharper disable LoopCanBeConvertedToQuery
 namespace Carbonate.TwoWay;
 
+using System.Runtime.InteropServices;
 using Core.TwoWay;
 
 /// <inheritdoc cref="IPushPullReactable{TIn,TOut}"/>
@@ -15,14 +16,14 @@ public class PushPullReactable<TIn, TOut> : ReactableBase<IReceiveRespondSubscri
     /// <inheritdoc/>
     public TOut? PushPull(in TIn data, Guid id)
     {
-        for (var i = 0; i < Subscriptions.Length; i++)
+        foreach (var subscription in CollectionsMarshal.AsSpan(InternalSubscriptions))
         {
-            if (Subscriptions[i].Id != id)
+            if (subscription.Id != id)
             {
                 continue;
             }
 
-            return Subscriptions[i].OnRespond(data);
+            return subscription.OnRespond(data) ?? default(TOut);
         }
 
         return default;
