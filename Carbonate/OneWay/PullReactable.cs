@@ -14,14 +14,21 @@ public class PullReactable<TOut>
     /// <inheritdoc/>
     public TOut? Pull(Guid id)
     {
-        foreach (var subscription in CollectionsMarshal.AsSpan(InternalSubscriptions))
+        try
         {
-            if (subscription.Id != id)
+            foreach (var subscription in CollectionsMarshal.AsSpan(InternalSubscriptions))
             {
-                continue;
-            }
+                if (subscription.Id != id)
+                {
+                    continue;
+                }
 
-            return subscription.OnRespond() ?? default(TOut);
+                return subscription.OnRespond() ?? default(TOut);
+            }
+        }
+        catch (Exception e)
+        {
+            SendError(e, id);
         }
 
         return default;
