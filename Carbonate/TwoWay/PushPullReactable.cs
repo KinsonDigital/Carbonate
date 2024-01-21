@@ -16,14 +16,21 @@ public class PushPullReactable<TIn, TOut> : ReactableBase<IReceiveRespondSubscri
     /// <inheritdoc/>
     public TOut? PushPull(in TIn data, Guid id)
     {
-        foreach (var subscription in CollectionsMarshal.AsSpan(InternalSubscriptions))
+        try
         {
-            if (subscription.Id != id)
+            foreach (var subscription in CollectionsMarshal.AsSpan(InternalSubscriptions))
             {
-                continue;
-            }
+                if (subscription.Id != id)
+                {
+                    continue;
+                }
 
-            return subscription.OnRespond(data) ?? default(TOut);
+                return subscription.OnRespond(data) ?? default(TOut);
+            }
+        }
+        catch (Exception e)
+        {
+            SendError(e, id);
         }
 
         return default;
