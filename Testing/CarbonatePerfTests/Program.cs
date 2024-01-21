@@ -5,15 +5,17 @@
 #pragma warning disable SA1200
 // ReSharper disable RedundantUsingDirective
 // ReSharper disable JoinDeclarationAndInitializer
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
+using Carbonate.Fluent;
 using Carbonate.NonDirectional;
 using Carbonate.OneWay;
 using CarbonatePerfTests.Benchmarks;
 
-#if RELEASE_NONDIRPUSHREACTABLE || RELEASE_ONEWAYPULLREACTABLE || RELEASE_ONEWAYPUSHREACTABLE
+#if RELEASE_NONDIRPUSHREACTABLE || RELEASE_ONEWAYPULLREACTABLE || RELEASE_ONEWAYPUSHREACTABLE || RELEASE_TWOWAYPUSHPULLREACTABLE
 Summary? summary;
 #endif
 
@@ -43,9 +45,13 @@ summary = BenchmarkRunner.Run<OneWay_PullReactable_Class>();
 
 summary = BenchmarkRunner.Run<OneWay_PushReactable_Class>();
 
+#elif RELEASE_TWOWAYPUSHPULLREACTABLE
+
+summary = BenchmarkRunner.Run<TwoWay_PushPullReactable_Class>();
+
 #endif
 
-#if RELEASE_NONDIRPUSHREACTABLE || RELEASE_ONEWAYPULLREACTABLE || RELEASE_ONEWAYPUSHREACTABLE
+#if RELEASE_NONDIRPUSHREACTABLE || RELEASE_ONEWAYPULLREACTABLE || RELEASE_ONEWAYPUSHREACTABLE || RELEASE_TWOWAYPUSHPULLREACTABLE
 Console.WriteLine(summary);
 #endif
 
