@@ -7,8 +7,8 @@ DefaultJob : .NET 8.0.0 (8.0.23.53103), X64 RyuJIT AVX2
 
 **Description:** Baseline - Standard for loop
 
-| Method                                 | TotalSubscriptions | Mean          | Error        | StdDev        | Median        | Gen0     | Allocated |
-|--------------------------------------- |------------------- |--------------:|-------------:|--------------:|--------------:|---------:|----------:|
+| Method                                        | TotalSubscriptions | Mean          | Error        | StdDev        | Median        | Gen0     | Allocated |
+|---------------------------------------------- |------------------- |--------------:|-------------:|--------------:|--------------:|---------:|----------:|
 | 'OneWay.PullReactable.Pull() Method | int'    | 10                 |      48.53 ns |     1.004 ns |      2.225 ns |      47.75 ns |   0.0166 |     208 B |
 | 'OneWay.PullReactable.Pull() Method | int'    | 100                |     136.20 ns |     3.325 ns |      9.803 ns |     134.40 ns |   0.1311 |    1648 B |
 | 'OneWay.PullReactable.Pull() Method | int'    | 1000               |     913.80 ns |    33.283 ns |     98.137 ns |     918.23 ns |   1.2779 |   16048 B |
@@ -20,8 +20,8 @@ DefaultJob : .NET 8.0.0 (8.0.23.53103), X64 RyuJIT AVX2
 
 **Description:** Upgrade To CollectionsMarshal.AsSpan()
 
-| Method                                 | TotalSubscriptions | Mean       | Error     | StdDev    | Allocated |
-|--------------------------------------- |------------------- |-----------:|----------:|----------:|----------:|
+| Method                                        | TotalSubscriptions | Mean       | Error     | StdDev    | Allocated |
+|---------------------------------------------- |------------------- |-----------:|----------:|----------:|----------:|
 | 'OneWay.PullReactable.Pull() Method | int'    | 10                 |   3.012 ns | 0.0928 ns | 0.1032 ns |         - |
 | 'OneWay.PullReactable.Pull() Method | int'    | 100                |   2.594 ns | 0.0816 ns | 0.1271 ns |         - |
 | 'OneWay.PullReactable.Pull() Method | int'    | 1000               |   2.670 ns | 0.0767 ns | 0.0970 ns |         - |
