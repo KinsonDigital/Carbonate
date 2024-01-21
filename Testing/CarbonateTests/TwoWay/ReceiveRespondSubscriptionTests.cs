@@ -74,6 +74,20 @@ public class ReceiveRespondSubscriptionTests
     }
 
     [Fact]
+    public void OnRespond_WhenInvokingWithNullData_ThrowsException()
+    {
+        // Arrange
+        var sut = new ReceiveRespondSubscription<int?, object>(Guid.NewGuid(), _ => new object());
+
+        // Act
+        var act = () => sut.OnRespond(null);
+
+        // Assert
+        act.Should().Throw<ArgumentNullException>()
+            .WithMessage("Value cannot be null. (Parameter 'data')");
+    }
+
+    [Fact]
     public void OnUnsubscribe_WhenInvoked_UnsubscribesSubscription()
     {
         // Arrange

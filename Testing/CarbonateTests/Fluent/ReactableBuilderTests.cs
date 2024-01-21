@@ -63,6 +63,18 @@ public class ReactableBuilderTests
     }
 
     [Fact]
+    public void WhenUnsubscribing_WhenInvoked_ReturnsCorrectResult()
+    {
+        // Arrange
+        var sut = IReactableBuilder.Create()
+            .WithId(Guid.NewGuid())
+            .WhenUnsubscribing(() => { });
+
+        // Assert
+        sut.Should().NotBeNull();
+    }
+
+    [Fact]
     public void WithError_WithNullParam_ThrowsException()
     {
         // Arrange

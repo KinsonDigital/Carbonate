@@ -90,6 +90,27 @@ public class PullReactableTests
         // Assert
         actual.Should().BeNull();
     }
+
+    [Fact]
+    public void Pull_WhenPullingDataThatThrowsException_InvokesOnErrorSubscription()
+    {
+        // Arrange
+        var id = Guid.NewGuid();
+        var sut = CreateSystemUnderTest();
+
+        // Act & Assert
+        sut.Subscribe(new RespondSubscription<string>(
+                id: id,
+                name: "test-name",
+                onRespond: () => throw new Exception("test-exception"),
+                onError: e =>
+                {
+                    e.Should().NotBeNull();
+                    e.Message.Should().Be("test-exception");
+                }));
+
+        sut.Pull(id);
+    }
     #endregion
 
     /// <summary>

@@ -62,6 +62,27 @@ public class PushPullReactableTests
         // Assert
         actual.Should().Be(0);
     }
+
+    [Fact]
+    public void Pull_WhenPullingDataThatThrowsException_InvokesOnErrorSubscription()
+    {
+        // Arrange
+        var id = Guid.NewGuid();
+        var sut = CreateSystemUnderTest();
+
+        // Act & Assert
+        sut.Subscribe(new ReceiveRespondSubscription<int, string>(
+            id: id,
+            name: "test-name",
+            onReceiveRespond: _ => throw new Exception("test-exception"),
+            onError: e =>
+            {
+                e.Should().NotBeNull();
+                e.Message.Should().Be("test-exception");
+            }));
+
+        sut.PushPull(123, id);
+    }
     #endregion
 
     /// <summary>
