@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
-        <Configurations>Debug;Release;Release OneWayPullReactable;Release OneWayPushReactable;Release NonDirPushReactable</Configurations>
+        <Configurations>Debug;Release;Release OneWayPullReactable;Release OneWayPushReactable;Release NonDirPushReactable;Release TwoWayPushPullReactable</Configurations>
         <Platforms>x64</Platforms>
     </PropertyGroup>
 

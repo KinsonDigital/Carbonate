@@ -7,7 +7,7 @@
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
         <RootNamespace>CarbonateTests</RootNamespace>
-        <Configurations>Release;Debug;Release OneWayPullReactable;Release OneWayPushReactable;Release NonDirPushReactable</Configurations>
+        <Configurations>Release;Debug;Release OneWayPullReactable;Release OneWayPushReactable;Release NonDirPushReactable;Release TwoWayPushPullReactable</Configurations>
         <Platforms>x64</Platforms>
     </PropertyGroup>
 

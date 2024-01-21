@@ -6,7 +6,7 @@
         <LangVersion>12.0</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Configurations>Release;Debug;Release OneWayPushReactable;Release OneWayPullReactable;Release NonDirPushReactable</Configurations>
+        <Configurations>Release;Debug;Release OneWayPushReactable;Release OneWayPullReactable;Release NonDirPushReactable;Release TwoWayPushPullReactable</Configurations>
         <Platforms>x64</Platforms>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
@@ -23,6 +23,10 @@
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release NonDirPushReactable|x64' ">
       <OutputPath>bin\x64\NonDirPushReactable\</OutputPath>
+      <Optimize>true</Optimize>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release TwoWayPushPullReactable|x64' ">
       <Optimize>true</Optimize>
     </PropertyGroup>
 
