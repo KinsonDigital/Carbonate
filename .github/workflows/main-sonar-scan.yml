@@ -9,6 +9,8 @@ defaults:
 on:
   push:
     branches: [preview]
+
+
 jobs:
   sonarcloud:
     runs-on: ubuntu-latest

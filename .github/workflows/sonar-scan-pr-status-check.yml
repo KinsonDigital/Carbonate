@@ -9,6 +9,8 @@ defaults:
 on:
   pull_request_target:
     branches: [main, preview]
+
+
 jobs:
   sonarcloud:
     runs-on: ubuntu-latest
