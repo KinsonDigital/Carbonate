@@ -1,4 +1,4 @@
-// <copyright file="ReactableBase.cs" company="KinsonDigital">
+﻿// <copyright file="ReactableBase.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -122,25 +122,9 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
             throw new ObjectDisposedException(nameof(PushReactable<TSubscription>), $"{nameof(PushReactable<TSubscription>)} disposed.");
         }
 
-        /* Keep this loop as a for-loop.  Do not convert to for-each.
-         * This is due to the Dispose() method possibly being called during
-         * iteration of the subscriptions list which will cause an exception.
-        */
-        for (var i = InternalSubscriptions.Count - 1; i >= 0; i--)
+        foreach (TSubscription subscription in CollectionsMarshal.AsSpan(InternalSubscriptions))
         {
-            /*NOTE:
-             * The purpose of this logic is to prevent array index errors
-             * if an OnReceive() implementation ends up unsubscribing a single
-             * subscription or unsubscribing from a single event id
-             *
-             * If the current index is not less than or equal to
-             * the total number of items, reset the index to the last item
-             */
-            i = i > InternalSubscriptions.Count - 1
-                ? InternalSubscriptions.Count - 1
-                : i;
-
-            InternalSubscriptions[i].OnUnsubscribe();
+            subscription.OnUnsubscribe();
         }
 
         InternalSubscriptions.Clear();
