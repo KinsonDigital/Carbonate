@@ -48,6 +48,21 @@ public class PullReactableTests
     }
 
     [Fact]
+    public void Pull_WhenInvokedAfterDisposal_ThrowsException()
+    {
+        // Arrange
+        var sut = CreateSystemUnderTest();
+        sut.Dispose();
+
+        // Act
+        var act = () => sut.Pull(Guid.Empty);
+
+        // Assert
+        act.Should().Throw<ObjectDisposedException>()
+            .WithMessage($"{nameof(PullReactable<int>)} disposed.{Environment.NewLine}Object name: 'PullReactable'.");
+    }
+
+    [Fact]
     public void Pull_WhenSubscriptionExists_InvokesCorrectSubscriptions()
     {
         // Arrange

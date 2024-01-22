@@ -14,6 +14,11 @@ public class PullReactable<TOut>
     /// <inheritdoc/>
     public TOut? Pull(Guid id)
     {
+        if (IsDisposed)
+        {
+            throw new ObjectDisposedException(nameof(PullReactable<TOut>), $"{nameof(PullReactable<TOut>)} disposed.");
+        }
+
         try
         {
             foreach (var subscription in CollectionsMarshal.AsSpan(InternalSubscriptions))
