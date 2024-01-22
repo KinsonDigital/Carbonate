@@ -24,7 +24,7 @@ public class PushReactableTests
         var sut = new PushReactable<object>();
 
         // Act
-        var act = () => sut.Push(null, Guid.NewGuid());
+        var act = () => sut.Push(Guid.NewGuid(), null);
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
@@ -39,7 +39,7 @@ public class PushReactableTests
         sut.Dispose();
 
         // Act
-        var act = () => sut.Push(123, Guid.Empty);
+        var act = () => sut.Push(Guid.Empty, 123);
 
         // Assert
         act.Should().Throw<ObjectDisposedException>()
@@ -68,7 +68,7 @@ public class PushReactableTests
         sut.Subscribe(mockSubC);
 
         // Act
-        sut.Push(123, invokedEventId);
+        sut.Push(invokedEventId, 123);
 
         // Assert
         mockSubA.Received(1).OnReceive(123);
@@ -109,7 +109,7 @@ public class PushReactableTests
         sut.Subscribe(initSubC);
 
         // Act
-        var act = () => sut.Push(data, mainId);
+        var act = () => sut.Push(mainId, data);
 
         // Assert
         act.Should().NotThrow<Exception>();
@@ -138,7 +138,7 @@ public class PushReactableTests
         sut.Subscribe(subB);
 
         // Act
-        sut.Push(123, idA);
+        sut.Push(idA, 123);
     }
     #endregion
 

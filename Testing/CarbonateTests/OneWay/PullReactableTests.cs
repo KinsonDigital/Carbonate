@@ -48,6 +48,21 @@ public class PullReactableTests
     }
 
     [Fact]
+    public void Pull_WhenInvokedAfterDisposal_ThrowsException()
+    {
+        // Arrange
+        var sut = CreateSystemUnderTest();
+        sut.Dispose();
+
+        // Act
+        var act = () => sut.Pull(Guid.Empty);
+
+        // Assert
+        act.Should().Throw<ObjectDisposedException>()
+            .WithMessage($"{nameof(PullReactable<int>)} disposed.{Environment.NewLine}Object name: 'PullReactable'.");
+    }
+
+    [Fact]
     public void Pull_WhenSubscriptionExists_InvokesCorrectSubscriptions()
     {
         // Arrange
@@ -89,6 +104,27 @@ public class PullReactableTests
 
         // Assert
         actual.Should().BeNull();
+    }
+
+    [Fact]
+    public void Pull_WhenPullingDataThatThrowsException_InvokesOnErrorSubscription()
+    {
+        // Arrange
+        var id = Guid.NewGuid();
+        var sut = CreateSystemUnderTest();
+
+        // Act & Assert
+        sut.Subscribe(new RespondSubscription<string>(
+                id: id,
+                name: "test-name",
+                onRespond: () => throw new Exception("test-exception"),
+                onError: e =>
+                {
+                    e.Should().NotBeNull();
+                    e.Message.Should().Be("test-exception");
+                }));
+
+        sut.Pull(id);
     }
     #endregion
 

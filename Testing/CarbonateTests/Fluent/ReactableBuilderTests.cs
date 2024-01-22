@@ -63,6 +63,24 @@ public class ReactableBuilderTests
     }
 
     [Fact]
+    public void WhenUnsubscribing_WhenInvoked_ReturnsCorrectResult()
+    {
+        // Arrange
+        var onSubscribingInvoked = false;
+        var sut = IReactableBuilder.Create();
+
+        // Act
+        (_, IPushReactable reactable) = sut.WithId(Guid.NewGuid())
+            .WhenUnsubscribing(() => onSubscribingInvoked = true)
+            .BuildPush(() => { });
+        reactable.Subscriptions[0].OnUnsubscribe();
+
+        // Assert
+        reactable.Should().NotBeNull();
+        onSubscribingInvoked.Should().BeTrue();
+    }
+
+    [Fact]
     public void WithError_WithNullParam_ThrowsException()
     {
         // Arrange
@@ -74,6 +92,24 @@ public class ReactableBuilderTests
         // Assert
         act.Should().Throw<ArgumentNullException>()
             .WithMessage("Value cannot be null. (Parameter 'onError')");
+    }
+
+    [Fact]
+    public void WithError_WhenInvoked_CorrectlySetsOnError()
+    {
+        // Arrange
+        var onErrorInvoked = false;
+        var sut = IReactableBuilder.Create();
+
+        // Act
+        (_, IPushReactable reactable) = sut
+            .WithId(Guid.NewGuid())
+            .WithError(_ => onErrorInvoked = true)
+            .BuildPush(() => { });
+        reactable.Subscriptions[0].OnError(new Exception("test-exception"));
+
+        // Assert
+        onErrorInvoked.Should().BeTrue();
     }
 
     [Fact]

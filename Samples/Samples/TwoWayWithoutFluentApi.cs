@@ -44,10 +44,10 @@ public class TwoWayWithoutFluentApi : Sample
             onError: ex => Console.WriteLine($"Error: {ex.Message}")));
 
         // Print the results of the data returned for each push notification
-        Console.WriteLine($"Favorite Language: {favoriteRequester.PushPull("prog-lang", msgEventId)}");
-        Console.WriteLine($"Favorite Food: {favoriteRequester.PushPull("food", msgEventId)}");
-        Console.WriteLine($"Favorite Past Time: {favoriteRequester.PushPull("past-time", msgEventId)}");
-        Console.WriteLine($"Favorite Music: {favoriteRequester.PushPull("music", msgEventId)}");
+        Console.WriteLine($"Favorite Language: {favoriteRequester.PushPull(msgEventId, "prog-lang")}");
+        Console.WriteLine($"Favorite Food: {favoriteRequester.PushPull(msgEventId, "food")}");
+        Console.WriteLine($"Favorite Past Time: {favoriteRequester.PushPull(msgEventId, "past-time")}");
+        Console.WriteLine($"Favorite Music: {favoriteRequester.PushPull(msgEventId, "music")}");
 
         unsubscriber.Dispose();
 

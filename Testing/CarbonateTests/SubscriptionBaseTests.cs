@@ -11,6 +11,21 @@ using Xunit;
 
 public class SubscriptionBaseTests
 {
+    #region Constructor Tests
+    [Fact]
+    public void Ctor_WhenInvoked_SetsIdAndNameProps()
+    {
+        // Arrange & Act
+        var id = Guid.NewGuid();
+        var name = "test-name";
+        var sut = new SubscriptionBaseFake(id, name);
+
+        // Assert
+        sut.Id.Should().Be(id);
+        sut.Name.Should().Be(name);
+    }
+    #endregion
+
     #region Method Tests
     [Fact]
     public void OnUnsubscribe_WhenNotUnsubscribed_InvokesAction()
@@ -43,6 +58,20 @@ public class SubscriptionBaseTests
 
         // Assert
         totalInvokes.Should().Be(1);
+    }
+
+    [Fact]
+    public void OnError_WithNullErrorParameter_ThrowsException()
+    {
+        // Arrange
+        var sut = new ReceiveSubscription<int>(Guid.NewGuid(), _ => { }, onError: _ => { });
+
+        // Act
+        var act = () => sut.OnError(null);
+
+        // Assert
+        act.Should().Throw<ArgumentNullException>()
+            .WithMessage("Value cannot be null. (Parameter 'error')");
     }
 
     [Fact]

@@ -40,7 +40,7 @@ public class PushPullReactableTests
         sut.Subscribe(mockSubB);
 
         // Act
-        var actual = sut.PushPull(data, respondIdB);
+        var actual = sut.PushPull(respondIdB, data);
 
         // Assert
         mockSubA.DidNotReceive().OnRespond(321);
@@ -51,16 +51,52 @@ public class PushPullReactableTests
     }
 
     [Fact]
+    public void PushPull_WhenInvokedAfterDisposal_ThrowsException()
+    {
+        // Arrange
+        var sut = CreateSystemUnderTest();
+        sut.Dispose();
+
+        // Act
+        var act = () => sut.PushPull(Guid.Empty, 123);
+
+        // Assert
+        act.Should().Throw<ObjectDisposedException>()
+            .WithMessage($"{nameof(PushPullReactable<int, string>)} disposed.{Environment.NewLine}Object name: 'PushPullReactable'.");
+    }
+
+    [Fact]
     public void Pull_WithNoMatchingSubscription_ReturnsCorrectResult()
     {
         // Arrange
         var sut = new PushPullReactable<int, int>();
 
         // Act
-        var actual = sut.PushPull(123, Guid.NewGuid());
+        var actual = sut.PushPull(Guid.NewGuid(), 123);
 
         // Assert
         actual.Should().Be(0);
+    }
+
+    [Fact]
+    public void Pull_WhenPullingDataThatThrowsException_InvokesOnErrorSubscription()
+    {
+        // Arrange
+        var id = Guid.NewGuid();
+        var sut = CreateSystemUnderTest();
+
+        // Act & Assert
+        sut.Subscribe(new ReceiveRespondSubscription<int, string>(
+            id: id,
+            name: "test-name",
+            onReceiveRespond: _ => throw new Exception("test-exception"),
+            onError: e =>
+            {
+                e.Should().NotBeNull();
+                e.Message.Should().Be("test-exception");
+            }));
+
+        sut.PushPull(id, 123);
     }
     #endregion
 

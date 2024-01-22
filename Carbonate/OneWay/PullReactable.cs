@@ -2,11 +2,9 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-// NOTE: Leave the loops as 'for loops'. This is a small performance improvement.
-// ReSharper disable ForCanBeConvertedToForeach
-// ReSharper disable LoopCanBeConvertedToQuery
 namespace Carbonate.OneWay;
 
+using System.Runtime.InteropServices;
 using Core.OneWay;
 
 /// <inheritdoc cref="IPullReactable{TOut}"/>
@@ -14,16 +12,28 @@ public class PullReactable<TOut>
     : ReactableBase<IRespondSubscription<TOut>>, IPullReactable<TOut>
 {
     /// <inheritdoc/>
-    public TOut? Pull(Guid respondId)
+    public TOut? Pull(Guid id)
     {
-        for (var i = 0; i < Subscriptions.Count; i++)
+        if (IsDisposed)
         {
-            if (Subscriptions[i].Id != respondId)
-            {
-                continue;
-            }
+            throw new ObjectDisposedException(nameof(PullReactable<TOut>), $"{nameof(PullReactable<TOut>)} disposed.");
+        }
 
-            return Subscriptions[i].OnRespond() ?? default(TOut);
+        try
+        {
+            foreach (var subscription in CollectionsMarshal.AsSpan(InternalSubscriptions))
+            {
+                if (subscription.Id != id)
+                {
+                    continue;
+                }
+
+                return subscription.OnRespond() ?? default(TOut);
+            }
+        }
+        catch (Exception e)
+        {
+            SendError(e, id);
         }
 
         return default;

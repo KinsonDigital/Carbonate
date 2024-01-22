@@ -11,9 +11,9 @@ namespace Carbonate.OneWay;
 public interface IPullable<out TOut>
 {
     /// <summary>
-    /// Requests to pull data from a source that matches the given <paramref name="respondId"/>.
+    /// Requests to pull data from a source that matches the given <paramref name="id"/>.
     /// </summary>
-    /// <param name="respondId">The ID of the response.</param>
+    /// <param name="id">The ID of the response.</param>
     /// <returns>The data result going out.</returns>>
-    TOut? Pull(Guid respondId);
+    TOut? Pull(Guid id);
 }

@@ -142,7 +142,7 @@ public class RespondSubscriptionTests
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
-            .WithMessage("The parameter must not be null. (Parameter 'error')");
+            .WithMessage("Value cannot be null. (Parameter 'error')");
         totalActionInvokes.Should().Be(0);
     }
 

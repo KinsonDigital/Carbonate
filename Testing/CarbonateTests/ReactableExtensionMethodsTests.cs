@@ -564,5 +564,44 @@ public class ReactableExtensionMethodsTests
         Assert.NotNull(unsubscriber);
         sut.SubscriptionIds.Should().BeEquivalentTo(expectedIds);
     }
+
+    [Theory]
+    [MemberData(nameof(SubscribeErrorData))]
+    [SuppressMessage("ReSharper", "ConvertToLocalFunction", Justification = "Not required for testing.")]
+    public void CreateTwoWay_WhenInvokingWithIdAndName_CreatesSubscription(Action? onUnsubscribe, Action<Exception>? onError)
+    {
+        // Arrange
+        var id = Guid.NewGuid();
+        var expectedIds = new[] { id }.AsReadOnly();
+        const string expectedName = "test-name";
+        Func<int, string> expectedAction = _ => "test-value";
+        var sut = new PushPullReactable<int, string>();
+
+        // Act
+        var unsubscriber = sut.CreateTwoWay(id, expectedName, expectedAction, onUnsubscribe, onError);
+
+        // Assert
+        Assert.NotNull(unsubscriber);
+        sut.SubscriptionIds.Should().BeEquivalentTo(expectedIds);
+    }
+
+    [Theory]
+    [MemberData(nameof(SubscribeErrorData))]
+    [SuppressMessage("ReSharper", "ConvertToLocalFunction", Justification = "Not required for testing.")]
+    public void CreateTwoWay_WhenInvokingWithIdAndAutoName_CreatesSubscription(Action? onUnsubscribe, Action<Exception>? onError)
+    {
+        // Arrange
+        var id = Guid.NewGuid();
+        var expectedIds = new[] { id }.AsReadOnly();
+        Func<int, string> expectedAction = _ => "test-value";
+        var sut = new PushPullReactable<int, string>();
+
+        // Act
+        var unsubscriber = sut.CreateTwoWay(id, expectedAction, onUnsubscribe, onError);
+
+        // Assert
+        Assert.NotNull(unsubscriber);
+        sut.SubscriptionIds.Should().BeEquivalentTo(expectedIds);
+    }
     #endregion
 }

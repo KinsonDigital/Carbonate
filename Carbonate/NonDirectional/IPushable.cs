@@ -12,9 +12,9 @@ using System.Diagnostics.CodeAnalysis;
 public interface IPushable
 {
     /// <summary>
-    /// Pushes a single notification for an event that matches the given <paramref name="eventId"/>.
+    /// Pushes a single notification for an event that matches the given <paramref name="id"/>.
     /// </summary>
-    /// <param name="eventId">The ID of the event where the notification will be pushed.</param>
+    /// <param name="id">The ID of the event where the notification will be pushed.</param>
     [SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = "Public API.")]
-    void Push(Guid eventId);
+    void Push(Guid id);
 }

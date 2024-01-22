@@ -45,10 +45,7 @@ internal sealed class SubscriptionUnsubscriber : IDisposable
 
         if (disposing)
         {
-            if (this.subscriptions.Contains(this.subscription))
-            {
-                this.subscriptions.Remove(this.subscription);
-            }
+            this.subscriptions.Remove(this.subscription);
         }
 
         this.isDisposed = true;

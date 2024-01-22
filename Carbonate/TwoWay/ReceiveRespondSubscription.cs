@@ -49,7 +49,7 @@ public class ReceiveRespondSubscription<TIn, TOut> : SubscriptionBase, IReceiveR
 
         if (data is null)
         {
-            throw new ArgumentNullException(nameof(data), "The parameter must not be null.");
+            throw new ArgumentNullException(nameof(data));
         }
 
         return this.onReceiveRespond is null ? default : this.onReceiveRespond.Invoke(data);
