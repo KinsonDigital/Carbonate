@@ -171,7 +171,7 @@ var favoriteMessenger = new PushPullReactable<string, string>();
 var subId = Guid.NewGuid(); // This is the ID used to identify the event
 
 var unsubscriber = favoriteMessenger.Subscribe(new ReceiveRespondSubscription<string, string>(
-    respondId: subId,
+    id: subId,
     onRespond: (data) => data switch
         {
             "prog-lang" => "C#",
