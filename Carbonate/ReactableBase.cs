@@ -1,4 +1,4 @@
-﻿// <copyright file="ReactableBase.cs" company="KinsonDigital">
+// <copyright file="ReactableBase.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -7,6 +7,7 @@ namespace Carbonate;
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices;
 using Core;
 using OneWay;
 
@@ -186,30 +187,14 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
     /// <param name="id">The ID of the event where the notification will be pushed.</param>
     protected void SendError(Exception exception, Guid id)
     {
-        /* Work from the end to the beginning of the list
-         * just in case the reactable is disposed(removed)
-         * in the OnReceive() method.
-         */
-        for (var i = InternalSubscriptions.Count - 1; i >= 0; i--)
+        foreach (TSubscription subscription in CollectionsMarshal.AsSpan(InternalSubscriptions))
         {
-            /*NOTE:
-             * The purpose of this logic is to prevent array index errors
-             * if an OnReceive() implementation ends up unsubscribing a single
-             * subscription or unsubscribing from a single event id
-             *
-             * If the current index is not less than or equal to
-             * the total number of items, reset the index to the last item
-             */
-            i = i > InternalSubscriptions.Count - 1
-                ? InternalSubscriptions.Count - 1
-                : i;
-
-            if (InternalSubscriptions[i].Id != id)
+            if (subscription.Id != id)
             {
                 continue;
             }
 
-            InternalSubscriptions[i].OnError(exception);
+            subscription.OnError(exception);
         }
     }
 }
