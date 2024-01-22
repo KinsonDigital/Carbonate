@@ -16,6 +16,11 @@ public class PushPullReactable<TIn, TOut> : ReactableBase<IReceiveRespondSubscri
     /// <inheritdoc/>
     public TOut? PushPull(in TIn data, Guid id)
     {
+        if (IsDisposed)
+        {
+            throw new ObjectDisposedException(nameof(PushPullReactable<TIn, TOut>), $"{nameof(PushPullReactable<TIn, TOut>)} disposed.");
+        }
+
         try
         {
             foreach (var subscription in CollectionsMarshal.AsSpan(InternalSubscriptions))

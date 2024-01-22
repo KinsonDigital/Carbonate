@@ -51,6 +51,21 @@ public class PushPullReactableTests
     }
 
     [Fact]
+    public void PushPull_WhenInvokedAfterDisposal_ThrowsException()
+    {
+        // Arrange
+        var sut = CreateSystemUnderTest();
+        sut.Dispose();
+
+        // Act
+        var act = () => sut.PushPull(123, Guid.Empty);
+
+        // Assert
+        act.Should().Throw<ObjectDisposedException>()
+            .WithMessage($"{nameof(PushPullReactable<int, string>)} disposed.{Environment.NewLine}Object name: 'PushPullReactable'.");
+    }
+
+    [Fact]
     public void Pull_WithNoMatchingSubscription_ReturnsCorrectResult()
     {
         // Arrange
