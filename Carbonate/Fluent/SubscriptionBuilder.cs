@@ -54,7 +54,8 @@ public class SubscriptionBuilder : ISubscriptionBuilder
     public ISubscriptionBuilder WithName(string name)
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
-        this.subName ??= name;
+
+        this.subName = name;
         return this;
     }
 
@@ -62,7 +63,8 @@ public class SubscriptionBuilder : ISubscriptionBuilder
     public ISubscriptionBuilder WhenUnsubscribing(Action onUnsubscribe)
     {
         ArgumentNullException.ThrowIfNull(onUnsubscribe);
-        this.unsubscribe ??= onUnsubscribe;
+
+        this.unsubscribe = onUnsubscribe;
         return this;
     }
 
@@ -71,7 +73,7 @@ public class SubscriptionBuilder : ISubscriptionBuilder
     {
         ArgumentNullException.ThrowIfNull(onError);
 
-        this.subOnError ??= onError;
+        this.subOnError = onError;
         return this;
     }
 
