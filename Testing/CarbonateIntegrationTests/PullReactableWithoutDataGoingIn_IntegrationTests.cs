@@ -95,7 +95,7 @@ public class PullReactableWithoutDataGoingIn_IntegrationTests
 
         // Act
         var actualNames = sut.Subscriptions.Select(s => s.Name).ToArray();
-        sut.Push(testData, id);
+        sut.Push(id, testData);
         sut.Unsubscribe(id);
 
         // Assert
@@ -130,7 +130,7 @@ public class PullReactableWithoutDataGoingIn_IntegrationTests
 
         // Act
         var actualNames = sut.Subscriptions.Select(s => s.Name).ToArray();
-        var actualOutData = sut.PushPull(123, id);
+        var actualOutData = sut.PushPull(id, 123);
         sut.Unsubscribe(id);
 
         // Assert

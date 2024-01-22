@@ -14,7 +14,7 @@ using Core.TwoWay;
 public class PushPullReactable<TIn, TOut> : ReactableBase<IReceiveRespondSubscription<TIn, TOut>>, IPushPullReactable<TIn, TOut>
 {
     /// <inheritdoc/>
-    public TOut? PushPull(in TIn data, Guid id)
+    public TOut? PushPull(Guid id, in TIn data)
     {
         if (IsDisposed)
         {

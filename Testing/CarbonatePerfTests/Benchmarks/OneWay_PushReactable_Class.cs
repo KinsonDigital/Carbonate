@@ -49,12 +49,12 @@ public class OneWay_PushReactable_Class
     [Benchmark(Description = $"{NameSpace}.{PushIntClassName}.{MethodName}")]
     public void PushReactable_Push_Method_Setup_A()
     {
-        this.pushReactableA.Push(123, this.setupAId);
+        this.pushReactableA.Push(this.setupAId, 123);
     }
 
     [Benchmark(Description = $"{NameSpace}.{PushStructClassName}.{MethodName}")]
     public void PushReactable_Push_Method_Setup_B()
     {
-        this.pushReactableB.Push(this.structItem, this.setupBId);
+        this.pushReactableB.Push(this.setupBId, this.structItem);
     }
 }

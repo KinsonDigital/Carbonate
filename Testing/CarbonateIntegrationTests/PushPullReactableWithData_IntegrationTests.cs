@@ -27,7 +27,7 @@ public class PushPullReactableWithData_IntegrationTests
             onReceiveRespond: _ => new SampleData { IntValue = 123, StringValue = "test-str" }));
 
         // Act
-        var actual = sut.PushPull(123, respondId);
+        var actual = sut.PushPull(respondId, 123);
 
         // Assert
         actual.Should().NotBeNull();

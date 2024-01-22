@@ -13,7 +13,7 @@ public class PushReactable<TIn>
 {
     /// <inheritdoc/>
     /// <exception cref="ObjectDisposedException">Thrown if this method is invoked after disposal.</exception>
-    public void Push(in TIn data, Guid id)
+    public void Push(Guid id, in TIn data)
     {
         if (data is null)
         {

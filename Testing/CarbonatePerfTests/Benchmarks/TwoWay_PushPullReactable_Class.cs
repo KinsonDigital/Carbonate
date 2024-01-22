@@ -49,12 +49,12 @@ public class TwoWay_PushPullReactable_Class
     [Benchmark(Description = $"{NameSpace}.{PushIntPullIntClassName}.{MethodName}")]
     public void PullReactable_Pull_Method_Setup_A()
     {
-        _ = this.pushPullReactableA.PushPull(10, this.setupAId);
+        _ = this.pushPullReactableA.PushPull(this.setupAId, 10);
     }
 
     [Benchmark(Description = $"{NameSpace}.{PushIntPullStructClassName}.{MethodName}")]
     public void PullReactable_Pull_Method_Setup_B()
     {
-        _ = this.pushPullReactableB.PushPull(20, this.setupBId);
+        _ = this.pushPullReactableB.PushPull(this.setupBId, 20);
     }
 }

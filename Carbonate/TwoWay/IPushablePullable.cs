@@ -17,10 +17,10 @@ public interface IPushablePullable<TIn, out TOut>
     /// Requests to pull data from a source that matches the given <paramref name="id"/>,
     /// with the given additional <paramref name="data"/>.
     /// </summary>
-    /// <param name="data">The data to send to the responder.</param>
     /// <param name="id">The ID of the response.</param>
+    /// <param name="data">The data to send to the responder.</param>
     /// <returns>The data result going out.</returns>
     [SuppressMessage("ReSharper", "UnusedParameter.Global", Justification = "Public API.")]
     [SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = "Public API.")]
-    TOut? PushPull(in TIn data, Guid id);
+    TOut? PushPull(Guid id, in TIn data);
 }

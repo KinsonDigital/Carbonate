@@ -40,7 +40,7 @@ public class PushPullReactableTests
         sut.Subscribe(mockSubB);
 
         // Act
-        var actual = sut.PushPull(data, respondIdB);
+        var actual = sut.PushPull(respondIdB, data);
 
         // Assert
         mockSubA.DidNotReceive().OnRespond(321);
@@ -58,7 +58,7 @@ public class PushPullReactableTests
         sut.Dispose();
 
         // Act
-        var act = () => sut.PushPull(123, Guid.Empty);
+        var act = () => sut.PushPull(Guid.Empty, 123);
 
         // Assert
         act.Should().Throw<ObjectDisposedException>()
@@ -72,7 +72,7 @@ public class PushPullReactableTests
         var sut = new PushPullReactable<int, int>();
 
         // Act
-        var actual = sut.PushPull(123, Guid.NewGuid());
+        var actual = sut.PushPull(Guid.NewGuid(), 123);
 
         // Assert
         actual.Should().Be(0);
@@ -96,7 +96,7 @@ public class PushPullReactableTests
                 e.Message.Should().Be("test-exception");
             }));
 
-        sut.PushPull(123, id);
+        sut.PushPull(id, 123);
     }
     #endregion
 
