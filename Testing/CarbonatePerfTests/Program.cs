@@ -2,43 +2,51 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace CarbonatePerfTests;
-
+#pragma warning disable SA1200
 // ReSharper disable RedundantUsingDirective
+// ReSharper disable JoinDeclarationAndInitializer
+using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
-using CarbonatePerfTests;
-using Benchmarks;
-using MemPerfs;
+using CarbonatePerfTests.Benchmarks;
 
-// ReSharper restore RedundantUsingDirective
-internal static class Program
-{
-    public static void Main()
-    {
+#if RELEASE_NONDIRPUSHREACTABLE || RELEASE_ONEWAYPULLREACTABLE || RELEASE_ONEWAYPUSHREACTABLE || RELEASE_TWOWAYPUSHPULLREACTABLE
+Summary? summary;
+#endif
+
 #if DEBUG
-        Console.WriteLine("Add simple debugging code and manual testing here.");
+
+Console.WriteLine("Add simple debugging code and manual testing here.");
 
 #elif RELEASE
 
-        Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine("WARNING!!");
-        Console.ForegroundColor = ConsoleColor.White;
-        Console.WriteLine("This application is for testing purposes only.");
-        Console.WriteLine("This can only be run with the following solution configuartions:");
-        Console.WriteLine("\t- Release Benchmark");
-        Console.WriteLine("\t- Release MemPerf");
+Console.ForegroundColor = ConsoleColor.Yellow;
+Console.WriteLine("WARNING!!");
+Console.ForegroundColor = ConsoleColor.White;
+Console.WriteLine("This application is for testing purposes only.");
+Console.WriteLine("This can only be run with the following solution configurations:");
+Console.WriteLine("\t- PullReactable");
+Console.WriteLine("\t- PushReactable");
 
-#elif RELEASE_BENCHMARK
+#elif RELEASE_NONDIRPUSHREACTABLE
 
-        var summary = BenchmarkRunner.Run<PullReactable_Class>();
-        Console.WriteLine(summary);
+summary = BenchmarkRunner.Run<NonDir_PushReactable_Class>();
 
-#elif RELEASE_MEMPERF
+#elif RELEASE_ONEWAYPULLREACTABLE
 
-        // MemPerfRunner.Run(PerfScenarios.PullReactable_Pull_Method_With_Struct, -1);
-        MemPerfRunner.Run(PerfScenarios.PullReactable_Pull_Method_With_Ptr, -1);
+summary = BenchmarkRunner.Run<OneWay_PullReactable_Class>();
+
+#elif RELEASE_ONEWAYPUSHREACTABLE
+
+summary = BenchmarkRunner.Run<OneWay_PushReactable_Class>();
+
+#elif RELEASE_TWOWAYPUSHPULLREACTABLE
+
+summary = BenchmarkRunner.Run<TwoWay_PushPullReactable_Class>();
 
 #endif
-        Console.ReadLine();
-    }
-}
+
+#if RELEASE_NONDIRPUSHREACTABLE || RELEASE_ONEWAYPULLREACTABLE || RELEASE_ONEWAYPUSHREACTABLE || RELEASE_TWOWAYPUSHPULLREACTABLE
+Console.WriteLine(summary);
+#endif
+
+Console.ReadLine();

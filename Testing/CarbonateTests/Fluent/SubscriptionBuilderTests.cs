@@ -32,7 +32,7 @@ public class SubscriptionBuilderTests
     [Theory]
     [InlineData(null, "Value cannot be null. (Parameter 'name')")]
     [InlineData("", "The value cannot be an empty string. (Parameter 'name')")]
-    public void WithName_WithNullOrEmptyName_ThrowsException(string name, string expectedMsg)
+    public void WithName_WithNullOrEmptyName_ThrowsException(string? name, string expectedMsg)
     {
         // Arrange
         var sut = ISubscriptionBuilder.Create();
@@ -60,6 +60,24 @@ public class SubscriptionBuilderTests
     }
 
     [Fact]
+    public void WhenUnsubscribing_WhenInvoked_ReturnsCorrectResult()
+    {
+        // Arrange
+        var onSubscribingInvoked = false;
+        var sut = ISubscriptionBuilder.Create();
+
+        // Act
+        var subscription = sut.WithId(Guid.NewGuid())
+            .WhenUnsubscribing(() => onSubscribingInvoked = true)
+            .BuildOneWayReceive<int>(_ => { });
+        subscription.OnUnsubscribe();
+
+        // Assert
+        subscription.Should().NotBeNull();
+        onSubscribingInvoked.Should().BeTrue();
+    }
+
+    [Fact]
     public void WithError_WithNullParam_ThrowsException()
     {
         // Arrange
@@ -74,7 +92,25 @@ public class SubscriptionBuilderTests
     }
 
     [Fact]
-    public void BuildNonReceive_WithNullParam_ThrowsException()
+    public void WithError_WhenInvoked_ReturnsCorrectResult()
+    {
+        // Arrange
+        var onErrorInvoked = false;
+        var sut = ISubscriptionBuilder.Create();
+
+        // Act
+        var subscription = sut.WithId(Guid.NewGuid())
+            .WithError(_ => onErrorInvoked = true)
+            .BuildOneWayReceive<int>(_ => { });
+        subscription.OnError(new Exception("test-exception"));
+
+        // Assert
+        subscription.Should().NotBeNull();
+        onErrorInvoked.Should().BeTrue();
+    }
+
+    [Fact]
+    public void BuildNonReceiveOrRespond_WithNullParam_ThrowsException()
     {
         // Arrange
         var sut = ISubscriptionBuilder.Create();
@@ -83,7 +119,7 @@ public class SubscriptionBuilderTests
         var act = () => sut
             .WithId(Guid.NewGuid())
             .WithName("test-name")
-            .BuildNonReceive(null);
+            .BuildNonReceiveOrRespond(null);
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
@@ -125,7 +161,7 @@ public class SubscriptionBuilderTests
     }
 
     [Fact]
-    public void BuildTwoWayRespond_WithNullParam_ThrowsException()
+    public void BuildTwoWay_WithNullParam_ThrowsException()
     {
         // Arrange
         var sut = ISubscriptionBuilder.Create();
@@ -134,7 +170,7 @@ public class SubscriptionBuilderTests
         var act = () => sut
             .WithId(Guid.NewGuid())
             .WithName("test-name")
-            .BuildTwoWayRespond<int, int>(null);
+            .BuildTwoWay<int, int>(null);
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
@@ -142,7 +178,7 @@ public class SubscriptionBuilderTests
     }
 
     [Fact]
-    public void BuildNonReceive_WhenInvoked_SetsIdAndNameProps()
+    public void BuildNonReceiveOrRespond_WhenInvoked_SetsIdAndNameProps()
     {
         // Arrange
         var expectedId = Guid.NewGuid();
@@ -152,7 +188,7 @@ public class SubscriptionBuilderTests
         var sub = sut
             .WithId(expectedId)
             .WithName("test-name")
-            .BuildNonReceive(() => { });
+            .BuildNonReceiveOrRespond(() => { });
 
         // Assert
         sub.Id.Should().Be(expectedId);
@@ -196,7 +232,7 @@ public class SubscriptionBuilderTests
     }
 
     [Fact]
-    public void BuildTwoWayRespond_WhenInvoked_SetsIdAndNameProps()
+    public void BuildTwoWay_WhenInvoked_SetsIdAndNameProps()
     {
         // Arrange
         var expectedId = Guid.NewGuid();
@@ -206,7 +242,7 @@ public class SubscriptionBuilderTests
         var sub = sut
             .WithId(expectedId)
             .WithName("test-name")
-            .BuildTwoWayRespond<int, int>(_ => 123);
+            .BuildTwoWay<int, int>(_ => 123);
 
         // Assert
         sub.Id.Should().Be(expectedId);

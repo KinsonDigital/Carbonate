@@ -54,7 +54,8 @@ public class SubscriptionBuilder : ISubscriptionBuilder
     public ISubscriptionBuilder WithName(string name)
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
-        this.subName ??= name;
+
+        this.subName = name;
         return this;
     }
 
@@ -62,7 +63,8 @@ public class SubscriptionBuilder : ISubscriptionBuilder
     public ISubscriptionBuilder WhenUnsubscribing(Action onUnsubscribe)
     {
         ArgumentNullException.ThrowIfNull(onUnsubscribe);
-        this.unsubscribe ??= onUnsubscribe;
+
+        this.unsubscribe = onUnsubscribe;
         return this;
     }
 
@@ -71,12 +73,12 @@ public class SubscriptionBuilder : ISubscriptionBuilder
     {
         ArgumentNullException.ThrowIfNull(onError);
 
-        this.subOnError ??= onError;
+        this.subOnError = onError;
         return this;
     }
 
     /// <inheritdoc/>
-    public IReceiveSubscription BuildNonReceive(Action onReceive)
+    public IReceiveSubscription BuildNonReceiveOrRespond(Action onReceive)
     {
         ArgumentNullException.ThrowIfNull(onReceive);
 
@@ -115,11 +117,11 @@ public class SubscriptionBuilder : ISubscriptionBuilder
     }
 
     /// <inheritdoc/>
-    public IRespondSubscription<TIn, TOut> BuildTwoWayRespond<TIn, TOut>(Func<TIn, TOut> onReceiveRespond)
+    public IReceiveRespondSubscription<TIn, TOut> BuildTwoWay<TIn, TOut>(Func<TIn, TOut> onReceiveRespond)
     {
         ArgumentNullException.ThrowIfNull(onReceiveRespond);
 
-        return new RespondSubscription<TIn, TOut>(
+        return new ReceiveRespondSubscription<TIn, TOut>(
             id: this.id,
             name: this.subName ?? string.Empty,
             onReceiveRespond: onReceiveRespond,

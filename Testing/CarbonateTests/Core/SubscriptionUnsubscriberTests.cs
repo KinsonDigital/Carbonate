@@ -11,7 +11,7 @@ using NSubstitute;
 using Xunit;
 
 /// <summary>
-/// Tests the <see cref="SubscriptionUnsubscriber"/> class.
+/// Tests the <see cref="SubscriptionUnsubscriber{TSubscription}"/> class.
 /// </summary>
 public class SubscriptionUnsubscriberTests
 {
@@ -22,13 +22,16 @@ public class SubscriptionUnsubscriberTests
         // Arrange & Act
         var act = () =>
         {
-            _ = new SubscriptionUnsubscriber(null, null);
+            _ = new SubscriptionUnsubscriber<ISubscription>(
+                null,
+                Substitute.For<ISubscription>(),
+                () => true);
         };
 
         // Assert
         act.Should()
             .Throw<ArgumentNullException>()
-            .WithMessage("The parameter must not be null. (Parameter 'subscriptions')");
+            .WithMessage("Value cannot be null. (Parameter 'subscriptions')");
     }
 
     [Fact]
@@ -37,13 +40,34 @@ public class SubscriptionUnsubscriberTests
         // Arrange & Act
         var act = () =>
         {
-            _ = new SubscriptionUnsubscriber(Array.Empty<ISubscription>().ToList(), null);
+            _ = new SubscriptionUnsubscriber<ISubscription>(
+                Array.Empty<ISubscription>().ToList(),
+                null,
+                () => true);
         };
 
         // Assert
         act.Should()
             .Throw<ArgumentNullException>()
-            .WithMessage("The parameter must not be null. (Parameter 'subscription')");
+            .WithMessage("Value cannot be null. (Parameter 'subscription')");
+    }
+
+    [Fact]
+    public void Ctor_WithNullIsProcessingParam_ThrowsException()
+    {
+        // Arrange & Act
+        var act = () =>
+        {
+            _ = new SubscriptionUnsubscriber<ISubscription>(
+                Array.Empty<ISubscription>().ToList(),
+                Substitute.For<ISubscription>(),
+                null);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("Value cannot be null. (Parameter 'isProcessing')");
     }
     #endregion
 
@@ -54,7 +78,10 @@ public class SubscriptionUnsubscriberTests
         // Arrange
         var subscriptions = new[] { Substitute.For<ISubscription>(), Substitute.For<ISubscription>() };
 
-        var sut = new SubscriptionUnsubscriber(subscriptions.ToList(), Substitute.For<ISubscription>());
+        var sut = new SubscriptionUnsubscriber<ISubscription>(
+            subscriptions.ToList(),
+            Substitute.For<ISubscription>(),
+            () => false);
 
         // Act
         var actual = sut.TotalSubscriptions;
@@ -74,7 +101,7 @@ public class SubscriptionUnsubscriberTests
 
         var subscriptions = new[] { subA, subB, subC };
 
-        var sut = new SubscriptionUnsubscriber(subscriptions.ToList(), subB);
+        var sut = new SubscriptionUnsubscriber<ISubscription>(subscriptions.ToList(), subB, () => false);
 
         // Act
         sut.Dispose();

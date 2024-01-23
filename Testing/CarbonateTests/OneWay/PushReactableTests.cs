@@ -6,6 +6,7 @@
 namespace CarbonateTests.OneWay;
 
 using Carbonate.Core.OneWay;
+using Carbonate.Exceptions;
 using Carbonate.OneWay;
 using FluentAssertions;
 using NSubstitute;
@@ -24,7 +25,7 @@ public class PushReactableTests
         var sut = new PushReactable<object>();
 
         // Act
-        var act = () => sut.Push(null, Guid.NewGuid());
+        var act = () => sut.Push(Guid.NewGuid(), null);
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
@@ -39,7 +40,7 @@ public class PushReactableTests
         sut.Dispose();
 
         // Act
-        var act = () => sut.Push(123, Guid.Empty);
+        var act = () => sut.Push(Guid.Empty, 123);
 
         // Assert
         act.Should().Throw<ObjectDisposedException>()
@@ -47,11 +48,40 @@ public class PushReactableTests
     }
 
     [Fact]
+    public void Push_WhenUnsubscribingWhileProcessingNotifications_ThrowsException()
+    {
+        // Arrange
+        var id = new Guid("9c252828-9c1a-413e-ab60-1547a09dae0e");
+        const string subName = "test-subscription";
+        var expectedMsg = "The send notification process is currently in progress.";
+        expectedMsg += $"\nThe subscription '{subName}' with id '{id}' could not be unsubscribed.";
+
+        IDisposable? unsubscriber = null;
+        var mockSubscription = Substitute.For<IReceiveSubscription<int>>();
+        mockSubscription.Id.Returns(id);
+        mockSubscription.Name.Returns(subName);
+        mockSubscription.When(x => x.OnReceive(123))
+            .Do(_ =>
+            {
+                unsubscriber.Dispose();
+            });
+
+        var sut = CreateSystemUnderTest();
+        unsubscriber = sut.Subscribe(mockSubscription);
+
+        // Act
+        var act = () => sut.Push(id, 123);
+
+        // Assert
+        act.Should().Throw<NotificationException>().WithMessage(expectedMsg);
+    }
+
+    [Fact]
     public void Push_WhenInvoking_NotifiesCorrectSubscriptionsThatMatchEventId()
     {
         // Arrange
-        var invokedEventId = Guid.NewGuid();
-        var notInvokedEventId = Guid.NewGuid();
+        var invokedEventId = new Guid("0cf574c1-f62c-4b89-be0f-19e6a6f8de35");
+        var notInvokedEventId = new Guid("1eba03c2-a911-45d0-aa62-11ac7eb17a0d");
 
         var mockSubA = Substitute.For<IReceiveSubscription<int>>();
         mockSubA.Id.Returns(invokedEventId);
@@ -68,51 +98,12 @@ public class PushReactableTests
         sut.Subscribe(mockSubC);
 
         // Act
-        sut.Push(123, invokedEventId);
+        sut.Push(invokedEventId, 123);
 
         // Assert
-        mockSubA.Received(1).OnReceive(Arg.Any<int>());
-        mockSubB.DidNotReceive().OnReceive(Arg.Any<int>());
-        mockSubC.Received(1).OnReceive(Arg.Any<int>());
-    }
-
-    [Fact]
-    public void Push_WhenUnsubscribingInsideOnReceiveSubscriptionAction_DoesNotThrowException()
-    {
-        // Arrange
-        var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
-        var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
-
-        IDisposable? otherUnsubscriberA = null;
-        IDisposable? otherUnsubscriberB = null;
-
-        var initSubA = new ReceiveSubscription<int>(id: mainId, _ => { });
-
-        var otherSubA = new ReceiveSubscription<int>(id: otherId, _ => { });
-        var otherSubB = new ReceiveSubscription<int>(id: otherId, _ => { });
-
-        const int data = 123;
-
-        var sut = CreateSystemUnderTest();
-
-        var initSubC = new ReceiveSubscription<int>(
-            id: mainId,
-            onReceive: _ =>
-            {
-                otherUnsubscriberA?.Dispose();
-                otherUnsubscriberB?.Dispose();
-            });
-
-        sut.Subscribe(initSubA);
-        otherUnsubscriberA = sut.Subscribe(otherSubA);
-        otherUnsubscriberB = sut.Subscribe(otherSubB);
-        sut.Subscribe(initSubC);
-
-        // Act
-        var act = () => sut.Push(data, mainId);
-
-        // Assert
-        act.Should().NotThrow<Exception>();
+        mockSubA.Received(1).OnReceive(123);
+        mockSubB.DidNotReceive().OnReceive(123);
+        mockSubC.Received(1).OnReceive(123);
     }
 
     [Fact]
@@ -138,7 +129,7 @@ public class PushReactableTests
         sut.Subscribe(subB);
 
         // Act
-        sut.Push(123, idA);
+        sut.Push(idA, 123);
     }
     #endregion
 
