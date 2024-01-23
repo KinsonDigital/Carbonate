@@ -5,7 +5,6 @@
 namespace Carbonate;
 
 using System.Collections.Immutable;
-using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using Core;
@@ -24,15 +23,25 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
     public ImmutableArray<TSubscription> Subscriptions => InternalSubscriptions.ToImmutableArray();
 
     /// <inheritdoc/>
-    public ReadOnlyCollection<Guid> SubscriptionIds => InternalSubscriptions
-        .Select(r => r.Id)
+    public ImmutableArray<Guid> SubscriptionIds => InternalSubscriptions
+        .Select(i => i.Id)
         .Distinct()
-        .ToList().AsReadOnly();
+        .ToImmutableArray();
+
+    /// <inheritdoc/>
+    public ImmutableArray<string> SubscriptionNames => InternalSubscriptions
+        .Select(i => i.Name).ToImmutableArray();
 
     /// <summary>
     /// Gets the list of subscriptions that are subscribed.
     /// </summary>
     internal List<TSubscription> InternalSubscriptions { get; } = [];
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not the <see cref="IReactable{TSubscription}"/> is
+    /// busy processing notifications.
+    /// </summary>
+    protected bool IsProcessing { get; set; }
 
     /// <summary>
     /// Gets a value indicating whether or not if the <see cref="ReactableBase{T}"/> has been disposed.
@@ -56,7 +65,7 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
 
         InternalSubscriptions.Add(subscription);
 
-        return new SubscriptionUnsubscriber(InternalSubscriptions.Cast<ISubscription>().ToList(), subscription);
+        return new SubscriptionUnsubscriber<TSubscription>(InternalSubscriptions, subscription, IsProcessingNotifications);
     }
 
     /// <inheritdoc/>
@@ -181,4 +190,10 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
             subscription.OnError(exception);
         }
     }
+
+    /// <summary>
+    /// Returns a value indicating whether or not the <see cref="IReactable{TSubscription}"/> is busy processing notifications.
+    /// </summary>
+    /// <returns>True if busy.</returns>
+    private bool IsProcessingNotifications() => IsProcessing;
 }
