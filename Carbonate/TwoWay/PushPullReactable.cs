@@ -9,6 +9,7 @@ namespace Carbonate.TwoWay;
 
 using System.Runtime.InteropServices;
 using Core.TwoWay;
+using Exceptions;
 
 /// <inheritdoc cref="IPushPullReactable{TIn,TOut}"/>
 public class PushPullReactable<TIn, TOut> : ReactableBase<IReceiveRespondSubscription<TIn, TOut>>, IPushPullReactable<TIn, TOut>
@@ -30,8 +31,16 @@ public class PushPullReactable<TIn, TOut> : ReactableBase<IReceiveRespondSubscri
                     continue;
                 }
 
-                return subscription.OnRespond(data) ?? default(TOut);
+                IsProcessing = true;
+                var value = subscription.OnRespond(data) ?? default(TOut);
+                IsProcessing = false;
+
+                return value;
             }
+        }
+        catch (Exception e) when (e is NotificationException)
+        {
+            throw;
         }
         catch (Exception e)
         {
