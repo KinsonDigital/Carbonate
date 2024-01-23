@@ -56,7 +56,7 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
 
         InternalSubscriptions.Add(subscription);
 
-        return new SubscriptionUnsubscriber(InternalSubscriptions.Cast<ISubscription>().ToList(), subscription);
+        return new SubscriptionUnsubscriber<TSubscription>(InternalSubscriptions, subscription);
     }
 
     /// <inheritdoc/>
