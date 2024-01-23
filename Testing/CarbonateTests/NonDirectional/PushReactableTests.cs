@@ -6,6 +6,7 @@
 namespace CarbonateTests.NonDirectional;
 
 using Carbonate.Core.NonDirectional;
+using Carbonate.Exceptions;
 using Carbonate.NonDirectional;
 using FluentAssertions;
 using NSubstitute;
@@ -27,6 +28,35 @@ public class PushReactableTests
         // Assert
         act.Should().Throw<ObjectDisposedException>()
             .WithMessage($"{nameof(PushReactable)} disposed.{Environment.NewLine}Object name: 'PushReactable'.");
+    }
+
+    [Fact]
+    public void Push_WhenUnsubscribingWhileProcessingNotifications_ThrowsException()
+    {
+        // Arrange
+        var id = new Guid("163b36a5-e043-480b-a8f9-53822316bd4b");
+        const string subName = "test-subscription";
+        var expectedMsg = "The send notification process is currently in progress.";
+        expectedMsg += $"\nThe subscription '{subName}' with id '{id}' could not be unsubscribed.";
+
+        IDisposable? unsubscriber = null;
+        var mockSubscription = Substitute.For<IReceiveSubscription>();
+        mockSubscription.Id.Returns(id);
+        mockSubscription.Name.Returns(subName);
+        mockSubscription.When(x => x.OnReceive())
+            .Do(_ =>
+            {
+                unsubscriber.Dispose();
+            });
+
+        var sut = CreateSystemUnderTest();
+        unsubscriber = sut.Subscribe(mockSubscription);
+
+        // Act
+        var act = () => sut.Push(id);
+
+        // Assert
+        act.Should().Throw<NotificationException>().WithMessage(expectedMsg);
     }
 
     [Fact]
