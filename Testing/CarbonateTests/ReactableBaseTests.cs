@@ -6,6 +6,7 @@ namespace CarbonateTests;
 
 using System.Diagnostics.CodeAnalysis;
 using Carbonate.Core;
+using Carbonate.Core.NonDirectional;
 using Carbonate.Core.OneWay;
 using Carbonate.OneWay;
 using FluentAssertions;
@@ -24,12 +25,11 @@ public class ReactableBaseTests
 
     #region Prop Tests
     [Fact]
-    public void EventIds_WhenGettingValue_ReturnsCorrectResult()
+    public void SubscriptionIds_WhenGettingValue_ReturnsCorrectResult()
     {
         // Arrange
         var eventIdA = Guid.NewGuid();
         var eventIdB = Guid.NewGuid();
-        var eventIdC = eventIdA;
 
         var expected = new[] { eventIdA, eventIdB };
 
@@ -40,7 +40,7 @@ public class ReactableBaseTests
         mockSubB.Id.Returns(eventIdB);
 
         var mockSubC = Substitute.For<IReceiveSubscription<int>>();
-        mockSubC.Id.Returns(eventIdC);
+        mockSubC.Id.Returns(eventIdA);
 
         var sut = CreateSystemUnderTest();
         sut.Subscribe(mockSubA);
@@ -49,6 +49,28 @@ public class ReactableBaseTests
 
         // Act
         var actual = sut.SubscriptionIds;
+
+        // Assert
+        actual.Should().BeEquivalentTo(expected);
+    }
+
+    [Fact]
+    public void SubscriptionNames_WhenGettingValue_ReturnsCorrectResult()
+    {
+        // Arrange
+        var expected = new[] { "sub-1", "sub-2" };
+        var sut = CreateSystemUnderTest();
+
+        var mockSub1 = Substitute.For<IReceiveSubscription>();
+        mockSub1.Name.Returns("sub-1");
+        var mockSub2 = Substitute.For<IReceiveSubscription>();
+        mockSub2.Name.Returns("sub-2");
+
+        sut.Subscribe(mockSub1);
+        sut.Subscribe(mockSub2);
+
+        // Act
+        var actual = sut.SubscriptionNames;
 
         // Assert
         actual.Should().BeEquivalentTo(expected);

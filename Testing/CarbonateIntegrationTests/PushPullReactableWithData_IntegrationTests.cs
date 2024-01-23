@@ -21,13 +21,13 @@ public class PushPullReactableWithData_IntegrationTests
 
         var sut = new PushPullReactable<int, SampleData>();
 
-        sut.Subscribe(new RespondSubscription<int, SampleData>(
+        sut.Subscribe(new ReceiveRespondSubscription<int, SampleData>(
             id: respondId,
             name: "test-name",
             onReceiveRespond: _ => new SampleData { IntValue = 123, StringValue = "test-str" }));
 
         // Act
-        var actual = sut.PushPull(123, respondId);
+        var actual = sut.PushPull(respondId, 123);
 
         // Assert
         actual.Should().NotBeNull();

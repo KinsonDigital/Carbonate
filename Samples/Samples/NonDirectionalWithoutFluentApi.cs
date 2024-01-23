@@ -40,7 +40,7 @@ public class NonDirectionalWithoutFluentApi : Sample
             name: "my-subscription",
             onReceive: () => Console.WriteLine("Received a message!"),
             onUnsubscribe: () => Console.WriteLine("Unsubscribed from notifications!"),
-            onError: (ex) => Console.WriteLine($"Error: {ex.Message}")));
+            onError: ex => Console.WriteLine($"Error: {ex.Message}")));
 
         eventSender.Push(msgEventId); // Will invoke all onReceive 'Actions'
         unsubscriber.Dispose(); // Will only unsubscribe from this subscription

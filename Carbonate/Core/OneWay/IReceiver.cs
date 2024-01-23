@@ -7,7 +7,7 @@ namespace Carbonate.Core.OneWay;
 /// <summary>
 /// Gives the ability to receive push notifications.
 /// </summary>
-/// <typeparam name="TIn">The type of data coming in.</typeparam>
+/// <typeparam name="TIn">The type of data coming from the source.</typeparam>
 public interface IReceiver<in TIn>
 {
     /// <summary>

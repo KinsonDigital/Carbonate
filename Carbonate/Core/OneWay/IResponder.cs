@@ -7,7 +7,7 @@ namespace Carbonate.Core.OneWay;
 /// <summary>
 /// Gives the ability to respond to a pull request from an <see cref="IReactable{IResponder}"/>.
 /// </summary>
-/// <typeparam name="TOut">The type of data going out.</typeparam>
+/// <typeparam name="TOut">The type of data going back to the source.</typeparam>
 public interface IResponder<out TOut>
 {
     /// <summary>
