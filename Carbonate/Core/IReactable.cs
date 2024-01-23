@@ -4,7 +4,7 @@
 
 namespace Carbonate.Core;
 
-using System.Collections.ObjectModel;
+using System.Collections.Immutable;
 
 /// <summary>
 /// Defines a provider for pushing notifications or receiving responses.
@@ -16,20 +16,24 @@ public interface IReactable<TSubscription> : IDisposable
     /// <summary>
     /// Gets the list of subscriptions that are subscribed to this <see cref="IReactable{T}"/>.
     /// </summary>
-    ReadOnlyCollection<TSubscription> Subscriptions { get; }
+    ImmutableArray<TSubscription> Subscriptions { get; }
 
     /// <summary>
     /// Gets the list of subscription IDs.
     /// </summary>
-    ReadOnlyCollection<Guid> SubscriptionIds { get; }
+    ImmutableArray<Guid> SubscriptionIds { get; }
+
+    /// <summary>
+    /// Gets the list of subscription names.
+    /// </summary>
+    ImmutableArray<string> SubscriptionNames { get; }
 
     /// <summary>
     /// Notifies the provider that an subscription is to receive notifications.
     /// </summary>
     /// <param name="subscription">The object that is to receive notifications.</param>
     /// <returns>
-    ///     A reference to an interface that allows subscriptions to stop receiving
-    ///     notifications before the provider has finished sending them.
+    ///     A <see cref="IDisposable"/> object that can be used to unsubscribe the <paramref name="subscription"/>.
     /// </returns>
     IDisposable Subscribe(TSubscription subscription);
 

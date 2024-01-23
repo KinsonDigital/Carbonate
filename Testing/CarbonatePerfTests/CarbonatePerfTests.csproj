@@ -2,19 +2,31 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
+        <LangVersion>12.0</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Configurations>Release;Debug;Release Benchmark;Release MemPerf</Configurations>
+        <Configurations>Release;Debug;Release OneWayPushReactable;Release OneWayPullReactable;Release NonDirPushReactable;Release TwoWayPushPullReactable</Configurations>
         <Platforms>x64</Platforms>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release Benchmark|x64' ">
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release OneWayPushReactable|x64' ">
+      <Optimize>true</Optimize>
+      <OutputPath>bin\x64\OneWayPushReactable\</OutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release OneWayPullReactable|x64' ">
+      <Optimize>true</Optimize>
+      <OutputPath>bin\x64\OneWayPullReactable\</OutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release NonDirPushReactable|x64' ">
+      <OutputPath>bin\x64\NonDirPushReactable\</OutputPath>
       <Optimize>true</Optimize>
     </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release MemPerf|x64' ">
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release TwoWayPushPullReactable|x64' ">
       <Optimize>true</Optimize>
     </PropertyGroup>
 

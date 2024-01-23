@@ -7,8 +7,8 @@ namespace Carbonate.Core.TwoWay;
 /// <summary>
 /// Gives the ability to respond to a pull request from an <see cref="IReactable{IResponder}"/>.
 /// </summary>
-/// <typeparam name="TIn">The type of data coming in.</typeparam>
-/// <typeparam name="TOut">The type of data going out.</typeparam>
+/// <typeparam name="TIn">The type of data coming from the source.</typeparam>
+/// <typeparam name="TOut">The type of data going back to the source.</typeparam>
 public interface IResponder<in TIn, out TOut>
 {
     /// <summary>

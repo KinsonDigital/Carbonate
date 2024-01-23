@@ -71,7 +71,7 @@ public abstract class SubscriptionBase : ISubscription
 
         if (error is null)
         {
-            throw new ArgumentNullException(nameof(error), "The parameter must not be null.");
+            throw new ArgumentNullException(nameof(error));
         }
 
         this.onError?.Invoke(error);

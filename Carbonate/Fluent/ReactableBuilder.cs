@@ -129,7 +129,7 @@ public class ReactableBuilder : IReactableBuilder
     {
         ArgumentNullException.ThrowIfNull(onReceiveRespond);
 
-        var subscription = new RespondSubscription<TIn, TOut>(
+        var subscription = new ReceiveRespondSubscription<TIn, TOut>(
             id: this.id,
             name: this.subName ?? string.Empty,
             onReceiveRespond: onReceiveRespond,

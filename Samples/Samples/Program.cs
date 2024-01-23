@@ -5,8 +5,10 @@
 // ReSharper disable HeapView.ObjectAllocation.Evident
 // ReSharper disable HeapView.DelegateAllocation
 // ReSharper disable HeapView.ObjectAllocation
+#pragma warning disable SA1200
 using System.Runtime.InteropServices;
 using Samples;
+#pragma warning restore SA1200
 
 // Check if the current platform is windows
 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))

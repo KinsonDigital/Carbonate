@@ -11,6 +11,4 @@ namespace CarbonatePerfTests;
 public readonly struct StructItem
 {
     public int NumberValue { get; init; }
-
-    public string StringValue { get; init; }
 }
