@@ -35,7 +35,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="BenchmarkDotNet" Version="0.13.11" />
+      <PackageReference Include="BenchmarkDotNet" Version="0.13.12" />
       <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
