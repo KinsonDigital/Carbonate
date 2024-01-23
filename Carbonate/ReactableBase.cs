@@ -5,7 +5,6 @@
 namespace Carbonate;
 
 using System.Collections.Immutable;
-using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using Core;
@@ -25,9 +24,13 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
 
     /// <inheritdoc/>
     public ImmutableArray<Guid> SubscriptionIds => InternalSubscriptions
-        .Select(r => r.Id)
+        .Select(i => i.Id)
         .Distinct()
         .ToImmutableArray();
+
+    /// <inheritdoc/>
+    public ImmutableArray<string> SubscriptionNames => InternalSubscriptions
+        .Select(i => i.Name).ToImmutableArray();
 
     /// <summary>
     /// Gets the list of subscriptions that are subscribed.

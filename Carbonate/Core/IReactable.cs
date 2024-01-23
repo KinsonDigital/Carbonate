@@ -5,7 +5,6 @@
 namespace Carbonate.Core;
 
 using System.Collections.Immutable;
-using System.Collections.ObjectModel;
 
 /// <summary>
 /// Defines a provider for pushing notifications or receiving responses.
@@ -23,6 +22,11 @@ public interface IReactable<TSubscription> : IDisposable
     /// Gets the list of subscription IDs.
     /// </summary>
     ImmutableArray<Guid> SubscriptionIds { get; }
+
+    /// <summary>
+    /// Gets the list of subscription names.
+    /// </summary>
+    ImmutableArray<string> SubscriptionNames { get; }
 
     /// <summary>
     /// Notifies the provider that an subscription is to receive notifications.
