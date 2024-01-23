@@ -6,6 +6,7 @@
 namespace CarbonateTests.OneWay;
 
 using Carbonate.Core.OneWay;
+using Carbonate.Exceptions;
 using Carbonate.OneWay;
 using FluentAssertions;
 using NSubstitute;
@@ -47,6 +48,35 @@ public class PushReactableTests
     }
 
     [Fact]
+    public void Push_WhenUnsubscribingWhileProcessingNotifications_ThrowsException()
+    {
+        // Arrange
+        var id = new Guid("9c252828-9c1a-413e-ab60-1547a09dae0e");
+        const string subName = "test-subscription";
+        var expectedMsg = "The send notification process is currently in progress.";
+        expectedMsg += $"\nThe subscription '{subName}' with id '{id}' could not be unsubscribed.";
+
+        IDisposable? unsubscriber = null;
+        var mockSubscription = Substitute.For<IReceiveSubscription<int>>();
+        mockSubscription.Id.Returns(id);
+        mockSubscription.Name.Returns(subName);
+        mockSubscription.When(x => x.OnReceive(123))
+            .Do(_ =>
+            {
+                unsubscriber.Dispose();
+            });
+
+        var sut = CreateSystemUnderTest();
+        unsubscriber = sut.Subscribe(mockSubscription);
+
+        // Act
+        var act = () => sut.Push(id, 123);
+
+        // Assert
+        act.Should().Throw<NotificationException>().WithMessage(expectedMsg);
+    }
+
+    [Fact]
     public void Push_WhenInvoking_NotifiesCorrectSubscriptionsThatMatchEventId()
     {
         // Arrange
@@ -74,45 +104,6 @@ public class PushReactableTests
         mockSubA.Received(1).OnReceive(123);
         mockSubB.DidNotReceive().OnReceive(123);
         mockSubC.Received(1).OnReceive(123);
-    }
-
-    [Fact]
-    public void Push_WhenUnsubscribingInsideOnReceiveSubscriptionAction_DoesNotThrowException()
-    {
-        // Arrange
-        var mainId = new Guid("aaaaaaaa-a683-410a-b03e-8f8fe105b5af");
-        var otherId = new Guid("bbbbbbbb-258d-4988-a169-4c23abf51c02");
-
-        IDisposable? otherUnsubscriberA = null;
-        IDisposable? otherUnsubscriberB = null;
-
-        var initSubA = new ReceiveSubscription<int>(id: mainId, _ => { });
-
-        var otherSubA = new ReceiveSubscription<int>(id: otherId, _ => { });
-        var otherSubB = new ReceiveSubscription<int>(id: otherId, _ => { });
-
-        const int data = 123;
-
-        var sut = CreateSystemUnderTest();
-
-        var initSubC = new ReceiveSubscription<int>(
-            id: mainId,
-            onReceive: _ =>
-            {
-                otherUnsubscriberA?.Dispose();
-                otherUnsubscriberB?.Dispose();
-            });
-
-        sut.Subscribe(initSubA);
-        otherUnsubscriberA = sut.Subscribe(otherSubA);
-        otherUnsubscriberB = sut.Subscribe(otherSubB);
-        sut.Subscribe(initSubC);
-
-        // Act
-        var act = () => sut.Push(mainId, data);
-
-        // Assert
-        act.Should().NotThrow<Exception>();
     }
 
     [Fact]
