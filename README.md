@@ -43,7 +43,7 @@ For a real-world example, check out the [Velaptor](https://github.com/KinsonDigi
 
 Go [here](https://refactoring.guru/design-patterns/observer) for information on the observable pattern. This design pattern has been extensively covered in various tutorials and examples across the web, making it well-documented, widely recognized, and a highly popular programming pattern.
 
-> **Note**
+> [!Note]
 > Click [here](https://github.com/KinsonDigital/Carbonate/tree/preview/Samples/Samples) to view all of the sample projects.
 
 <h2 style="font-weight:bold;border:0" align="center">✨ Features & Benefits ✨</h2>
@@ -71,6 +71,10 @@ Below are some examples to demonstrate some basic uses of ***Carbonate***.  This
 
 To send a _**non-directional**_ push notification, you can use the `PushReactable` class. You subscribe using the `Subscribe()` method by sending in the subscription object. The term _**non-directional**_ means that no data is being sent out or returned from the notification call stack.  This is great for sending a notification that an event has occurred when no data is needed.
 
+Every notification sent out contains a unique ID, which subscribers must use to receive the intended notification, ensuring its exclusivity and eliminating the need for additional logic to filter out each notification going out.
+
+<details closed><summary>Subscription Example</summary>
+
 ```cs
 var messenger = new PushReactable(); // Create the messenger object to push notifications
 var subId = Guid.NewGuid(); // This is the ID used to identify the event
@@ -89,41 +93,61 @@ IDisposable unsubscriber = messenger.Subscribe(subscription);
 messenger.Push(subId); // Will invoke all onReceive 'Actions' subscribed to this reactable
 unsubscriber.Dispose(); // Will only unsubscribe from this subscription
 ```
+</details>
 
-Every notification sent out contains a unique ID, which subscribers must use to receive the intended notification, ensuring its exclusivity and eliminating the need for additional logic to filter out each notification going out.
+<br/>
 
-> **Note**
-> **💡TIP💡**  
+<details closed><summary>How To Unsubscribe Example</summary>
+
+```cs
+var mySubscription = new ReceiveSubscription(
+    id: subId,
+    name: "my-subscription",
+    onReceive: () => { Console.WriteLine("Received notification!"); }
+    onUnsubscribe: () =>
+    {
+       unsubscriber.Dispose(); // Will unsubscribe from further notifications
+    });
+```
+</details>
+
+<br/>
+
+<details closed><summary>How Not To Unsubscribe Example</summary>
+
+Below is an example of what you _**SHOULD NOT**_ do.
+```cs
+IDisposable? unsubscriber;
+var subId = Guid.NewGuid(); // This is the ID used to identify the event
+
+var badSubscription = new ReceiveSubscription(
+    id: subId,
+    name: "bad-subscription",
+    onReceive: () =>
+    {
+        // DO NOT DO THIS!!
+        unsubscriber.Dispose(); // An exception will be thrown in here
+    });
+var messenger = new PushReactable();
+unsubscriber = messenger.Subscribe(badSubscription);
+messenger.Push(subId);
+```
+</details>
+
+> [!Tip]
 > If you want to receive a single notification, unsubscribe from further notifications by calling the `Dispose()`
-> method on the `IDisposable` object returned by the _**Reactable**_ object. All reactable objects return an unsubscriber object for unsubscribing at a later time.  The unsubscriber is returned when invoking the `Subscribe()`` method.
-> ```cs
-> var mySubscription = new ReceiveSubscription(
->     id: subId,
->     name: "my-subscription",
->     onReceive: () => { Console.WriteLine("Received notification!"); }
->     onUnsubscribe: () =>
->     {
->        unsubscriber.Dispose(); // Will unsubscribe from further notifications
->     });
-> ```
+> method on the `IDisposable` object returned by the _**Reactable**_ object. All reactable objects return an unsubscriber object for unsubscribing at a later time.  The unsubscriber is returned when invoking the `Subscribe()` method.  Unsubscribing can be done anytime except in the notification delegates `onReceive`, `onRespond`, and `onReceiveRespond`.
 
-> **Note**
-> Some notes about exceptions and unsubscribing**
-> - Throwing an exception in the 'onReceive' action delegate implementation will invoke the 'onError' action for _**ALL**_ subscriptions.
-> - Invoking `*Reactable.Dispose()` method will invoke the `onUnsubscribe` action for _**ALL**_ subscriptions subscribed to that reactable.
-> - You can unsubscribe from a single subscription by calling the `Dispose()` method on the `IDisposable` object returned by the reactable's `Subscribe()` method.
-
+> [!Tip]
+> If an attempt is made to unsubscribe from notifications inside of any of the notification delegates, a `NotificationException` will be
+> thrown.  This is an intentional design to prevent the removal of any internal subscriptions during the notification process.
+> Of course, you can add a `try...catch` in the notification delegate to swallow the exception, but again this is not recommended.
 
 <h3 style="font-weight:bold;color: #00BBC6">One way push notifications</h3>
 
-To facilitate _**one way**_ data transfer through push notifications, you can employ the `PushReactable<TIn>` or `PullReactable<TOut>` types while subscribers utilize the `ReceiveSubscription<TIn>` or `RespondSubscription<TOut>` types for their subscriptions. Setting up and using this approach follows the same steps as in the previous example. In this context, the term one-directional signifies that data exclusively flows in one direction either out from the source or in from the source in the notification.
+To facilitate _**one way**_ data transfer through push notifications, you can employ the `PushReactable<TIn>` or `PullReactable<TOut>` types while subscribers utilize the `ReceiveSubscription<TIn>` or `RespondSubscription<TOut>` types for their subscriptions. Setting up and using this approach follows the same steps as in the previous example. In this context, the term one-directional signifies that data exclusively flows in one direction either out from the source to the subscription delegate or from the subscription delegate to the source.
 
-> **Note**
-> The _**ONLY**_ difference with this example is that your sending some data out _**WITH**_ your notification, or
-> receiving data back _**WITH**_ the notification.
-> The generic parameters `TIn` and `TOut` are the types of data you are sending out or receiving back.
-
-<h4>One Way Out Notification</h4>
+<details closed><summary>One Way Out Notification Example</summary>
 
 ```cs
 var messenger = new PushReactable<string>(); // Create the messenger object to push notifications with data
@@ -141,8 +165,11 @@ IDisposable unsubscriber = messenger.Subscribe(new ReceiveSubscription<string>(
 messenger.Push("hello from source!", subId); // Will invoke all onReceive 'Actions' that have subscribed with 'subId'.
 messenger.Unsubscribe(subId); // Will invoke all onUnsubscribe 'Actions' that have subscribed with 'subId'.
 ```
+</details>
 
-<h4>One Way In Notification(Polling)</h4>
+<br/>
+
+<details closed><summary>One Way In Notification(Polling) Example</summary>
 
 ```cs
 var messenger = new PullReactable<string>(); // Create the messenger object to push notifications to receive data
@@ -161,10 +188,13 @@ var response = messenger.Pull(subId); // Will invoke all onRespond 'Actions' tha
 Console.WriteLine(response);
 messenger.Unsubscribe(subId); // Will invoke all onUnsubscribe 'Actions' that have subscribed with 'subId'.
 ```
+</details>
 
-<h3 style="font-weight:bold;color: #00BBC6">Two way push notifications</h3>
+<h3 style="font-weight:bold;color: #00BBC6">Two Way Push Pull Notifications</h3>
 
-To enable ***two way*** push notifications, allowing data to be sent out and returned, you can employ the `PushPullReactable<TIn, TOut>` type. Subscribers, on the other hand, utilize the `ReceiveRespondSubscription<TIn, TOut>` for their notification subscriptions. This approach proves useful when you need to send a push notification with data required by the receiver, who then responds with data back to the original caller who initiated the notification.
+To enable ***two way*** push notifications, allowing data to be sent out and returned, you can employ the `PushPullReactable<TIn, TOut>` type. Subscribers, on the other hand, utilize the `ReceiveRespondSubscription<TIn, TOut>` when subscribing. This approach proves useful when you need to send a push notification with data required by the receiver, who then responds with data back to the source that initiated the notification.  This is synonymous with sending an email out to a person and getting a response back.
+
+<details closed><summary>Two Way Notification Example</summary>
 
 ```cs
 var favoriteMessenger = new PushPullReactable<string, string>();
@@ -189,14 +219,17 @@ Console.WriteLine($"Favorite Food: {favoriteMessenger.PushPull("food", subId)}")
 Console.WriteLine($"Favorite Past Time: {favoriteMessenger.PushPull("past-time", subId)}");
 Console.WriteLine($"Favorite Music: {favoriteMessenger.PushPull("music", subId)}");
 ```
+</details>
 
-> **Note**
-> The difference between _**one way**_ and _**two way**_ notifications is that _**one way**_ notifications enable data travel in one direction whereas _**two way**_ notifications enable data exchange in both directions.  The terms 'Push', 'Pull', 'Receive', and 'Respond' should give a clue as to the direction of travel of the data.
+<br/>
+
+> [!Note]
+> The difference between _**one way**_ and _**two way**_ notifications is that _**one way**_ notifications enable data travel in one direction whereas _**two way**_ notifications enable data travel in both directions.  The terms 'Push', 'Pull', 'Receive', and 'Respond' should give a clue as to the direction of travel of the data.
 
 
-> **Note**
-> **💡TIP💡**
-> Most of the time, the `PushReactable`, `PushReactable<TIn>`, and `PushPullReactable<TIn, TOut>` classes will suit your needs.  However, if you have any requirements that these can't provide, you can always create your own custom implementations of the interfaces provided.
+> [!Tip]
+> Most of the time, the built in reactable implementations will suit your needs.  However, if you have any requirements that these can't provide, you can always create your own custom implementations using the interfaces provided.
+
 
 <h2 style="font-weight:bold;" align="center">🙏🏼 Contributing 🙏🏼</h2>
 
