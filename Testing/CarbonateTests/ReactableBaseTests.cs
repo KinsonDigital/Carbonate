@@ -24,12 +24,11 @@ public class ReactableBaseTests
 
     #region Prop Tests
     [Fact]
-    public void EventIds_WhenGettingValue_ReturnsCorrectResult()
+    public void SubscriptionIds_WhenGettingValue_ReturnsCorrectResult()
     {
         // Arrange
         var eventIdA = Guid.NewGuid();
         var eventIdB = Guid.NewGuid();
-        var eventIdC = eventIdA;
 
         var expected = new[] { eventIdA, eventIdB };
 
@@ -40,7 +39,7 @@ public class ReactableBaseTests
         mockSubB.Id.Returns(eventIdB);
 
         var mockSubC = Substitute.For<IReceiveSubscription<int>>();
-        mockSubC.Id.Returns(eventIdC);
+        mockSubC.Id.Returns(eventIdA);
 
         var sut = CreateSystemUnderTest();
         sut.Subscribe(mockSubA);
