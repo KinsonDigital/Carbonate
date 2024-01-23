@@ -6,6 +6,7 @@ namespace Carbonate.OneWay;
 
 using System.Runtime.InteropServices;
 using Core.OneWay;
+using Exceptions;
 
 /// <inheritdoc cref="IPushReactable{T}"/>
 public class PushReactable<TIn>
@@ -34,8 +35,14 @@ public class PushReactable<TIn>
                     continue;
                 }
 
+                IsProcessing = true;
                 subscription.OnReceive(data);
+                IsProcessing = false;
             }
+        }
+        catch (Exception e) when (e is NotificationException)
+        {
+            throw;
         }
         catch (Exception e)
         {

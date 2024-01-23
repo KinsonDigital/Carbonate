@@ -4,7 +4,9 @@
 
 namespace CarbonateTests.OneWay;
 
+using System.Diagnostics.CodeAnalysis;
 using Carbonate.Core.OneWay;
+using Carbonate.Exceptions;
 using Carbonate.OneWay;
 using FluentAssertions;
 using NSubstitute;
@@ -60,6 +62,39 @@ public class PullReactableTests
         // Assert
         act.Should().Throw<ObjectDisposedException>()
             .WithMessage($"{nameof(PullReactable<int>)} disposed.{Environment.NewLine}Object name: 'PullReactable'.");
+    }
+
+    [Fact]
+    [SuppressMessage(
+        "ReSharper",
+        "AccessToModifiedClosure",
+        Justification = "Required for testing.")]
+    public void Pull_WhenUnsubscribingWhileProcessingNotifications_ThrowsException()
+    {
+        // Arrange
+        var id = new Guid("296ad655-5ae3-4040-9602-9760af31362d");
+        const string subName = "test-subscription";
+        var expectedMsg = "The send notification process is currently in progress.";
+        expectedMsg += $"\nThe subscription '{subName}' with id '{id}' could not be unsubscribed.";
+
+        IDisposable? unsubscriber = null;
+        var mockSubscription = Substitute.For<IRespondSubscription<string>>();
+        mockSubscription.Id.Returns(id);
+        mockSubscription.Name.Returns(subName);
+        mockSubscription.When(x => x.OnRespond())
+            .Do(_ =>
+            {
+                unsubscriber.Dispose();
+            });
+
+        var sut = CreateSystemUnderTest();
+        unsubscriber = sut.Subscribe(mockSubscription);
+
+        // Act
+        var act = () => sut.Pull(id);
+
+        // Assert
+        act.Should().Throw<NotificationException>().WithMessage(expectedMsg);
     }
 
     [Fact]
