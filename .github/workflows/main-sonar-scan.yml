@@ -1,4 +1,4 @@
-name: ✅Sonar Scan Status Check
+name: 🔎Main Sonar Scan
 
 
 defaults:
@@ -7,8 +7,8 @@ defaults:
 
 
 on:
-  pull_request_target:
-    branches: [main, preview]
+  push:
+    branches: [preview]
 
 
 jobs:

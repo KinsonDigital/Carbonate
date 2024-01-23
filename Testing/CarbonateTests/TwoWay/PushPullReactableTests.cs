@@ -4,8 +4,10 @@
 
 namespace CarbonateTests.TwoWay;
 
+using System.Diagnostics.CodeAnalysis;
 using Carbonate.TwoWay;
 using Carbonate.Core.TwoWay;
+using Carbonate.Exceptions;
 using FluentAssertions;
 using NSubstitute;
 using Xunit;
@@ -40,7 +42,7 @@ public class PushPullReactableTests
         sut.Subscribe(mockSubB);
 
         // Act
-        var actual = sut.PushPull(data, respondIdB);
+        var actual = sut.PushPull(respondIdB, data);
 
         // Assert
         mockSubA.DidNotReceive().OnRespond(321);
@@ -51,16 +53,85 @@ public class PushPullReactableTests
     }
 
     [Fact]
+    public void PushPull_WhenInvokedAfterDisposal_ThrowsException()
+    {
+        // Arrange
+        var sut = CreateSystemUnderTest();
+        sut.Dispose();
+
+        // Act
+        var act = () => sut.PushPull(Guid.Empty, 123);
+
+        // Assert
+        act.Should().Throw<ObjectDisposedException>()
+            .WithMessage($"{nameof(PushPullReactable<int, string>)} disposed.{Environment.NewLine}Object name: 'PushPullReactable'.");
+    }
+
+    [Fact]
+    [SuppressMessage(
+        "ReSharper",
+        "AccessToModifiedClosure",
+        Justification = "Required for testing.")]
+    public void Push_WhenUnsubscribingWhileProcessingNotifications_ThrowsException()
+    {
+        // Arrange
+        var id = new Guid("37cfea9d-3ca6-4a67-8a65-ea138cd04aef");
+        const string subName = "test-subscription";
+        var expectedMsg = "The send notification process is currently in progress.";
+        expectedMsg += $"\nThe subscription '{subName}' with id '{id}' could not be unsubscribed.";
+
+        IDisposable? unsubscriber = null;
+        var mockSubscription = Substitute.For<IReceiveRespondSubscription<int, string>>();
+        mockSubscription.Id.Returns(id);
+        mockSubscription.Name.Returns(subName);
+        mockSubscription.When(x => x.OnRespond(123))
+            .Do(_ =>
+            {
+                unsubscriber.Dispose();
+            });
+
+        var sut = CreateSystemUnderTest();
+        unsubscriber = sut.Subscribe(mockSubscription);
+
+        // Act
+        var act = () => sut.PushPull(id, 123);
+
+        // Assert
+        act.Should().Throw<NotificationException>().WithMessage(expectedMsg);
+    }
+
+    [Fact]
     public void Pull_WithNoMatchingSubscription_ReturnsCorrectResult()
     {
         // Arrange
         var sut = new PushPullReactable<int, int>();
 
         // Act
-        var actual = sut.PushPull(123, Guid.NewGuid());
+        var actual = sut.PushPull(Guid.NewGuid(), 123);
 
         // Assert
         actual.Should().Be(0);
+    }
+
+    [Fact]
+    public void Pull_WhenPullingDataThatThrowsException_InvokesOnErrorSubscription()
+    {
+        // Arrange
+        var id = Guid.NewGuid();
+        var sut = CreateSystemUnderTest();
+
+        // Act & Assert
+        sut.Subscribe(new ReceiveRespondSubscription<int, string>(
+            id: id,
+            name: "test-name",
+            onReceiveRespond: _ => throw new Exception("test-exception"),
+            onError: e =>
+            {
+                e.Should().NotBeNull();
+                e.Message.Should().Be("test-exception");
+            }));
+
+        sut.PushPull(id, 123);
     }
     #endregion
 

@@ -7,22 +7,44 @@
 // ReSharper disable LoopCanBeConvertedToQuery
 namespace Carbonate.TwoWay;
 
+using System.Runtime.InteropServices;
 using Core.TwoWay;
+using Exceptions;
 
 /// <inheritdoc cref="IPushPullReactable{TIn,TOut}"/>
 public class PushPullReactable<TIn, TOut> : ReactableBase<IReceiveRespondSubscription<TIn, TOut>>, IPushPullReactable<TIn, TOut>
 {
     /// <inheritdoc/>
-    public TOut? PushPull(in TIn data, Guid respondId)
+    public TOut? PushPull(Guid id, in TIn data)
     {
-        for (var i = 0; i < Subscriptions.Count; i++)
+        if (IsDisposed)
         {
-            if (Subscriptions[i].Id != respondId)
-            {
-                continue;
-            }
+            throw new ObjectDisposedException(nameof(PushPullReactable<TIn, TOut>), $"{nameof(PushPullReactable<TIn, TOut>)} disposed.");
+        }
 
-            return Subscriptions[i].OnRespond(data);
+        try
+        {
+            foreach (var subscription in CollectionsMarshal.AsSpan(InternalSubscriptions))
+            {
+                if (subscription.Id != id)
+                {
+                    continue;
+                }
+
+                IsProcessing = true;
+                var value = subscription.OnRespond(data) ?? default(TOut);
+                IsProcessing = false;
+
+                return value;
+            }
+        }
+        catch (Exception e) when (e is NotificationException)
+        {
+            throw;
+        }
+        catch (Exception e)
+        {
+            SendError(e, id);
         }
 
         return default;

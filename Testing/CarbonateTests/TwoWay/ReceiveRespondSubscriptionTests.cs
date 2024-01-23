@@ -58,6 +58,20 @@ public class ReceiveRespondSubscriptionTests
     }
 
     [Fact]
+    public void OnRespond_WhenInvokingWithNullData_ThrowsException()
+    {
+        // Arrange
+        var sut = new ReceiveRespondSubscription<int?, object>(Guid.NewGuid(), _ => new object());
+
+        // Act
+        var act = () => sut.OnRespond(null);
+
+        // Assert
+        act.Should().Throw<ArgumentNullException>()
+            .WithMessage("Value cannot be null. (Parameter 'data')");
+    }
+
+    [Fact]
     public void OnRespond_WhenOnRespondDataIsNotNull_ReturnsCorrectResult()
     {
         // Arrange
@@ -129,7 +143,7 @@ public class ReceiveRespondSubscriptionTests
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
-            .WithMessage("The parameter must not be null. (Parameter 'error')");
+            .WithMessage("Value cannot be null. (Parameter 'error')");
         totalActionInvokes.Should().Be(0);
     }
 

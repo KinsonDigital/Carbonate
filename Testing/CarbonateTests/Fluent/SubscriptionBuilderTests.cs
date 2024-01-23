@@ -60,6 +60,24 @@ public class SubscriptionBuilderTests
     }
 
     [Fact]
+    public void WhenUnsubscribing_WhenInvoked_ReturnsCorrectResult()
+    {
+        // Arrange
+        var onSubscribingInvoked = false;
+        var sut = ISubscriptionBuilder.Create();
+
+        // Act
+        var subscription = sut.WithId(Guid.NewGuid())
+            .WhenUnsubscribing(() => onSubscribingInvoked = true)
+            .BuildOneWayReceive<int>(_ => { });
+        subscription.OnUnsubscribe();
+
+        // Assert
+        subscription.Should().NotBeNull();
+        onSubscribingInvoked.Should().BeTrue();
+    }
+
+    [Fact]
     public void WithError_WithNullParam_ThrowsException()
     {
         // Arrange
@@ -71,6 +89,24 @@ public class SubscriptionBuilderTests
         // Assert
         act.Should().Throw<ArgumentNullException>()
             .WithMessage("Value cannot be null. (Parameter 'onError')");
+    }
+
+    [Fact]
+    public void WithError_WhenInvoked_ReturnsCorrectResult()
+    {
+        // Arrange
+        var onErrorInvoked = false;
+        var sut = ISubscriptionBuilder.Create();
+
+        // Act
+        var subscription = sut.WithId(Guid.NewGuid())
+            .WithError(_ => onErrorInvoked = true)
+            .BuildOneWayReceive<int>(_ => { });
+        subscription.OnError(new Exception("test-exception"));
+
+        // Assert
+        subscription.Should().NotBeNull();
+        onErrorInvoked.Should().BeTrue();
     }
 
     [Fact]
