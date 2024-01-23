@@ -454,9 +454,10 @@ public class ReactableExtensionMethodsTests
     public void CreateNonReceiveOrRespond_WhenInvokingWithIdAndName_CreatesSubscription(Action? onUnsubscribe, Action<Exception>? onError)
     {
         // Arrange
-        var id = Guid.NewGuid();
+        var id = new Guid("45c55fd2-32c9-46de-bf24-65cffd2da87f");
         var expectedIds = new[] { id }.AsReadOnly();
         const string expectedName = "test-name";
+        var expectedNames = new[] { expectedName };
         var expectedAction = () => { };
         var sut = new PushReactable();
 
@@ -466,6 +467,7 @@ public class ReactableExtensionMethodsTests
         // Assert
         Assert.NotNull(unsubscriber);
         sut.SubscriptionIds.Should().BeEquivalentTo(expectedIds);
+        sut.SubscriptionNames.Should().BeEquivalentTo(expectedNames);
     }
 
     [Theory]
@@ -474,8 +476,11 @@ public class ReactableExtensionMethodsTests
     public void CreateNonReceiveOrRespond_WhenInvokingWithIdAndAutoName_CreatesSubscription(Action? onUnsubscribe, Action<Exception>? onError)
     {
         // Arrange
-        var id = Guid.NewGuid();
+        var id = new Guid("e743d8f1-3274-4cdf-af79-dba7b2356786");
         var expectedIds = new[] { id }.AsReadOnly();
+        var expectedName = $"{nameof(ReactableExtensionMethodsTests)}";
+        expectedName += $".{nameof(CreateNonReceiveOrRespond_WhenInvokingWithIdAndAutoName_CreatesSubscription)}() - {id}";
+        var expectedNames = new[] { expectedName };
         var expectedAction = () => { };
         var sut = new PushReactable();
 
@@ -485,6 +490,7 @@ public class ReactableExtensionMethodsTests
         // Assert
         Assert.NotNull(unsubscriber);
         sut.SubscriptionIds.Should().BeEquivalentTo(expectedIds);
+        sut.SubscriptionNames.Should().BeEquivalentTo(expectedNames);
     }
 
     [Theory]
@@ -493,9 +499,10 @@ public class ReactableExtensionMethodsTests
     public void CreateOneWayReceive_WhenInvokingWithIdAndName_CreatesSubscription(Action? onUnsubscribe, Action<Exception>? onError)
     {
         // Arrange
-        var id = Guid.NewGuid();
+        var id = new Guid("ceb12e34-1dcc-400c-a42e-29f357fecfe6");
         var expectedIds = new[] { id }.AsReadOnly();
         const string expectedName = "test-name";
+        var expectedNames = new[] { expectedName };
         var expectedAction = (int _) => { };
         var sut = new PushReactable<int>();
 
@@ -505,6 +512,7 @@ public class ReactableExtensionMethodsTests
         // Assert
         Assert.NotNull(unsubscriber);
         sut.SubscriptionIds.Should().BeEquivalentTo(expectedIds);
+        sut.SubscriptionNames.Should().BeEquivalentTo(expectedNames);
     }
 
     [Theory]
@@ -513,8 +521,11 @@ public class ReactableExtensionMethodsTests
     public void CreateOneWayReceive_WhenInvokingWithIdAndAutoName_CreatesSubscription(Action? onUnsubscribe, Action<Exception>? onError)
     {
         // Arrange
-        var id = Guid.NewGuid();
+        var id = new Guid("770a143e-9694-48e1-9ad6-db7f70224308");
         var expectedIds = new[] { id }.AsReadOnly();
+        var expectedName = $"{nameof(ReactableExtensionMethodsTests)}";
+        expectedName += $".{nameof(CreateOneWayReceive_WhenInvokingWithIdAndAutoName_CreatesSubscription)}() - {id}";
+        var expectedNames = new[] { expectedName };
         var expectedAction = (int _) => { };
         var sut = new PushReactable<int>();
 
@@ -524,6 +535,7 @@ public class ReactableExtensionMethodsTests
         // Assert
         Assert.NotNull(unsubscriber);
         sut.SubscriptionIds.Should().BeEquivalentTo(expectedIds);
+        sut.SubscriptionNames.Should().BeEquivalentTo(expectedNames);
     }
 
     [Theory]
@@ -532,9 +544,10 @@ public class ReactableExtensionMethodsTests
     public void CreateOneWayRespond_WhenInvokingWithIdAndName_CreatesSubscription(Action? onUnsubscribe, Action<Exception>? onError)
     {
         // Arrange
-        var id = Guid.NewGuid();
+        var id = new Guid("ef2b9247-9d9f-4efc-910e-2ae4727f49f3");
         var expectedIds = new[] { id }.AsReadOnly();
         const string expectedName = "test-name";
+        var expectedNames = new[] { expectedName };
         var expectedAction = () => 123;
         var sut = new PullReactable<int>();
 
@@ -544,6 +557,7 @@ public class ReactableExtensionMethodsTests
         // Assert
         Assert.NotNull(unsubscriber);
         sut.SubscriptionIds.Should().BeEquivalentTo(expectedIds);
+        sut.SubscriptionNames.Should().BeEquivalentTo(expectedNames);
     }
 
     [Theory]
@@ -552,8 +566,11 @@ public class ReactableExtensionMethodsTests
     public void CreateOneWayRespond_WhenInvokingWithIdAndAutoName_CreatesSubscription(Action? onUnsubscribe, Action<Exception>? onError)
     {
         // Arrange
-        var id = Guid.NewGuid();
+        var id = new Guid("1201281a-dd5b-4b85-a732-7789104217c8");
         var expectedIds = new[] { id }.AsReadOnly();
+        var expectedName = $"{nameof(ReactableExtensionMethodsTests)}";
+        expectedName += $".{nameof(CreateOneWayRespond_WhenInvokingWithIdAndAutoName_CreatesSubscription)}() - {id}";
+        var expectedNames = new[] { expectedName };
         var expectedAction = () => 456;
         var sut = new PullReactable<int>();
 
@@ -563,6 +580,7 @@ public class ReactableExtensionMethodsTests
         // Assert
         Assert.NotNull(unsubscriber);
         sut.SubscriptionIds.Should().BeEquivalentTo(expectedIds);
+        sut.SubscriptionNames.Should().BeEquivalentTo(expectedNames);
     }
 
     [Theory]
@@ -571,9 +589,10 @@ public class ReactableExtensionMethodsTests
     public void CreateTwoWay_WhenInvokingWithIdAndName_CreatesSubscription(Action? onUnsubscribe, Action<Exception>? onError)
     {
         // Arrange
-        var id = Guid.NewGuid();
+        var id = new Guid("77dcfe92-8b22-426b-94ab-54fb0cd298ee");
         var expectedIds = new[] { id }.AsReadOnly();
         const string expectedName = "test-name";
+        var expectedNames = new[] { expectedName };
         Func<int, string> expectedAction = _ => "test-value";
         var sut = new PushPullReactable<int, string>();
 
@@ -583,6 +602,7 @@ public class ReactableExtensionMethodsTests
         // Assert
         Assert.NotNull(unsubscriber);
         sut.SubscriptionIds.Should().BeEquivalentTo(expectedIds);
+        sut.SubscriptionNames.Should().BeEquivalentTo(expectedNames);
     }
 
     [Theory]
@@ -591,8 +611,11 @@ public class ReactableExtensionMethodsTests
     public void CreateTwoWay_WhenInvokingWithIdAndAutoName_CreatesSubscription(Action? onUnsubscribe, Action<Exception>? onError)
     {
         // Arrange
-        var id = Guid.NewGuid();
+        var id = new Guid("6aea4904-0e72-40bf-8d0e-bee23c8aea7b");
         var expectedIds = new[] { id }.AsReadOnly();
+        var expectedName = $"{nameof(ReactableExtensionMethodsTests)}";
+        expectedName += $".{nameof(CreateTwoWay_WhenInvokingWithIdAndAutoName_CreatesSubscription)}() - {id}";
+        var expectedNames = new[] { expectedName };
         Func<int, string> expectedAction = _ => "test-value";
         var sut = new PushPullReactable<int, string>();
 
@@ -602,6 +625,7 @@ public class ReactableExtensionMethodsTests
         // Assert
         Assert.NotNull(unsubscriber);
         sut.SubscriptionIds.Should().BeEquivalentTo(expectedIds);
+        sut.SubscriptionNames.Should().BeEquivalentTo(expectedNames);
     }
     #endregion
 }
