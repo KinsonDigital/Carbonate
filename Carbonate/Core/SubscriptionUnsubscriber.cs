@@ -4,6 +4,8 @@
 
 namespace Carbonate.Core;
 
+using Exceptions;
+
 /// <summary>
 /// A subscription unsubscriber for unsubscribing from a <see cref="IReactable{TSubscription}"/>.
 /// </summary>
@@ -13,6 +15,7 @@ internal sealed class SubscriptionUnsubscriber<TSubscription> : IDisposable
 {
     private readonly List<TSubscription> subscriptions;
     private readonly TSubscription subscription;
+    private readonly Func<bool> isProcessing;
     private bool isDisposed;
 
     /// <summary>
@@ -20,10 +23,16 @@ internal sealed class SubscriptionUnsubscriber<TSubscription> : IDisposable
     /// </summary>
     /// <param name="subscriptions">The list of subscriptions.</param>
     /// <param name="subscription">The subscription that has been subscribed.</param>
-    internal SubscriptionUnsubscriber(List<TSubscription> subscriptions, TSubscription subscription)
+    /// <param name="isProcessing">Returns the in-processing state.</param>
+    internal SubscriptionUnsubscriber(List<TSubscription> subscriptions, TSubscription subscription, Func<bool> isProcessing)
     {
-        this.subscriptions = subscriptions ?? throw new ArgumentNullException(nameof(subscriptions), "The parameter must not be null.");
-        this.subscription = subscription ?? throw new ArgumentNullException(nameof(subscription), "The parameter must not be null.");
+        ArgumentNullException.ThrowIfNull(subscriptions);
+        ArgumentNullException.ThrowIfNull(subscription);
+        ArgumentNullException.ThrowIfNull(isProcessing);
+
+        this.subscriptions = subscriptions;
+        this.subscription = subscription;
+        this.isProcessing = isProcessing;
     }
 
     /// <summary>
@@ -47,6 +56,13 @@ internal sealed class SubscriptionUnsubscriber<TSubscription> : IDisposable
 
         if (disposing)
         {
+            if (this.isProcessing())
+            {
+                var exMsg = "The send notification process is currently in progress.";
+                exMsg += $"\nThe subscription '{this.subscription.Name}' with id '{this.subscription.Id}' could not be unsubscribed.";
+                throw new NotificationException(exMsg);
+            }
+
             this.subscriptions.Remove(this.subscription);
         }
 
