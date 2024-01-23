@@ -22,7 +22,7 @@ public interface IReactable<TSubscription> : IDisposable
     /// <summary>
     /// Gets the list of subscription IDs.
     /// </summary>
-    ReadOnlyCollection<Guid> SubscriptionIds { get; }
+    ImmutableArray<Guid> SubscriptionIds { get; }
 
     /// <summary>
     /// Notifies the provider that an subscription is to receive notifications.

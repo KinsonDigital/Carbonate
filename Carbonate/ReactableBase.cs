@@ -24,10 +24,10 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
     public ImmutableArray<TSubscription> Subscriptions => InternalSubscriptions.ToImmutableArray();
 
     /// <inheritdoc/>
-    public ReadOnlyCollection<Guid> SubscriptionIds => InternalSubscriptions
+    public ImmutableArray<Guid> SubscriptionIds => InternalSubscriptions
         .Select(r => r.Id)
         .Distinct()
-        .ToList().AsReadOnly();
+        .ToImmutableArray();
 
     /// <summary>
     /// Gets the list of subscriptions that are subscribed.
