@@ -35,6 +35,12 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
     internal List<TSubscription> InternalSubscriptions { get; } = [];
 
     /// <summary>
+    /// Gets or sets a value indicating whether or not the <see cref="IReactable{TSubscription}"/> is
+    /// busy processing notifications.
+    /// </summary>
+    protected bool IsProcessing { get; set; }
+
+    /// <summary>
     /// Gets a value indicating whether or not if the <see cref="ReactableBase{T}"/> has been disposed.
     /// </summary>
     protected bool IsDisposed { get; private set; }
@@ -56,7 +62,7 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
 
         InternalSubscriptions.Add(subscription);
 
-        return new SubscriptionUnsubscriber(InternalSubscriptions.Cast<ISubscription>().ToList(), subscription);
+        return new SubscriptionUnsubscriber<TSubscription>(InternalSubscriptions, subscription, IsProcessingNotifications);
     }
 
     /// <inheritdoc/>
@@ -181,4 +187,10 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
             subscription.OnError(exception);
         }
     }
+
+    /// <summary>
+    /// Returns a value indicating whether or not the <see cref="IReactable{TSubscription}"/> is busy processing notifications.
+    /// </summary>
+    /// <returns>True if busy.</returns>
+    private bool IsProcessingNotifications() => IsProcessing;
 }

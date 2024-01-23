@@ -6,6 +6,7 @@ namespace Carbonate.OneWay;
 
 using System.Runtime.InteropServices;
 using Core.OneWay;
+using Exceptions;
 
 /// <inheritdoc cref="IPullReactable{TOut}"/>
 public class PullReactable<TOut>
@@ -28,8 +29,16 @@ public class PullReactable<TOut>
                     continue;
                 }
 
-                return subscription.OnRespond() ?? default(TOut);
+                IsProcessing = true;
+                var value = subscription.OnRespond() ?? default(TOut);
+                IsProcessing = false;
+
+                return value;
             }
+        }
+        catch (Exception e) when (e is NotificationException)
+        {
+            throw;
         }
         catch (Exception e)
         {

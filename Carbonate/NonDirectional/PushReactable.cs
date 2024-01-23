@@ -6,6 +6,7 @@ namespace Carbonate.NonDirectional;
 
 using System.Runtime.InteropServices;
 using Core.NonDirectional;
+using Exceptions;
 
 /// <inheritdoc cref="IPushReactable"/>
 public class PushReactable : ReactableBase<IReceiveSubscription>, IPushReactable
@@ -27,8 +28,14 @@ public class PushReactable : ReactableBase<IReceiveSubscription>, IPushReactable
                     continue;
                 }
 
+                IsProcessing = true;
                 subscription.OnReceive();
+                IsProcessing = false;
             }
+        }
+        catch (Exception e) when (e is NotificationException)
+        {
+            throw;
         }
         catch (Exception e)
         {
