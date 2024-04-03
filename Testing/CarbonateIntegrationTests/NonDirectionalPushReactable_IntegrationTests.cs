@@ -20,22 +20,54 @@ public class NonDirectionalPushReactable_IntegrationTests
     public void WhenPushing_And_WithSingleEventID_And_WithSingleSubscription_And_WithSingleUnsubscribe_ReturnsCorrectResults()
     {
         // Arrange
-        var eventId = new Guid("98a879d4-e819-41da-80e4-a1b459b3e43f");
+        var id = new Guid("98a879d4-e819-41da-80e4-a1b459b3e43f");
 
         IDisposable? unsubscriber = null;
 
-        var reactable = new PushReactable();
+        var sut = new PushReactable();
 
-        unsubscriber = reactable.Subscribe(new ReceiveSubscription(
-            id: eventId,
+        unsubscriber = sut.Subscribe(new ReceiveSubscription(
+            id: id,
             onReceive: () => { },
             onUnsubscribe: () => unsubscriber?.Dispose()));
 
         // Act
-        reactable.Push(eventId);
-        reactable.Unsubscribe(eventId);
+        sut.Push(id);
+        sut.Unsubscribe(id);
 
         // Assert
-        reactable.Subscriptions.Should().HaveCount(0);
+        sut.Subscriptions.Should().HaveCount(0);
+    }
+
+    [Fact]
+    public void Unsubscribing_BeforeCallingUnsubscribeAll_DoesNotThrowException()
+    {
+        // Arrange
+        var id = new Guid("f227d62c-1830-4a42-a5b3-3c920779bf94");
+        IDisposable? unsubscriberB = null;
+        var sut = new PushReactable();
+
+        sut.Subscribe(
+            new ReceiveSubscription(
+                id: id,
+                onReceive: () => { },
+                onUnsubscribe: () =>
+                {
+                    // Unsubscribe from the second subscription so when
+                    // it comes its turn to be unsubscribed, it will be null.
+                    unsubscriberB.Dispose();
+                }));
+
+        unsubscriberB = sut.Subscribe(
+            new ReceiveSubscription(
+                id: id,
+                onReceive: () => { },
+                onUnsubscribe: () => unsubscriberB.Dispose()));
+
+        // Act
+        var act = () => sut.UnsubscribeAll();
+
+        // Assert
+        act.Should().NotThrow();
     }
 }
