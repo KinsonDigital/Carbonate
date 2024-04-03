@@ -133,6 +133,13 @@ public abstract class ReactableBase<TSubscription> : IReactable<TSubscription>
 
         foreach (TSubscription subscription in CollectionsMarshal.AsSpan(InternalSubscriptions))
         {
+            // NOTE: This suppression is because the items could be null even with nullable reference types enabled.
+            // ReSharper disable ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+            if (subscription is null)
+            {
+                continue;
+            }
+
             subscription.OnUnsubscribe();
         }
 
