@@ -42,7 +42,10 @@ jobs:
   test_status_check:
     name: ${{ vars.PROJECT_NAME }} Test Status Check
     needs: [main_tests, integration_tests]
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Print Status Check Pass Message
         shell: pwsh
