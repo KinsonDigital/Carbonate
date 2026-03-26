@@ -17,7 +17,7 @@ on:
         options: [Preview, Production]
       release-version:
         required: true
-        description: The version of the release to prepare.
+        description: The version of the release to prepare (e.g. v1.2.3 or v1.2.3-preview.1).
         type: string
 
 
@@ -38,18 +38,16 @@ jobs:
             exit 1;
           }
 
-
           if ($releaseType -eq "") {
             Write-Host "::error::The release type input cannot be empty.";
             exit 1;
           }
 
-
-          if ($releaseType -ne 'preview' -and $releaseType -ne 'Production') {
+          if ($releaseType -ne 'preview' -and $releaseType -ne 'production') {
             Write-Host "::error::The release type input must be either 'Preview' or 'Production'.";
             exit 1;
           }
-          
+
           $releaseVersion = "${{ inputs.release-version }}".Trim().ToLower();
 
           if ($releaseVersion -eq "") {
@@ -57,15 +55,13 @@ jobs:
             exit 1;
           }
 
+          $versionRegex = "^v([1-9]\d*|0)\.([1-9]\d*|0)\.([1-9]\d*|0)(-preview\.([1-9]\d*))?$";
 
-          $versionRegex = "v([1-9]\d*|0)\.([1-9]\d*|0)\.([1-9]\d*|0)(-preview\.([1-9]\d*))?";
-
-          # Verify that the version has valid syntax
           if (($releaseVersion -match $versionRegex)) {
             Write-Host "::notice::The 'release-version' workflow input is valid.";
           } else {
-            $versionSyntax = $releaseType == "production" ? "v#.#.#" : "v#.#.#-preview.#";
-            Write-Host "::error::The 'release-version' workflow input is not valid.  Expected format: '$versionSyntax";
+            $versionSyntax = $releaseType -eq "production" ? "v#.#.#" : "v#.#.#-preview.#";
+            Write-Host "::error::The 'release-version' workflow input is not valid.  Expected format: '$versionSyntax'";
             exit 1;
           }
 
@@ -73,10 +69,65 @@ jobs:
   prepare_release:
     name: Prepare ${{ inputs.release-type }} Release Of ${{ vars.PROJECT_NAME }}
     needs: print_validate_workflow
-    uses: KinsonDigital/Infrastructure/.github/workflows/prepare-release.yml@v13.6.3
-    with:
-      project-name: "${{ vars.PROJECT_NAME }}"
-      release-type: "${{ inputs.release-type }}"
-      release-version: "${{ inputs.release-version }}"
-    secrets:
-      cicd-pat: ${{ secrets.CICD_TOKEN }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.CICD_TOKEN }}
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]";
+          git config user.email "github-actions[bot]@users.noreply.github.com";
+
+      - name: Create Release Branch
+        run: |
+          $version = "${{ inputs.release-version }}".Trim().ToLower();
+          $branchName = "release/$version";
+
+          git checkout -b "$branchName";
+          Write-Host "::notice::Created release branch: $branchName";
+
+      - name: Update Version In Project File
+        run: |
+          $version = "${{ inputs.release-version }}".Trim().ToLower();
+          $version = $version.StartsWith("v") ? $version.Substring(1) : $version;
+
+          $csprojPath = "${{ github.workspace }}/${{ vars.PROJECT_NAME }}/${{ vars.PROJECT_NAME }}.csproj";
+          $content = Get-Content -Path $csprojPath -Raw;
+
+          $content = $content -replace '<Version>.+<\/Version>', "<Version>$version</Version>";
+          $content = $content -replace '<FileVersion>.+<\/FileVersion>', "<FileVersion>$version</FileVersion>";
+
+          Set-Content -Path $csprojPath -Value $content -NoNewline;
+          Write-Host "::notice::Updated version to $version in $csprojPath";
+
+      - name: Commit And Push Release Branch
+        run: |
+          $version = "${{ inputs.release-version }}".Trim().ToLower();
+          $branchName = "release/$version";
+
+          git add .;
+          git commit -m "chore: prepare $version release";
+          git push origin "$branchName";
+
+      - name: Create Pull Request
+        env:
+          GH_TOKEN: ${{ secrets.CICD_TOKEN }}
+        run: |
+          $version = "${{ inputs.release-version }}".Trim().ToLower();
+          $releaseType = "${{ inputs.release-type }}";
+          $branchName = "release/$version";
+          $targetBranch = $releaseType -eq "Production" ? "main" : "preview";
+          $title = "🚀 $releaseType Release of ${{ vars.PROJECT_NAME }} $version";
+
+          gh pr create `
+            --title "$title" `
+            --body "## $releaseType Release $version``n``nThis PR prepares the $releaseType release of **${{ vars.PROJECT_NAME }}** version **$version**." `
+            --base "$targetBranch" `
+            --head "$branchName" `
+            --label "release";
+
+          Write-Host "::notice::Created release PR from $branchName to $targetBranch";
