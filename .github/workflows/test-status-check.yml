@@ -32,7 +32,7 @@ jobs:
           dotnet-version: ${{ vars.NET_SDK_VERSION }}
 
       - name: Run Build
-        run: dotnet build "${{ github.workspace }}/${{ vars.PROJECT_NAME }}/Tests${{ vars.PROJECT_NAME }}/Tests.csproj" -c Debug;
+        run: dotnet build "${{ github.workspace }}/Testing/${{ vars.PROJECT_NAME }}Tests/${{ vars.PROJECT_NAME }}Tests.csproj" -c Debug;
 
 
   integration_tests:
