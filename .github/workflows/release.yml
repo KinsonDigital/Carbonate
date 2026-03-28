@@ -34,7 +34,7 @@ jobs:
       release-notes-file-path: ${{ steps.get-notes-path.outputs.release-notes-file-path }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Get Release Notes File Path
         id: get-notes-path
