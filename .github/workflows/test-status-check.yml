@@ -54,7 +54,7 @@ jobs:
           dotnet-version: ${{ vars.NET_SDK_VERSION }}
 
       - name: Run Build
-        run: dotnet build "${{ github.workspace }}/${{ vars.PROJECT_NAME }}IntegrationTests/${{ vars.PROJECT_NAME }}IntegrationTests.csproj" -c Debug;
+        run: dotnet build "${{ github.workspace }}/Testing/${{ vars.PROJECT_NAME }}IntegrationTests/${{ vars.PROJECT_NAME }}IntegrationTests.csproj" -c Debug;
 
   test_status_check:
     name: ${{ vars.PROJECT_NAME }} Test Status Check
