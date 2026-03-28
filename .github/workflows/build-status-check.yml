@@ -37,28 +37,34 @@ jobs:
 
   build_perf_project:
     name: Build ${{ vars.PROJECT_NAME }}PerfTests
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v13.6.3
-    with:
-      project-name: "${{ vars.PROJECT_NAME }}PerfTests"
-      build-config: Debug
-      net-sdk-version: "${{ vars.NET_SDK_VERSION }}"
-      checkout-ref: ${{ github.event.pull_request.head.ref }}
-      checkout-repository: ${{ github.event.pull_request.head.repo.full_name }}
-    secrets:
-      cicd-pat: ${{ secrets.CICD_TOKEN }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Set Up .NET SDK (${{ vars.NET_SDK_VERSION }})
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ vars.NET_SDK_VERSION }}
+
+      - name: Build ${{ vars.PROJECT_NAME }}PerfTests
+        run: dotnet build "${{ github.workspace }}/Testing/${{ vars.PROJECT_NAME }}PerfTests/${{ vars.PROJECT_NAME }}PerfTests.csproj" -c Debug;
 
 
   build_samples_project:
     name: Build Samples
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v13.6.3
-    with:
-      project-name: "Samples"
-      build-config: Debug
-      net-sdk-version: "${{ vars.NET_SDK_VERSION }}"
-      checkout-ref: ${{ github.event.pull_request.head.ref }}
-      checkout-repository: ${{ github.event.pull_request.head.repo.full_name }}
-    secrets:
-      cicd-pat: ${{ secrets.CICD_TOKEN }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Set Up .NET SDK (${{ vars.NET_SDK_VERSION }})
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ vars.NET_SDK_VERSION }}
+
+      - name: Build Samples
+        run: dotnet build "${{ github.workspace }}/Samples/Samples/Samples.csproj" -c Debug;
 
 
   build_status_check:
