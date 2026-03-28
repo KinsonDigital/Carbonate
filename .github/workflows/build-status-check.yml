@@ -8,22 +8,31 @@ defaults:
 
 
 on:
-  pull_request_target:
+  pull_request:
     branches: [main, preview]
 
 
 jobs:
   build_main_project:
     name: Build ${{ vars.PROJECT_NAME }}
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v13.6.3
-    with:
-      project-name: "${{ vars.PROJECT_NAME }}"
-      build-config: Debug
-      net-sdk-version: "${{ vars.NET_SDK_VERSION }}"
-      checkout-ref: ${{ github.event.pull_request.head.ref }}
-      checkout-repository: ${{ github.event.pull_request.head.repo.full_name }}
-    secrets:
-      cicd-pat: ${{ secrets.CICD_TOKEN }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: "windows-latest"
+          - platform: "ubuntu-latest"
+          - platform: "macos-latest" # for Arm based macs (M1 and above).
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set Up .NET SDK (${{ vars.NET_SDK_VERSION }})
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: ${{ vars.NET_SDK_VERSION }}
+
+      - name: Run Build
+        run: dotnet build "${{ github.workspace }}/${{ vars.PROJECT_NAME }}/${{ vars.PROJECT_NAME }}.csproj" -c Debug;
 
 
   build_perf_project:
