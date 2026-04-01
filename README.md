@@ -242,7 +242,7 @@ Interested in contributing? If so, click [here](https://github.com/KinsonDigital
 [Calvin Wilkinson](https://x.com/KDCoder) (KinsonDigital GitHub Organization - Owner)
 
 ![bluesky-logo](https://raw.githubusercontent.com/KinsonDigital/.github/main/Images/bluesky-logo-16x16.svg)
-[Calvin Wilkinson](https://x.com/KDCoder) (KinsonDigital GitHub Organization - Owner)
+[Calvin Wilkinson](https://bsky.app/profile/kdcoder.bsky.social) (KinsonDigital GitHub Organization - Owner)
 
 
 <h2 style="font-weight:bold;border:0" align="center">🚔 Licensing and Governance 🚔</h2>
