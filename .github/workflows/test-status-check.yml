@@ -1,5 +1,5 @@
-name: ✅Testing Status Check
-run-name: ✅Unit Testing Status Check (${{ github.base_ref }} branch)
+name: ✅ Testing Status Check
+run-name: ✅ Unit Testing Status Check (${{ github.base_ref }} branch)
 
 
 defaults:
