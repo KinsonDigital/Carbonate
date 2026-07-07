@@ -35,6 +35,16 @@
 		"Velaptor",
 		"xunit"
 	],
+	"files.exclude": {
+		"**/.git": true,
+		"**/.svn": true,
+		"**/.hg": true,
+		"**/.DS_Store": true,
+		"**/Thumbs.db": true,
+		"**/.idea": true,
+		"**/bin": true,
+		"**/obj": true
+	},
     "dotnet.defaultSolution": "Carbonate.sln",
     "[csharp]": {
 		"editor.insertSpaces": true,
