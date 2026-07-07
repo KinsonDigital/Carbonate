@@ -1,4 +1,4 @@
-﻿// <copyright file="Program.cs" company="KinsonDigital">
+// <copyright file="Program.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -9,13 +9,6 @@
 using System.Runtime.InteropServices;
 using Samples;
 #pragma warning restore SA1200
-
-// Check if the current platform is windows
-if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-{
-    // Set the console window size to be larger than the default
-    Console.SetWindowSize(Console.WindowWidth, Console.LargestWindowHeight);
-}
 
 var samples = new Dictionary<string, Action>
 {
@@ -48,10 +41,10 @@ for (var i = 0; i < samples.Count; i++)
         Console.WriteLine("-------------------------------------------------");
         Console.ForegroundColor = consoleClr;
 
-        Console.ReadKey();
+        Console.ReadLine();
     }
 }
 
 Console.WriteLine();
 Console.WriteLine("Running samples complete!!");
-Console.ReadKey();
+Console.ReadLine();
