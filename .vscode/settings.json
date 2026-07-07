@@ -27,6 +27,8 @@
 		"serilog",
 		"simpleinjector",
 		"sixlabors",
+		"sonarcloud",
+		"sonarsource",
 		"struct",
 		"TWOWAYPUSHPULLREACTABLE",
 		"unsubscriber",
