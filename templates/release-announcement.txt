@@ -1,0 +1,9 @@
+{PROJECT_NAME} {VERSION} is live! 🚀
+
+Internal messaging library for dotnet just got better!
+Send private messages internally from your public API!
+Take it for a spin, share what you build, and help drive the project's evolution! 🤘🏼
+
+GitHub: {WEBSITE_URL}
+
+#carbonate #dotnet

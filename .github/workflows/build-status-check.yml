@@ -1,5 +1,5 @@
-name: ✅Build Status Check
-run-name: ✅Build Status Check (${{ github.base_ref }} branch)
+name: ✅ Build Status Check
+run-name: ✅ Build Status Check (${{ github.base_ref }} branch)
 
 
 defaults:
@@ -18,10 +18,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - platform: "windows-latest"
-          - platform: "ubuntu-latest"
-          - platform: "macos-latest" # for Arm based macs (M1 and above).
+        platform: ["windows-latest", "ubuntu-latest", "macos-latest"]
+        build_config: ["Debug", "Release"]
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v6
@@ -37,7 +35,12 @@ jobs:
 
   build_perf_project:
     name: Build ${{ vars.PROJECT_NAME }}PerfTests
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: ["windows-latest", "ubuntu-latest", "macos-latest"]
+        build_config: ["Debug", "Release"]
+    runs-on: ${{ matrix.platform }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v6
@@ -53,7 +56,12 @@ jobs:
 
   build_samples_project:
     name: Build Samples
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: ["windows-latest", "ubuntu-latest", "macos-latest"]
+        build_config: ["Debug", "Release"]
+    runs-on: ${{ matrix.platform }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v6
@@ -70,10 +78,7 @@ jobs:
   build_status_check:
     name: ${{ vars.PROJECT_NAME }} Build Status Check
     needs: [build_main_project, build_perf_project, build_samples_project]
-    strategy:
-      matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
       - name: Print Status Check Pass Message
         shell: pwsh
