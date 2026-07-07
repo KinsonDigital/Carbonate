@@ -2,6 +2,10 @@ name: ✅ Build Status Check
 run-name: ✅ Build Status Check (${{ github.base_ref }} branch)
 
 
+permissions:
+  contents: read
+
+
 defaults:
   run:
     shell: pwsh
@@ -30,7 +34,10 @@ jobs:
           dotnet-version: ${{ vars.NET_SDK_VERSION }}
 
       - name: Run Build
-        run: dotnet build "${{ github.workspace }}/${{ vars.PROJECT_NAME }}/${{ vars.PROJECT_NAME }}.csproj" -c Debug;
+        env:
+          PROJECT_NAME: ${{ vars.PROJECT_NAME }}
+          BUILD_CONFIG: ${{ matrix.build_config }}
+        run: dotnet build "$env:GITHUB_WORKSPACE/$env:PROJECT_NAME/$env:PROJECT_NAME.csproj" -c "$env:BUILD_CONFIG";
 
 
   build_perf_project:
@@ -51,7 +58,10 @@ jobs:
           dotnet-version: ${{ vars.NET_SDK_VERSION }}
 
       - name: Build ${{ vars.PROJECT_NAME }}PerfTests
-        run: dotnet build "${{ github.workspace }}/Testing/${{ vars.PROJECT_NAME }}PerfTests/${{ vars.PROJECT_NAME }}PerfTests.csproj" -c Debug;
+        env:
+          PROJECT_NAME: ${{ vars.PROJECT_NAME }}
+          BUILD_CONFIG: ${{ matrix.build_config }}
+        run: dotnet build "$env:GITHUB_WORKSPACE/Testing/$($env:PROJECT_NAME)PerfTests/$($env:PROJECT_NAME)PerfTests.csproj" -c "$env:BUILD_CONFIG";
 
 
   build_samples_project:
@@ -72,7 +82,9 @@ jobs:
           dotnet-version: ${{ vars.NET_SDK_VERSION }}
 
       - name: Build Samples
-        run: dotnet build "${{ github.workspace }}/Samples/Samples/Samples.csproj" -c Debug;
+        env:
+          BUILD_CONFIG: ${{ matrix.build_config }}
+        run: dotnet build "$env:GITHUB_WORKSPACE/Samples/Samples/Samples.csproj" -c "$env:BUILD_CONFIG";
 
 
   build_status_check:

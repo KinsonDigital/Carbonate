@@ -2,6 +2,10 @@ name: ✅ Testing Status Check
 run-name: ✅ Unit Testing Status Check (${{ github.base_ref }} branch)
 
 
+permissions:
+  contents: read
+
+
 defaults:
   run:
     shell: pwsh
@@ -30,7 +34,10 @@ jobs:
           dotnet-version: ${{ vars.NET_SDK_VERSION }}
 
       - name: Run Build
-        run: dotnet build "${{ github.workspace }}/Testing/${{ vars.PROJECT_NAME }}Tests/${{ vars.PROJECT_NAME }}Tests.csproj" -c Debug;
+        env:
+          PROJECT_NAME: ${{ vars.PROJECT_NAME }}
+          BUILD_CONFIG: ${{ matrix.build_config }}
+        run: dotnet build "$env:GITHUB_WORKSPACE/Testing/$($env:PROJECT_NAME)Tests/$($env:PROJECT_NAME)Tests.csproj" -c "$env:BUILD_CONFIG";
 
 
   integration_tests:
@@ -50,7 +57,10 @@ jobs:
           dotnet-version: ${{ vars.NET_SDK_VERSION }}
 
       - name: Run Build
-        run: dotnet build "${{ github.workspace }}/Testing/${{ vars.PROJECT_NAME }}IntegrationTests/${{ vars.PROJECT_NAME }}IntegrationTests.csproj" -c Debug;
+        env:
+          PROJECT_NAME: ${{ vars.PROJECT_NAME }}
+          BUILD_CONFIG: ${{ matrix.build_config }}
+        run: dotnet build "$env:GITHUB_WORKSPACE/Testing/$($env:PROJECT_NAME)IntegrationTests/$($env:PROJECT_NAME)IntegrationTests.csproj" -c "$env:BUILD_CONFIG";
 
   test_status_check:
     name: ${{ vars.PROJECT_NAME }} Test Status Check
