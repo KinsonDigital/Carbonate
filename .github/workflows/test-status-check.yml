@@ -18,10 +18,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - platform: "windows-latest"
-          - platform: "ubuntu-latest"
-          - platform: "macos-latest" # for Arm based macs (M1 and above).
+        platform: ["windows-latest", "ubuntu-latest", "macos-latest"]
+        build_config: ["Debug", "Release"]
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v6
@@ -40,10 +38,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - platform: "windows-latest"
-          - platform: "ubuntu-latest"
-          - platform: "macos-latest" # for Arm based macs (M1 and above).
+        platform: ["windows-latest", "ubuntu-latest", "macos-latest"]
+        build_config: ["Debug", "Release"]
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v6
