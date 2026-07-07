@@ -1,8 +1,18 @@
 {
+	"deno.enablePaths": [
+		"DevTools/"
+	],
     "cSpell.words": [
+		"avalonia",
+		"benchmarkdotnet",
 		"Carbonate",
 		"CICD",
+		"communitytoolkit",
+		"fluentassertions",
+		"imagesharp",
 		"Kinson",
+		"kinsondigital",
+		"mvvm",
 		"NONDIRPUSHREACTABLE",
 		"ONEWAYPULLREACTABLE",
 		"ONEWAYPUSHREACTABLE",
@@ -14,12 +24,16 @@
 		"reactables",
 		"REPONAME",
 		"runsettings",
+		"serilog",
+		"simpleinjector",
+		"sixlabors",
 		"struct",
 		"TWOWAYPUSHPULLREACTABLE",
 		"unsubscriber",
 		"unsubscription",
 		"unsubscriptions",
-		"Velaptor"
+		"Velaptor",
+		"xunit"
 	],
     "dotnet.defaultSolution": "Carbonate.sln",
     "[csharp]": {
@@ -38,5 +52,5 @@
 	"[github-actions-workflow]": {
 		"editor.tabSize": 2,
 		"editor.insertSpaces": true
-	}
+	},
 }
