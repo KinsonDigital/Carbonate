@@ -8,7 +8,7 @@
         <IsPackable>false</IsPackable>
         <RootNamespace>CarbonateTests</RootNamespace>
         <Configurations>Release;Debug;Release OneWayPullReactable;Release OneWayPushReactable;Release NonDirPushReactable;Release TwoWayPushPullReactable</Configurations>
-        <Platforms>x64</Platforms>
+        <Platforms>x64;arm64</Platforms>
     </PropertyGroup>
 
     <ItemGroup>

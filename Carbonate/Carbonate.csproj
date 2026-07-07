@@ -32,7 +32,7 @@
         <RepositoryUrl>https://github.com/KinsonDigital/Carbonate</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageIcon>carbonate-logo-light-mode.png</PackageIcon>
-        <Platforms>x64</Platforms>
+        <Platforms>x64;arm64</Platforms>
         <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
 

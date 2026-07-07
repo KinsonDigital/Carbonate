@@ -20,8 +20,8 @@ public class TwoWayWithoutFluentApi : Sample
     /// <inheritdoc/>
     public override void Run()
     {
-        var description = "This sample shows how to create a 'two way' reactable object without using the fluent API.";
-        description += "\nThe is the lowest level and most verbose approach to creating a reactable and";
+        var description = "This sample shows how to create a 'two-way' reactable object without using the fluent API.";
+        description += "\nThis is the lowest level and most verbose approach to creating a reactable and";
         description += "\nfor subscribing to push notifications from the reactable.";
         description += "\n\nThis setup is useful if you want to send and receive data with a push notification";
 
@@ -30,7 +30,8 @@ public class TwoWayWithoutFluentApi : Sample
         var msgEventId = Guid.NewGuid(); // This is the ID used to identify the event
         var favoriteRequester = new PushPullReactable<string, string>();
 
-        var unsubscriber = favoriteRequester.Subscribe(new ReceiveRespondSubscription<string, string>(
+        var unsubscriber = favoriteRequester.Subscribe(
+            new ReceiveRespondSubscription<string, string>(
             id: msgEventId,
             name: "adder",
             onReceiveRespond: data => data switch
