@@ -13,10 +13,6 @@ permissions:
   pull-requests: write
 
 
-env:
-  CS_PROJ_FILE_NAME: ${{ github.workspace }}/${{ vars.PROJECT_NAME }}/${{ vars.PROJECT_NAME }}.csproj
-
-
 on:
   workflow_dispatch:
     inputs:
@@ -161,6 +157,7 @@ jobs:
       - name: Should Fail Job
         env:
           PROJECT_NAME: ${{ vars.PROJECT_NAME }}
+          VERSION: ${{ needs.get_and_validate_version.outputs.version }}
         run: |
           $tagCheckFailed = "${{ steps.tag-check.outcome == 'failure' }}";
           $sdkCheckFailed = "${{ steps.sdk-check.outcome == 'failure' }}";
@@ -181,7 +178,7 @@ jobs:
           }
 
           if ($notesFileCheckFailed -eq "true") {
-            Write-Host "::error::The release notes for version '${{ needs.get_and_validate_version.outputs.version }}' do not exist.";
+            Write-Host "::error::The release notes for version 'v$($env:VERSION)' do not exist.";
           }
 
           if ($packageCheckFailed -eq "true") {
@@ -193,11 +190,11 @@ jobs:
           }
 
           if ($milestoneExists -eq "false") {
-            Write-Host "::error::The milestone 'v${{ needs.get_and_validate_version.outputs.version }}' does not exist.";
+            Write-Host "::error::The milestone 'v$($env:VERSION)' does not exist.";
           }
 
           if ($milestoneItemsCheckFailed -eq "true") {
-            Write-Host "::error::The milestone 'v${{ needs.get_and_validate_version.outputs.version }}' has one or more issues that are not closed or PRs that are in draft.";
+            Write-Host "::error::The milestone 'v$($env:VERSION)' has one or more issues that are not closed or PRs that are in draft.";
           }
 
           if ($githubReleaseCheckFailed -eq "true") {
@@ -222,7 +219,7 @@ jobs:
 
 
   build_carbonate:
-    name: Build Carbonate Status Check
+    name: Build ${{ vars.PROJECT_NAME }} Status Check
     needs: [run_prerelease_validation]
     strategy:
       fail-fast: false
@@ -240,14 +237,13 @@ jobs:
 
       - name: Run Build
         env:
-          WORKSPACE: ${{ github.workspace }}
           PROJECT_NAME: ${{ vars.PROJECT_NAME }}
           BUILD_CONFIG: ${{ matrix.build_config }}
-        run: dotnet build "$($env:WORKSPACE)/$($env:PROJECT_NAME)/$($env:PROJECT_NAME).csproj" -c "$env:BUILD_CONFIG";
+        run: dotnet build "$($env:GITHUB_WORKSPACE)/$($env:PROJECT_NAME)/$($env:PROJECT_NAME).csproj" -c "$env:BUILD_CONFIG";
 
 
   run_carbonate_tests:
-    name: Run Carbonate Tests
+    name: Run ${{ vars.PROJECT_NAME }} Tests
     needs: [run_prerelease_validation]
     strategy:
       fail-fast: false
@@ -265,10 +261,9 @@ jobs:
 
       - name: Run Tests
         env:
-          WORKSPACE: ${{ github.workspace }}
           PROJECT_NAME: ${{ vars.PROJECT_NAME }}
           BUILD_CONFIG: ${{ matrix.build_config }}
-        run: dotnet test "$($env:WORKSPACE)/Testing/$($env:PROJECT_NAME)Testing/$($env:PROJECT_NAME)Testing.csproj" -c "$env:BUILD_CONFIG";
+        run: dotnet test "$($env:GITHUB_WORKSPACE)/Testing/$($env:PROJECT_NAME)Tests/$($env:PROJECT_NAME)Tests.csproj" -c "$env:BUILD_CONFIG";
 
 
   run_release:
