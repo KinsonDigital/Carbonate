@@ -1,6 +1,10 @@
 name: 🔎 Sonar Scan Status Check
 
 
+permissions:
+  contents: read
+
+
 defaults:
   run:
     shell: pwsh

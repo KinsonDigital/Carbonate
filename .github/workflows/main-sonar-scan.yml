@@ -2,6 +2,10 @@ name: 🔎 Main Sonar Scan
 run-name: 🔎 Main Sonar Scan
 
 
+permissions:
+  contents: read
+
+
 defaults:
   run:
     shell: pwsh

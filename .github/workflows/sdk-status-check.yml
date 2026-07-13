@@ -1,5 +1,9 @@
 name: ✅ SDK Status Check
-run-name: ✅ SDK Status Check (${{ github.base_ref }} branch)
+run-name: ✅ SDK Status Check (${{ github.head_ref }} branch)
+
+
+permissions:
+  contents: read
 
 
 defaults:
