@@ -37,14 +37,14 @@ jobs:
     steps:
       - name: Get Version
         id: get-version
-        uses: KinsonDigital/Infrastructure/actions/get-version@9c4f1702ed7e5f785415d7db14796b1dde7c6a16 #v17.2.0
+        uses: KinsonDigital/Infrastructure/actions/get-version@acc7aa3997697717943e56c439f7b529d1e1d1ba # v19.0.0
         with:
           version-file-path: "${{ github.workspace }}/${{ vars.PROJECT_NAME }}/${{ vars.PROJECT_NAME }}.csproj"
           cache-enabled: false
 
       - name: Validate Version
         id: validate-version
-        uses: KinsonDigital/Infrastructure/actions/validate-version@9c4f1702ed7e5f785415d7db14796b1dde7c6a16 #v17.2.0
+        uses: KinsonDigital/Infrastructure/actions/validate-version@acc7aa3997697717943e56c439f7b529d1e1d1ba # v19.0.0
         with:
           version: "v${{ steps.get-version.outputs.version }}"
           release-type: "${{ inputs.release-type }}"
@@ -269,7 +269,7 @@ jobs:
   run_release:
     name: Performing ${{ inputs.release-type }} Release of ${{ vars.PROJECT_NAME }} (${{ inputs.release-type == 'Production' && 'Release' || 'Debug' }})
     needs: [build_carbonate, run_carbonate_tests, get_and_validate_version]
-    uses: KinsonDigital/Infrastructure/.github/workflows/dotnet-lib-release.yml@9c4f1702ed7e5f785415d7db14796b1dde7c6a16 #v17.2.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/dotnet-lib-release.yml@acc7aa3997697717943e56c439f7b529d1e1d1ba # v19.0.0
     with:
       project-name: "${{ vars.PROJECT_NAME }}"
       release-type: "${{ inputs.release-type }}"
@@ -294,7 +294,7 @@ jobs:
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Send X Release Announcement
-        uses: KinsonDigital/Infrastructure/actions/send-x-release-announcement@9c4f1702ed7e5f785415d7db14796b1dde7c6a16 #v17.2.0
+        uses: KinsonDigital/Infrastructure/actions/send-x-release-announcement@acc7aa3997697717943e56c439f7b529d1e1d1ba # v19.0.0
         with:
           repo-owner: ${{ vars.ORGANIZATION_NAME }}
           project-name: ${{ vars.PROJECT_NAME }}
@@ -310,7 +310,7 @@ jobs:
           github-token: ${{ secrets.CICD_TOKEN }}
 
       - name: Send Bluesky Release Announcement
-        uses: KinsonDigital/Infrastructure/actions/send-bluesky-release-announcement@9c4f1702ed7e5f785415d7db14796b1dde7c6a16 #v17.2.0
+        uses: KinsonDigital/Infrastructure/actions/send-bluesky-release-announcement@acc7aa3997697717943e56c439f7b529d1e1d1ba # v19.0.0
         with:
           repo-owner: ${{ vars.ORGANIZATION_NAME }}
           project-name: ${{ vars.PROJECT_NAME }}
