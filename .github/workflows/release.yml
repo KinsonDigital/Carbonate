@@ -36,7 +36,7 @@ on:
 jobs:
   get_and_validate_version:
     name: Get And Validate Version
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     outputs:
       version: ${{ steps.get-version.outputs.version }}
     steps:
@@ -141,7 +141,7 @@ jobs:
 
   send_release_announcements:
     name: Send Release Announcements
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [get_and_validate_version, validate_release, build_carbonate, run_carbonate_tests, run_release]
     if: ${{ inputs.dry-run == false }}
     steps:

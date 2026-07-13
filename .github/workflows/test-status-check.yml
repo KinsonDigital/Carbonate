@@ -65,7 +65,7 @@ jobs:
   test_status_check:
     name: ${{ vars.PROJECT_NAME }} Test Status Check
     needs: [main_tests, integration_tests]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Print Status Check Pass Message
         shell: pwsh
