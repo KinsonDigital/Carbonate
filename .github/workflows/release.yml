@@ -31,7 +31,7 @@ on:
 jobs:
   get_and_validate_version:
     name: Get And Validate Version
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     outputs:
       version: ${{ steps.get-version.outputs.version }}
     steps:
@@ -224,7 +224,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [windows-latest, ubuntu-latest, macos-latest]
+        platform: [windows-2025, ubuntu-22.04, macos-26]
         build_config: [Release]
     runs-on: ${{ matrix.platform }}
     steps:
@@ -248,7 +248,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [windows-latest, ubuntu-latest, macos-latest]
+        platform: [windows-2025, ubuntu-22.04, macos-26]
         build_config: [Debug, Release]
     runs-on: ${{ matrix.platform }}
     steps:
@@ -286,7 +286,7 @@ jobs:
 
   send_release_announcements:
     name: Send Release Announcements
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: [get_and_validate_version, run_prerelease_validation, build_carbonate, run_carbonate_tests, run_release]
     if: ${{ inputs.dry-run == false }}
     steps:

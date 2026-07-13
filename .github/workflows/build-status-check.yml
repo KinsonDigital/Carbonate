@@ -22,7 +22,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: ["windows-latest", "ubuntu-latest", "macos-latest"]
+        platform: ["windows-2025", "ubuntu-22.04", "macos-26"]
         build_config: ["Debug", "Release"]
     runs-on: ${{ matrix.platform }}
     steps:
@@ -45,7 +45,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: ["windows-latest", "ubuntu-latest", "macos-latest"]
+        platform: ["windows-2025", "ubuntu-22.04", "macos-26"]
         build_config: ["Debug", "Release"]
     runs-on: ${{ matrix.platform }}
     steps:
@@ -69,7 +69,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: ["windows-latest", "ubuntu-latest", "macos-latest"]
+        platform: ["windows-2025", "ubuntu-22.04", "macos-26"]
         build_config: ["Debug", "Release"]
     runs-on: ${{ matrix.platform }}
     steps:
@@ -90,7 +90,7 @@ jobs:
   build_status_check:
     name: ${{ vars.PROJECT_NAME }} Build Status Check
     needs: [build_main_project, build_perf_project, build_samples_project]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Print Status Check Pass Message
         shell: pwsh

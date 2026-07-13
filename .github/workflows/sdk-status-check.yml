@@ -15,7 +15,7 @@ on:
 jobs:
   sdk_status_check:
     name: ${{ vars.PROJECT_NAME }} SDK Status Check
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout Repository
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
