@@ -1,4 +1,4 @@
-﻿// <copyright file="SubscriptionUnsubscriberTests.cs" company="KinsonDigital">
+// <copyright file="SubscriptionUnsubscriberTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -6,7 +6,7 @@ namespace CarbonateTests.Core;
 
 using System.Diagnostics.CodeAnalysis;
 using Carbonate.Core;
-using FluentAssertions;
+using Shouldly;
 using NSubstitute;
 using Xunit;
 
@@ -29,9 +29,8 @@ public class SubscriptionUnsubscriberTests
         };
 
         // Assert
-        act.Should()
-            .Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'subscriptions')");
+        Should.Throw<ArgumentNullException>(act)
+            .Message.ShouldBe("Value cannot be null. (Parameter 'subscriptions')");
     }
 
     [Fact]
@@ -47,9 +46,8 @@ public class SubscriptionUnsubscriberTests
         };
 
         // Assert
-        act.Should()
-            .Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'subscription')");
+        Should.Throw<ArgumentNullException>(act)
+            .Message.ShouldBe("Value cannot be null. (Parameter 'subscription')");
     }
 
     [Fact]
@@ -65,9 +63,8 @@ public class SubscriptionUnsubscriberTests
         };
 
         // Assert
-        act.Should()
-            .Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'isProcessing')");
+        Should.Throw<ArgumentNullException>(act)
+            .Message.ShouldBe("Value cannot be null. (Parameter 'isProcessing')");
     }
     #endregion
 
@@ -87,7 +84,7 @@ public class SubscriptionUnsubscriberTests
         var actual = sut.TotalSubscriptions;
 
         // Assert
-        actual.Should().Be(2);
+        actual.ShouldBe(2);
     }
 
     [Fact]
@@ -110,7 +107,7 @@ public class SubscriptionUnsubscriberTests
         var actual = sut.TotalSubscriptions;
 
         // Assert
-        actual.Should().Be(2);
+        actual.ShouldBe(2);
     }
     #endregion
 }

@@ -1,4 +1,4 @@
-﻿// <copyright file="ReactableExtensionMethodsTests.cs" company="KinsonDigital">
+// <copyright file="ReactableExtensionMethodsTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -9,7 +9,7 @@ using Carbonate;
 using Carbonate.NonDirectional;
 using Carbonate.OneWay;
 using Carbonate.TwoWay;
-using FluentAssertions;
+using Shouldly;
 using Xunit;
 
 /// <summary>
@@ -45,8 +45,7 @@ public class ReactableExtensionMethodsTests
         var act = () => sut.CreateNonReceiveOrRespond(Guid.NewGuid(), "test-name", () => { });
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'reactable')");
+        Should.Throw<ArgumentNullException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'reactable')");
     }
 
     [Fact]
@@ -59,8 +58,7 @@ public class ReactableExtensionMethodsTests
         var act = () => sut.CreateNonReceiveOrRespond(Guid.Empty, "test-name", () => { });
 
         // Assert
-        act.Should().Throw<ArgumentException>()
-            .WithMessage("The id cannot be empty. (Parameter 'id')");
+        Should.Throw<ArgumentException>(act).Message.ShouldBe("The id cannot be empty. (Parameter 'id')");
     }
 
     [Theory]
@@ -75,7 +73,7 @@ public class ReactableExtensionMethodsTests
         var act = () => sut.CreateNonReceiveOrRespond(Guid.NewGuid(), name, () => { });
 
         // Assert
-        act.Should().Throw<ArgumentException>().WithMessage(expected);
+        Should.Throw<ArgumentException>(act).Message.ShouldBe(expected);
     }
 
     [Fact]
@@ -85,11 +83,10 @@ public class ReactableExtensionMethodsTests
         var sut = new PushReactable();
 
         // Act
-        var act = () => sut.CreateNonReceiveOrRespond(Guid.NewGuid(), "test-name", null);
+        Action act = () => sut.CreateNonReceiveOrRespond(Guid.NewGuid(), "test-name", null);
 
         // Assert
-        act.Should().Throw<ArgumentException>()
-            .WithMessage("Value cannot be null. (Parameter 'onReceive')");
+        Should.Throw<ArgumentException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'onReceive')");
     }
     #endregion
 
@@ -104,8 +101,7 @@ public class ReactableExtensionMethodsTests
         var act = () => sut.CreateNonReceiveOrRespond(Guid.NewGuid(), () => { });
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'reactable')");
+        Should.Throw<ArgumentNullException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'reactable')");
     }
 
     [Fact]
@@ -118,8 +114,7 @@ public class ReactableExtensionMethodsTests
         var act = () => sut.CreateNonReceiveOrRespond(Guid.Empty, () => { });
 
         // Assert
-        act.Should().Throw<ArgumentException>()
-            .WithMessage("The id cannot be empty. (Parameter 'id')");
+        Should.Throw<ArgumentException>(act).Message.ShouldBe("The id cannot be empty. (Parameter 'id')");
     }
 
     [Fact]
@@ -129,11 +124,10 @@ public class ReactableExtensionMethodsTests
         var sut = new PushReactable();
 
         // Act
-        var act = () => sut.CreateNonReceiveOrRespond(Guid.NewGuid(), null);
+        Action act = () => sut.CreateNonReceiveOrRespond(Guid.NewGuid(), null);
 
         // Assert
-        act.Should().Throw<ArgumentException>()
-            .WithMessage("Value cannot be null. (Parameter 'onReceive')");
+        Should.Throw<ArgumentException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'onReceive')");
     }
     #endregion
 
@@ -148,8 +142,7 @@ public class ReactableExtensionMethodsTests
         var act = () => sut.CreateOneWayReceive(Guid.Empty, "test-name", _ => { });
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'reactable')");
+        Should.Throw<ArgumentNullException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'reactable')");
     }
 
     [Fact]
@@ -162,8 +155,7 @@ public class ReactableExtensionMethodsTests
         var act = () => sut.CreateOneWayReceive(Guid.Empty, "test-name", _ => { });
 
         // Assert
-        act.Should().Throw<ArgumentException>()
-            .WithMessage("The id cannot be empty. (Parameter 'id')");
+        Should.Throw<ArgumentException>(act).Message.ShouldBe("The id cannot be empty. (Parameter 'id')");
     }
 
     [Theory]
@@ -175,10 +167,10 @@ public class ReactableExtensionMethodsTests
         var sut = new PushReactable<int>();
 
         // Act
-        var act = () => sut.CreateOneWayReceive(Guid.NewGuid(), name, null);
+        Action act = () => sut.CreateOneWayReceive(Guid.NewGuid(), name, null);
 
         // Assert
-        act.Should().Throw<ArgumentException>().WithMessage(expected);
+        Should.Throw<ArgumentException>(act).Message.ShouldBe(expected);
     }
 
     [Fact]
@@ -188,11 +180,10 @@ public class ReactableExtensionMethodsTests
         var sut = new PushReactable<int>();
 
         // Act
-        var act = () => sut.CreateOneWayReceive(Guid.NewGuid(), "test-name", null);
+        Action act = () => sut.CreateOneWayReceive(Guid.NewGuid(), "test-name", null);
 
         // Assert
-        act.Should().Throw<ArgumentException>()
-            .WithMessage("Value cannot be null. (Parameter 'onReceive')");
+        Should.Throw<ArgumentException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'onReceive')");
     }
     #endregion
 
@@ -207,8 +198,7 @@ public class ReactableExtensionMethodsTests
         var act = () => sut.CreateOneWayReceive(Guid.Empty, _ => { });
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'reactable')");
+        Should.Throw<ArgumentNullException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'reactable')");
     }
 
     [Fact]
@@ -221,8 +211,7 @@ public class ReactableExtensionMethodsTests
         var act = () => sut.CreateOneWayReceive(Guid.Empty, _ => { });
 
         // Assert
-        act.Should().Throw<ArgumentException>()
-            .WithMessage("The id cannot be empty. (Parameter 'id')");
+        Should.Throw<ArgumentException>(act).Message.ShouldBe("The id cannot be empty. (Parameter 'id')");
     }
 
     [Fact]
@@ -232,11 +221,10 @@ public class ReactableExtensionMethodsTests
         var sut = new PushReactable<int>();
 
         // Act
-        var act = () => sut.CreateOneWayReceive(Guid.NewGuid(), null);
+        Action act = () => sut.CreateOneWayReceive(Guid.NewGuid(), null);
 
         // Assert
-        act.Should().Throw<ArgumentException>()
-            .WithMessage("Value cannot be null. (Parameter 'onReceive')");
+        Should.Throw<ArgumentException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'onReceive')");
     }
     #endregion
 
@@ -248,11 +236,10 @@ public class ReactableExtensionMethodsTests
         IPullReactable<int>? sut = null;
 
         // Act
-        var act = () => sut.CreateOneWayRespond(Guid.Empty, "test-name", () => 10);
+        Action act = () => sut.CreateOneWayRespond(Guid.Empty, "test-name", () => 10);
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'reactable')");
+        Should.Throw<ArgumentNullException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'reactable')");
     }
 
     [Fact]
@@ -262,11 +249,10 @@ public class ReactableExtensionMethodsTests
         var sut = new PullReactable<int>();
 
         // Act
-        var act = () => sut.CreateOneWayRespond(Guid.Empty, "test-name", () => 20);
+        Action act = () => sut.CreateOneWayRespond(Guid.Empty, "test-name", () => 20);
 
         // Assert
-        act.Should().Throw<ArgumentException>()
-            .WithMessage("The id cannot be empty. (Parameter 'id')");
+        Should.Throw<ArgumentException>(act).Message.ShouldBe("The id cannot be empty. (Parameter 'id')");
     }
 
     [Theory]
@@ -278,10 +264,10 @@ public class ReactableExtensionMethodsTests
         var sut = new PullReactable<int>();
 
         // Act
-        var act = () => sut.CreateOneWayRespond(Guid.NewGuid(), name, null);
+        Action act = () => sut.CreateOneWayRespond(Guid.NewGuid(), name, null);
 
         // Assert
-        act.Should().Throw<ArgumentException>().WithMessage(expected);
+        Should.Throw<ArgumentException>(act).Message.ShouldBe(expected);
     }
 
     [Fact]
@@ -291,11 +277,10 @@ public class ReactableExtensionMethodsTests
         var sut = new PullReactable<int>();
 
         // Act
-        var act = () => sut.CreateOneWayRespond(Guid.NewGuid(), "test-name", null);
+        Action act = () => sut.CreateOneWayRespond(Guid.NewGuid(), "test-name", null);
 
         // Assert
-        act.Should().Throw<ArgumentException>()
-            .WithMessage("Value cannot be null. (Parameter 'onRespond')");
+        Should.Throw<ArgumentException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'onRespond')");
     }
     #endregion
 
@@ -307,11 +292,10 @@ public class ReactableExtensionMethodsTests
         IPullReactable<int>? sut = null;
 
         // Act
-        var act = () => sut.CreateOneWayRespond(Guid.Empty, () => 30);
+        Action act = () => sut.CreateOneWayRespond(Guid.Empty, () => 30);
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'reactable')");
+        Should.Throw<ArgumentNullException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'reactable')");
     }
 
     [Fact]
@@ -321,11 +305,10 @@ public class ReactableExtensionMethodsTests
         var sut = new PullReactable<int>();
 
         // Act
-        var act = () => sut.CreateOneWayRespond(Guid.Empty, () => 40);
+        Action act = () => sut.CreateOneWayRespond(Guid.Empty, () => 40);
 
         // Assert
-        act.Should().Throw<ArgumentException>()
-            .WithMessage("The id cannot be empty. (Parameter 'id')");
+        Should.Throw<ArgumentException>(act).Message.ShouldBe("The id cannot be empty. (Parameter 'id')");
     }
 
     [Fact]
@@ -335,11 +318,10 @@ public class ReactableExtensionMethodsTests
         var sut = new PullReactable<int>();
 
         // Act
-        var act = () => sut.CreateOneWayRespond(Guid.NewGuid(), null);
+        Action act = () => sut.CreateOneWayRespond(Guid.NewGuid(), null);
 
         // Assert
-        act.Should().Throw<ArgumentException>()
-            .WithMessage("Value cannot be null. (Parameter 'onRespond')");
+        Should.Throw<ArgumentException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'onRespond')");
     }
     #endregion
 
@@ -351,11 +333,10 @@ public class ReactableExtensionMethodsTests
         IPushPullReactable<int, bool>? sut = null;
 
         // Act
-        var act = () => sut.CreateTwoWay(Guid.Empty, "test-name", _ => true);
+        Action act = () => sut.CreateTwoWay(Guid.Empty, "test-name", _ => true);
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'reactable')");
+        Should.Throw<ArgumentNullException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'reactable')");
     }
 
     [Fact]
@@ -365,11 +346,10 @@ public class ReactableExtensionMethodsTests
         var sut = new PushPullReactable<int, bool>();
 
         // Act
-        var act = () => sut.CreateTwoWay(Guid.Empty, "test-name", _ => true);
+        Action act = () => sut.CreateTwoWay(Guid.Empty, "test-name", _ => true);
 
         // Assert
-        act.Should().Throw<ArgumentException>()
-            .WithMessage("The id cannot be empty. (Parameter 'id')");
+        Should.Throw<ArgumentException>(act).Message.ShouldBe("The id cannot be empty. (Parameter 'id')");
     }
 
     [Theory]
@@ -381,10 +361,10 @@ public class ReactableExtensionMethodsTests
         var sut = new PushPullReactable<int, bool>();
 
         // Act
-        var act = () => sut.CreateTwoWay(Guid.NewGuid(), name, null);
+        Action act = () => sut.CreateTwoWay(Guid.NewGuid(), name, null);
 
         // Assert
-        act.Should().Throw<ArgumentException>().WithMessage(expected);
+        Should.Throw<ArgumentException>(act).Message.ShouldBe(expected);
     }
 
     [Fact]
@@ -394,11 +374,10 @@ public class ReactableExtensionMethodsTests
         var sut = new PushPullReactable<int, bool>();
 
         // Act
-        var act = () => sut.CreateTwoWay(Guid.NewGuid(), "test-name", null);
+        Action act = () => sut.CreateTwoWay(Guid.NewGuid(), "test-name", null);
 
         // Assert
-        act.Should().Throw<ArgumentException>()
-            .WithMessage("Value cannot be null. (Parameter 'onReceiveRespond')");
+        Should.Throw<ArgumentException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'onReceiveRespond')");
     }
     #endregion
 
@@ -410,11 +389,10 @@ public class ReactableExtensionMethodsTests
         IPushPullReactable<int, bool>? sut = null;
 
         // Act
-        var act = () => sut.CreateTwoWay(Guid.Empty, _ => true);
+        Action act = () => sut.CreateTwoWay(Guid.Empty, _ => true);
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'reactable')");
+        Should.Throw<ArgumentNullException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'reactable')");
     }
 
     [Fact]
@@ -424,11 +402,10 @@ public class ReactableExtensionMethodsTests
         var sut = new PushPullReactable<int, bool>();
 
         // Act
-        var act = () => sut.CreateTwoWay(Guid.Empty, _ => true);
+        Action act = () => sut.CreateTwoWay(Guid.Empty, _ => true);
 
         // Assert
-        act.Should().Throw<ArgumentException>()
-            .WithMessage("The id cannot be empty. (Parameter 'id')");
+        Should.Throw<ArgumentException>(act).Message.ShouldBe("The id cannot be empty. (Parameter 'id')");
     }
 
     [Fact]
@@ -438,11 +415,10 @@ public class ReactableExtensionMethodsTests
         var sut = new PushPullReactable<int, bool>();
 
         // Act
-        var act = () => sut.CreateTwoWay(Guid.NewGuid(), null);
+        Action act = () => sut.CreateTwoWay(Guid.NewGuid(), null);
 
         // Assert
-        act.Should().Throw<ArgumentException>()
-            .WithMessage("Value cannot be null. (Parameter 'onReceiveRespond')");
+        Should.Throw<ArgumentException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'onReceiveRespond')");
     }
     #endregion
     #endregion
@@ -466,8 +442,8 @@ public class ReactableExtensionMethodsTests
 
         // Assert
         Assert.NotNull(unsubscriber);
-        sut.SubscriptionIds.Should().BeEquivalentTo(expectedIds);
-        sut.SubscriptionNames.Should().BeEquivalentTo(expectedNames);
+        sut.SubscriptionIds.ShouldBe(expectedIds);
+        sut.SubscriptionNames.ShouldBe(expectedNames);
     }
 
     [Theory]
@@ -489,8 +465,8 @@ public class ReactableExtensionMethodsTests
 
         // Assert
         Assert.NotNull(unsubscriber);
-        sut.SubscriptionIds.Should().BeEquivalentTo(expectedIds);
-        sut.SubscriptionNames.Should().BeEquivalentTo(expectedNames);
+        sut.SubscriptionIds.ShouldBe(expectedIds);
+        sut.SubscriptionNames.ShouldBe(expectedNames);
     }
 
     [Theory]
@@ -511,8 +487,8 @@ public class ReactableExtensionMethodsTests
 
         // Assert
         Assert.NotNull(unsubscriber);
-        sut.SubscriptionIds.Should().BeEquivalentTo(expectedIds);
-        sut.SubscriptionNames.Should().BeEquivalentTo(expectedNames);
+        sut.SubscriptionIds.ShouldBe(expectedIds);
+        sut.SubscriptionNames.ShouldBe(expectedNames);
     }
 
     [Theory]
@@ -534,8 +510,8 @@ public class ReactableExtensionMethodsTests
 
         // Assert
         Assert.NotNull(unsubscriber);
-        sut.SubscriptionIds.Should().BeEquivalentTo(expectedIds);
-        sut.SubscriptionNames.Should().BeEquivalentTo(expectedNames);
+        sut.SubscriptionIds.ShouldBe(expectedIds);
+        sut.SubscriptionNames.ShouldBe(expectedNames);
     }
 
     [Theory]
@@ -556,8 +532,8 @@ public class ReactableExtensionMethodsTests
 
         // Assert
         Assert.NotNull(unsubscriber);
-        sut.SubscriptionIds.Should().BeEquivalentTo(expectedIds);
-        sut.SubscriptionNames.Should().BeEquivalentTo(expectedNames);
+        sut.SubscriptionIds.ShouldBe(expectedIds);
+        sut.SubscriptionNames.ShouldBe(expectedNames);
     }
 
     [Theory]
@@ -579,8 +555,8 @@ public class ReactableExtensionMethodsTests
 
         // Assert
         Assert.NotNull(unsubscriber);
-        sut.SubscriptionIds.Should().BeEquivalentTo(expectedIds);
-        sut.SubscriptionNames.Should().BeEquivalentTo(expectedNames);
+        sut.SubscriptionIds.ShouldBe(expectedIds);
+        sut.SubscriptionNames.ShouldBe(expectedNames);
     }
 
     [Theory]
@@ -601,8 +577,8 @@ public class ReactableExtensionMethodsTests
 
         // Assert
         Assert.NotNull(unsubscriber);
-        sut.SubscriptionIds.Should().BeEquivalentTo(expectedIds);
-        sut.SubscriptionNames.Should().BeEquivalentTo(expectedNames);
+        sut.SubscriptionIds.ShouldBe(expectedIds);
+        sut.SubscriptionNames.ShouldBe(expectedNames);
     }
 
     [Theory]
@@ -624,8 +600,8 @@ public class ReactableExtensionMethodsTests
 
         // Assert
         Assert.NotNull(unsubscriber);
-        sut.SubscriptionIds.Should().BeEquivalentTo(expectedIds);
-        sut.SubscriptionNames.Should().BeEquivalentTo(expectedNames);
+        sut.SubscriptionIds.ShouldBe(expectedIds);
+        sut.SubscriptionNames.ShouldBe(expectedNames);
     }
     #endregion
 }

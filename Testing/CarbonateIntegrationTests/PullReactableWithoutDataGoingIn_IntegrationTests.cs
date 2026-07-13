@@ -1,4 +1,4 @@
-﻿// <copyright file="PullReactableWithoutDataGoingIn_IntegrationTests.cs" company="KinsonDigital">
+// <copyright file="PullReactableWithoutDataGoingIn_IntegrationTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -8,7 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 using Carbonate.NonDirectional;
 using Carbonate.OneWay;
 using Carbonate.TwoWay;
-using FluentAssertions;
+using Shouldly;
 using Xunit;
 
 [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Integrations Tests Are Named In This Way")]
@@ -37,11 +37,11 @@ public class PullReactableWithoutDataGoingIn_IntegrationTests
         sut.Unsubscribe(id);
 
         // Assert
-        actualNames.Should().BeEquivalentTo(expectedNames);
-        unsubscriber.Should().NotBeNull();
-        onReceiveInvoked.Should().BeTrue();
-        unsubscribeInvoked.Should().BeTrue();
-        sut.Subscriptions.Should().BeEmpty();
+        actualNames.ShouldBe(expectedNames);
+        unsubscriber.ShouldNotBeNull();
+        onReceiveInvoked.ShouldBeTrue();
+        unsubscribeInvoked.ShouldBeTrue();
+        sut.Subscriptions.ShouldBeEmpty();
     }
 
     [Fact]
@@ -66,12 +66,12 @@ public class PullReactableWithoutDataGoingIn_IntegrationTests
         sut.Unsubscribe(id);
 
         // Assert
-        actualNames.Should().BeEquivalentTo(actualNames);
-        unsubscriber.Should().NotBeNull();
-        actual.Should().NotBeNull();
-        actual.Should().BeEquivalentTo(expectedOutData);
-        unsubscribeInvoked.Should().BeTrue();
-        sut.Subscriptions.Should().BeEmpty();
+        actualNames.ShouldBe(actualNames);
+        unsubscriber.ShouldNotBeNull();
+        actual.ShouldNotBeNull();
+        actual.ShouldBeEquivalentTo(expectedOutData);
+        unsubscribeInvoked.ShouldBeTrue();
+        sut.Subscriptions.ShouldBeEmpty();
     }
 
     [Fact]
@@ -99,12 +99,12 @@ public class PullReactableWithoutDataGoingIn_IntegrationTests
         sut.Unsubscribe(id);
 
         // Assert
-        actualNames.Should().BeEquivalentTo(expectedNames);
-        unsubscriber.Should().NotBeNull();
-        actualData.Should().NotBeNull();
-        actualData.Should().BeEquivalentTo(expectedInData);
-        unsubscribeInvoked.Should().BeTrue();
-        sut.Subscriptions.Should().BeEmpty();
+        actualNames.ShouldBe(expectedNames);
+        unsubscriber.ShouldNotBeNull();
+        actualData.ShouldNotBeNull();
+        actualData.ShouldBeEquivalentTo(expectedInData);
+        unsubscribeInvoked.ShouldBeTrue();
+        sut.Subscriptions.ShouldBeEmpty();
     }
 
     [Fact]
@@ -134,12 +134,12 @@ public class PullReactableWithoutDataGoingIn_IntegrationTests
         sut.Unsubscribe(id);
 
         // Assert
-        actualNames.Should().BeEquivalentTo(expectedNames);
-        actualInData.Should().Be(123);
-        actualOutData.Should().Be(expectedOutData);
-        unsubscriber.Should().NotBeNull();
-        unsubscribeInvoked.Should().BeTrue();
-        sut.Subscriptions.Should().BeEmpty();
+        actualNames.ShouldBe(expectedNames);
+        actualInData.ShouldBe(123);
+        actualOutData.ShouldBe(expectedOutData);
+        unsubscriber.ShouldNotBeNull();
+        unsubscribeInvoked.ShouldBeTrue();
+        sut.Subscriptions.ShouldBeEmpty();
     }
     #endregion
 }

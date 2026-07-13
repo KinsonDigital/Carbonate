@@ -1,11 +1,11 @@
-﻿// <copyright file="NotificationExceptionTests.cs" company="KinsonDigital">
+// <copyright file="NotificationExceptionTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
 namespace CarbonateTests.Exceptions;
 
 using Carbonate.Exceptions;
-using FluentAssertions;
+using Shouldly;
 using Xunit;
 
 /// <summary>
@@ -21,7 +21,7 @@ public class NotificationExceptionTests
         var exception = new NotificationException();
 
         // Assert
-        exception.Message.Should().Be("The send notification process is currently in progress.");
+        exception.Message.ShouldBe("The send notification process is currently in progress.");
     }
 
     [Fact]
@@ -31,7 +31,7 @@ public class NotificationExceptionTests
         var exception = new NotificationException("test-message");
 
         // Assert
-        exception.Message.Should().Be("test-message");
+        exception.Message.ShouldBe("test-message");
     }
 
     [Fact]
@@ -44,8 +44,8 @@ public class NotificationExceptionTests
         var deviceException = new NotificationException("test-exception", innerException);
 
         // Assert
-        deviceException.InnerException.Message.Should().Be("inner-exception");
-        deviceException.Message.Should().Be("test-exception");
+        deviceException.InnerException.Message.ShouldBe("inner-exception");
+        deviceException.Message.ShouldBe("test-exception");
     }
     #endregion
 }

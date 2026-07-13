@@ -6,7 +6,7 @@ namespace CarbonateTests.Fluent;
 
 using Carbonate.Exceptions;
 using Carbonate.Fluent;
-using FluentAssertions;
+using Shouldly;
 using Xunit;
 
 /// <summary>
@@ -22,11 +22,10 @@ public class SubscriptionBuilderTests
         var sut = ISubscriptionBuilder.Create();
 
         // Act
-        var act = () => sut.WithId(Guid.Empty);
+        Action act = () => sut.WithId(Guid.Empty);
 
         // Assert
-        act.Should().Throw<EmptySubscriptionIdException>()
-            .WithMessage("The subscription ID cannot be empty.");
+        Should.Throw<EmptySubscriptionIdException>(act).Message.ShouldBe("The subscription ID cannot be empty.");
     }
 
     [Theory]
@@ -38,11 +37,10 @@ public class SubscriptionBuilderTests
         var sut = ISubscriptionBuilder.Create();
 
         // Act
-        var act = () => sut.WithId(Guid.NewGuid()).WithName(name);
+        Action act = () => sut.WithId(Guid.NewGuid()).WithName(name);
 
         // Assert
-        act.Should().Throw<ArgumentException>()
-            .WithMessage(expectedMsg);
+        Should.Throw<ArgumentException>(act).Message.ShouldBe(expectedMsg);
     }
 
     [Fact]
@@ -52,11 +50,10 @@ public class SubscriptionBuilderTests
         var sut = ISubscriptionBuilder.Create();
 
         // Act
-        var act = () => sut.WithId(Guid.NewGuid()).WhenUnsubscribing(null);
+        Action act = () => sut.WithId(Guid.NewGuid()).WhenUnsubscribing(null);
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'onUnsubscribe')");
+        Should.Throw<ArgumentNullException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'onUnsubscribe')");
     }
 
     [Fact]
@@ -73,8 +70,8 @@ public class SubscriptionBuilderTests
         subscription.OnUnsubscribe();
 
         // Assert
-        subscription.Should().NotBeNull();
-        onSubscribingInvoked.Should().BeTrue();
+        subscription.ShouldNotBeNull();
+        onSubscribingInvoked.ShouldBeTrue();
     }
 
     [Fact]
@@ -84,11 +81,10 @@ public class SubscriptionBuilderTests
         var sut = ISubscriptionBuilder.Create();
 
         // Act
-        var act = () => sut.WithId(Guid.NewGuid()).WithError(null);
+        Action act = () => sut.WithId(Guid.NewGuid()).WithError(null);
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'onError')");
+        Should.Throw<ArgumentNullException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'onError')");
     }
 
     [Fact]
@@ -105,8 +101,8 @@ public class SubscriptionBuilderTests
         subscription.OnError(new Exception("test-exception"));
 
         // Assert
-        subscription.Should().NotBeNull();
-        onErrorInvoked.Should().BeTrue();
+        subscription.ShouldNotBeNull();
+        onErrorInvoked.ShouldBeTrue();
     }
 
     [Fact]
@@ -122,8 +118,7 @@ public class SubscriptionBuilderTests
             .BuildNonReceiveOrRespond(null);
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'onReceive')");
+        Should.Throw<ArgumentNullException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'onReceive')");
     }
 
     [Fact]
@@ -139,8 +134,7 @@ public class SubscriptionBuilderTests
             .BuildOneWayReceive<int>(null);
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'onReceive')");
+        Should.Throw<ArgumentNullException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'onReceive')");
     }
 
     [Fact]
@@ -156,8 +150,7 @@ public class SubscriptionBuilderTests
             .BuildOneWayRespond<int>(null);
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'onRespond')");
+        Should.Throw<ArgumentNullException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'onRespond')");
     }
 
     [Fact]
@@ -173,8 +166,7 @@ public class SubscriptionBuilderTests
             .BuildTwoWay<int, int>(null);
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'onReceiveRespond')");
+        Should.Throw<ArgumentNullException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'onReceiveRespond')");
     }
 
     [Fact]
@@ -191,8 +183,8 @@ public class SubscriptionBuilderTests
             .BuildNonReceiveOrRespond(() => { });
 
         // Assert
-        sub.Id.Should().Be(expectedId);
-        sub.Name.Should().Be("test-name");
+        sub.Id.ShouldBe(expectedId);
+        sub.Name.ShouldBe("test-name");
     }
 
     [Fact]
@@ -209,8 +201,8 @@ public class SubscriptionBuilderTests
             .BuildOneWayReceive<int>(_ => { });
 
         // Assert
-        sub.Id.Should().Be(expectedId);
-        sub.Name.Should().Be("test-name");
+        sub.Id.ShouldBe(expectedId);
+        sub.Name.ShouldBe("test-name");
     }
 
     [Fact]
@@ -227,8 +219,8 @@ public class SubscriptionBuilderTests
             .BuildOneWayRespond(() => 123);
 
         // Assert
-        sub.Id.Should().Be(expectedId);
-        sub.Name.Should().Be("test-name");
+        sub.Id.ShouldBe(expectedId);
+        sub.Name.ShouldBe("test-name");
     }
 
     [Fact]
@@ -245,8 +237,8 @@ public class SubscriptionBuilderTests
             .BuildTwoWay<int, int>(_ => 123);
 
         // Assert
-        sub.Id.Should().Be(expectedId);
-        sub.Name.Should().Be("test-name");
+        sub.Id.ShouldBe(expectedId);
+        sub.Name.ShouldBe("test-name");
     }
     #endregion
 }

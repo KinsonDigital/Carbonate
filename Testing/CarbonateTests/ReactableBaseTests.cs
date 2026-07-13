@@ -1,4 +1,4 @@
-﻿// <copyright file="ReactableBaseTests.cs" company="KinsonDigital">
+// <copyright file="ReactableBaseTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -9,7 +9,7 @@ using Carbonate.Core;
 using Carbonate.Core.NonDirectional;
 using Carbonate.Core.OneWay;
 using Carbonate.OneWay;
-using FluentAssertions;
+using Shouldly;
 using Helpers.Fakes;
 using NSubstitute;
 using Xunit;
@@ -51,7 +51,7 @@ public class ReactableBaseTests
         var actual = sut.SubscriptionIds;
 
         // Assert
-        actual.Should().BeEquivalentTo(expected);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -73,7 +73,7 @@ public class ReactableBaseTests
         var actual = sut.SubscriptionNames;
 
         // Assert
-        actual.Should().BeEquivalentTo(expected);
+        actual.ShouldBe(expected);
     }
     #endregion
 
@@ -86,11 +86,10 @@ public class ReactableBaseTests
         sut.Dispose();
 
         // Act
-        var act = () => sut.Subscribe(null);
+        Action act = () => sut.Subscribe(null);
 
         // Assert
-        act.Should().Throw<ObjectDisposedException>()
-            .WithMessage($"{nameof(PushReactable<int>)} disposed.{Environment.NewLine}Object name: 'PushReactable'.");
+        Should.Throw<ObjectDisposedException>(act).Message.ShouldBe($"{nameof(PushReactable<int>)} disposed.{Environment.NewLine}Object name: 'PushReactable'.");
     }
 
     [Fact]
@@ -100,11 +99,10 @@ public class ReactableBaseTests
         var sut = CreateSystemUnderTest();
 
         // Act
-        var act = () => sut.Subscribe(null);
+        Action act = () => sut.Subscribe(null);
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("The parameter must not be null. (Parameter 'subscription')");
+        Should.Throw<ArgumentNullException>(act).Message.ShouldBe("The parameter must not be null. (Parameter 'subscription')");
     }
 
     [Fact]
@@ -125,11 +123,11 @@ public class ReactableBaseTests
         var actual = sut.Subscriptions;
 
         // Assert
-        actual.Should().BeEquivalentTo(expected);
-        actual[0].Should().BeSameAs(mockSubA);
-        actual[1].Should().BeSameAs(mockSubB);
-        unsubscriberA.Should().NotBeNull();
-        unsubscriberB.Should().NotBeNull();
+        actual.ShouldBe(expected);
+        actual[0].ShouldBeSameAs(mockSubA);
+        actual[1].ShouldBeSameAs(mockSubB);
+        unsubscriberA.ShouldNotBeNull();
+        unsubscriberB.ShouldNotBeNull();
     }
 
     [Fact]
@@ -140,11 +138,10 @@ public class ReactableBaseTests
         sut.Dispose();
 
         // Act
-        var act = () => sut.Unsubscribe(Guid.Empty);
+        Action act = () => sut.Unsubscribe(Guid.Empty);
 
         // Assert
-        act.Should().Throw<ObjectDisposedException>()
-            .WithMessage($"{nameof(PushReactable<int>)} disposed.{Environment.NewLine}Object name: 'PushReactable'.");
+        Should.Throw<ObjectDisposedException>(act).Message.ShouldBe($"{nameof(PushReactable<int>)} disposed.{Environment.NewLine}Object name: 'PushReactable'.");
     }
 
     [Fact]
@@ -175,7 +172,7 @@ public class ReactableBaseTests
         mockSubA.Received(1).OnUnsubscribe();
         mockSubB.DidNotReceive().OnUnsubscribe();
         mockSubC.Received(1).OnUnsubscribe();
-        sut.Subscriptions.Should().HaveCount(1);
+        sut.Subscriptions.Length.ShouldBe(1);
     }
 
     [Fact]
@@ -203,7 +200,7 @@ public class ReactableBaseTests
         // Assert
         mockSubA.Received(1).OnUnsubscribe();
         mockSubB.Received(1).OnUnsubscribe();
-        sut.Subscriptions.Should().BeEmpty();
+        sut.Subscriptions.ShouldBeEmpty();
     }
 
     [Fact]
@@ -234,10 +231,14 @@ public class ReactableBaseTests
         sut.Subscribe(initSubC);
 
         // Act
-        var act = () => sut.Unsubscribe(mainId);
+        Action act = () => sut.Unsubscribe(mainId);
 
         // Assert
-        act.Should().NotThrow<ArgumentOutOfRangeException>();
+        var ex = Record.Exception(act);
+        if (ex is not null)
+        {
+            ex.ShouldNotBeOfType<ArgumentOutOfRangeException>();
+        }
     }
 
     [Fact]
@@ -248,11 +249,10 @@ public class ReactableBaseTests
         sut.Dispose();
 
         // Act
-        var act = () => sut.UnsubscribeAll();
+        Action act = () => sut.UnsubscribeAll();
 
         // Assert
-        act.Should().Throw<ObjectDisposedException>()
-            .WithMessage($"{nameof(PushReactable<int>)} disposed.{Environment.NewLine}Object name: 'PushReactable'.");
+        Should.Throw<ObjectDisposedException>(act).Message.ShouldBe($"{nameof(PushReactable<int>)} disposed.{Environment.NewLine}Object name: 'PushReactable'.");
     }
 
     [Fact]
@@ -283,7 +283,7 @@ public class ReactableBaseTests
         mockSubA.Received(1).OnUnsubscribe();
         mockSubB.Received(1).OnUnsubscribe();
         mockSubC.Received(1).OnUnsubscribe();
-        sut.Subscriptions.Should().BeEmpty();
+        sut.Subscriptions.ShouldBeEmpty();
     }
 
     [Fact]
@@ -314,10 +314,14 @@ public class ReactableBaseTests
         sut.Subscribe(initSubC);
 
         // Act
-        var act = () => sut.UnsubscribeAll();
+        Action act = () => sut.UnsubscribeAll();
 
         // Assert
-        act.Should().NotThrow<ArgumentOutOfRangeException>();
+        var ex = Record.Exception(act);
+        if (ex is not null)
+        {
+            ex.ShouldNotBeOfType<ArgumentOutOfRangeException>();
+        }
     }
 
     [Fact]
@@ -346,7 +350,7 @@ public class ReactableBaseTests
         mockSubA.Received(1).OnUnsubscribe();
         mockSubB.Received(1).OnUnsubscribe();
 
-        sut.Subscriptions.Should().BeEmpty();
+        sut.Subscriptions.ShouldBeEmpty();
     }
     #endregion
 

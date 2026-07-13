@@ -9,7 +9,7 @@ using Carbonate.Fluent;
 using Carbonate.NonDirectional;
 using Carbonate.OneWay;
 using Carbonate.TwoWay;
-using FluentAssertions;
+using Shouldly;
 using Xunit;
 
 /// <summary>
@@ -25,11 +25,10 @@ public class ReactableBuilderTests
         var sut = IReactableBuilder.Create();
 
         // Act
-        var act = () => sut.WithId(Guid.Empty);
+        Action act = () => sut.WithId(Guid.Empty);
 
         // Assert
-        act.Should().Throw<EmptySubscriptionIdException>()
-            .WithMessage("The subscription ID cannot be empty.");
+        Should.Throw<EmptySubscriptionIdException>(act).Message.ShouldBe("The subscription ID cannot be empty.");
     }
 
     [Theory]
@@ -41,11 +40,10 @@ public class ReactableBuilderTests
         var sut = IReactableBuilder.Create();
 
         // Act
-        var act = () => sut.WithId(Guid.NewGuid()).WithName(name);
+        Action act = () => sut.WithId(Guid.NewGuid()).WithName(name);
 
         // Assert
-        act.Should().Throw<ArgumentException>()
-            .WithMessage(expectedMsg);
+        Should.Throw<ArgumentException>(act).Message.ShouldBe(expectedMsg);
     }
 
     [Fact]
@@ -55,11 +53,10 @@ public class ReactableBuilderTests
         var sut = IReactableBuilder.Create();
 
         // Act
-        var act = () => sut.WithId(Guid.NewGuid()).WhenUnsubscribing(null);
+        Action act = () => sut.WithId(Guid.NewGuid()).WhenUnsubscribing(null);
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'onUnsubscribe')");
+        Should.Throw<ArgumentNullException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'onUnsubscribe')");
     }
 
     [Fact]
@@ -76,8 +73,8 @@ public class ReactableBuilderTests
         reactable.Subscriptions[0].OnUnsubscribe();
 
         // Assert
-        reactable.Should().NotBeNull();
-        onSubscribingInvoked.Should().BeTrue();
+        reactable.ShouldNotBeNull();
+        onSubscribingInvoked.ShouldBeTrue();
     }
 
     [Fact]
@@ -87,11 +84,10 @@ public class ReactableBuilderTests
         var sut = IReactableBuilder.Create();
 
         // Act
-        var act = () => sut.WithId(Guid.NewGuid()).WithError(null);
+        Action act = () => sut.WithId(Guid.NewGuid()).WithError(null);
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'onError')");
+        Should.Throw<ArgumentNullException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'onError')");
     }
 
     [Fact]
@@ -109,7 +105,7 @@ public class ReactableBuilderTests
         reactable.Subscriptions[0].OnError(new Exception("test-exception"));
 
         // Assert
-        onErrorInvoked.Should().BeTrue();
+        onErrorInvoked.ShouldBeTrue();
     }
 
     [Fact]
@@ -119,14 +115,10 @@ public class ReactableBuilderTests
         var sut = IReactableBuilder.Create();
 
         // Act
-        var act = () => sut
-            .WithId(Guid.NewGuid())
-            .WithName("test-name")
-            .BuildPush(null);
+        Action act = () => sut.WithId(Guid.NewGuid()).WithName("test-name").BuildPush(null);
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'onReceive')");
+        Should.Throw<ArgumentNullException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'onReceive')");
     }
 
     [Fact]
@@ -136,14 +128,13 @@ public class ReactableBuilderTests
         var sut = IReactableBuilder.Create();
 
         // Act
-        var act = () => sut
+        Action act = () => sut
             .WithId(Guid.NewGuid())
             .WithName("test-name")
             .BuildOneWayPush<int>(null);
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'onReceive')");
+        Should.Throw<ArgumentNullException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'onReceive')");
     }
 
     [Fact]
@@ -153,14 +144,13 @@ public class ReactableBuilderTests
         var sut = IReactableBuilder.Create();
 
         // Act
-        var act = () => sut
+        Action act = () => sut
             .WithId(Guid.NewGuid())
             .WithName("test-name")
             .BuildOneWayPull<int>(null);
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'onRespond')");
+        Should.Throw<ArgumentNullException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'onRespond')");
     }
 
     [Fact]
@@ -170,14 +160,13 @@ public class ReactableBuilderTests
         var sut = IReactableBuilder.Create();
 
         // Act
-        var act = () => sut
+        Action act = () => sut
             .WithId(Guid.NewGuid())
             .WithName("test-name")
             .BuildTwoWayPull<int, int>(null);
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'onReceiveRespond')");
+        Should.Throw<ArgumentNullException>(act).Message.ShouldBe("Value cannot be null. (Parameter 'onReceiveRespond')");
     }
 
     [Fact]
@@ -194,13 +183,13 @@ public class ReactableBuilderTests
             .BuildPush(() => { });
 
         // Assert
-        unsubscriber.Should().NotBeNull();
-        reactable.Should().NotBeNull();
-        reactable.Subscriptions.Should().ContainSingle("only one subscription was added.");
-        reactable.Subscriptions[0].Id.Should().Be(expectedId);
-        reactable.Subscriptions[0].Name.Should().Be("test-name");
-        reactable.Subscriptions[0].Unsubscribed.Should().BeFalse();
-        reactable.SubscriptionIds.Should().BeEquivalentTo(new[] { expectedId });
+        unsubscriber.ShouldNotBeNull();
+        reactable.ShouldNotBeNull();
+        reactable.Subscriptions.ShouldHaveSingleItem("only one subscription was added.");
+        reactable.Subscriptions[0].Id.ShouldBe(expectedId);
+        reactable.Subscriptions[0].Name.ShouldBe("test-name");
+        reactable.Subscriptions[0].Unsubscribed.ShouldBeFalse();
+        reactable.SubscriptionIds.ShouldBe(new[] { expectedId });
     }
 
     [Fact]
@@ -217,13 +206,13 @@ public class ReactableBuilderTests
             .BuildOneWayPush<int>(_ => { });
 
         // Assert
-        unsubscriber.Should().NotBeNull();
-        reactable.Should().NotBeNull();
-        reactable.Subscriptions.Should().ContainSingle("only one subscription was added.");
-        reactable.Subscriptions[0].Id.Should().Be(expectedId);
-        reactable.Subscriptions[0].Name.Should().Be("test-name");
-        reactable.Subscriptions[0].Unsubscribed.Should().BeFalse();
-        reactable.SubscriptionIds.Should().BeEquivalentTo(new[] { expectedId });
+        unsubscriber.ShouldNotBeNull();
+        reactable.ShouldNotBeNull();
+        reactable.Subscriptions.ShouldHaveSingleItem("only one subscription was added.");
+        reactable.Subscriptions[0].Id.ShouldBe(expectedId);
+        reactable.Subscriptions[0].Name.ShouldBe("test-name");
+        reactable.Subscriptions[0].Unsubscribed.ShouldBeFalse();
+        reactable.SubscriptionIds.ShouldBe(new[] { expectedId });
     }
 
     [Fact]
@@ -240,13 +229,13 @@ public class ReactableBuilderTests
             .BuildOneWayPull(() => 123);
 
         // Assert
-        unsubscriber.Should().NotBeNull();
-        reactable.Should().NotBeNull();
-        reactable.Subscriptions.Should().ContainSingle("only one subscription was added.");
-        reactable.Subscriptions[0].Id.Should().Be(expectedId);
-        reactable.Subscriptions[0].Name.Should().Be("test-name");
-        reactable.Subscriptions[0].Unsubscribed.Should().BeFalse();
-        reactable.SubscriptionIds.Should().BeEquivalentTo(new[] { expectedId });
+        unsubscriber.ShouldNotBeNull();
+        reactable.ShouldNotBeNull();
+        reactable.Subscriptions.ShouldHaveSingleItem("only one subscription was added.");
+        reactable.Subscriptions[0].Id.ShouldBe(expectedId);
+        reactable.Subscriptions[0].Name.ShouldBe("test-name");
+        reactable.Subscriptions[0].Unsubscribed.ShouldBeFalse();
+        reactable.SubscriptionIds.ShouldBe(new[] { expectedId });
     }
 
     [Fact]
@@ -263,13 +252,13 @@ public class ReactableBuilderTests
             .BuildTwoWayPull<int, int>(_ => 123);
 
         // Assert
-        unsubscriber.Should().NotBeNull();
-        reactable.Should().NotBeNull();
-        reactable.Subscriptions.Should().ContainSingle("only one subscription was added.");
-        reactable.Subscriptions[0].Id.Should().Be(expectedId);
-        reactable.Subscriptions[0].Name.Should().Be("test-name");
-        reactable.Subscriptions[0].Unsubscribed.Should().BeFalse();
-        reactable.SubscriptionIds.Should().BeEquivalentTo(new[] { expectedId });
+        unsubscriber.ShouldNotBeNull();
+        reactable.ShouldNotBeNull();
+        reactable.Subscriptions.ShouldHaveSingleItem("only one subscription was added.");
+        reactable.Subscriptions[0].Id.ShouldBe(expectedId);
+        reactable.Subscriptions[0].Name.ShouldBe("test-name");
+        reactable.Subscriptions[0].Unsubscribed.ShouldBeFalse();
+        reactable.SubscriptionIds.ShouldBe(new[] { expectedId });
     }
     #endregion
 }

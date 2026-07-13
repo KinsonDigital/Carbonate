@@ -8,7 +8,7 @@ namespace CarbonateTests.OneWay;
 using Carbonate.Core.OneWay;
 using Carbonate.Exceptions;
 using Carbonate.OneWay;
-using FluentAssertions;
+using Shouldly;
 using NSubstitute;
 using Xunit;
 
@@ -25,11 +25,10 @@ public class PushReactableTests
         var sut = new PushReactable<object>();
 
         // Act
-        var act = () => sut.Push(Guid.NewGuid(), null);
+        Action act = () => sut.Push(Guid.NewGuid(), null);
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("The parameter must not be null. (Parameter 'data')");
+        Should.Throw<ArgumentNullException>(act).Message.ShouldBe("The parameter must not be null. (Parameter 'data')");
     }
 
     [Fact]
@@ -40,11 +39,10 @@ public class PushReactableTests
         sut.Dispose();
 
         // Act
-        var act = () => sut.Push(Guid.Empty, 123);
+        Action act = () => sut.Push(Guid.Empty, 123);
 
         // Assert
-        act.Should().Throw<ObjectDisposedException>()
-            .WithMessage($"{nameof(PushReactable<int>)} disposed.{Environment.NewLine}Object name: 'PushReactable'.");
+        Should.Throw<ObjectDisposedException>(act).Message.ShouldBe($"{nameof(PushReactable<int>)} disposed.{Environment.NewLine}Object name: 'PushReactable'.");
     }
 
     [Fact]
@@ -70,10 +68,10 @@ public class PushReactableTests
         unsubscriber = sut.Subscribe(mockSubscription);
 
         // Act
-        var act = () => sut.Push(id, 123);
+        Action act = () => sut.Push(id, 123);
 
         // Assert
-        act.Should().Throw<NotificationException>().WithMessage(expectedMsg);
+        Should.Throw<NotificationException>(act).Message.ShouldBe(expectedMsg);
     }
 
     [Fact]
@@ -120,8 +118,8 @@ public class PushReactableTests
             onError: e =>
             {
                 // Assert
-                e.Should().BeOfType<Exception>();
-                e.Message.Should().Be("test-exception");
+                e.ShouldBeOfType<Exception>();
+                e.Message.ShouldBe("test-exception");
             });
         var subB = new ReceiveSubscription<int>(idB, _ => { });
 

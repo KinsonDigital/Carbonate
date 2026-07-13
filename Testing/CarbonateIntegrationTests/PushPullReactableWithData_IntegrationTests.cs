@@ -1,4 +1,4 @@
-﻿// <copyright file="PushPullReactableWithData_IntegrationTests.cs" company="KinsonDigital">
+// <copyright file="PushPullReactableWithData_IntegrationTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -6,7 +6,7 @@ namespace CarbonateIntegrationTests;
 
 using System.Diagnostics.CodeAnalysis;
 using Carbonate.TwoWay;
-using FluentAssertions;
+using Shouldly;
 using Xunit;
 
 [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Integrations Tests Are Named In This Way")]
@@ -30,10 +30,10 @@ public class PushPullReactableWithData_IntegrationTests
         var actual = sut.PushPull(respondId, 123);
 
         // Assert
-        actual.Should().NotBeNull();
-        actual.Should().BeOfType<SampleData>();
-        actual.IntValue.Should().Be(123);
-        actual.StringValue.Should().Be("test-str");
+        actual.ShouldNotBeNull();
+        actual.ShouldBeOfType<SampleData>();
+        actual.IntValue.ShouldBe(123);
+        actual.StringValue.ShouldBe("test-str");
     }
     #endregion
 }
