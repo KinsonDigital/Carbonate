@@ -90,7 +90,7 @@ jobs:
   build_status_check:
     name: ${{ vars.PROJECT_NAME }} Build Status Check
     needs: [build_main_project, build_perf_project, build_samples_project]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Print Status Check Pass Message
         shell: pwsh
