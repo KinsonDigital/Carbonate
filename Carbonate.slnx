@@ -6,8 +6,8 @@
     <BuildType Name="Release OneWayPullReactable" />
     <BuildType Name="Release OneWayPushReactable" />
     <BuildType Name="Release TwoWayPushPullReactable" />
-    <Platform Name="arm64" />
     <Platform Name="x64" />
+    <Platform Name="arm64" />
   </Configurations>
   <Folder Name="/Samples/">
     <Project Path="Samples/Samples/Samples.csproj">
@@ -15,8 +15,8 @@
       <BuildType Solution="Release OneWayPullReactable|*" Project="Release" />
       <BuildType Solution="Release OneWayPushReactable|*" Project="Release" />
       <BuildType Solution="Release TwoWayPushPullReactable|*" Project="Release" />
-      <Platform Solution="*|arm64" Project="arm64" />
       <Platform Solution="*|x64" Project="x64" />
+      <Platform Solution="*|arm64" Project="arm64" />
     </Project>
   </Folder>
   <Folder Name="/Solution Items/">
@@ -48,20 +48,20 @@
       <BuildType Solution="Release OneWayPullReactable|*" Project="Release" />
       <BuildType Solution="Release OneWayPushReactable|*" Project="Release" />
       <BuildType Solution="Release TwoWayPushPullReactable|*" Project="Release" />
-      <Platform Solution="*|arm64" Project="arm64" />
       <Platform Solution="*|x64" Project="x64" />
+      <Platform Solution="*|arm64" Project="arm64" />
     </Project>
     <Project Path="Testing/CarbonatePerfTests/CarbonatePerfTests.csproj">
-      <Platform Solution="*|arm64" Project="arm64" />
       <Platform Solution="*|x64" Project="x64" />
+      <Platform Solution="*|arm64" Project="arm64" />
     </Project>
     <Project Path="Testing/CarbonateTests/CarbonateTests.csproj">
       <BuildType Solution="Release NonDirPushReactable|*" Project="Release" />
       <BuildType Solution="Release OneWayPullReactable|*" Project="Release" />
       <BuildType Solution="Release OneWayPushReactable|*" Project="Release" />
       <BuildType Solution="Release TwoWayPushPullReactable|*" Project="Release" />
-      <Platform Solution="*|arm64" Project="arm64" />
       <Platform Solution="*|x64" Project="x64" />
+      <Platform Solution="*|arm64" Project="arm64" />
     </Project>
   </Folder>
   <Project Path="Carbonate/Carbonate.csproj">
@@ -69,7 +69,7 @@
     <BuildType Solution="Release OneWayPullReactable|*" Project="Release" />
     <BuildType Solution="Release OneWayPushReactable|*" Project="Release" />
     <BuildType Solution="Release TwoWayPushPullReactable|*" Project="Release" />
-    <Platform Solution="*|arm64" Project="arm64" />
     <Platform Solution="*|x64" Project="x64" />
+    <Platform Solution="*|arm64" Project="arm64" />
   </Project>
 </Solution>
