@@ -1,11 +1,11 @@
-﻿// <copyright file="ReceiveSubscriptionTests.cs" company="KinsonDigital">
+// <copyright file="ReceiveSubscriptionTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
 namespace CarbonateTests.OneWay;
 
 using Carbonate.OneWay;
-using FluentAssertions;
+using Shouldly;
 using Xunit;
 
 /// <summary>
@@ -25,7 +25,7 @@ public class ReceiveSubscriptionTests
         var actual = sut.Id;
 
         // Assert
-        actual.Should().Be(guid);
+        actual.ShouldBe(guid);
     }
     #endregion
 
@@ -45,7 +45,7 @@ public class ReceiveSubscriptionTests
         sut.OnReceive(data);
 
         // Assert
-        onReceiveInvoked.Should().BeTrue();
+        onReceiveInvoked.ShouldBeTrue();
     }
 
     [Fact]
@@ -65,7 +65,7 @@ public class ReceiveSubscriptionTests
         sut.OnReceive(data);
 
         // Assert
-        onReceiveInvoked.Should().BeFalse();
+        onReceiveInvoked.ShouldBeFalse();
     }
 
     [Fact]
@@ -75,11 +75,11 @@ public class ReceiveSubscriptionTests
         var sut = new ReceiveSubscription<object>(Guid.NewGuid(), _ => { });
 
         // Act
-        var act = () => sut.OnReceive(null);
+        Action act = () => sut.OnReceive(null);
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("The parameter must not be null. (Parameter 'data')");
+        Should.Throw<ArgumentNullException>(act)
+            .Message.ShouldBe("The parameter must not be null. (Parameter 'data')");
     }
 
     [Theory]
@@ -100,7 +100,7 @@ public class ReceiveSubscriptionTests
         var actual = sut.ToString();
 
         // Assert
-        actual.Should().Be(expected);
+        actual.ShouldBe(expected);
     }
     #endregion
 }

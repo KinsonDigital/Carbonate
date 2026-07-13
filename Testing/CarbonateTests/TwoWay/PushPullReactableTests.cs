@@ -1,4 +1,4 @@
-﻿// <copyright file="PushPullReactableTests.cs" company="KinsonDigital">
+// <copyright file="PushPullReactableTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -8,7 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 using Carbonate.TwoWay;
 using Carbonate.Core.TwoWay;
 using Carbonate.Exceptions;
-using FluentAssertions;
+using Shouldly;
 using NSubstitute;
 using Xunit;
 
@@ -47,9 +47,9 @@ public class PushPullReactableTests
         // Assert
         mockSubA.DidNotReceive().OnRespond(321);
         mockSubB.Received().OnRespond(654);
-        actual.Should().NotBeNull();
-        actual.Should().NotBeNull();
-        actual.Should().Be("return-value");
+        actual.ShouldNotBeNull();
+        actual.ShouldNotBeNull();
+        actual.ShouldBe("return-value");
     }
 
     [Fact]
@@ -60,11 +60,10 @@ public class PushPullReactableTests
         sut.Dispose();
 
         // Act
-        var act = () => sut.PushPull(Guid.Empty, 123);
+        Action act = () => sut.PushPull(Guid.Empty, 123);
 
         // Assert
-        act.Should().Throw<ObjectDisposedException>()
-            .WithMessage($"{nameof(PushPullReactable<int, string>)} disposed.{Environment.NewLine}Object name: 'PushPullReactable'.");
+        Should.Throw<ObjectDisposedException>(act).Message.ShouldBe($"{nameof(PushPullReactable<int, string>)} disposed.{Environment.NewLine}Object name: 'PushPullReactable'.");
     }
 
     [Fact]
@@ -94,10 +93,10 @@ public class PushPullReactableTests
         unsubscriber = sut.Subscribe(mockSubscription);
 
         // Act
-        var act = () => sut.PushPull(id, 123);
+        Action act = () => sut.PushPull(id, 123);
 
         // Assert
-        act.Should().Throw<NotificationException>().WithMessage(expectedMsg);
+        Should.Throw<NotificationException>(act).Message.ShouldBe(expectedMsg);
     }
 
     [Fact]
@@ -110,7 +109,7 @@ public class PushPullReactableTests
         var actual = sut.PushPull(Guid.NewGuid(), 123);
 
         // Assert
-        actual.Should().Be(0);
+        actual.ShouldBe(0);
     }
 
     [Fact]
@@ -127,8 +126,8 @@ public class PushPullReactableTests
             onReceiveRespond: _ => throw new Exception("test-exception"),
             onError: e =>
             {
-                e.Should().NotBeNull();
-                e.Message.Should().Be("test-exception");
+                e.ShouldNotBeNull();
+                e.Message.ShouldBe("test-exception");
             }));
 
         sut.PushPull(id, 123);

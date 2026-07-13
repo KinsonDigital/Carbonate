@@ -1,4 +1,4 @@
-﻿// <copyright file="PushReactableTests.cs" company="KinsonDigital">
+// <copyright file="PushReactableTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -8,7 +8,7 @@ namespace CarbonateTests.NonDirectional;
 using Carbonate.Core.NonDirectional;
 using Carbonate.Exceptions;
 using Carbonate.NonDirectional;
-using FluentAssertions;
+using Shouldly;
 using NSubstitute;
 using Xunit;
 
@@ -23,11 +23,10 @@ public class PushReactableTests
         sut.Dispose();
 
         // Act
-        var act = () => sut.Push(Guid.Empty);
+        Action act = () => sut.Push(Guid.Empty);
 
         // Assert
-        act.Should().Throw<ObjectDisposedException>()
-            .WithMessage($"{nameof(PushReactable)} disposed.{Environment.NewLine}Object name: 'PushReactable'.");
+        Should.Throw<ObjectDisposedException>(act).Message.ShouldBe($"{nameof(PushReactable)} disposed.{Environment.NewLine}Object name: 'PushReactable'.");
     }
 
     [Fact]
@@ -53,10 +52,10 @@ public class PushReactableTests
         unsubscriber = sut.Subscribe(mockSubscription);
 
         // Act
-        var act = () => sut.Push(id);
+        Action act = () => sut.Push(id);
 
         // Assert
-        act.Should().Throw<NotificationException>().WithMessage(expectedMsg);
+        Should.Throw<NotificationException>(act).Message.ShouldBe(expectedMsg);
     }
 
     [Fact]
@@ -120,10 +119,14 @@ public class PushReactableTests
         sut.Subscribe(initSubC);
 
         // Act
-        var act = () => sut.Push(mainId);
+        Action act = () => sut.Push(mainId);
 
         // Assert
-        act.Should().NotThrow<ArgumentOutOfRangeException>();
+        var ex = Record.Exception(act);
+        if (ex is not null)
+        {
+            ex.ShouldNotBeOfType<ArgumentOutOfRangeException>();
+        }
     }
 
     [Fact]
@@ -138,8 +141,8 @@ public class PushReactableTests
             onReceive: () => throw new Exception("test-exception"),
             onError: e =>
             {
-                e.Should().BeOfType<Exception>();
-                e.Message.Should().Be("test-exception");
+                e.ShouldBeOfType<Exception>();
+                e.Message.ShouldBe("test-exception");
             });
 
         var subB = new ReceiveSubscription(id: idB, () => { });
@@ -150,10 +153,10 @@ public class PushReactableTests
         sut.Subscribe(subB);
 
         // Act
-        var act = () => sut.Push(idA);
+        Action act = () => sut.Push(idA);
 
         // Assert
-        act.Should().NotThrow<ArgumentOutOfRangeException>();
+        Should.NotThrow(act);
     }
     #endregion
 

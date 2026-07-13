@@ -1,11 +1,11 @@
-﻿// <copyright file="ReceiveSubscriptionTests.cs" company="KinsonDigital">
+// <copyright file="ReceiveSubscriptionTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
 namespace CarbonateTests.NonDirectional;
 
 using Carbonate.NonDirectional;
-using FluentAssertions;
+using Shouldly;
 using Xunit;
 
 /// <summary>
@@ -25,7 +25,7 @@ public class ReceiveSubscriptionTests
         var actual = sut.Id;
 
         // Assert
-        actual.Should().Be(guid);
+        actual.ShouldBe(guid);
     }
     #endregion
 
@@ -43,7 +43,7 @@ public class ReceiveSubscriptionTests
         sut.OnReceive();
 
         // Assert
-        onReceiveInvoked.Should().BeTrue();
+        onReceiveInvoked.ShouldBeTrue();
     }
 
     [Fact]
@@ -61,7 +61,7 @@ public class ReceiveSubscriptionTests
         sut.OnReceive();
 
         // Assert
-        onReceiveInvoked.Should().BeFalse();
+        onReceiveInvoked.ShouldBeFalse();
     }
 
     [Fact]
@@ -77,7 +77,7 @@ public class ReceiveSubscriptionTests
         sut.OnUnsubscribe();
 
         // Assert
-        onReceiveInvoked.Should().BeTrue();
+        onReceiveInvoked.ShouldBeTrue();
     }
 
     [Fact]
@@ -94,7 +94,7 @@ public class ReceiveSubscriptionTests
         sut.OnUnsubscribe();
 
         // Assert
-        totalInvokes.Should().Be(1);
+        totalInvokes.ShouldBe(1);
     }
 
     [Fact]
@@ -112,7 +112,7 @@ public class ReceiveSubscriptionTests
         sut.OnError(exception);
 
         // Assert
-        onErrorInvoked.Should().BeTrue();
+        onErrorInvoked.ShouldBeTrue();
     }
 
     [Fact]
@@ -132,7 +132,7 @@ public class ReceiveSubscriptionTests
         sut.OnError(exception);
 
         // Assert
-        onReceiveInvoked.Should().BeFalse();
+        onReceiveInvoked.ShouldBeFalse();
     }
 
     [Theory]
@@ -153,7 +153,7 @@ public class ReceiveSubscriptionTests
         var actual = sut.ToString();
 
         // Assert
-        actual.Should().Be(expected);
+        actual.ShouldBe(expected);
     }
     #endregion
 }

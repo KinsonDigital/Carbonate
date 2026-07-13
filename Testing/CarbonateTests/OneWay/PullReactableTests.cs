@@ -1,4 +1,4 @@
-﻿// <copyright file="PullReactableTests.cs" company="KinsonDigital">
+// <copyright file="PullReactableTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -8,7 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 using Carbonate.Core.OneWay;
 using Carbonate.Exceptions;
 using Carbonate.OneWay;
-using FluentAssertions;
+using Shouldly;
 using NSubstitute;
 using Xunit;
 
@@ -44,9 +44,9 @@ public class PullReactableTests
         // Assert
         mockSubA.Received(1).OnRespond();
         mockSubB.DidNotReceive().OnRespond();
-        actual.Should().NotBeNull();
-        actual.Should().NotBeNull();
-        actual.Should().Be("return-value");
+        actual.ShouldNotBeNull();
+        actual.ShouldNotBeNull();
+        actual.ShouldBe("return-value");
     }
 
     [Fact]
@@ -57,11 +57,10 @@ public class PullReactableTests
         sut.Dispose();
 
         // Act
-        var act = () => sut.Pull(Guid.Empty);
+        Action act = () => sut.Pull(Guid.Empty);
 
         // Assert
-        act.Should().Throw<ObjectDisposedException>()
-            .WithMessage($"{nameof(PullReactable<int>)} disposed.{Environment.NewLine}Object name: 'PullReactable'.");
+        Should.Throw<ObjectDisposedException>(act).Message.ShouldBe($"{nameof(PullReactable<int>)} disposed.{Environment.NewLine}Object name: 'PullReactable'.");
     }
 
     [Fact]
@@ -91,10 +90,10 @@ public class PullReactableTests
         unsubscriber = sut.Subscribe(mockSubscription);
 
         // Act
-        var act = () => sut.Pull(id);
+        Action act = () => sut.Pull(id);
 
         // Assert
-        act.Should().Throw<NotificationException>().WithMessage(expectedMsg);
+        Should.Throw<NotificationException>(act).Message.ShouldBe(expectedMsg);
     }
 
     [Fact]
@@ -138,7 +137,7 @@ public class PullReactableTests
         var actual = sut.Pull(Guid.NewGuid());
 
         // Assert
-        actual.Should().BeNull();
+        actual.ShouldBeNull();
     }
 
     [Fact]
@@ -155,8 +154,8 @@ public class PullReactableTests
                 onRespond: () => throw new Exception("test-exception"),
                 onError: e =>
                 {
-                    e.Should().NotBeNull();
-                    e.Message.Should().Be("test-exception");
+                    e.ShouldNotBeNull();
+                    e.Message.ShouldBe("test-exception");
                 }));
 
         sut.Pull(id);

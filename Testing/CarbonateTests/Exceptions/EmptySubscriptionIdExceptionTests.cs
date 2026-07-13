@@ -5,7 +5,7 @@
 namespace CarbonateTests.Exceptions;
 
 using Carbonate.Exceptions;
-using FluentAssertions;
+using Shouldly;
 using Xunit;
 
 /// <summary>
@@ -21,7 +21,7 @@ public class EmptySubscriptionIdExceptionTests
         var exception = new EmptySubscriptionIdException();
 
         // Assert
-        exception.Message.Should().Be("The subscription ID cannot be empty.");
+        exception.Message.ShouldBe("The subscription ID cannot be empty.");
     }
 
     [Fact]
@@ -31,7 +31,7 @@ public class EmptySubscriptionIdExceptionTests
         var exception = new EmptySubscriptionIdException("test-message");
 
         // Assert
-        exception.Message.Should().Be("test-message");
+        exception.Message.ShouldBe("test-message");
     }
 
     [Fact]
@@ -44,8 +44,8 @@ public class EmptySubscriptionIdExceptionTests
         var deviceException = new EmptySubscriptionIdException("test-exception", innerException);
 
         // Assert
-        deviceException.InnerException.Message.Should().Be("inner-exception");
-        deviceException.Message.Should().Be("test-exception");
+        deviceException.InnerException.Message.ShouldBe("inner-exception");
+        deviceException.Message.ShouldBe("test-exception");
     }
     #endregion
 }

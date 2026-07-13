@@ -7,7 +7,7 @@ namespace CarbonateIntegrationTests;
 
 using System.Diagnostics.CodeAnalysis;
 using Carbonate.NonDirectional;
-using FluentAssertions;
+using Shouldly;
 using Xunit;
 
 /// <summary>
@@ -36,7 +36,7 @@ public class NonDirectionalPushReactable_IntegrationTests
         sut.Unsubscribe(id);
 
         // Assert
-        sut.Subscriptions.Should().HaveCount(0);
+        sut.Subscriptions.Length.ShouldBe(0);
     }
 
     [Fact]
@@ -65,9 +65,9 @@ public class NonDirectionalPushReactable_IntegrationTests
                 onUnsubscribe: () => unsubscriberB.Dispose()));
 
         // Act
-        var act = () => sut.UnsubscribeAll();
+        Action act = () => sut.UnsubscribeAll();
 
         // Assert
-        act.Should().NotThrow();
+        Should.NotThrow(act);
     }
 }

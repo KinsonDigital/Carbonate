@@ -1,11 +1,11 @@
-﻿// <copyright file="RespondSubscriptionTests.cs" company="KinsonDigital">
+// <copyright file="RespondSubscriptionTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
 namespace CarbonateTests.OneWay;
 
 using Carbonate.OneWay;
-using FluentAssertions;
+using Shouldly;
 using Xunit;
 
 /// <summary>
@@ -24,7 +24,7 @@ public class RespondSubscriptionTests
         var sut = new RespondSubscription<string>(id, () => string.Empty);
 
         // Assert
-        sut.Id.Should().Be(id);
+        sut.Id.ShouldBe(id);
     }
 
     [Fact]
@@ -37,7 +37,7 @@ public class RespondSubscriptionTests
         var sut = new RespondSubscription<string>(id, () => "value", "test-name");
 
         // Assert
-        sut.Name.Should().Be("test-name");
+        sut.Name.ShouldBe("test-name");
     }
     #endregion
 
@@ -62,7 +62,7 @@ public class RespondSubscriptionTests
         _ = sut.OnRespond();
 
         // Assert
-        totalActionInvokes.Should().Be(0);
+        totalActionInvokes.ShouldBe(0);
     }
 
     [Fact]
@@ -83,7 +83,7 @@ public class RespondSubscriptionTests
         _ = sut.OnRespond();
 
         // Assert
-        totalActionInvokes.Should().Be(1);
+        totalActionInvokes.ShouldBe(1);
     }
 
     [Fact]
@@ -102,8 +102,8 @@ public class RespondSubscriptionTests
         sut.OnUnsubscribe();
 
         // Assert
-        sut.Unsubscribed.Should().BeTrue();
-        totalActionInvokes.Should().Be(1);
+        sut.Unsubscribed.ShouldBeTrue();
+        totalActionInvokes.ShouldBe(1);
     }
 
     [Fact]
@@ -123,7 +123,7 @@ public class RespondSubscriptionTests
         sut.OnError(new Exception());
 
         // Assert
-        totalActionInvokes.Should().Be(0);
+        totalActionInvokes.ShouldBe(0);
     }
 
     [Fact]
@@ -138,12 +138,12 @@ public class RespondSubscriptionTests
             onError: _ => totalActionInvokes++);
 
         // Act
-        var act = () => sut.OnError(null);
+        Action act = () => sut.OnError(null);
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'error')");
-        totalActionInvokes.Should().Be(0);
+        Should.Throw<ArgumentNullException>(act)
+            .Message.ShouldBe("Value cannot be null. (Parameter 'error')");
+        totalActionInvokes.ShouldBe(0);
     }
 
     [Fact]
@@ -157,8 +157,8 @@ public class RespondSubscriptionTests
             onRespond: () => string.Empty,
             onError: e =>
             {
-                e.Should().BeOfType<InvalidOperationException>();
-                e.Message.Should().Be("test-exception");
+                e.ShouldBeOfType<InvalidOperationException>();
+                e.Message.ShouldBe("test-exception");
 
                 totalActionInvokes++;
             });
@@ -167,7 +167,7 @@ public class RespondSubscriptionTests
         sut.OnError(new InvalidOperationException("test-exception"));
 
         // Assert
-        totalActionInvokes.Should().Be(1);
+        totalActionInvokes.ShouldBe(1);
     }
 
     [Theory]
@@ -191,7 +191,7 @@ public class RespondSubscriptionTests
         var actual = sut.ToString();
 
         // Assert
-        actual.Should().Be(expected);
+        actual.ShouldBe(expected);
     }
     #endregion
 }

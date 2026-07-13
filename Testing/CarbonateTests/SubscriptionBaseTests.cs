@@ -1,11 +1,11 @@
-﻿// <copyright file="SubscriptionBaseTests.cs" company="KinsonDigital">
+// <copyright file="SubscriptionBaseTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
 namespace CarbonateTests;
 
 using Carbonate.OneWay;
-using FluentAssertions;
+using Shouldly;
 using Helpers.Fakes;
 using Xunit;
 
@@ -21,8 +21,8 @@ public class SubscriptionBaseTests
         var sut = new SubscriptionBaseFake(id, name);
 
         // Assert
-        sut.Id.Should().Be(id);
-        sut.Name.Should().Be(name);
+        sut.Id.ShouldBe(id);
+        sut.Name.ShouldBe(name);
     }
     #endregion
 
@@ -40,7 +40,7 @@ public class SubscriptionBaseTests
         sut.OnUnsubscribe();
 
         // Assert
-        onReceiveInvoked.Should().BeTrue();
+        onReceiveInvoked.ShouldBeTrue();
     }
 
     [Fact]
@@ -57,7 +57,7 @@ public class SubscriptionBaseTests
         sut.OnUnsubscribe();
 
         // Assert
-        totalInvokes.Should().Be(1);
+        totalInvokes.ShouldBe(1);
     }
 
     [Fact]
@@ -67,11 +67,11 @@ public class SubscriptionBaseTests
         var sut = new ReceiveSubscription<int>(Guid.NewGuid(), _ => { }, onError: _ => { });
 
         // Act
-        var act = () => sut.OnError(null);
+        Action act = () => sut.OnError(null);
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'error')");
+        Should.Throw<ArgumentNullException>(act)
+            .Message.ShouldBe("Value cannot be null. (Parameter 'error')");
     }
 
     [Fact]
@@ -89,7 +89,7 @@ public class SubscriptionBaseTests
         sut.OnError(exception);
 
         // Assert
-        onErrorInvoked.Should().BeTrue();
+        onErrorInvoked.ShouldBeTrue();
     }
 
     [Fact]
@@ -109,7 +109,7 @@ public class SubscriptionBaseTests
         sut.OnError(exception);
 
         // Assert
-        onReceiveInvoked.Should().BeFalse();
+        onReceiveInvoked.ShouldBeFalse();
     }
     #endregion
 }
