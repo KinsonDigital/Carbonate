@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Validate SDK Versions
-        uses: KinsonDigital/Infrastructure/actions/validate-sdk-versions@acc7aa3997697717943e56c439f7b529d1e1d1ba # v19.0.0
+        uses: KinsonDigital/Infrastructure/actions/validate-sdk-versions@5dade832543507f6ee8f9123794ca7dd3b317e67 # v19.0.1
         with:
           base-search-dir-path: "${{ github.workspace }}"
           net-sdk-version: "${{ vars.NET_SDK_VERSION }}"
