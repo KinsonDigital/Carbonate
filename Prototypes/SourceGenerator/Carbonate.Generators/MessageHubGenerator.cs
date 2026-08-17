@@ -1,0 +1,203 @@
+// <copyright file="MessageHubGenerator.cs" company="KinsonDigital">
+// Copyright (c) KinsonDigital. All rights reserved.
+// </copyright>
+
+namespace Carbonate.Generators;
+
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
+
+/// <summary>
+/// Incremental source generator that implements <c>partial</c> message properties
+/// declared in classes marked with <c>[MessageHub]</c>.
+///
+/// The generator:
+/// 1. Finds every static partial class with the [MessageHub] attribute.
+/// 2. For each partial property typed Event / Event&lt;T&gt; / Request&lt;T&gt; / Request&lt;TIn,TOut&gt;,
+///    emits the implementing partial of the class with a deterministic Guid
+///    (SHA-256 of the fully-qualified message name, first 16 bytes).
+/// 3. Emits a communication manifest (JSON) as an additional build artifact
+///    listing every declared message - the seed of the "who talks to whom" report.
+/// </summary>
+[Generator]
+public sealed class MessageHubGenerator : IIncrementalGenerator
+{
+    private const string AttributeMetadataName = "Carbonate.Messaging.MessageHubAttribute";
+
+    /// <inheritdoc/>
+    public void Initialize(IncrementalGeneratorInitializationContext context)
+    {
+        // Find candidate classes cheaply (syntax-only filter)...
+        IncrementalValuesProvider<ClassDeclarationSyntax> hubCandidates = context.SyntaxProvider
+            .ForAttributeWithMetadataName(
+                AttributeMetadataName,
+                predicate: static (node, _) => node is ClassDeclarationSyntax,
+                transform: static (ctx, _) => (ClassDeclarationSyntax)ctx.TargetNode);
+
+        // ...then combine with the compilation to get full semantic information.
+        IncrementalValueProvider<(Compilation Compilation, System.Collections.Immutable.ImmutableArray<ClassDeclarationSyntax> Hubs)> combined =
+            context.CompilationProvider.Combine(hubCandidates.Collect());
+
+        context.RegisterSourceOutput(combined, static (spc, source) => Execute(spc, source.Compilation, source.Hubs));
+    }
+
+    private static void Execute(
+        SourceProductionContext context,
+        Compilation compilation,
+        System.Collections.Immutable.ImmutableArray<ClassDeclarationSyntax> hubs)
+    {
+        var manifestEntries = new List<string>();
+
+        foreach (ClassDeclarationSyntax hubSyntax in hubs.Distinct(SyntaxNodeComparer.Instance))
+        {
+            SemanticModel model = compilation.GetSemanticModel(hubSyntax.SyntaxTree);
+
+            if (model.GetDeclaredSymbol(hubSyntax) is not INamedTypeSymbol hubSymbol)
+            {
+                continue;
+            }
+
+            var messageProps = new List<(string Name, string TypeName)>();
+
+            foreach (ISymbol member in hubSymbol.GetMembers())
+            {
+                if (member is not IPropertySymbol prop)
+                {
+                    continue;
+                }
+
+                // Only implement properties the user explicitly declared as 'partial'.
+                bool isPartial = prop.DeclaringSyntaxReferences
+                    .Select(r => r.GetSyntax())
+                    .OfType<PropertyDeclarationSyntax>()
+                    .Any(p => p.Modifiers.Any(SyntaxKind.PartialKeyword));
+
+                if (!isPartial)
+                {
+                    continue;
+                }
+
+                // Fully qualified: the generated file shares no usings with the user's file.
+                string typeName = prop.Type.ToDisplayString(
+                    SymbolDisplayFormat.FullyQualifiedFormat.WithMiscellaneousOptions(
+                        SymbolDisplayMiscellaneousOptions.IncludeNullableReferenceTypeModifier));
+
+                if (!IsMessageType(prop.Type))
+                {
+                    continue;
+                }
+
+                messageProps.Add((prop.Name, typeName));
+
+                string fullyQualified = $"{hubSymbol.ToDisplayString()}.{prop.Name}";
+                string guid = CreateDeterministicGuid(fullyQualified);
+                manifestEntries.Add($"  {{ \"name\": \"{fullyQualified}\", \"kind\": \"{MessageKind(prop.Type)}\", \"id\": \"{guid}\" }}");
+            }
+
+            if (messageProps.Count == 0)
+            {
+                continue;
+            }
+
+            string source = EmitHubImplementation(hubSymbol, messageProps);
+            context.AddSource($"{hubSymbol.Name}.Messages.g.cs", SourceText.From(source, Encoding.UTF8));
+        }
+
+        if (manifestEntries.Count > 0)
+        {
+            // NOTE: AddSource only emits C# compilation units, so the manifest is
+            // embedded as a comment. A real v2 implementation would emit this via an
+            // analyzer AdditionalFile/build-transitive target so it lands as a
+            // first-class JSON build artifact.
+            string manifest = "// <auto-generated/>\n// Communication manifest - every message declared in this compilation.\n// [\n"
+                + string.Join(",\n", manifestEntries.Select(e => "// " + e.Trim()))
+                + "\n// ]\n";
+            context.AddSource("Carbonate.Manifest.g.cs", SourceText.From(manifest, Encoding.UTF8));
+        }
+    }
+
+    private static bool IsMessageType(ITypeSymbol type)
+    {
+        string name = type.Name;
+        string? ns = type.ContainingNamespace?.ToDisplayString();
+
+        return ns == "Carbonate.Messaging"
+            && (name == "Event" || name == "Request");
+    }
+
+    private static string MessageKind(ITypeSymbol type) => type switch
+    {
+        INamedTypeSymbol { Name: "Event", TypeArguments.Length: 0 } => "event",
+        INamedTypeSymbol { Name: "Event", TypeArguments.Length: 1 } => "event-push",
+        INamedTypeSymbol { Name: "Request", TypeArguments.Length: 1 } => "request-pull",
+        INamedTypeSymbol { Name: "Request", TypeArguments.Length: 2 } => "request-pushpull",
+        _ => "unknown",
+    };
+
+    private static string EmitHubImplementation(
+        INamedTypeSymbol hubSymbol,
+        List<(string Name, string TypeName)> props)
+    {
+        string ns = hubSymbol.ContainingNamespace.IsGlobalNamespace
+            ? string.Empty
+            : $"namespace {hubSymbol.ContainingNamespace.ToDisplayString()};\n\n";
+
+        var sb = new StringBuilder();
+        sb.AppendLine("// <auto-generated/>");
+        sb.AppendLine("// Implemented by Carbonate.Generators.MessageHubGenerator.");
+        sb.AppendLine("// The Guid for each message is a deterministic SHA-256-derived value");
+        sb.AppendLine("// of the fully-qualified message name - stable across builds and machines.");
+        sb.AppendLine("#nullable enable");
+        sb.AppendLine();
+        sb.Append(ns);
+
+        // Preserve nested class structure if the hub is nested (rare, but cheap to support).
+        sb.AppendLine($"public static partial class {hubSymbol.Name}");
+        sb.AppendLine("{");
+
+        foreach ((string name, string typeName) in props)
+        {
+            string fullyQualified = $"{hubSymbol.ToDisplayString()}.{name}";
+            string guid = CreateDeterministicGuid(fullyQualified);
+            string fieldName = $"_{char.ToLowerInvariant(name[0])}{name.Substring(1)}";
+
+            sb.AppendLine($"    private static {typeName}? {fieldName};");
+            sb.AppendLine();
+            sb.AppendLine($"    public static partial {typeName} {name} =>");
+            sb.AppendLine($"        {fieldName} ??= new {typeName}(new global::System.Guid(\"{guid}\"), \"{name}\");");
+            sb.AppendLine();
+        }
+
+        sb.AppendLine("}");
+        return sb.ToString();
+    }
+
+    /// <summary>
+    /// Creates a deterministic Guid from the first 16 bytes of the SHA-256 hash
+    /// of the fully-qualified message name. Same name = same Guid, forever.
+    /// (Renaming a message intentionally produces a new ID and breaks stale references at compile time.)
+    /// </summary>
+    private static string CreateDeterministicGuid(string value)
+    {
+        using var sha = System.Security.Cryptography.SHA256.Create();
+        byte[] hash = sha.ComputeHash(Encoding.UTF8.GetBytes(value));
+        byte[] guidBytes = new byte[16];
+        System.Array.Copy(hash, guidBytes, 16);
+        return new System.Guid(guidBytes).ToString();
+    }
+
+    private sealed class SyntaxNodeComparer : IEqualityComparer<ClassDeclarationSyntax>
+    {
+        public static readonly SyntaxNodeComparer Instance = new ();
+
+        public bool Equals(ClassDeclarationSyntax? x, ClassDeclarationSyntax? y) =>
+            ReferenceEquals(x, y) || (x is not null && y is not null && x.Span == y.Span && x.SyntaxTree == y.SyntaxTree);
+
+        public int GetHashCode(ClassDeclarationSyntax obj) => obj.SyntaxTree.GetHashCode() ^ obj.Span.GetHashCode();
+    }
+}

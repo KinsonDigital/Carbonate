@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <!--
+        Source generator projects MUST target netstandard2.0 so they can be
+        loaded by the compiler (Roslyn) inside Visual Studio, VS Code, and dotnet build.
+        The generator RUNS AT COMPILE TIME, not at runtime.
+    -->
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
+        <IsRoslynComponent>true</IsRoslynComponent>
+        <!-- Generated files are written here for inspection (wired up in DemoApp) -->
+        <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" PrivateAssets="all" />
+    </ItemGroup>
+
+</Project>

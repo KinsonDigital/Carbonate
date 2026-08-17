@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+        <LangVersion>13</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <!--
+            These two properties let YOU (the human) see the generated files on disk.
+            They land under: obj\Debug\net9.0\generated\Carbonate.Generators\...
+        -->
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+        <CompilerGeneratedFilesOutputPath>generated</CompilerGeneratedFilesOutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Carbonate.Messaging\Carbonate.Messaging.csproj" />
+
+        <!--
+            This is how a CONSUMER references a source generator:
+            OutputItemType="Analyzer"  -> run it as a compiler analyzer (generates code)
+            ReferenceOutputAssembly="false" -> do NOT reference its DLL as a normal library
+        -->
+        <ProjectReference Include="..\Carbonate.Generators\Carbonate.Generators.csproj"
+                          OutputItemType="Analyzer"
+                          ReferenceOutputAssembly="false" />
+    </ItemGroup>
+
+</Project>

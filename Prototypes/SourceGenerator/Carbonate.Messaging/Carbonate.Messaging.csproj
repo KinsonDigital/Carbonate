@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <!--
+        Prototype of the Carbonate v2 "message contract" runtime.
+        These types are hand-written ONCE in the library (not generated).
+        References the real Carbonate v1 project so generated/user code
+        can target the existing reactables (full backward compat).
+    -->
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <LangVersion>13</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\Carbonate\Carbonate.csproj" />
+    </ItemGroup>
+
+</Project>
